@@ -16,7 +16,7 @@ class CreateMoviesTable extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->increments('id');
 			$table->string('title');
-			$table->text('summary');
+			$table->string('summary', 4000);
 			$table->string('notes')->nullable();
 			$table->unsignedInteger('year')->default(0);
 			$table->string('poster')->default('missing-poster.jpg');

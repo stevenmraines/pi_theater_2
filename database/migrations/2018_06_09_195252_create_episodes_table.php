@@ -19,7 +19,7 @@ class CreateEpisodesTable extends Migration
 			$table->unsignedInteger('season');
 			$table->unsignedInteger('episode');
 			$table->string('title');
-			$table->text('summary');
+			$table->string('summary', 4000);
 			$table->string('video');
             $table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

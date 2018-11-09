@@ -1,9 +1,10 @@
 /node_modules
 /public/hot
 /public/storage
-/public/img/banners
-/public/img/logos
 /public/img/posters
+/public/img/*.psd
+/public/img/banners/*.psd
+/public/img/logos/*.psd
 /storage/*.key
 /vendor
 /.idea

@@ -16,7 +16,7 @@ class CreateShowsTable extends Migration
         Schema::create('shows', function (Blueprint $table) {
             $table->increments('id');
 			$table->string('title');
-			$table->text('summary');
+			$table->string('summary', 4000);
 			$table->string('notes')->nullable();
 			$table->unsignedInteger('year_start')->default(0);
 			$table->unsignedInteger('year_end')->default(0);

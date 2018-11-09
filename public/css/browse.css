@@ -1,0 +1,312 @@
+/*
+ *  Util classes
+ */
+ .top-most {
+	z-index: 999 !important;
+}
+
+.hidden {
+	display: none !important;
+}
+
+/*
+ *  Scrollbar
+ */
+.scrollbar {
+	background: black;  /* Vertical space between scrollbar and container */
+	overflow-y: scroll;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {  /* The bar itself */
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.7);
+	background-color: #555;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.7);
+	border-radius: 10px;
+	background-color: #222;
+}
+
+.scrollbar::-webkit-scrollbar {
+	width: 12px;
+	background-color: #222;
+}
+
+/*
+ *  Navbar
+ */
+body {
+	margin-top: 57px; /* Make sure body content clears the navbar */
+}
+
+#nav-logo {
+	height: 40px;
+}
+
+#nav-user-icon {
+	opacity: 0.5;
+	width: 40px;
+	height: 40px;
+}
+
+#nav-user-icon:hover, #nav-user-icon:visited {
+	opacity: 1.0;
+}
+
+nav .dropdown-menu {
+	background-color: #060606 !important;
+	border: 1px solid #282828;
+}
+
+nav .dropdown-menu hr {
+	margin: 7px 0;
+	border-bottom: 1px solid #282828;
+}
+
+#search-bar {
+	min-width: 225px;
+}
+
+.drop-check-p-fix {
+	padding: 0.25rem 1.5rem !important;
+}
+
+.menu-logo {
+	min-width: 300px !important;
+	min-height: 75px !important;
+	cursor: pointer;
+}
+
+form[name="search-filters-form"] {
+	max-height: 850px;
+}
+
+/*
+ *  Collections jumbotron
+ */
+.collection-jumbotron {
+	width: 100%;
+	height: auto;
+}
+
+.collection-info-container {
+	background: linear-gradient(to right, black, black 75%, transparent);
+	z-index: 1;
+	position: absolute;
+	left: 0;
+	width: 24%;
+	height: 100%;
+	padding: 12px;
+}
+
+.collection-info-container > div {
+	padding-right: 25%;
+	height: 100%;
+}
+
+.collection-logo {
+	display: block !important;
+}
+
+.collection-summary {
+	font-size: 25px;
+	color: white;
+}
+
+.collection-explore {
+	white-space: normal;
+	font-size: 25px;
+}
+
+.carousel-indicators li,
+.carousel-indicators li::after,
+.carousel-indicators li::before {
+	cursor: pointer;
+}
+
+/*
+ *  Movie/Show modals
+ */
+.modal-poster {
+	box-shadow: 0 0 30px black;
+}
+
+#movie-modal-info {
+	font-size: 17px;
+}
+
+#show-modal-info {
+	max-height: 345px;
+}
+
+.seasons-dropdown {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	transform: translate3d(111px, 0px, 0px);
+	will-change: transform;
+}
+
+#show-modal-episodes {
+	max-height: 95%;
+	overflow: auto;
+}
+
+/*
+ *  These 2 rules keep the "watch now" and "add to watchlist"
+ *  buttons centered on mobile view.
+ */
+.modal-footer > :not(:last-child) {
+	margin-right: 0;
+}
+
+.modal-footer > :not(:first-child) {
+	margin-left: 0;
+}
+
+/*
+ *  General
+ */
+body {
+    margin-bottom: 70px;
+}
+
+.poster-row {
+	overflow: hidden;
+	white-space: nowrap;
+	position: relative;
+}
+
+.poster-container {
+	position: relative;
+	width: 230px;
+	height: 345px;
+	margin: 0 0.075rem;
+	transition: 0.2s transform ease-in;
+}
+
+.poster-container:hover {
+	transform: scale(1.09);
+}
+
+/*.poster-container:hover ~ .poster-container {
+	transform: translate3d(10px, 0, 0);
+}*/
+
+.play {
+	font-family: Arial;
+	border: 6px solid white;
+	border-radius: 50%;
+	background-color: rgba(0, 0, 0, 0.5);
+	width: 100px;
+	height: 100px;
+	font-size: 65px;
+	line-height: 87px;
+	cursor: pointer;
+	color: white;
+	padding-left: 12px;
+}
+
+.play:hover {
+	color: red !important;
+	border: 6px solid red;
+	text-decoration: none;
+}
+
+.play:active {
+	color: #0F3 !important;
+	border: 6px solid #0F3;
+}
+
+.poster-overlay {
+	background-color: rgba(0,0,0,0.5);
+	color: white;
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	transition: 0.2s opacity ease-in;
+}
+
+.poster-overlay:hover {
+	opacity: 1;
+}
+
+.shift-left {
+	transform: translate3d(-10px, 0, 0);
+}
+
+.shift-right {
+	transform: translate3d(10px, 0, 0);
+}
+
+.left-arrow, .right-arrow {
+	font-size: 128px;
+	position: absolute;
+	z-index: 3;
+	width: 100px;
+	height: 345px;
+	cursor: pointer;
+	line-height: 314px; /* 345 x 1.09 = ~376, 376 - 345 = 31, 345 - 31 = 314 */
+	transition: background 1s ease;
+	transform: scale(1.09);
+	user-select: none;
+}
+
+.left-arrow {
+	background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+	padding-left: 7px;
+}
+
+.right-arrow {
+	background: linear-gradient(to left, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+	right: 0;
+	text-align: right;
+	padding-right: 7px;
+}
+
+.left-arrow:hover, .right-arrow:hover {
+	color: white;
+}
+
+.left-arrow:hover {
+	background: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+}
+
+.right-arrow:hover {
+	background: linear-gradient(to left, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+}
+
+.banner {
+	cursor: pointer;
+	transition: transform ease-in 0.2s;
+}
+
+.banner:hover {
+	transform: scale(1.05);
+}
+
+@media only screen and (max-width: 576px) {
+	.btn-watchlist {
+		min-width: 75%;
+		padding: 0.65rem 1rem;
+	}
+}
+
+@media only screen and (max-height: 767px) {
+	form[name="search-filters-form"] {
+		max-height: 350px;
+	}
+}
+
+@media only screen and (max-height: 899px) {
+	#collections-menu-container {
+		max-height: 350px;
+		overflow-y: auto;
+	}
+}

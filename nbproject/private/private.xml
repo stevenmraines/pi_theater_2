@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/routes/web.php</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/assets/js/components/MovieModal.vue</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/assets/js/browse.js</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/public/css/browse.css</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/views/layouts/header.blade.php</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/assets/js/components/RegistrationModal.vue</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/assets/js/components/PosterRow.vue</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/assets/js/components/PosterContainer.vue</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/assets/js/app.js</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/assets/js/components/LoginModal.vue</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/views/home/browse.blade.php</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/routes/api.php</file>
+            <file>file:/C:/xampp/htdocs/laravel/pi_theater_2/resources/views/layouts/poster_rows.blade.php</file>
+        </group>
+    </open-files>
+</project-private>

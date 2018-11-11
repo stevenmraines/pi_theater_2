@@ -37,7 +37,7 @@
 					</div>
 				</li>
 				<li class="nav-item dropdown">
-					<a href="#" class="nav-link" id="search-menu">
+					<a href="#" class="nav-link py-0" id="search-menu">
 						<img src="{{ asset('img/search.png') }}" class="img-fluid" />
 					</a>
 				</li>

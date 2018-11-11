@@ -8,7 +8,7 @@
 	<div class="collapse navbar-collapse" id="nav-content">
 		<div class="navbar-nav">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item dropdown">
+				<li class="nav-item dropdown my-auto">
 					<a href="#" class="nav-link dropdown-toggle" id="genres-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Genres
 					</a>
@@ -26,7 +26,7 @@
 						</table>
 					</div>
 				</li>
-				<li class="nav-item dropdown">
+				<li class="nav-item dropdown my-auto">
 					<a href="#" class="nav-link dropdown-toggle" id="collections-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Collections
 					</a>
@@ -35,6 +35,11 @@
 							<img v-bind:src="'/img/logos/' + collection.logo" class="dropdown-item menu-logo" />
 						</a>
 					</div>
+				</li>
+				<li class="nav-item dropdown">
+					<a href="#" class="nav-link" id="search-menu">
+						<img src="{{ asset('img/search.png') }}" class="img-fluid" />
+					</a>
 				</li>
 			</ul>
 		</div>

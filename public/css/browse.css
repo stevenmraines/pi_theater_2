@@ -45,13 +45,22 @@ body {
 	height: 40px;
 }
 
-#nav-user-icon {
+#search-menu > img {
+    opacity: 0.5;
+    height: 40px;
+}
+
+#search-menu:hover > img, #search-menu:focus > img {
+    opacity: 1;
+}
+
+#user-options-menu > img {
 	opacity: 0.5;
 	width: 40px;
 	height: 40px;
 }
 
-#nav-user-icon:hover, #nav-user-icon:visited {
+#user-options-menu:hover > img, #user-options-menu:focus > img {
 	opacity: 1.0;
 }
 

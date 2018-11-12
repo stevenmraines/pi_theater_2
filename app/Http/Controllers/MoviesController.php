@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-//use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Movie;
 
 class MoviesController extends Controller
 {
     public function info($id) {
-		return Movie::find($id)->load('genres');
+        $info           = Movie::find($id)->load('genres');
+        $info['logged'] = Auth::check();
+		return $info;
 	}
 
 	public function recent($limit, $offset) {

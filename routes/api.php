@@ -38,3 +38,9 @@ Route::get('/collection/movies/{id}', 'CollectionsController@movies');
 Route::get('/collection/shows/{id}', 'CollectionsController@shows');
 Route::get('/collection/episodes/{id}', 'CollectionsController@episodes');
 Route::get('/collection/allMedia/{id}', 'CollectionsController@allMedia');
+
+/*
+ * User routes
+ */
+Route::get('/user/watchlist/movies/{id}', 'UsersController@watchlistMovies');
+Route::get('/user/watchlist/shows/{id}', 'UsersController@watchlistShows');

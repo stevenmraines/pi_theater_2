@@ -4,7 +4,7 @@ $user = Auth::check();
 ?>
 
 @extends('master')
-@section('content')
+@section('browse')
 	<link rel="stylesheet" href="{{ asset('css/browse.css') }}" />
 	@include('header')
 	@include('new_collections')

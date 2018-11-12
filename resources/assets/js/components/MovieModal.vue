@@ -31,7 +31,7 @@
 					</div>
 					<div class="modal-footer d-flex justify-content-between flex-column-reverse flex-sm-row">
 						<!-- Need to figure out how to show only when logged in -->
-						<div v-if="true">
+						<div v-if="logged">
 							<button class="btn btn-success btn-watchlist" v-if="!inWatchlist">
 								ADD TO WATCHLIST
 							</button>
@@ -61,7 +61,8 @@
 				year:			0,
 				poster:			'missing-poster.jpg',
 				genres:			[],
-				inWatchlist:	false
+				inWatchlist:	false,
+				logged:			false
 			};
 		},
 
@@ -72,17 +73,19 @@
 		methods: {
 			load(data) {
 				var self = this;
-				$.get('/api/movie/info/' + data.id, function(response) {
-					self.mediaId		= response.id;
-					self.title			= response.title;
-					self.summary		= response.summary;
-					self.notes			= response.notes;
-					self.year			= response.year;
-					self.poster			= response.poster;
-					self.genres			= response.genres;
-					self.inWatchlist	= false;
-					$('#movie-modal').modal('show');
-				});
+				axios.get('/api/movie/info/' + data.id)
+					.then(function(response) {
+						self.mediaId		= response.data.id;
+						self.title			= response.data.title;
+						self.summary		= response.data.summary;
+						self.notes			= response.data.notes;
+						self.year			= response.data.year;
+						self.poster			= response.data.poster;
+						self.genres			= response.data.genres;
+						self.logged			= response.data.logged;
+						self.inWatchlist	= false;
+						$('#movie-modal').modal('show');
+					});
 			}
 		}
 	}

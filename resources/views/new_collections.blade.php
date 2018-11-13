@@ -16,7 +16,7 @@
 					<img v-bind:src="'/img/logos/' + col.logo"
 							class="collection-logo img-fluid" />
 					<div class="collection-summary my-5">@{{ col.summary }}</div>
-					<button class="btn btn-info collection-explore mt-5" onclick="">
+					<button class="btn btn-primary collection-explore mt-5" onclick="">
 						Explore this Collection
 					</button>
 				</div>

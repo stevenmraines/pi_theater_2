@@ -13982,7 +13982,8 @@ return jQuery;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(14);
-module.exports = __webpack_require__(55);
+__webpack_require__(55);
+module.exports = __webpack_require__(56);
 
 
 /***/ }),
@@ -47967,7 +47968,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			year: 0,
 			poster: 'missing-poster.jpg',
 			genres: [],
-			inWatchlist: false
+			inWatchlist: false,
+			logged: false
 		};
 	},
 	created: function created() {
@@ -47978,14 +47980,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	methods: {
 		load: function load(data) {
 			var self = this;
-			$.get('/api/movie/info/' + data.id, function (response) {
-				self.mediaId = response.id;
-				self.title = response.title;
-				self.summary = response.summary;
-				self.notes = response.notes;
-				self.year = response.year;
-				self.poster = response.poster;
-				self.genres = response.genres;
+			axios.get('/api/movie/info/' + data.id).then(function (response) {
+				self.mediaId = response.data.id;
+				self.title = response.data.title;
+				self.summary = response.data.summary;
+				self.notes = response.data.notes;
+				self.year = response.data.year;
+				self.poster = response.data.poster;
+				self.genres = response.data.genres;
+				self.logged = response.data.logged;
 				self.inWatchlist = false;
 				$('#movie-modal').modal('show');
 			});
@@ -48115,7 +48118,7 @@ var render = function() {
                     "modal-footer d-flex justify-content-between flex-column-reverse flex-sm-row"
                 },
                 [
-                  true
+                  _vm.logged
                     ? _c("div", [
                         !_vm.inWatchlist
                           ? _c(
@@ -48147,7 +48150,7 @@ var render = function() {
                     "a",
                     {
                       staticClass:
-                        "btn btn-info ml-sm-auto ml-0 mb-4 mb-sm-0 btn-watchlist",
+                        "btn btn-primary ml-sm-auto ml-0 mb-4 mb-sm-0 btn-watchlist",
                       attrs: { href: "/theater/movie/" + _vm.mediaId }
                     },
                     [_vm._v("\n\t\t\t\t\t\tWATCH NOW\n\t\t\t\t\t")]
@@ -48558,6 +48561,12 @@ if (false) {
 
 /***/ }),
 /* 55 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 56 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

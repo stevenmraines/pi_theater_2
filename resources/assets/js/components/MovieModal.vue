@@ -40,7 +40,7 @@
 							</button>
 						</div>
 						<a v-bind:href="'/theater/movie/' + mediaId"
-								class="btn btn-info ml-sm-auto ml-0 mb-4 mb-sm-0 btn-watchlist">
+								class="btn btn-primary ml-sm-auto ml-0 mb-4 mb-sm-0 btn-watchlist">
 							WATCH NOW
 						</a>
 					</div>

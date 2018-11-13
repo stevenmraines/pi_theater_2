@@ -12,7 +12,7 @@
 					<a href="#" class="nav-link dropdown-toggle" id="genres-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Genres
 					</a>
-					<div aria-labelledby="genres-menu" class="dropdown-menu dropdown-menu-left px-2">
+					<div id="genres-menu-container" aria-labelledby="genres-menu" class="dropdown-menu dropdown-menu-left px-2">
 						<table class="table">
 							<tbody>
 								<tr scope="row">

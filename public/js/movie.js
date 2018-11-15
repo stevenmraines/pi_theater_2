@@ -76,7 +76,13 @@ module.exports = __webpack_require__(60);
 /***/ 60:
 /***/ (function(module, exports) {
 
-
+/*
+ * ROOT VUE INSTANCE
+ */
+var app = new Vue({
+  el: '#vue-wrapper',
+  data: {}
+});
 
 /***/ })
 

@@ -8,16 +8,9 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" />
 		<link href="{{ asset('css/bootstrap_pi.css') }}" rel="stylesheet">
-		<script>
-			window.Laravel = {
-				csrfToken: '{{ csrf_token() }}'
-			};
-		</script>
 		<script src="js/app.js"></script>
 	</head>
 	<body>
-		<div id="vue-wrapper" class='container-fluid px-0'>
-			@yield('browse')
-		</div>
+		@yield('content')
 	</body>
 </html>

@@ -58,7 +58,7 @@
 					<a href="#" class="nav-link">Watchlist</a>
 				</li>
 				<li class="nav-item dropdown">
-					<a href="#" class="nav-link dropdown-toggle" id="user-options-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a href="#" class="nav-link dropdown-toggle py-0" id="user-options-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<img id="nav-user-icon" src="{{ asset('img/user.png') }}" />
 					</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-options-menu">

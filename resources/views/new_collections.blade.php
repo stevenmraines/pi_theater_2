@@ -11,7 +11,7 @@
 	<div class="carousel-inner" role="listbox">
 		<div class="carousel-item" v-bind:class="{ active: index === 0 }"
 				v-for="(col, index) in collections">
-			<div class="collection-info-container">
+			<div class="collection-info-container hidden">
 				<div class="d-flex flex-column justify-content-center">
 					<img v-bind:src="'/img/logos/' + col.logo"
 							class="collection-logo img-fluid" />

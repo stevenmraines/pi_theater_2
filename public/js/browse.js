@@ -134,6 +134,13 @@ var app = new Vue({
 		history: [],
 		movie_modal: {},
 		show_modal: {}
+	},
+	methods: {
+		newGenre: function newGenre(genre_id) {
+			axios.get('/api/movie/recentGenre/10/0/' + genre_id).then(function (response) {
+				console.log(response.data);
+			});
+		}
 	}
 });
 

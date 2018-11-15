@@ -11,6 +11,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
  */
 Route::get('/movie/info/{id}', 'MoviesController@info');
 Route::get('/movie/recent/{limit}/{offset}', 'MoviesController@recent');
+Route::get('/movie/recentGenre/{limit}/{offset}/{genre}', 'MoviesController@recentGenre');
 Route::get('/movie/year/{year}', 'MoviesController@year');
 Route::get('/movie/genres/{id}', 'MoviesController@genres');
 

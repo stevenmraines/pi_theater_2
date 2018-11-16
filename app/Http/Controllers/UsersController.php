@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Movie;
 use App\Show;
 use App\WatchlistMovie;
@@ -10,13 +11,31 @@ use App\WatchlistShow;
 
 class UsersController extends Controller
 {
-    public function watchlistMovies($id) {
-        $movie_ids = WatchlistMovie::where('user_id', $id)->get(['movie_id']);
+    private function movies() {
+        $movie_ids = WatchlistMovie::where('user_id', auth()->user()->id)->get(['movie_id']);
 		return Movie::whereIn('id', $movie_ids)->get();
 	}
 
-    public function watchlistShows($id) {
-        $show_ids = WatchlistShow::where('user_id', $id)->get(['show_id']);
+    private function shows() {
+        $show_ids = WatchlistShow::where('user_id', auth()->user()->id)->get(['show_id']);
 		return Show::whereIn('id', $show_ids)->get();
 	}
+
+    public function allMedia() {
+        if(Auth::check()) {
+            return [
+                'movies'    => $this->movies(),
+                'shows'     => $this->shows()
+            ];
+        }
+        return [];
+    }
+
+    public function addMovieToWatchlist($movie_id) {
+        return WatchlistMovie::add($movie_id);
+    }
+
+    public function removeMovieFromWatchlist($movie_id) {
+        return WatchlistMovie::remove($movie_id);
+    }
 }

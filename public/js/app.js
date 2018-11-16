@@ -47956,7 +47956,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -47980,7 +47979,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	methods: {
 		load: function load(data) {
 			var self = this;
-			axios.get('/api/movie/info/' + data.id).then(function (response) {
+			axios.get('/movie/info/' + data.id)
+			// axios.get('/api/movie/info/' + data.id)
+			.then(function (response) {
 				self.mediaId = response.data.id;
 				self.title = response.data.title;
 				self.summary = response.data.summary;
@@ -47989,8 +47990,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				self.poster = response.data.poster;
 				self.genres = response.data.genres;
 				self.logged = response.data.logged;
-				self.inWatchlist = false;
+				self.inWatchlist = response.data.inWatchlist;
 				$('#movie-modal').modal('show');
+			});
+		},
+
+		addMovie: function addMovie(id) {
+			var self = this;
+			axios.get('/user/watchlist/addMovie/' + id).then(function (response) {
+				if (typeof response.data.success !== null && response.data.success) {
+					self.inWatchlist = true;
+				}
+			});
+		},
+		removeMovie: function removeMovie(id) {
+			var self = this;
+			axios.get('/user/watchlist/removeMovie/' + id).then(function (response) {
+				if (typeof response.data.success !== null && response.data.success) {
+					self.inWatchlist = false;
+				}
 			});
 		}
 	}
@@ -48123,7 +48141,14 @@ var render = function() {
                         !_vm.inWatchlist
                           ? _c(
                               "button",
-                              { staticClass: "btn btn-success btn-watchlist" },
+                              {
+                                staticClass: "btn btn-success btn-watchlist",
+                                on: {
+                                  click: function($event) {
+                                    _vm.addMovie(_vm.mediaId)
+                                  }
+                                }
+                              },
                               [
                                 _vm._v(
                                   "\n\t\t\t\t\t\t\tADD TO WATCHLIST\n\t\t\t\t\t\t"
@@ -48135,7 +48160,14 @@ var render = function() {
                         _vm.inWatchlist
                           ? _c(
                               "button",
-                              { staticClass: "btn btn-warning btn-watchlist" },
+                              {
+                                staticClass: "btn btn-warning btn-watchlist",
+                                on: {
+                                  click: function($event) {
+                                    _vm.removeMovie(_vm.mediaId)
+                                  }
+                                }
+                              },
                               [
                                 _vm._v(
                                   "\n\t\t\t\t\t\t\tREMOVE FROM WATCHLIST\n\t\t\t\t\t\t"

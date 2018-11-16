@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Movie;
+use App\WatchlistMovie;
 
 class MoviesController extends Controller
 {
     public function info($id) {
-        $info           = Movie::find($id)->load('genres');
-        $info['logged'] = Auth::check();
+        $info                   = Movie::find($id)->load('genres');
+        $info['logged']         = Auth::check();
+        $info['inWatchlist']    = false;
+        if($info['logged']) {
+            $info['inWatchlist'] = WatchlistMovie::where('movie_id', $id)
+                ->where('user_id', auth()->user()->id)
+                ->count() > 0;
+        }
 		return $info;
 	}
 

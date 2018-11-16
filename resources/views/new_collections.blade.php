@@ -1,4 +1,4 @@
-<div id="collections-carousel" class="carousel slide mb-5" data-ride="carousel">
+<div id="collections-carousel" class="carousel carousel-fade slide mb-5" data-ride="carousel">
 	<ol class="carousel-indicators">
 		<li
 				v-for="(col, index) in collections"

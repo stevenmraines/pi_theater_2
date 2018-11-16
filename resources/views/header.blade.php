@@ -55,7 +55,7 @@
 				<!--include('layouts.email_change')
 				include('layouts.password_change')-->
 				<li class="nav-item align-top">
-					<a href="#" class="nav-link">Watchlist</a>
+					<a href="#" class="nav-link" v-on:click="getWatchlist()">Watchlist</a>
 				</li>
 				<li class="nav-item dropdown">
 					<a href="#" class="nav-link dropdown-toggle py-0" id="user-options-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

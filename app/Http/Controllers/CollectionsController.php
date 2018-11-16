@@ -7,6 +7,10 @@ use App\Collection;
 
 class CollectionsController extends Controller
 {
+    public function recent($limit) {
+        return Collection::limit($limit)->get();
+    }
+
     public function movies($id) {
         return Collection::find($id)->load('movies');
     }

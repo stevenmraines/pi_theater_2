@@ -15,10 +15,5 @@ $user = Auth::check();
 		<registration-modal></registration-modal>
 		<login-modal></login-modal>
 	</div>
-	<script>
-		var genres			= <?= $genres ?>;
-		var collections		= <?= $collections ?>;
-		var recent_movies	= <?= $recent_movies ?>;
-	</script>
 	<script src='{{ asset('js/browse.js') }}'></script>
 @endsection

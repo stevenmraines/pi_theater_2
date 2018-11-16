@@ -7,6 +7,10 @@ use App\Genre;
 
 class GenresController extends Controller
 {
+    public function allGenres() {
+        return Genre::orderBy('name', 'asc')->get();
+    }
+
     public function movies($id) {
 		return Genre::find($id)->load('movies');
 	}

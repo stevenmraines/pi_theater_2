@@ -30,12 +30,11 @@
 						</span>
 					</div>
 					<div class="modal-footer d-flex justify-content-between flex-column-reverse flex-sm-row">
-						<!-- Need to figure out how to show only when logged in -->
 						<div v-if="logged">
-							<button class="btn btn-success btn-watchlist" v-if="!inWatchlist">
+							<button class="btn btn-success btn-watchlist" v-if="!inWatchlist" v-on:click="addMovie(mediaId)">
 								ADD TO WATCHLIST
 							</button>
-							<button class="btn btn-warning btn-watchlist" v-if="inWatchlist">
+							<button class="btn btn-warning btn-watchlist" v-if="inWatchlist" v-on:click="removeMovie(mediaId)">
 								REMOVE FROM WATCHLIST
 							</button>
 						</div>
@@ -73,7 +72,8 @@
 		methods: {
 			load(data) {
 				var self = this;
-				axios.get('/api/movie/info/' + data.id)
+				axios.get('/movie/info/' + data.id)
+				// axios.get('/api/movie/info/' + data.id)
 					.then(function(response) {
 						self.mediaId		= response.data.id;
 						self.title			= response.data.title;
@@ -83,8 +83,26 @@
 						self.poster			= response.data.poster;
 						self.genres			= response.data.genres;
 						self.logged			= response.data.logged;
-						self.inWatchlist	= false;
+						self.inWatchlist	= response.data.inWatchlist;
 						$('#movie-modal').modal('show');
+					});
+			},
+			addMovie: function(id) {
+				var self = this;
+				axios.get('/user/watchlist/addMovie/' + id)
+					.then(function(response) {
+						if(typeof response.data.success !== null && response.data.success) {
+							self.inWatchlist = true;
+						}
+					});
+			},
+			removeMovie: function(id) {
+				var self = this;
+				axios.get('/user/watchlist/removeMovie/' + id)
+					.then(function(response) {
+						if(typeof response.data.success !== null && response.data.success) {
+							self.inWatchlist = false;
+						}
 					});
 			}
 		}

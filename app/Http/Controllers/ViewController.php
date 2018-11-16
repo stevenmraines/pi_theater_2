@@ -14,16 +14,7 @@ use Illuminate\Http\Request;
 class ViewController extends Controller
 {
     public function browse() {
-        $genres			= Genre::orderBy('name', 'asc')->get();
-    	$collections	= Collection::limit(3)->get();
-    	$recent_movies	= Movie::recent(10, 0);
-    	$recent_shows	= Show::recent(10, 0);
-        return view('browse', compact([
-    		'genres',
-    		'collections',
-    		'recent_movies',
-    		'recent_shows'
-    	]));
+        return view('browse');
     }
 
     public function movieTheater($id) {

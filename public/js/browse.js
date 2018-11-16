@@ -81,19 +81,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /*
- * SETUP VARIABLES
- */
-var genre_column_count = genres.length % 5 === 0 ? 5 : genres.length % 4 === 0 ? 4 : 3;
-var max_genres_per_column = Math.ceil(genres.length / genre_column_count);
-var genre_columns = [];
-for (var i = 0; i < genres.length; i++) {
-	if (i % max_genres_per_column === 0 || i === 0) {
-		genre_columns.push([]); // Add another column
-	}
-	genre_columns[genre_columns.length - 1].push(genres[i]);
-}
-
-/*
  * EVENT DISPATCHER
  */
 window.Event = new (function () {
@@ -126,10 +113,10 @@ window.Event = new (function () {
 var app = new Vue({
 	el: '#vue-wrapper',
 	data: {
-		genres: genres,
-		genre_columns: genre_columns,
-		collections: collections,
-		recent_movies: recent_movies,
+		genres: [],
+		genre_columns: [],
+		collections: [],
+		recent_movies: [],
 		recent_shows: [],
 		history: [],
 		movie_modal: {},
@@ -140,7 +127,44 @@ var app = new Vue({
 			axios.get('/api/movie/recentGenre/10/0/' + genre_id).then(function (response) {
 				console.log(response.data);
 			});
+		},
+		createGenreTable: function createGenreTable() {
+			var genre_column_count = this.genres.length % 5 === 0 ? 5 : this.genres.length % 4 === 0 ? 4 : 3;
+			var max_genres_per_column = Math.ceil(this.genres.length / genre_column_count);
+			var genre_columns = [];
+			for (var i = 0; i < this.genres.length; i++) {
+				if (i % max_genres_per_column === 0 || i === 0) {
+					genre_columns.push([]); // Add another column
+				}
+				genre_columns[genre_columns.length - 1].push(this.genres[i]);
+			}
+			this.genre_columns = genre_columns;
+		},
+		getWatchlist: function getWatchlist() {
+			axios.get('/user/watchlist/allMedia').then(function (response) {
+				console.log(response.data);
+			});
 		}
+	},
+	mounted: function mounted() {
+		/*
+   * TODO:
+   * - Get all genres for navbar
+   * - Get recently updated collections
+   * - Get recent movies
+   * - Create genres table dropdown in navbar
+   */
+		var self = this;
+		axios.get('/api/genre/allGenres').then(function (response) {
+			self.genres = response.data;
+			self.createGenreTable();
+		});
+		axios.get('/api/collection/recent/3').then(function (response) {
+			self.collections = response.data;
+		});
+		axios.get('/api/movie/recent/10/0').then(function (response) {
+			self.recent_movies = response.data;
+		});
 	}
 });
 

@@ -3,14 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class WatchlistMovie extends Model
 {
     public static function add($movie_id) {
-        if(Auth::check()) {
+        if(auth()->check()) {
             $addition           = new WatchlistMovie;
-            $addition->user_id  = auth()->user()->id;
+            $addition->user_id  = auth()->id();
             $addition->movie_id = $movie_id;
             $addition->save();
             return ['success' => true];
@@ -19,8 +18,8 @@ class WatchlistMovie extends Model
     }
 
     public static function remove($movie_id) {
-        if(Auth::check()) {
-            WatchlistMovie::where('user_id', auth()->user()->id)
+        if(auth()->check()) {
+            WatchlistMovie::where('user_id', auth()->id())
                 ->where('movie_id', $movie_id)
                 ->delete();
             return ['success' => true];

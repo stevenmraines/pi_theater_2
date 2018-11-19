@@ -1,6 +1,5 @@
 <?php
-use Illuminate\Support\Facades\Auth;
-$user = Auth::check();
+$user = auth()->check();
 ?>
 
 @extends('layouts.master')

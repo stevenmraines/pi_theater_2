@@ -62,9 +62,9 @@
 						<img id="nav-user-icon" src="{{ asset('img/user.png') }}" />
 					</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-options-menu">
-						@if(Auth::user()->admin)
+						@if(auth()->user()->admin)
 							<h6 class="dropdown-header">Admin Functions</h6>
-							<a class="dropdown-item" href="/update_tables.php">Update Tables</a><hr />
+							<a class="dropdown-item" href="/upload">Upload Content</a><hr />
 						@endif
 						<a href="#" class="dropdown-item" href="#" data-toggle="modal" data-target="#change_email_modal">Change Email</a>
 						<a href="#" class="dropdown-item" href="#" data-toggle="modal" data-target="#change_password_modal">Change Password</a><hr />

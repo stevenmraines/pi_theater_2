@@ -15,10 +15,8 @@ class CheckAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user()->admin == 1) {
-            return $next($request);
-        }
+        abort_if(!auth()->user()->admin, 403, 'You do not have admin access');
 
-        abort(403, 'You do not have admin access');
+        return $next($request);
     }
 }

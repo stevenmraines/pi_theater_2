@@ -23,7 +23,7 @@
 									class="form-control"
 									name="email"
 									placeholder="address@email.com"
-									v-bind:value="email"
+									v-model="email"
 									required />
 							<div class="text-danger" v-if="false">
 								Invalid email address
@@ -39,7 +39,7 @@
 									id="register-modal-password"
 									class="form-control"
 									name="password"
-									v-bind:value="password"
+									v-model="password"
 									required />
 							<div class="text-danger" v-if="false">
 								This field is required
@@ -72,6 +72,11 @@
 				remember: false,
 				success: false
 			};
+		},
+		methods: {
+			submit: function() {
+
+			}
 		}
 	}
 </script>

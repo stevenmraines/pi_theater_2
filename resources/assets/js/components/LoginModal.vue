@@ -10,38 +10,39 @@
 				</div>
 				<div class="modal-body">
 					<form
-							method="POST"
-							action="/login"
-							name="login_form"
-							v-on:submit="event.preventDefault();"
-							novalidate>
+						v-on:submit.prevent="submit"
+						novalidate
+					>
 						<div class="form-group">
 							<label for="login-modal-email">Email Address</label>
 							<input
-									type="email"
-									id="login-modal-email"
-									class="form-control"
-									name="email"
-									placeholder="address@email.com"
-									v-bind:value="email"
-									required />
+								type="email"
+								id="login-modal-email"
+								class="form-control"
+								name="email"
+								placeholder="address@email.com"
+								v-model="email"
+								required
+								autofocus
+							/>
 							<div class="text-danger" v-if="false">
 								Invalid email address
 							</div>
-							<div class="text-danger" v-if="false">
+							<div class="text-danger" v-if="email === ''">
 								This field is required
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="login-modal-password">Password</label>
 							<input
-									type="password"
-									id="login-modal-password"
-									class="form-control"
-									name="password"
-									v-bind:value="password"
-									required />
-							<div class="text-danger" v-if="false">
+								type="password"
+								id="login-modal-password"
+								class="form-control"
+								name="password"
+								v-model="password"
+								required
+							/>
+							<div class="text-danger" v-if="password === ''">
 								This field is required
 							</div>
 						</div>
@@ -49,10 +50,10 @@
 							<input type="submit" class="btn btn-outline-success" value="Login" />
 						</div>
 					</form>
-					<div class="alert alert-success" v-if="success">
+					<div class="alert alert-success" v-if="loggedIn">
 						<h4 class="alert-heading">Success!</h4>Logging you in now...
 					</div>
-					<div class="alert alert-danger" v-if="!success && false">
+					<div class="alert alert-danger" v-if="notLoggedIn">
 						<h4 class="alert-heading">Login Failed!</h4>
 						Your email and/or password could not be verified.
 					</div>
@@ -68,8 +69,42 @@
 			return {
 				email: '',
 				password: '',
-				success: false
+				success: false,
+				submitted: false  // Need to find a better way to do this
 			};
+		},
+		computed: {
+			loggedIn() {
+				return this.success && this.submitted;
+			},
+			notLoggedIn() {
+				return !this.success && this.submitted;
+			}
+		},
+		methods: {
+			submit() {
+				var creds = {
+					email:		this.email,
+					password:	this.password
+				};
+				var self = this;
+				axios
+					.post('/login', creds)
+					.then(function(response) {
+						self.submitted	= true;
+						self.success		= true;
+						// if(response.data.success) {
+						// 	self.success = true;
+							setTimeout(function() {
+								window.location.reload(false);
+							}, 1000);
+						// }
+					})
+					.catch(function(error) {
+						self.submitted	= true;
+						self.success		= false;
+					});
+			}
 		}
 	}
 </script>

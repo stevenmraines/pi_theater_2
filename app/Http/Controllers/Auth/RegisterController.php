@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -67,6 +69,28 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'admin' => 0,
         ]);
+    }
+
+    protected function register(Request $request) {
+        $validated = $request->validate([
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|string|email|max:255|unique:users',
+            'password'  => 'required|string|min:6|confirmed',
+        ]);
+
+        if(RegisterController::create($validated)) {
+            // Need to log the user in automatically
+            $response = ['success' => true];
+            return response()->json($response);
+        }
+
+        $response = [
+            'success' => false,
+            'message' => 'An unknown error occured'
+        ];
+
+        return response()->json($response);
     }
 }

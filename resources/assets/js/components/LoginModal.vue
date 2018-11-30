@@ -55,7 +55,7 @@
 					</div>
 					<div class="alert alert-danger" v-if="notLoggedIn">
 						<h4 class="alert-heading">Login Failed!</h4>
-						Your email and/or password could not be verified.
+						<span>{{ errorMessage }}</span>
 					</div>
 				</div>
 			</div>
@@ -67,10 +67,11 @@
 	export default {
 		data() {
 			return {
-				email: '',
-				password: '',
-				success: false,
-				submitted: false  // Need to find a better way to do this
+				email:			'',
+				password:		'',
+				success:		false,
+				submitted:		false,
+				errorMessage:	'',
 			};
 		},
 		computed: {
@@ -83,26 +84,31 @@
 		},
 		methods: {
 			submit() {
-				var creds = {
+				var self	= this;
+				var creds	= {
 					email:		this.email,
 					password:	this.password
 				};
-				var self = this;
+
 				axios
 					.post('/login', creds)
 					.then(function(response) {
-						self.submitted	= true;
-						self.success		= true;
-						// if(response.data.success) {
-						// 	self.success = true;
+						self.submitted = true;
+
+						if(response.data.success) {
+							self.success = true;
+
 							setTimeout(function() {
 								window.location.reload(false);
 							}, 1000);
-						// }
+						}
+
+						self.errorMessage = 'Your email and/or password could not be verified.';
 					})
 					.catch(function(error) {
-						self.submitted	= true;
+						self.submitted		= true;
 						self.success		= false;
+						self.errorMessage	= 'An unknown error occurred';
 					});
 			}
 		}

@@ -62,6 +62,7 @@
 						<img id="nav-user-icon" src="{{ asset('img/user.png') }}" />
 					</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-options-menu">
+						<h4 class="dropdown-item">{{ auth()->user()->name }}</h4><hr />
 						@if(auth()->user()->admin)
 							<h6 class="dropdown-header">Admin Functions</h6>
 							<a class="dropdown-item" href="/upload">Upload Content</a><hr />
@@ -69,10 +70,11 @@
 						<a href="#" class="dropdown-item" href="#" data-toggle="modal" data-target="#change_email_modal">Change Email</a>
 						<a href="#" class="dropdown-item" href="#" data-toggle="modal" data-target="#change_password_modal">Change Password</a><hr />
 						<a
-								id="logout-button"
-								class="dropdown-item"
-								href="{{ route('logout') }}"
-								onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+							id="logout-button"
+							class="dropdown-item"
+							href="{{ route('logout') }}"
+							onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+						>
 							Logout
 						</a>
 						<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

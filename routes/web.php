@@ -29,6 +29,12 @@ Route::get('/user/watchlist/addMovie/{id}', 'UsersController@addMovieToWatchlist
 Route::get('/user/watchlist/removeMovie/{id}', 'UsersController@removeMovieFromWatchlist');
 
 /*
+ * Auth
+ */
+Route::post('/login', 'Auth\LoginController@login');
+Route::post('/register', 'Auth\LoginController@register');
+
+/*
  * Default Laravel routes
  */
 Auth::routes();

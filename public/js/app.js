@@ -47387,14 +47387,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
 			email: '',
 			password: '',
-			success: false
+			success: false,
+			submitted: false,
+			errorMessage: ''
 		};
+	},
+
+	computed: {
+		loggedIn: function loggedIn() {
+			return this.success && this.submitted;
+		},
+		notLoggedIn: function notLoggedIn() {
+			return !this.success && this.submitted;
+		}
+	},
+	methods: {
+		submit: function submit() {
+			var self = this;
+			var creds = {
+				email: this.email,
+				password: this.password
+			};
+
+			axios.post('/login', creds).then(function (response) {
+				self.submitted = true;
+
+				if (response.data.success) {
+					self.success = true;
+
+					setTimeout(function () {
+						window.location.reload(false);
+					}, 1000);
+				}
+
+				self.errorMessage = 'Your email and/or password could not be verified.';
+			}).catch(function (error) {
+				self.submitted = true;
+				self.success = false;
+				self.errorMessage = 'An unknown error occurred';
+			});
+		}
 	}
 });
 
@@ -47418,15 +47457,11 @@ var render = function() {
             _c(
               "form",
               {
-                attrs: {
-                  method: "POST",
-                  action: "/login",
-                  name: "login_form",
-                  novalidate: ""
-                },
+                attrs: { novalidate: "" },
                 on: {
                   submit: function($event) {
-                    _vm.event.preventDefault()
+                    $event.preventDefault()
+                    return _vm.submit($event)
                   }
                 }
               },
@@ -47437,15 +47472,32 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.email,
+                        expression: "email"
+                      }
+                    ],
                     staticClass: "form-control",
                     attrs: {
                       type: "email",
                       id: "login-modal-email",
                       name: "email",
                       placeholder: "address@email.com",
-                      required: ""
+                      required: "",
+                      autofocus: ""
                     },
-                    domProps: { value: _vm.email }
+                    domProps: { value: _vm.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.email = $event.target.value
+                      }
+                    }
                   }),
                   _vm._v(" "),
                   false
@@ -47456,7 +47508,7 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  false
+                  _vm.email === ""
                     ? _c("div", { staticClass: "text-danger" }, [
                         _vm._v(
                           "\n\t\t\t\t\t\t\tThis field is required\n\t\t\t\t\t\t"
@@ -47471,6 +47523,14 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.password,
+                        expression: "password"
+                      }
+                    ],
                     staticClass: "form-control",
                     attrs: {
                       type: "password",
@@ -47478,10 +47538,18 @@ var render = function() {
                       name: "password",
                       required: ""
                     },
-                    domProps: { value: _vm.password }
+                    domProps: { value: _vm.password },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.password = $event.target.value
+                      }
+                    }
                   }),
                   _vm._v(" "),
-                  false
+                  _vm.password === ""
                     ? _c("div", { staticClass: "text-danger" }, [
                         _vm._v(
                           "\n\t\t\t\t\t\t\tThis field is required\n\t\t\t\t\t\t"
@@ -47494,7 +47562,7 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _vm.success
+            _vm.loggedIn
               ? _c("div", { staticClass: "alert alert-success" }, [
                   _c("h4", { staticClass: "alert-heading" }, [
                     _vm._v("Success!")
@@ -47503,14 +47571,13 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            !_vm.success && false
+            _vm.notLoggedIn
               ? _c("div", { staticClass: "alert alert-danger" }, [
                   _c("h4", { staticClass: "alert-heading" }, [
                     _vm._v("Login Failed!")
                   ]),
-                  _vm._v(
-                    "\n\t\t\t\t\tYour email and/or password could not be verified.\n\t\t\t\t"
-                  )
+                  _vm._v(" "),
+                  _c("span", [_vm._v(_vm._s(_vm.errorMessage))])
                 ])
               : _vm._e()
           ])
@@ -47676,15 +47743,112 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
+			name: '',
 			email: '',
 			password: '',
-			remember: false,
-			success: false
+			password_confirmation: '',
+			success: false,
+			submitted: false,
+			errorMessage: '',
+			errors: {}
 		};
+	},
+
+	computed: {
+		registered: function registered() {
+			return this.success && this.submitted;
+		},
+		notRegistered: function notRegistered() {
+			return !this.success && this.submitted;
+		}
+	},
+	methods: {
+		submit: function submit() {
+			var self = this;
+			var creds = {
+				name: this.name,
+				email: this.email,
+				password: this.password,
+				password_confirmation: this.password_confirmation
+			};
+
+			axios.post('/register', creds).then(function (response) {
+				self.submitted = true;
+
+				if (response.data.success) {
+					self.success = true;
+
+					setTimeout(function () {
+						window.location.reload(false);
+					}, 1000);
+				}
+
+				if (!response.data.success) {
+					// Need to clean this up
+					self.errorMessage = response.data.message;
+				}
+			}).catch(function (error) {
+				self.submitted = true;
+				self.success = false;
+				self.errors = {};
+				self.errorMessage = 'An unknown error occurred';
+
+				if (error.response) {
+					if (error.response.data.message) {
+						self.errorMessage = error.response.data.message;
+					}
+
+					if (error.response.data.errors) {
+						self.errors = error.response.data.errors;
+					}
+				} else if (error.request) {
+					console.log(error.request);
+				} else {
+					console.log(error.message);
+				}
+			});
+		}
 	}
 });
 
@@ -47708,34 +47872,46 @@ var render = function() {
             _c(
               "form",
               {
-                attrs: {
-                  method: "POST",
-                  action: "/register",
-                  name: "register_form",
-                  novalidate: ""
-                },
+                attrs: { novalidate: "" },
                 on: {
                   submit: function($event) {
-                    _vm.event.preventDefault()
+                    $event.preventDefault()
+                    _vm.submit()
                   }
                 }
               },
               [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "register-modal-email" } }, [
-                    _vm._v("Email Address")
+                  _c("label", { attrs: { for: "register-modal-name" } }, [
+                    _vm._v("Name")
                   ]),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.name,
+                        expression: "name"
+                      }
+                    ],
                     staticClass: "form-control",
                     attrs: {
-                      type: "email",
-                      id: "register-modal-email",
-                      name: "email",
-                      placeholder: "address@email.com",
+                      id: "register-modal-name",
+                      name: "name",
+                      placeholder: "John",
+                      autofocus: "",
                       required: ""
                     },
-                    domProps: { value: _vm.email }
+                    domProps: { value: _vm.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.name = $event.target.value
+                      }
+                    }
                   }),
                   _vm._v(" "),
                   false
@@ -47746,7 +47922,57 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
+                  _vm.name === ""
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(
+                          "\n\t\t\t\t\t\t\tThis field is required\n\t\t\t\t\t\t"
+                        )
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "register-modal-email" } }, [
+                    _vm._v("Email")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.email,
+                        expression: "email"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "email",
+                      id: "register-modal-email",
+                      name: "email",
+                      placeholder: "address@email.com",
+                      required: ""
+                    },
+                    domProps: { value: _vm.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.email = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
                   false
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(
+                          "\n\t\t\t\t\t\t\tInvalid email address\n\t\t\t\t\t\t"
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.email === ""
                     ? _c("div", { staticClass: "text-danger" }, [
                         _vm._v(
                           "\n\t\t\t\t\t\t\tThis field is required\n\t\t\t\t\t\t"
@@ -47761,6 +47987,14 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.password,
+                        expression: "password"
+                      }
+                    ],
                     staticClass: "form-control",
                     attrs: {
                       type: "password",
@@ -47768,10 +48002,61 @@ var render = function() {
                       name: "password",
                       required: ""
                     },
-                    domProps: { value: _vm.password }
+                    domProps: { value: _vm.password },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.password = $event.target.value
+                      }
+                    }
                   }),
                   _vm._v(" "),
-                  false
+                  _vm.password === ""
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(
+                          "\n\t\t\t\t\t\t\tThis field is required\n\t\t\t\t\t\t"
+                        )
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    { attrs: { for: "register-modal-password-conf" } },
+                    [_vm._v("Confirm Password")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.password_confirmation,
+                        expression: "password_confirmation"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "password",
+                      id: "register-modal-password-conf",
+                      name: "password_confirmation",
+                      required: ""
+                    },
+                    domProps: { value: _vm.password_confirmation },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.password_confirmation = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.password_confirmation === ""
                     ? _c("div", { staticClass: "text-danger" }, [
                         _vm._v(
                           "\n\t\t\t\t\t\t\tThis field is required\n\t\t\t\t\t\t"
@@ -47784,7 +48069,7 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _vm.success
+            _vm.registered
               ? _c("div", { staticClass: "alert alert-success" }, [
                   _c("h4", { staticClass: "alert-heading" }, [
                     _vm._v("Thank you!")
@@ -47795,14 +48080,33 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            !_vm.success && false
+            _vm.notRegistered
               ? _c("div", { staticClass: "alert alert-danger" }, [
                   _c("h4", { staticClass: "alert-heading" }, [
                     _vm._v("Registration Failed!")
                   ]),
-                  _vm._v(
-                    "\n\t\t\t\t\tA user with this email address may already be registered.\n\t\t\t\t"
-                  )
+                  _vm._v(" "),
+                  _c("span", [_vm._v(_vm._s(_vm.errorMessage))]),
+                  _vm._v(" "),
+                  _vm.errors.name || _vm.errors.email || _vm.errors.password
+                    ? _c(
+                        "ul",
+                        [
+                          _vm._l(_vm.errors.name, function(error) {
+                            return _c("li", [_vm._v(_vm._s(error))])
+                          }),
+                          _vm._v(" "),
+                          _vm._l(_vm.errors.email, function(error) {
+                            return _c("li", [_vm._v(_vm._s(error))])
+                          }),
+                          _vm._v(" "),
+                          _vm._l(_vm.errors.password, function(error) {
+                            return _c("li", [_vm._v(_vm._s(error))])
+                          })
+                        ],
+                        2
+                      )
+                    : _vm._e()
                 ])
               : _vm._e()
           ])

@@ -1,10 +1,17 @@
 /node_modules
+/public/css/app.css
+/public/css/bootstrap_pi.css
 /public/hot
 /public/storage
 /public/img/posters
 /public/img/*.psd
 /public/img/banners/*.psd
 /public/img/logos/*.psd
+/public/js/app.js
+/public/js/browse.js
+/public/js/episode.js
+/public/js/movie.js
+/public/mix-manifest.json
 /storage/*.key
 /vendor
 /.idea

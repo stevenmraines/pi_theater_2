@@ -40,7 +40,7 @@
 		},
 
 		created() {
-			Event.listen('slide', this.doSlide);
+			// Event.listen('slide', this.doSlide);
 		}
 	}
 </script>

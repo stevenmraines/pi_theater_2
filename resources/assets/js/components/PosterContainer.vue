@@ -31,16 +31,6 @@
 			unhover() {
 				Event.trigger('posterContainerUnhover');
 			},
-
-			doSlide(data) {
-				// console.log(data);
-				// console.log($(this.$el));
-				$(this.$el).css('left', data.newLeft);
-			}
 		},
-
-		created() {
-			// Event.listen('slide', this.doSlide);
-		}
 	}
 </script>

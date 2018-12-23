@@ -20,6 +20,7 @@ window.Event = new class {
  */
 const app = new Vue({
 	el: '#vue-wrapper',
+
 	data: {
 		genres: [],
 		genre_columns: [],
@@ -30,6 +31,7 @@ const app = new Vue({
 		movie_modal: {},
 		show_modal: {}
 	},
+
 	methods: {
 		newGenre: function(genre_id) {
 			axios.get('/api/movie/recentGenre/10/0/' + genre_id)
@@ -37,6 +39,7 @@ const app = new Vue({
 					console.log(response.data);
 				});
 		},
+
 		createGenreTable: function() {
 			var genre_column_count		= this.genres.length % 5 === 0 ? 5 :
 					(this.genres.length % 4 === 0 ? 4 : 3);
@@ -50,13 +53,15 @@ const app = new Vue({
 			}
 			this.genre_columns = genre_columns;
 		},
+
 		getWatchlist: function() {
 			axios.get('/user/watchlist/allMedia')
 				.then(function(response) {
 					console.log(response.data);
 				});
-		}
+		},
 	},
+
 	mounted: function() {
 		/*
 		 * TODO:
@@ -66,18 +71,26 @@ const app = new Vue({
 		 * - Create genres table dropdown in navbar
 		 */
 		var self = this;
+
 		axios.get('/api/genre/allGenres')
 			.then(function(response) {
 				self.genres = response.data;
 				self.createGenreTable();
 			});
+
 		axios.get('/api/collection/recent/3')
 			.then(function(response) {
 				self.collections = response.data;
 			});
+
 		axios.get('/api/movie/recent/10/0')
 			.then(function(response) {
 				self.recent_movies = response.data;
 			});
-	}
+
+		axios.get('/api/show/recent/10/0')
+			.then(function(response) {
+				self.recent_shows = response.data;
+			});
+	},
 });

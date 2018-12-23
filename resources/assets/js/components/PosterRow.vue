@@ -11,6 +11,7 @@
 					v-bind:media-type="'movie'"
 					v-bind:title="content.title"
 					v-bind:poster="content.poster"
+					v-bind:eventDispatcher="eventDispatcher"
 			></poster-container>
 		</div>
 	</div>
@@ -20,10 +21,15 @@
 	export default {
 		props: ['contents'],
 
+		/*
+		 * Using a non-global event dispatcher here because the global one was causing an
+		 * issue where when one poster was hovered, ALL poster rows listened and responded.
+		 */
 		data() {
 			return {
 				offset:	10,
-				leftOffset: 0
+				leftOffset: 0,
+				eventDispatcher: new Vue({}),
 			};
 		},
 
@@ -109,8 +115,8 @@
 		},
 
 		created() {
-			Event.listen('posterContainerHover', this.shift);
-			Event.listen('posterContainerUnhover', this.unshift);
+			this.eventDispatcher.$on('posterContainerHover', this.shift);
+			this.eventDispatcher.$on('posterContainerUnhover', this.unshift);
 		}
 	}
 </script>

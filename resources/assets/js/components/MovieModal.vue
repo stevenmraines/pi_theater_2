@@ -31,14 +31,14 @@
 					</div>
 					<div class="modal-footer d-flex justify-content-between flex-column-reverse flex-sm-row">
 						<div v-if="logged">
-							<button class="btn btn-success btn-watchlist" v-if="!inWatchlist" v-on:click="addMovie(mediaId)">
+							<button class="btn btn-success btn-watchlist" v-if="!inWatchlist" v-on:click="addMovie()">
 								ADD TO WATCHLIST
 							</button>
-							<button class="btn btn-warning btn-watchlist" v-if="inWatchlist" v-on:click="removeMovie(mediaId)">
+							<button class="btn btn-warning btn-watchlist" v-if="inWatchlist" v-on:click="removeMovie()">
 								REMOVE FROM WATCHLIST
 							</button>
 						</div>
-						<a v-bind:href="'/theater/movie/' + mediaId"
+						<a v-bind:href="'/theater/movie/' + id"
 								class="btn btn-primary ml-sm-auto ml-0 mb-4 mb-sm-0 btn-watchlist">
 							WATCH NOW
 						</a>
@@ -53,7 +53,7 @@
 	export default {
 		data() {
 			return {
-				mediaId:		0,
+				id:		0,
 				title:			'',
 				summary:		'',
 				notes:			null,
@@ -74,7 +74,7 @@
 				var self = this;
 				axios.get('/movie/info/' + data.id)
 					.then(function(response) {
-						self.mediaId		= response.data.id;
+						self.id		= response.data.id;
 						self.title			= response.data.title;
 						self.summary		= response.data.summary;
 						self.notes			= response.data.notes;
@@ -87,9 +87,9 @@
 					});
 			},
 
-			addMovie: function(id) {
+			addMovie() {
 				var self = this;
-				axios.get('/user/watchlist/addMovie/' + id)
+				axios.get('/user/watchlist/addMovie/' + this.id)
 					.then(function(response) {
 						if(typeof response.data.success !== null && response.data.success) {
 							self.inWatchlist = true;
@@ -97,9 +97,9 @@
 					});
 			},
 
-			removeMovie: function(id) {
+			removeMovie() {
 				var self = this;
-				axios.get('/user/watchlist/removeMovie/' + id)
+				axios.get('/user/watchlist/removeMovie/' + this.id)
 					.then(function(response) {
 						if(typeof response.data.success !== null && response.data.success) {
 							self.inWatchlist = false;

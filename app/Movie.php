@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movie extends Model
 {
-    public function genres() {
+  public function genres() {
 		return $this->belongsToMany(Genre::class, 'movie_genres', 'movie_id', 'genre_id');
 	}
 
@@ -14,6 +14,6 @@ class Movie extends Model
 		return self::orderBy('created_at', 'desc')
 				->limit($limit)
 				->offset($offset)
-                ->get();
+        ->get();
 	}
 }

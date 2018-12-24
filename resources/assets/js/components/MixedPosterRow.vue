@@ -1,6 +1,10 @@
 <template>
 	<div class="container-fluid poster-row px-0 py-3 mb-5">
-		<span class="left-arrow" v-on:click="slide('right')" v-bind:class="{ hidden: leftOffset >= 0 }">&#8249;</span>
+		<span
+			class="left-arrow"
+			v-on:click="slide('right')"
+			v-bind:class="{ hidden: leftOffset >= 0 }"
+		>&#8249;</span>
 		<span class="right-arrow" v-on:click="slide('left')">&#8250;</span>
 		<div class="slider">
 			<movie-poster-container

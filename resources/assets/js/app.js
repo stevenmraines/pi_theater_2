@@ -19,6 +19,7 @@ window.Vue		= require('vue');
 Vue.component('login-modal', require('./components/LoginModal.vue'));
 Vue.component('registration-modal', require('./components/RegistrationModal.vue'));
 Vue.component('movie-modal', require('./components/MovieModal.vue'));
+Vue.component('show-modal', require('./components/ShowModal.vue'));
 Vue.component('movie-poster-row', require('./components/MoviePosterRow.vue'));
 Vue.component('movie-poster-container', require('./components/MoviePosterContainer.vue'));
 Vue.component('show-poster-row', require('./components/ShowPosterRow.vue'));

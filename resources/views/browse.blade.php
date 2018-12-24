@@ -11,6 +11,7 @@ $user = auth()->check();
 		@include('categories')
 		@include('poster_rows')
 		<movie-modal></movie-modal>
+		<show-modal></show-modal>
 		<registration-modal></registration-modal>
 		<login-modal></login-modal>
 	</div>

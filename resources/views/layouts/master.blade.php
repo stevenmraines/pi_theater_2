@@ -10,7 +10,7 @@
 		<link href="{{ asset('css/bootstrap_pi.css') }}" rel="stylesheet">
 		<script src="js/app.js"></script>
 	</head>
-	<body>
+	<body class="scrollbar">
 		@yield('content')
 	</body>
 </html>

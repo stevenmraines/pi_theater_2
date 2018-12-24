@@ -238,15 +238,13 @@ form[name="search-filters-form"] {
  *  Movie/Show modals
  */
 .modal-poster {
+  width: 230px;
+  height: 345px;
 	box-shadow: 0 0 30px black;
 }
 
 #movie-modal-info {
 	font-size: 17px;
-}
-
-#show-modal-info {
-	max-height: 345px;
 }
 
 .seasons-dropdown {
@@ -258,8 +256,14 @@ form[name="search-filters-form"] {
 }
 
 #show-modal-episodes {
-	max-height: 95%;
+	max-height: 250px;
 	overflow: auto;
+  border: 7px solid #282828;
+}
+
+#show-modal hr {
+ margin: 5px 0;
+ border-bottom: 1px solid #444;
 }
 
 /*

@@ -18,7 +18,7 @@ Route::get('/movie/genres/{id}', 'MoviesController@genres');
 /*
  * Show routes
  */
-Route::get('/show/info/{id}', 'ShowsController@info');
+// Route::get('/show/info/{id}', 'ShowsController@info');
 Route::get('/show/recent/{limit}/{offset}', 'ShowsController@recent');
 Route::get('/show/year/{year}', 'ShowsController@year');
 Route::get('/show/genres/{id}', 'ShowsController@genres');

@@ -9,7 +9,13 @@ Route::get('/', 'ViewController@browse');
  * Movie page
  */
 Route::get('/theater/movie/{movie_id}', 'ViewController@movieTheater');
-Route::get('/movie/info/{id}', 'MoviesController@info');  // Move here and auth works
+Route::get('/movie/info/{id}', 'MoviesController@info');
+
+/*
+ * Show page
+ */
+Route::get('/show/info/{id}', 'ShowsController@info');
+Route::get('/show/episodes/{id}/{season}', 'ShowsController@episodes');
 
 /*
  * Episode page

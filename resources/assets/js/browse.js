@@ -28,15 +28,21 @@ const app = new Vue({
 		recent_movies: [],
 		recent_shows: [],
 		history: [],
+		watchlist: [],
+		watchlist_movies: [],
+		watchlist_shows: [],
+		watchlist_api: '',
 		movie_modal: {},
-		show_modal: {}
+		show_modal: {},
 	},
 
 	methods: {
 		newGenre: function(genre_id) {
+			var self = this;
 			axios.get('/api/movie/recentGenre/10/0/' + genre_id)
 				.then(function(response) {
 					console.log(response.data);
+					// self.something = response.data;
 				});
 		},
 
@@ -55,9 +61,13 @@ const app = new Vue({
 		},
 
 		getWatchlist: function() {
+			var self = this;
 			axios.get('/user/watchlist/allMedia')
 				.then(function(response) {
 					console.log(response.data);
+					self.watchlist_movies = response.data.movies;
+					self.watchlist_shows = response.data.shows;
+					self.watchlist = response.data.movies.concat(response.data.shows);
 				});
 		},
 	},

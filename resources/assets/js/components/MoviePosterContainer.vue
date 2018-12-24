@@ -3,7 +3,7 @@
 		<img v-bind:src="'/img/posters/' + poster" class="img-fluid" />
 		<div class="poster-overlay d-flex flex-column justify-content-around">
 			<span class="mx-auto">{{ title }}</span>
-			<a v-bind:href="'/theater/' + mediaType + '/' + mediaId" class="mx-auto play text-center">&#9658;</a>
+			<a v-bind:href="'/theater/movie/' + id" class="mx-auto play text-center">&#9658;</a>
 			<button class="mx-auto btn btn-outline-success" v-on:click="moreInfo">More Info</button>
 		</div>
 	</div>
@@ -12,8 +12,7 @@
 <script>
 	export default {
 		props: [
-			'mediaId',
-			'mediaType',
+			'id',
 			'title',
 			'poster',
 			'eventDispatcher',
@@ -21,12 +20,11 @@
 
 		methods: {
 			moreInfo() {
-				var e = this.mediaType === 'movie' ? 'movieinfo' : 'showinfo';
-				Event.trigger(e, { id: this.mediaId });  // Global event dispatcher is fine here
+				Event.trigger('movieInfo', { id: this.id });  // Global event dispatcher is fine here
 			},
 
 			hover() {
-				this.eventDispatcher.$emit('posterContainerHover', { id: this.mediaId });
+				this.eventDispatcher.$emit('posterContainerHover', { id: this.id });
 			},
 
 			unhover() {

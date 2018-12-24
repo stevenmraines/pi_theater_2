@@ -66,14 +66,13 @@
 		},
 
 		created() {
-			Event.listen('movieinfo', this.load);
+			Event.listen('movieInfo', this.load);
 		},
 
 		methods: {
 			load(data) {
 				var self = this;
 				axios.get('/movie/info/' + data.id)
-				// axios.get('/api/movie/info/' + data.id)
 					.then(function(response) {
 						self.mediaId		= response.data.id;
 						self.title			= response.data.title;
@@ -87,6 +86,7 @@
 						$('#movie-modal').modal('show');
 					});
 			},
+
 			addMovie: function(id) {
 				var self = this;
 				axios.get('/user/watchlist/addMovie/' + id)
@@ -96,6 +96,7 @@
 						}
 					});
 			},
+
 			removeMovie: function(id) {
 				var self = this;
 				axios.get('/user/watchlist/removeMovie/' + id)
@@ -104,7 +105,7 @@
 							self.inWatchlist = false;
 						}
 					});
-			}
-		}
+			},
+		},
 	}
 </script>

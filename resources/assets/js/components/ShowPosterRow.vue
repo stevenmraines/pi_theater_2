@@ -1,18 +1,17 @@
 <template>
-	<div class="container-fluid poster-row px-0 py-3 mb-3">
+	<div class="container-fluid poster-row px-0 py-3 mb-5">
 		<span class="left-arrow" v-on:click="slide('right')" v-bind:class="{ hidden: leftOffset >= 0 }">&#8249;</span>
 		<span class="right-arrow" v-on:click="slide('left')">&#8250;</span>
 		<div class="slider">
-			<poster-container
+			<show-poster-container
 					ref="posterContainers"
 					v-for="content in contents"
 					v-bind:key="content.id"
-					v-bind:media-id="content.id"
-					v-bind:media-type="'movie'"
+					v-bind:id="content.id"
 					v-bind:title="content.title"
 					v-bind:poster="content.poster"
 					v-bind:eventDispatcher="eventDispatcher"
-			></poster-container>
+			></show-poster-container>
 		</div>
 	</div>
 </template>
@@ -40,7 +39,7 @@
 
 				if(dir === 'left') {  // Right arrow clicked
 					axios
-						.get('/api/movie/recent/' + inc + '/' + this.offset)
+						.get('/api/show/recent/' + inc + '/' + this.offset)
 						.then(function(response) {
 							for(var i = 0; i < response.data.length; i++) {
 								self.contents.push(response.data[i]);
@@ -96,7 +95,7 @@
 				for(var i = 0; i < p.length; i++) {
 					if(!found) {
 						p[i].$el.classList.add('shift-left');
-						if(p[i].mediaId === data.id) {
+						if(p[i].id === data.id) {
 							found = true;
 						}
 					}else {

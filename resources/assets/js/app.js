@@ -19,8 +19,11 @@ window.Vue		= require('vue');
 Vue.component('login-modal', require('./components/LoginModal.vue'));
 Vue.component('registration-modal', require('./components/RegistrationModal.vue'));
 Vue.component('movie-modal', require('./components/MovieModal.vue'));
-Vue.component('poster-row', require('./components/PosterRow.vue'));
-Vue.component('poster-container', require('./components/PosterContainer.vue'));
+Vue.component('movie-poster-row', require('./components/MoviePosterRow.vue'));
+Vue.component('movie-poster-container', require('./components/MoviePosterContainer.vue'));
+Vue.component('show-poster-row', require('./components/ShowPosterRow.vue'));
+Vue.component('show-poster-container', require('./components/ShowPosterContainer.vue'));
+Vue.component('mixed-poster-row', require('./components/MixedPosterRow.vue'));
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue'));
 //

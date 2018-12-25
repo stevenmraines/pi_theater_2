@@ -1,7 +1,15 @@
 <template>
 	<div class="container-fluid poster-row px-0 py-3 mb-5">
-		<span class="left-arrow" v-on:click="slide('right')" v-bind:class="{ hidden: leftOffset >= 0 }">&#8249;</span>
-		<span class="right-arrow" v-on:click="slide('left')">&#8250;</span>
+		<span
+			class="left-arrow"
+			v-on:click="slide('right')"
+			v-bind:class="{ hidden: leftOffset >= 0 }"
+		>&#8249;</span>
+		<span
+			class="right-arrow"
+			v-on:click="slide('left')"
+			v-bind:class="{ hidden: complete }"
+		>&#8250;</span>
 		<div class="slider">
 			<movie-poster-container
 					ref="posterContainers"
@@ -28,6 +36,7 @@
 			return {
 				offset:	10,
 				leftOffset: 0,
+				complete: false,  // If there are no more results to get
 				eventDispatcher: new Vue({}),
 			};
 		},
@@ -41,11 +50,17 @@
 					axios
 						.get('/api/movie/recent/' + inc + '/' + this.offset)
 						.then(function(response) {
-							for(var i = 0; i < response.data.length; i++) {
-								self.contents.push(response.data[i]);
+							if(response.data.length > 0) {
+								for(var i = 0; i < response.data.length; i++) {
+									self.contents.push(response.data[i]);
+								}
+
+								inc = inc <= response.data.length ? inc : response.data.length;
+								self.offset += inc;
+								return self.doSlide(dir, inc);
 							}
-							self.offset += inc;
-							return self.doSlide(dir, inc);
+
+							self.complete = true;
 						})
 						.catch(function(error) {
 							console.log(error);
@@ -80,32 +95,43 @@
 				}
 			},
 
+			/*
+			 * May need to make this global so it is available in app.js when
+			 * fetching the initial results for recent_movies.
+			 */
 			getIncrement() {
 				var width = window.innerWidth;
 				var inc = 0;
+
 				while((inc + 1) * 230 < width) {
 					inc++;
 				}
+
 				return inc;
 			},
 
 			shift(data) {
 				var p = this.$refs.posterContainers;
 				var found = false;
+
 				for(var i = 0; i < p.length; i++) {
 					if(!found) {
 						p[i].$el.classList.add('shift-left');
+
 						if(p[i].id === data.id) {
 							found = true;
 						}
-					}else {
-						p[i].$el.classList.add('shift-right');
+
+						continue;
 					}
+
+					p[i].$el.classList.add('shift-right');
 				}
 			},
 
 			unshift() {
 				var p = this.$refs.posterContainers;
+				
 				for(var i = 0; i < p.length; i++) {
 					p[i].$el.classList.remove('shift-left');
 					p[i].$el.classList.remove('shift-right');

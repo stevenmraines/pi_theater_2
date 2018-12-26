@@ -70,6 +70,10 @@ const app = new Vue({
 					self.watchlist = response.data.movies.concat(response.data.shows);
 				});
 		},
+
+		showSearchModal: function() {
+			Event.trigger('showSearchModal');
+		},
 	},
 
 	mounted: function() {

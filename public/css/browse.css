@@ -73,6 +73,16 @@ body {
   padding-top: 60px;  /* Clear navbar */
 }
 
+#search-modal > .modal-dialog {
+    transform: none;
+    max-width: 100%;
+}
+
+#search-modal > .modal-dialog > .modal-content {
+    background-color: transparent;
+    border: none;
+}
+
 #search-input {
   display: block;
   width: 100%;

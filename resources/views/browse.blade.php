@@ -6,10 +6,10 @@ $user = auth()->check();
 @section('content')
 	<link rel="stylesheet" href="{{ asset('css/browse.css') }}" />
 	<div id="vue-wrapper" class='container-fluid px-0'>
-			@include('header')
-			@include('new_collections')
-			@include('categories')
-			@include('poster_rows')
+		@include('header')
+		@include('new_collections')
+		@include('categories')
+		@include('poster_rows')
 		<search-modal></search-modal>
 		<movie-modal></movie-modal>
 		<show-modal></show-modal>

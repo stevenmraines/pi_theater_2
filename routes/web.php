@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
  * "Browse" page, AKA the home page
  */
@@ -10,6 +12,9 @@ Route::get('/', 'ViewController@browse');
  */
 Route::get('/theater/movie/{movie_id}', 'ViewController@movieTheater');
 Route::get('/movie/info/{id}', 'MoviesController@info');
+Route::get('/movie/search', function(Request $request) {
+    return App\Movie::where('title', 'LIKE', "%{$request->input('query')}%")->get();
+});
 
 /*
  * Show page

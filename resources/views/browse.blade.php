@@ -10,7 +10,7 @@ $user = auth()->check();
 		@include('new_collections')
 		@include('categories')
 		@include('poster_rows')
-		<search-modal></search-modal>
+		<search-modal v-bind:search-results="[]"></search-modal>
 		<movie-modal></movie-modal>
 		<show-modal></show-modal>
 		<login-modal></login-modal>

@@ -24,7 +24,17 @@ const app = new Vue({
 	data: {
 		genres: [],
 		genre_columns: [],
+		genre_results: {
+			movies: [],
+			shows: [],
+		},
+		collection_results: {
+			movies: [],
+			shows: [],
+			episodes: [],
+		},
 		collections: [],
+		recent_collections: [],
 		recent_movies: [],
 		recent_shows: [],
 		history: [],
@@ -39,6 +49,7 @@ const app = new Vue({
 	methods: {
 		newGenre: function(genre_id) {
 			var self = this;
+			
 			axios.get('/api/movie/recentGenre/10/0/' + genre_id)
 				.then(function(response) {
 					console.log(response.data);
@@ -47,21 +58,48 @@ const app = new Vue({
 		},
 
 		createGenreTable: function() {
-			var genre_column_count		= this.genres.length % 5 === 0 ? 5 :
-					(this.genres.length % 4 === 0 ? 4 : 3);
+			var genre_column_count = this.genres.length % 5 === 0 ? 5 :
+				(this.genres.length % 4 === 0 ? 4 : 3);
 			var max_genres_per_column	= Math.ceil(this.genres.length / genre_column_count);
-			var genre_columns			= [];
+			var genre_columns = [];
+
 			for(var i = 0; i < this.genres.length; i++) {
 				if(i % max_genres_per_column === 0 || i === 0) {
 					genre_columns.push([]);  // Add another column
 				}
+
 				genre_columns[genre_columns.length - 1].push(this.genres[i]);
 			}
+
 			this.genre_columns = genre_columns;
+		},
+
+		getGenre: function(id) {
+			var self = this;
+
+			axios.get('/api/genre/allMedia/' + id)
+				.then(function(response) {
+					console.log(response.data);
+					self.genre_results.movies = response.data.movies;
+					self.genre_results.shows = response.data.shows;
+				});
+		},
+
+		getCollection: function(id) {
+			var self = this;
+
+			axios.get('/api/collection/allMedia/' + id)
+				.then(function(response) {
+					console.log(response.data);
+					self.collection_results.movies = response.data.movies;
+					self.collection_results.shows = response.data.shows;
+					self.collection_results.episodes = response.data.episodes;
+				});
 		},
 
 		getWatchlist: function() {
 			var self = this;
+
 			axios.get('/user/watchlist/allMedia')
 				.then(function(response) {
 					console.log(response.data);
@@ -77,13 +115,6 @@ const app = new Vue({
 	},
 
 	mounted: function() {
-		/*
-		 * TODO:
-		 * - Get all genres for navbar
-		 * - Get recently updated collections
-		 * - Get recent movies
-		 * - Create genres table dropdown in navbar
-		 */
 		var self = this;
 
 		axios.get('/api/genre/allGenres')
@@ -92,9 +123,14 @@ const app = new Vue({
 				self.createGenreTable();
 			});
 
-		axios.get('/api/collection/recent/3')
+		axios.get('/api/collection/allCollections')
 			.then(function(response) {
 				self.collections = response.data;
+			});
+
+		axios.get('/api/collection/recent/3')
+			.then(function(response) {
+				self.recent_collections = response.data;
 			});
 
 		axios.get('/api/movie/recent/10/0')

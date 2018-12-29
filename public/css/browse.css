@@ -103,6 +103,11 @@ body {
     font-size: 20px;
 }
 
+/* #search-modal-movies::after, #search-modal-shows::after {
+  content: "";
+  flex: auto;
+} */
+
 /*
  *  Collections jumbotron
  */

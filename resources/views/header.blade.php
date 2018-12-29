@@ -18,7 +18,9 @@
 								<tr scope="row">
 									<td v-for="column in genre_columns" class="px-1 pb-0">
 										<div v-for="genre in column">
-											<a href="#" class="nav-link">@{{ genre.name }}</a>
+											<a href="#" class="nav-link" v-on:click="getGenre(genre.id)">
+												@{{ genre.name }}
+											</a>
 										</div>
 									</td>
 								</tr>
@@ -32,7 +34,11 @@
 					</a>
 					<div id="collections-menu-container" class="dropdown-menu dropdown-menu-left scrollbar" aria-labelledby="collections-menu">
 						<a href="#" v-for="collection in collections">
-							<img v-bind:src="'/img/logos/' + collection.logo" class="dropdown-item menu-logo" />
+							<img
+								v-bind:src="'/img/logos/' + collection.logo"
+								class="dropdown-item menu-logo"
+								v-on:click="getCollection(collection.id)"
+							/>
 						</a>
 					</div>
 				</li>

@@ -3,47 +3,45 @@
 use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+  return $request->user();
 });
 
 /*
  * Movie routes
  */
-// Route::get('/movie/info/{id}', 'MoviesController@info');
-Route::get('/movie/recent/{limit}/{offset}', 'MoviesController@recent');
+Route::get('/movie/recent/{limit}/{offset}', function($limit, $offset) {
+  return App\Movie::recent($limit, $offset);
+});
+
 Route::get('/movie/recentGenre/{limit}/{offset}/{genre}', 'MoviesController@recentGenre');
-Route::get('/movie/year/{year}', 'MoviesController@year');
-Route::get('/movie/genres/{id}', 'MoviesController@genres');
 
 /*
  * Show routes
  */
-// Route::get('/show/info/{id}', 'ShowsController@info');
-Route::get('/show/recent/{limit}/{offset}', 'ShowsController@recent');
-Route::get('/show/year/{year}', 'ShowsController@year');
-Route::get('/show/genres/{id}', 'ShowsController@genres');
+Route::get('/show/recent/{limit}/{offset}', function($limit, $offset) {
+  return App\Show::orderBy('created_at', 'desc')->limit($limit)->offset($offset)->get();
+});
 
 /*
  * Genre routes
  */
-Route::get('/genre/allGenres', 'GenresController@allGenres');
-Route::get('/genre/movies/{id}', 'GenresController@movies');
-Route::get('/genre/shows/{id}', 'GenresController@shows');
-Route::get('/genre/allMedia/{id}', 'GenresController@allMedia');
-Route::get('/genre/movies/recent/{id}/{limit}', 'GenresController@recent_movies');
-Route::get('/genre/shows/recent/{id}/{limit}', 'GenresController@recent_shows');
+Route::get('/genre/allGenres', function() {
+  return App\Genre::orderBy('name', 'asc')->get();
+});
+
+Route::get('/genre/allMedia/{id}', function($id) {
+  return App\Genre::find($id)->load('movies')->load('shows');
+});
 
 /*
  * Collection routes
  */
-Route::get('/collection/recent/{limit}', 'CollectionsController@recent');
-Route::get('/collection/movies/{id}', 'CollectionsController@movies');
-Route::get('/collection/shows/{id}', 'CollectionsController@shows');
-Route::get('/collection/episodes/{id}', 'CollectionsController@episodes');
-Route::get('/collection/allMedia/{id}', 'CollectionsController@allMedia');
+Route::get('/collection/allCollections', function() {
+  return App\Collection::get();
+});
 
-/*
- * User routes
- */
-// Route::get('/user/watchlist/movies/{id}', 'UsersController@watchlistMovies');
-// Route::get('/user/watchlist/shows/{id}', 'UsersController@watchlistShows');
+Route::get('/collection/recent/{limit}', function($limit) {
+  return App\Collection::limit($limit)->get();
+});
+
+Route::get('/collection/allMedia/{id}', 'CollectionsController@allMedia');

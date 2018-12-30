@@ -32,6 +32,7 @@ const app = new Vue({
 			movies: [],
 			shows: [],
 			episodes: [],
+			logo: '',
 		},
 		collections: [],
 		recent_collections: [],
@@ -49,7 +50,7 @@ const app = new Vue({
 	methods: {
 		newGenre: function(genre_id) {
 			var self = this;
-			
+
 			axios.get('/api/movie/recentGenre/10/0/' + genre_id)
 				.then(function(response) {
 					console.log(response.data);
@@ -90,10 +91,8 @@ const app = new Vue({
 
 			axios.get('/api/collection/allMedia/' + id)
 				.then(function(response) {
-					console.log(response.data);
-					self.collection_results.movies = response.data.movies;
-					self.collection_results.shows = response.data.shows;
-					self.collection_results.episodes = response.data.episodes;
+					self.collection_results = response.data;
+					Event.trigger('showCollectionModal');
 				});
 		},
 

@@ -1,5 +1,5 @@
 <?php
-$user = auth()->check();
+	$user = auth()->check();
 ?>
 
 @extends('layouts.master')
@@ -11,6 +11,7 @@ $user = auth()->check();
 		@include('categories')
 		@include('poster_rows')
 		<search-modal v-bind:search-results="[]"></search-modal>
+		<collection-modal v-bind:contents="collection_results"></collection-modal>
 		<movie-modal></movie-modal>
 		<show-modal></show-modal>
 		<login-modal></login-modal>

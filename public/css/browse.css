@@ -70,6 +70,49 @@ body {
 }
 
 /*
+ * Fluid Modal
+ */
+.fluid-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 1030;
+  background-color: rgba(0,0,0,0.8);
+}
+
+.fluid-modal-content {
+  position: relative;
+}
+
+.fluid-modal-poster-container {
+  position: relative;
+  clear: both;
+}
+
+.fluid-modal-movies-container,
+.fluid-modal-shows-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 2rem;
+}
+
+.fluid-modal-hr {
+  margin: 0;
+  border-top: 2px solid #282828;
+}
+
+.fluid-modal-close {
+  font-size: 36px;
+}
+
+/*
  *  Search Modal
  */
 #search-modal {
@@ -121,11 +164,6 @@ body {
 #search-modal-count {
     font-size: 20px;
 }
-
-/* #search-modal-movies::after, #search-modal-shows::after {
-  content: "";
-  flex: auto;
-} */
 
 /*
  *  Collections jumbotron

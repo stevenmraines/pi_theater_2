@@ -1,5 +1,6 @@
 <template>
-  <div id="search-modal" class="pl-3 pr-4 scrollbar" v-on:click="hide">
+  <div id="search-modal" class="pl-3 pr-4 scrollbar">
+  <!-- <div id="search-modal" class="pl-3 pr-4 scrollbar" v-on:click.stop="hide"> -->
     <div id="search-modal-content-container" class="m-0">
         <div id="search-modal-content" class="d-block">
           <div class="mb-5">

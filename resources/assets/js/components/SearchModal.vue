@@ -1,7 +1,7 @@
 <template>
-  <div id="search-modal" class="modal fade px-3">
-    <div class="modal-dialog m-0">
-        <div class="modal-content d-block">
+  <div id="search-modal" class="pl-3 pr-4 scrollbar" v-on:click="hide">
+    <div id="search-modal-content-container" class="m-0">
+        <div id="search-modal-content" class="d-block">
           <div class="mb-5">
             <button
               id="search-modal-hide"
@@ -66,7 +66,7 @@
     methods: {
       keyup() {
           clearTimeout(this.typingTimer);
-          this.typingTimer = setTimeout(this.search, 1000);
+          this.typingTimer = setTimeout(this.search, 750);
       },
 
       keydown() {
@@ -95,14 +95,16 @@
       },
 
       show() {
-        $('#search-modal').modal('show');
-        // document.getElementById('search-input').focus();
+        document.getElementsByTagName('body')[0].classList.add('overflow-hidden');
+        $('#search-modal').fadeIn();
+        document.getElementById('search-input').focus();
       },
 
       hide() {
         this.query = '';
         this.searchResults = [];
-        $('#search-modal').modal('hide');
+        $('#search-modal').fadeOut();
+        document.getElementsByTagName('body')[0].classList.remove('overflow-hidden');
       },
     },
   }

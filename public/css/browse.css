@@ -9,6 +9,10 @@
 	opacity: 0 !important;
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
 /*
  *  General
  */
@@ -69,18 +73,33 @@ body {
  *  Search Modal
  */
 #search-modal {
-  background-color: rgba(0,0,0,0.7);
+  display: none;
+  position: fixed;
   padding-top: 60px;  /* Clear navbar */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+  overflow: overlay;
+  outline: 0;
+  background-color: rgba(0,0,0,0.8);
 }
 
-#search-modal > .modal-dialog {
-    transform: none;
-    max-width: 100%;
+#search-modal-content-container {
+  position: relative;
+  width: auto;
+  pointer-events: none;
 }
 
-#search-modal > .modal-dialog > .modal-content {
-    background-color: transparent;
-    border: none;
+#search-modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-clip: padding-box;
+  outline: 0;
 }
 
 #search-input {
@@ -222,6 +241,7 @@ body {
 	height: 100%;
 	z-index: 1;
 	transition: 0.2s opacity ease-in;
+  text-align: center;
 }
 
 .poster-overlay:hover {

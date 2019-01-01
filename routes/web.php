@@ -14,10 +14,6 @@ Route::get('/', function() {
  */
 Route::get('/movie/info/{id}', 'MoviesController@info');
 
-Route::get('/movie/search', function(Request $request) {
-  return App\Movie::where('title', 'LIKE', "%{$request->input('query')}%")->get();
-});
-
 /*
  * Shows
  */
@@ -25,6 +21,18 @@ Route::get('/show/info/{id}', 'ShowsController@info');
 
 Route::get('/show/episodes/{id}/{season}', function($id, $season) {
   return App\Show::episodes($id, $season);
+});
+
+/*
+ * Search
+ */
+Route::get('/search', function(Request $request) {
+  $movies = App\Movie::where('title', 'LIKE', "%{$request->input('query')}%")->get();
+  $shows = App\Show::where('title', 'LIKE', "%{$request->input('query')}%")->get();
+  return [
+    'movies' => $movies,
+    'shows' => $shows
+  ];
 });
 
 /*

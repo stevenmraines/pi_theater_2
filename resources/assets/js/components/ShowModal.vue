@@ -49,7 +49,7 @@
                   <div v-for="episode in currentEpisodes">
                     <hr />
                     <div class="d-flex justify-content-between align-items-center">
-    									<span>
+    									<span class="pr-2">
                         {{ episode.episode < 10 ? 0 : '' }}{{ episode.episode }}
                         - {{ episode.title }}
                       </span>

@@ -1,13 +1,11 @@
 <template>
-  <div id="search-modal" class="pl-3 pr-4 scrollbar">
+  <div class="fluid-modal scrollbar" ref="container">
   <!-- <div id="search-modal" class="pl-3 pr-4 scrollbar" v-on:click.stop="hide"> -->
-    <div id="search-modal-content-container" class="m-0">
-        <div id="search-modal-content" class="d-block">
-          <div class="mb-5">
+    <div class="fluid-modal-content">
+        <div>
+          <div class="mb-5 p-3">
             <button
-              id="search-modal-hide"
-              type="button"
-              class="close d-block"
+              class="fluid-modal-close close d-block"
               v-on:click="hide"
             >
               <span>&times;</span>
@@ -17,30 +15,41 @@
               v-model:value="query"
               placeholder="Search by Title"
               spellcheck="false"
+              ref="input"
               v-on:keyup="keyup"
               v-on:change="keyup"
               v-on:paste="keyup"
               v-on:keydown="keydown"
             />
+            <div id="search-modal-count" class="mt-2">
+                {{ searchResultsLength }} results found
+            </div>
           </div>
-          <div id="search-modal-count" class="mt-2">
-              {{ searchResults.length }} results found
-          </div>
-          <div v-if="searchResults.length > 0">
-            <div id="search-modal-movies" class="p-5 d-flex flex-wrap flex-row">
+          <div>
+            <div class="fluid-modal-movies-container mx-0 mb-2" v-if="searchResults.movies.length > 0">
               <movie-poster-container
-                class="mx-auto my-3"
+                class="my-3"
                 ref="moviePosterContainers"
-                v-for="movie in searchResults"
+                v-for="movie in searchResults.movies"
                 v-bind:key="movie.id"
                 v-bind:id="movie.id"
                 v-bind:title="movie.title"
                 v-bind:poster="movie.poster"
                 v-bind:event-dispatcher="eventDispatcher"
-    			    ></movie-poster-container>
-            </div><hr />
-            <div id="search-modal-shows" v-if="false">
-              <show-poster-container></show-poster-container>
+    		  ></movie-poster-container>
+            </div>
+            <hr class="fluid-modal-hr" v-if="bothFound" />
+            <div class="fluid-modal-shows-container mx-0 mt-2" v-if="searchResults.shows.length > 0">
+              <show-poster-container
+                class="my-3"
+                ref="showPosterContainers"
+                v-for="show in searchResults.shows"
+                v-bind:key="show.id"
+                v-bind:id="show.id"
+                v-bind:title="show.title"
+                v-bind:poster="show.poster"
+                v-bind:event-dispatcher="eventDispatcher"
+              ></show-poster-container>
             </div>
           </div>
         </div>
@@ -60,6 +69,17 @@
       }
     },
 
+    computed: {
+      searchResultsLength: function() {
+          return this.searchResults.movies.length + this.searchResults.shows.length;
+      },
+
+      bothFound: function() {
+        return this.searchResults.movies.length > 0 &&
+            this.searchResults.shows.length > 0;
+      },
+    },
+
     created() {
       Event.listen('showSearchModal', this.show);
     },
@@ -76,35 +96,44 @@
 
       search() {
           if(this.query === '') {
-              return this.searchResults = [];
+              return this.searchResults = { movies: [], shows: [] };
           }
 
           var self = this;
 
-          axios.get('/movie/search', {
+          axios.get('/search', {
               params: {
                   query: this.query
               },
           }).then(function(response) {
               console.log(response.data);
-              self.searchResults.splice(0, self.searchResults.length);
 
-              for(var i = 0; i < response.data.length; i++) {
-                  self.searchResults.push(response.data[i]);
+              /*
+               * Should probably trigger an event here to be heard by poster
+               * containers and update their data with search results
+               */
+              self.searchResults = { movies: [], shows: [] };
+
+              for(var i = 0; i < response.data.movies.length; i++) {
+                  self.searchResults.movies.push(response.data.movies[i]);
+              }
+
+              for(var i = 0; i < response.data.shows.length; i++) {
+                  self.searchResults.shows.push(response.data.shows[i]);
               }
           });
       },
 
       show() {
         document.getElementsByTagName('body')[0].classList.add('overflow-hidden');
-        $('#search-modal').fadeIn();
-        document.getElementById('search-input').focus();
+        $(this.$refs.container).fadeIn();
+        this.$refs.input.focus();
       },
 
       hide() {
         this.query = '';
-        this.searchResults = [];
-        $('#search-modal').fadeOut();
+        this.searchResults = { movies: [], shows: [] };
+        $(this.$refs.container).fadeOut();
         document.getElementsByTagName('body')[0].classList.remove('overflow-hidden');
       },
     },

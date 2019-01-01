@@ -10,7 +10,7 @@
 		@include('new_collections')
 		@include('categories')
 		@include('poster_rows')
-		<search-modal v-bind:search-results="[]"></search-modal>
+		<search-modal v-bind:search-results="searchResults"></search-modal>
 		<collection-modal v-bind:contents="collection_results"></collection-modal>
 		<movie-modal></movie-modal>
 		<show-modal></show-modal>

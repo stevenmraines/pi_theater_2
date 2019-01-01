@@ -12,7 +12,10 @@
         </button>
       </div>
       <div class="fluid-modal-poster-container">
-        <div class="fluid-modal-movies-container mx-0 mb-2">
+        <div
+            class="fluid-modal-movies-container mx-0 mb-2"
+            v-if="contents.movies.length > 0"
+        >
           <movie-poster-container
             class="my-3"
             ref="moviePosterContainers"
@@ -24,8 +27,11 @@
             v-bind:event-dispatcher="eventDispatcher"
 			    ></movie-poster-container>
         </div>
-        <hr class="fluid-modal-hr" v-if="contents.shows.length > 0" />
-        <div class="fluid-modal-shows-container mx-0 mt-2">
+        <hr class="fluid-modal-hr" v-if="bothFound" />
+        <div
+            class="fluid-modal-shows-container mx-0 mt-2"
+            v-if="contents.shows.length > 0"
+        >
           <show-poster-container
             class="my-3"
             ref="showPosterContainers"
@@ -50,6 +56,12 @@
       return {
         eventDispatcher: new Vue({}),
       }
+    },
+
+    computed: {
+      bothFound: function() {
+        return this.contents.movies.length > 0 && this.contents.shows.length > 0;
+      },
     },
 
     created() {

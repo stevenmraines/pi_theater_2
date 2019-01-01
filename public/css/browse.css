@@ -115,36 +115,6 @@ body {
 /*
  *  Search Modal
  */
-#search-modal {
-  display: none;
-  position: fixed;
-  padding-top: 60px;  /* Clear navbar */
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1030;
-  overflow: overlay;
-  outline: 0;
-  background-color: rgba(0,0,0,0.8);
-}
-
-#search-modal-content-container {
-  position: relative;
-  width: auto;
-  pointer-events: none;
-}
-
-#search-modal-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-clip: padding-box;
-  outline: 0;
-}
-
 #search-input {
   display: block;
   width: 100%;
@@ -155,10 +125,6 @@ body {
   font-size: 36px;
   outline: none;
   color: #888;
-}
-
-#search-modal-hide {
-  font-size: 36px;
 }
 
 #search-modal-count {

@@ -28,6 +28,10 @@ const app = new Vue({
 			movies: [],
 			shows: [],
 		},
+		searchResults: {
+			movies: [],
+			shows: []
+		},
 		collection_results: {
 			movies: [],
 			shows: [],

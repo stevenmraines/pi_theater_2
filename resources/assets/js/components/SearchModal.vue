@@ -95,7 +95,9 @@
 
       search() {
           if(this.query === '') {
-              return this.searchResults = { movies: [], shows: [] };
+              this.searchResults.movies.splice(0, this.searchResults.movies.length);
+              this.searchResults.shows.splice(0, this.searchResults.shows.length);
+              return true;
           }
 
           var self = this;
@@ -105,13 +107,8 @@
                   query: this.query
               },
           }).then(function(response) {
-              console.log(response.data);
-
-              /*
-               * Should probably trigger an event here to be heard by poster
-               * containers and update their data with search results
-               */
-              self.searchResults = { movies: [], shows: [] };
+              self.searchResults.movies.splice(0, self.searchResults.movies.length);
+              self.searchResults.shows.splice(0, self.searchResults.shows.length);
 
               for(var i = 0; i < response.data.movies.length; i++) {
                   self.searchResults.movies.push(response.data.movies[i]);
@@ -121,6 +118,12 @@
                   self.searchResults.shows.push(response.data.shows[i]);
               }
           });
+      },
+
+      clearResults() {
+          // this.searchResults.movies.splice(0, this.searchResults.movies.length);
+          // this.searchResults.shows.splice(0, this.searchResults.shows.length);
+          // this.searchResults.episodes.splice(0, this.searchResults.episodes.length);
       },
 
       show() {
@@ -140,7 +143,8 @@
 
         setTimeout(function() {
           self.query = '';
-          self.searchResults = { movies: [], shows: [] };
+          self.searchResults.movies.splice(0, self.searchResults.movies.length);
+          self.searchResults.shows.splice(0, self.searchResults.shows.length);
           document.getElementsByTagName('body')[0]
             .classList.remove('overflow-hidden');
         }, 400);

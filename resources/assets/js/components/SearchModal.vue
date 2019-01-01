@@ -1,58 +1,57 @@
 <template>
   <div class="fluid-modal scrollbar" ref="container">
-  <!-- <div id="search-modal" class="pl-3 pr-4 scrollbar" v-on:click.stop="hide"> -->
-    <div class="fluid-modal-content">
+    <div id="search-modal-controls">
+      <button
+        class="fluid-modal-close close d-block"
+        v-on:click="hide"
+      >
+        <span>&times;</span>
+      </button>
+      <input
+        id="search-input"
+        v-model:value="query"
+        placeholder="Search by Title"
+        spellcheck="false"
+        ref="input"
+        v-on:keyup="keyup"
+        v-on:change="keyup"
+        v-on:paste="keyup"
+        v-on:keydown="keydown"
+      />
+      <div id="search-modal-count" class="mt-2">
+        {{ searchResultsLength }} results found
+      </div>
+    </div>
+    <div id="search-modal-content" class="fluid-modal-content">
+      <div>
         <div>
-          <div class="mb-5 p-3">
-            <button
-              class="fluid-modal-close close d-block"
-              v-on:click="hide"
-            >
-              <span>&times;</span>
-            </button>
-            <input
-              id="search-input"
-              v-model:value="query"
-              placeholder="Search by Title"
-              spellcheck="false"
-              ref="input"
-              v-on:keyup="keyup"
-              v-on:change="keyup"
-              v-on:paste="keyup"
-              v-on:keydown="keydown"
-            />
-            <div id="search-modal-count" class="mt-2">
-                {{ searchResultsLength }} results found
-            </div>
+          <div class="fluid-modal-movies-container mx-0 mb-2" v-if="searchResults.movies.length > 0">
+            <movie-poster-container
+              class="my-3"
+              ref="moviePosterContainers"
+              v-for="movie in searchResults.movies"
+              v-bind:key="movie.id"
+              v-bind:id="movie.id"
+              v-bind:title="movie.title"
+              v-bind:poster="movie.poster"
+              v-bind:event-dispatcher="eventDispatcher"
+  		      ></movie-poster-container>
           </div>
-          <div>
-            <div class="fluid-modal-movies-container mx-0 mb-2" v-if="searchResults.movies.length > 0">
-              <movie-poster-container
-                class="my-3"
-                ref="moviePosterContainers"
-                v-for="movie in searchResults.movies"
-                v-bind:key="movie.id"
-                v-bind:id="movie.id"
-                v-bind:title="movie.title"
-                v-bind:poster="movie.poster"
-                v-bind:event-dispatcher="eventDispatcher"
-    		  ></movie-poster-container>
-            </div>
-            <hr class="fluid-modal-hr" v-if="bothFound" />
-            <div class="fluid-modal-shows-container mx-0 mt-2" v-if="searchResults.shows.length > 0">
-              <show-poster-container
-                class="my-3"
-                ref="showPosterContainers"
-                v-for="show in searchResults.shows"
-                v-bind:key="show.id"
-                v-bind:id="show.id"
-                v-bind:title="show.title"
-                v-bind:poster="show.poster"
-                v-bind:event-dispatcher="eventDispatcher"
-              ></show-poster-container>
-            </div>
+          <hr class="fluid-modal-hr" v-if="bothFound" />
+          <div class="fluid-modal-shows-container mx-0 mt-2" v-if="searchResults.shows.length > 0">
+            <show-poster-container
+              class="my-3"
+              ref="showPosterContainers"
+              v-for="show in searchResults.shows"
+              v-bind:key="show.id"
+              v-bind:id="show.id"
+              v-bind:title="show.title"
+              v-bind:poster="show.poster"
+              v-bind:event-dispatcher="eventDispatcher"
+            ></show-poster-container>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -71,7 +70,7 @@
 
     computed: {
       searchResultsLength: function() {
-          return this.searchResults.movies.length + this.searchResults.shows.length;
+        return this.searchResults.movies.length + this.searchResults.shows.length;
       },
 
       bothFound: function() {
@@ -125,16 +124,26 @@
       },
 
       show() {
-        document.getElementsByTagName('body')[0].classList.add('overflow-hidden');
+        var self = this;
         $(this.$refs.container).fadeIn();
-        this.$refs.input.focus();
+
+        setTimeout(function() {
+          document.getElementsByTagName('body')[0]
+            .classList.add('overflow-hidden');
+          self.$refs.input.focus();
+        }, 400);
       },
 
       hide() {
-        this.query = '';
-        this.searchResults = { movies: [], shows: [] };
+        var self = this;
         $(this.$refs.container).fadeOut();
-        document.getElementsByTagName('body')[0].classList.remove('overflow-hidden');
+
+        setTimeout(function() {
+          self.query = '';
+          self.searchResults = { movies: [], shows: [] };
+          document.getElementsByTagName('body')[0]
+            .classList.remove('overflow-hidden');
+        }, 400);
       },
     },
   }

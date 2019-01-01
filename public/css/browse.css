@@ -115,6 +115,20 @@ body {
 /*
  *  Search Modal
  */
+#search-modal-controls {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 0.25rem 1.2rem 1rem 1rem;
+  z-index: 1031;
+  background-color: black;
+}
+
+#search-modal-content {
+  margin-top: 160px;
+}
+
 #search-input {
   display: block;
   width: 100%;

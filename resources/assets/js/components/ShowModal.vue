@@ -46,7 +46,7 @@
   							<div id="show-modal-summary">{{ summary }}</div>
   						</div>
   						<div id="show-modal-episodes" class="card-body py-1 scrollbar">
-                <div v-for="(episode, index) in currentEpisodes">
+                <div v-for="(episode, index) in episodes[current_season]">
                   <hr class="fluid-modal-hr my-1" v-if="index > 0" />
                   <div
                     class="d-flex justify-content-between align-items-center"
@@ -82,7 +82,6 @@
                 v-if="!inWatchlist"
                 v-on:click="removeShow()"
               >REMOVE FROM WATCHLIST</button>
-  						<!--<a href="</?= SHOW_PATH ?>/@{{ show_modal.id }}/@{{ show_modal.current_season }}/@{{ show_modal.current_episode }}" class="btn btn-info">WATCH NOW</a>-->
   					</div>
 				  </div>
   			</div>
@@ -104,21 +103,12 @@
 				poster: 'missing-poster.jpg',
         seasons: [],
         current_season: 0,
-        episodes: [],
+        episodes: {},
 				genres: [],
 				inWatchlist: false,
         logged: false,
 			};
 		},
-
-    computed: {
-      currentEpisodes() {
-        var self = this;
-        return this.episodes.filter(function(ep) {
-          return ep.season === self.current_season;
-        });
-      },
-    },
 
 		created() {
 			Event.listen('showInfo', this.load);
@@ -137,11 +127,17 @@
     				self.year_end       = response.data.year_end;
             self.seasons        = response.data.seasons;
             self.current_season = response.data.seasons[0];
-            self.episodes       = response.data.episodes;
     				self.poster			    = response.data.poster;
     				self.genres			    = response.data.genres;
     				self.logged     	  = response.data.logged;
     				self.inWatchlist	  = response.data.inWatchlist;
+
+            response.data.seasons.forEach(function(season) {
+              self.episodes[season] = [];
+            });
+
+            self.episodes[response.data.seasons[0]] = response.data.episodes;
+
             document.getElementById('show-modal-episodes').scrollTop = 0;  // Why doesn't this work when it works in changeSeason?
     				$('#show-modal').modal('show');
     			});
@@ -168,19 +164,23 @@
       },
 
       changeSeason(season) {
-        var self = this;
-        axios.get('/show/episodes/' + this.id + '/' + season)
-          .then(function(response) {
-            self.current_season = season;
-            self.episodes = self.episodes.concat(response.data);  // Need to make sure I don't add same season twice
-            document.getElementById('show-modal-episodes').scrollTop = 0;
-          });
+        this.current_season = season;
+
+        if(this.episodes[season].length === 0) {
+          var self = this;
+
+          axios.get('/show/episodes/' + this.id + '/' + season)
+            .then(function(response) {
+              self.episodes[self.current_season] = response.data;
+              document.getElementById('show-modal-episodes').scrollTop = 0;
+            });
+        }
       },
 
       episodeListStyles(index) {
         return {
           'mt-1': index === 0,
-          'mb-1': index === this.currentEpisodes.length - 1,
+          'mb-1': index === this.episodes[this.current_season].length - 1,
         };
       },
     },

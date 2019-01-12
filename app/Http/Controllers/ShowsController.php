@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Show;
-use App\WatchlistMovie;
+use App\WatchlistShow;
 
 class ShowsController extends Controller
 {

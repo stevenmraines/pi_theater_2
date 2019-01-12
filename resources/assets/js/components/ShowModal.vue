@@ -163,15 +163,20 @@
 					});
       },
 
+      // Bit of duplication going on here, could probably be simplified
       changeSeason(season) {
-        this.current_season = season;
+        if(this.episodes[season].length > 0) {
+          this.current_season = season;
+          document.getElementById('show-modal-episodes').scrollTop = 0;
+        }
 
         if(this.episodes[season].length === 0) {
           var self = this;
 
           axios.get('/show/episodes/' + this.id + '/' + season)
             .then(function(response) {
-              self.episodes[self.current_season] = response.data;
+              self.current_season = season;
+              self.episodes[season] = response.data;
               document.getElementById('show-modal-episodes').scrollTop = 0;
             });
         }

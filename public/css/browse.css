@@ -108,23 +108,25 @@ body {
   border-top: 2px solid #282828;
 }
 
+.fluid-modal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+}
+
+.fluid-modal-title {
+  font-size: 36px;
+  font-weight: bold;
+}
+
 .fluid-modal-close {
   font-size: 36px;
 }
 
 .fluid-modal .poster-container {
   margin: 1rem !important;
-}
-
-/*
- *  Collection Modal
- */
-#collection-modal-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 1.5rem 1.5rem 0 1.5rem;
 }
 
 /*
@@ -377,17 +379,17 @@ body {
 }
 
 @media only screen and (max-width: 769px) {
-	#collection-modal-header {
+	.fluid-modal-header {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
   }
 
-  #collection-modal-header > img {
+  .fluid-modal-title {
     order: 2;
   }
 
-  #collection-modal-header > button {
+  .fluid-modal-header > button {
     order: 1;
     margin-left: auto;
   }

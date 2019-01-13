@@ -2,8 +2,11 @@
   <div class="fluid-modal scrollbar" ref="container">
   <!-- <div class="fluid-modal scrollbar" ref="container" v-on:click.stop="hide"> -->
     <div class="fluid-modal-content">
-      <div id="collection-modal-header">
-        <img v-bind:src="'/img/logos/' + contents.logo" v-if="contents.logo !== ''" />
+      <div class="fluid-modal-header">
+        <img
+          class="fluid-modal-title"
+          v-bind:src="'/img/logos/' + contents.logo" v-if="contents.logo !== ''"
+        />
         <button
           class="fluid-modal-close close"
           v-on:click="hide"
@@ -13,8 +16,8 @@
       </div>
       <div class="fluid-modal-poster-container">
         <div
-            class="fluid-modal-movies-container mx-0 mb-2"
-            v-if="contents.movies.length > 0"
+          class="fluid-modal-movies-container mx-0 mb-2"
+          v-if="contents.movies.length > 0"
         >
           <movie-poster-container
             class="my-3"
@@ -29,8 +32,8 @@
         </div>
         <hr class="fluid-modal-hr" v-if="bothFound" />
         <div
-            class="fluid-modal-shows-container mx-0 mt-2"
-            v-if="contents.shows.length > 0"
+          class="fluid-modal-shows-container mx-0 mt-2"
+          v-if="contents.shows.length > 0"
         >
           <show-poster-container
             class="my-3"

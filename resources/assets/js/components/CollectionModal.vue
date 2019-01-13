@@ -2,7 +2,6 @@
   <div class="fluid-modal scrollbar" ref="container">
   <!-- <div class="fluid-modal scrollbar" ref="container" v-on:click.stop="hide"> -->
     <div class="fluid-modal-content">
-      <!-- <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start pt-3 px-3"> -->
       <div id="collection-modal-header">
         <img v-bind:src="'/img/logos/' + contents.logo" v-if="contents.logo !== ''" />
         <button

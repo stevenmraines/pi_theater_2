@@ -1,6 +1,10 @@
 <div class="row mx-0 my-5">
   <div class="col-xs-12 col-md-6 col-lg-4">
-    <img src="{{ asset('img/banners/new-eps-banner.jpg') }}" class="banner img-fluid" />
+    <img
+      src="{{ asset('img/banners/new-eps-banner.jpg') }}"
+      class="banner img-fluid"
+      v-on:click="getNewEpisodes()"
+    />
   </div>
   <div class="col-xs-12 col-md-6 col-lg-4">
     <img

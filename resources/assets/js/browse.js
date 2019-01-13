@@ -42,7 +42,10 @@ const app = new Vue({
 		recent_collections: [],
 		recent_movies: [],
 		recent_shows: [],
-		history: [],
+		history: {
+			movies: [],
+			shows: [],
+		},
 		watchlist: {
 			movies: [],
 			shows: [],
@@ -50,6 +53,16 @@ const app = new Vue({
 		watchlist_api: '',
 		movie_modal: {},
 		show_modal: {},
+		newHorror: {
+			movies: [],
+			shows: [],
+		},
+		newSciFi: {
+			movies: [],
+			shows: [],
+		},
+		newEpisodes: [],
+		showNewEpisodes: false,
 	},
 
 	methods: {
@@ -58,9 +71,17 @@ const app = new Vue({
 
 			axios.get('/api/movie/recentGenre/10/0/' + genre_id)
 				.then(function(response) {
-					console.log(response.data);
-					// self.something = response.data;
+					self.something = response.data;
 				});
+		},
+
+		getNewEpisodes: function() {
+			var self = this;
+
+			axios.get('/api/show/newEpisodes/10/0').then(function(response) {
+				self.newEpisodes = response.data;
+				self.showNewEpisodes = true;
+			});
 		},
 
 		createGenreTable: function() {

@@ -22,6 +22,10 @@ Route::get('/show/recent/{limit}/{offset}', function($limit, $offset) {
   return App\Show::orderBy('created_at', 'desc')->limit($limit)->offset($offset)->get();
 });
 
+Route::get('/show/newEpisodes/{limit}/{offset}', function($limit, $offset) {
+  return App\Episode::recent($limit, $offset);
+});
+
 /*
  * Genre routes
  */

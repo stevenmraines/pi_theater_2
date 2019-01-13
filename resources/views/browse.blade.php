@@ -12,6 +12,7 @@
 		@include('poster_rows')
 		<search-modal v-bind:search-results="searchResults"></search-modal>
 		<collection-modal v-bind:contents="collection_results"></collection-modal>
+		<watchlist-modal v-bind:contents="watchlist"></watchlist-modal>
 		<movie-modal></movie-modal>
 		<show-modal></show-modal>
 		<login-modal></login-modal>

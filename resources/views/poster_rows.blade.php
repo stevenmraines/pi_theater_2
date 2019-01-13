@@ -13,14 +13,4 @@
 	<h4 class="h4 pl-4">Recently Viewed</h4>
 	<mixed-poster-row id="history"></mixed-poster-row>
 </div>
-
-<div v-if="watchlist.length > 0">
-	<h4 class="h4 pl-4">Watchlist</h4>
-	<mixed-poster-row
-		id="watchlist"
-		v-bind:movies="watchlist_movies"
-		v-bind:shows="watchlist_shows"
-		v-bind:api="watchlist_api"
-	></mixed-poster-row>
-</div>
 @endif

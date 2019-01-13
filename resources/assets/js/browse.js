@@ -43,9 +43,10 @@ const app = new Vue({
 		recent_movies: [],
 		recent_shows: [],
 		history: [],
-		watchlist: [],
-		watchlist_movies: [],
-		watchlist_shows: [],
+		watchlist: {
+			movies: [],
+			shows: [],
+		},
 		watchlist_api: '',
 		movie_modal: {},
 		show_modal: {},
@@ -105,10 +106,9 @@ const app = new Vue({
 
 			axios.get('/user/watchlist/allMedia')
 				.then(function(response) {
-					console.log(response.data);
-					self.watchlist_movies = response.data.movies;
-					self.watchlist_shows = response.data.shows;
-					self.watchlist = response.data.movies.concat(response.data.shows);
+					self.watchlist.movies = response.data.movies;
+					self.watchlist.shows = response.data.shows;
+					Event.trigger('showWatchlistModal');
 				});
 		},
 

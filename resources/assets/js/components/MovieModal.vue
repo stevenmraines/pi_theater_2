@@ -103,6 +103,10 @@
 					.then(function(response) {
 						if(typeof response.data.success !== null && response.data.success) {
 							self.inWatchlist = false;
+							Event.trigger('removeFromWatchlist', {
+								id: self.id,
+								mediaType: 'movies',
+							});
 						}
 					});
 			},

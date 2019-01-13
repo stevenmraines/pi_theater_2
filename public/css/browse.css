@@ -112,6 +112,21 @@ body {
   font-size: 36px;
 }
 
+.fluid-modal .poster-container {
+  margin: 1rem !important;
+}
+
+/*
+ *  Collection Modal
+ */
+#collection-modal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+}
+
 /*
  *  Search Modal
  */
@@ -359,6 +374,23 @@ body {
 		min-width: 75%;
 		padding: 0.65rem 1rem;
 	}
+}
+
+@media only screen and (max-width: 769px) {
+	#collection-modal-header {
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  #collection-modal-header > img {
+    order: 2;
+  }
+
+  #collection-modal-header > button {
+    order: 1;
+    margin-left: auto;
+  }
 }
 
 @media only screen and (max-height: 899px) {

@@ -79,7 +79,7 @@
               >ADD TO WATCHLIST</button>
   						<button
                 class="btn btn-warning mx-auto ml-sm-0 mr-sm-auto btn-watchlist"
-                v-if="!inWatchlist"
+                v-if="inWatchlist"
                 v-on:click="removeShow()"
               >REMOVE FROM WATCHLIST</button>
   					</div>

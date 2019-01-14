@@ -105,7 +105,7 @@
 							self.inWatchlist = false;
 							Event.trigger('removeFromWatchlist', {
 								id: self.id,
-								mediaType: 'movies',
+								mediaType: 'movie',
 							});
 						}
 					});

@@ -1,24 +1,29 @@
 <template>
 	<div class="container-fluid poster-row px-0 py-3 mb-5">
-		<span class="left-arrow" v-on:click="slide('right')" v-bind:class="{ hidden: leftOffset >= 0 }">&#8249;</span>
+		<span
+			class="left-arrow"
+			v-on:click="slide('right')"
+			v-bind:class="{ hidden: leftOffset >= 0 }"
+		>&#8249;</span>
 		<span class="right-arrow" v-on:click="slide('left')">&#8250;</span>
 		<div class="slider">
-			<show-poster-container
-					ref="posterContainers"
-					v-for="content in contents"
-					v-bind:key="content.id"
-					v-bind:id="content.id"
-					v-bind:title="content.title"
-					v-bind:poster="content.poster"
-					v-bind:eventDispatcher="eventDispatcher"
-			></show-poster-container>
+			<poster-container
+				ref="posterContainers"
+				v-for="content in contents"
+				v-bind:key="content.mediaType + '_' + content.id"
+				v-bind:id="content.id"
+				v-bind:title="content.title"
+				v-bind:poster="content.poster"
+				v-bind:mediaType="content.mediaType"
+				v-bind:eventDispatcher="eventDispatcher"
+			></poster-container>
 		</div>
 	</div>
 </template>
 
 <script>
 	export default {
-		props: ['contents'],
+		props: ['contents', 'api'],
 
 		/*
 		 * Using a non-global event dispatcher here because the global one was causing an
@@ -38,18 +43,21 @@
 				var self = this;
 
 				if(dir === 'left') {  // Right arrow clicked
-					axios
-						.get('/api/show/recent/' + inc + '/' + this.offset)
-						.then(function(response) {
-							for(var i = 0; i < response.data.length; i++) {
-								self.contents.push(response.data[i]);
-							}
-							self.offset += inc;
-							return self.doSlide(dir, inc);
-						})
-						.catch(function(error) {
-							console.log(error);
-						});
+          if(this.api !== '') {
+            axios
+            .get(this.api + inc + '/' + this.offset)
+            .then(function(response) {
+              for(var i = 0; i < response.data.length; i++) {
+                self.contents.push(response.data[i]);
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+          }
+
+          self.offset += inc;
+          return self.doSlide(dir, inc);
 				}
 
 				if(dir === 'right') {
@@ -83,9 +91,11 @@
 			getIncrement() {
 				var width = window.innerWidth;
 				var inc = 0;
+
 				while((inc + 1) * 230 < width) {
 					inc++;
 				}
+
 				return inc;
 			},
 
@@ -116,6 +126,6 @@
 		created() {
 			this.eventDispatcher.$on('posterContainerHover', this.shift);
 			this.eventDispatcher.$on('posterContainerUnhover', this.unshift);
-		}
+		},
 	}
 </script>

@@ -16,7 +16,7 @@
 						<table class="table">
 							<tbody>
 								<tr scope="row">
-									<td v-for="column in genre_columns" class="px-1 pb-0">
+									<td v-for="column in genreColumns" class="px-1 pb-0">
 										<div v-for="genre in column">
 											<a href="#" class="nav-link" v-on:click="getGenre(genre.id)">
 												@{{ genre.name }}

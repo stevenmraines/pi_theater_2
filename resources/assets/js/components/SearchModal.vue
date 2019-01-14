@@ -19,37 +19,26 @@
         v-on:keydown="keydown"
       />
       <div id="search-modal-count" class="mt-2">
-        {{ searchResultsLength }} results found
+        {{ contents.length }} results found
       </div>
     </div>
     <div id="search-modal-content" class="fluid-modal-content">
       <div>
-        <div>
-          <div class="fluid-modal-movies-container mx-0 mb-2" v-if="searchResults.movies.length > 0">
-            <movie-poster-container
-              class="my-3"
-              ref="moviePosterContainers"
-              v-for="movie in searchResults.movies"
-              v-bind:key="movie.id"
-              v-bind:id="movie.id"
-              v-bind:title="movie.title"
-              v-bind:poster="movie.poster"
-              v-bind:event-dispatcher="eventDispatcher"
-  		      ></movie-poster-container>
-          </div>
-          <hr class="fluid-modal-hr" v-if="bothFound" />
-          <div class="fluid-modal-shows-container mx-0 mt-2" v-if="searchResults.shows.length > 0">
-            <show-poster-container
-              class="my-3"
-              ref="showPosterContainers"
-              v-for="show in searchResults.shows"
-              v-bind:key="show.id"
-              v-bind:id="show.id"
-              v-bind:title="show.title"
-              v-bind:poster="show.poster"
-              v-bind:event-dispatcher="eventDispatcher"
-            ></show-poster-container>
-          </div>
+        <div
+          class="fluid-modal-inner-poster-container mx-0"
+          v-if="contents.length > 0"
+        >
+          <poster-container
+            class="my-3"
+            ref="posterContainers"
+            v-for="content in contents"
+            v-bind:key="content.mediaType + '_' + content.id"
+            v-bind:id="content.id"
+            v-bind:title="content.title"
+            v-bind:poster="content.poster"
+            v-bind:mediaType="content.mediaType"
+            v-bind:event-dispatcher="eventDispatcher"
+			    ></poster-container>
         </div>
       </div>
     </div>
@@ -58,7 +47,7 @@
 
 <script>
   export default {
-    props: ['searchResults'],
+    props: ['contents'],
 
     data() {
       return {
@@ -66,17 +55,6 @@
         typingTimer: {},
         eventDispatcher: new Vue({}),
       }
-    },
-
-    computed: {
-      searchResultsLength: function() {
-        return this.searchResults.movies.length + this.searchResults.shows.length;
-      },
-
-      bothFound: function() {
-        return this.searchResults.movies.length > 0 &&
-            this.searchResults.shows.length > 0;
-      },
     },
 
     created() {
@@ -95,8 +73,8 @@
 
       search() {
           if(this.query === '') {
-              this.searchResults.movies.splice(0, this.searchResults.movies.length);
-              this.searchResults.shows.splice(0, this.searchResults.shows.length);
+              this.contents.movies.splice(0, this.contents.movies.length);
+              this.contents.shows.splice(0, this.contents.shows.length);
               return true;
           }
 
@@ -107,23 +85,23 @@
                   query: this.query
               },
           }).then(function(response) {
-              self.searchResults.movies.splice(0, self.searchResults.movies.length);
-              self.searchResults.shows.splice(0, self.searchResults.shows.length);
+              self.contents.movies.splice(0, self.contents.movies.length);
+              self.contents.shows.splice(0, self.contents.shows.length);
 
               for(var i = 0; i < response.data.movies.length; i++) {
-                  self.searchResults.movies.push(response.data.movies[i]);
+                  self.contents.movies.push(response.data.movies[i]);
               }
 
               for(var i = 0; i < response.data.shows.length; i++) {
-                  self.searchResults.shows.push(response.data.shows[i]);
+                  self.contents.shows.push(response.data.shows[i]);
               }
           });
       },
 
       clearResults() {
-          // this.searchResults.movies.splice(0, this.searchResults.movies.length);
-          // this.searchResults.shows.splice(0, this.searchResults.shows.length);
-          // this.searchResults.episodes.splice(0, this.searchResults.episodes.length);
+          // this.contents.movies.splice(0, this.contents.movies.length);
+          // this.contents.shows.splice(0, this.contents.shows.length);
+          // this.contents.episodes.splice(0, this.contents.episodes.length);
       },
 
       show() {
@@ -143,8 +121,8 @@
 
         setTimeout(function() {
           self.query = '';
-          self.searchResults.movies.splice(0, self.searchResults.movies.length);
-          self.searchResults.shows.splice(0, self.searchResults.shows.length);
+          self.contents.movies.splice(0, self.contents.movies.length);
+          self.contents.shows.splice(0, self.contents.shows.length);
           document.getElementsByTagName('body')[0]
             .classList.remove('overflow-hidden');
         }, 400);

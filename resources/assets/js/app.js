@@ -16,18 +16,15 @@ window.Vue		= require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.component('login-modal', require('./components/LoginModal.vue'));
-Vue.component('registration-modal', require('./components/RegistrationModal.vue'));
-Vue.component('movie-modal', require('./components/MovieModal.vue'));
-Vue.component('show-modal', require('./components/ShowModal.vue'));
-Vue.component('search-modal', require('./components/SearchModal.vue'));
 Vue.component('collection-modal', require('./components/CollectionModal.vue'));
+Vue.component('login-modal', require('./components/LoginModal.vue'));
+Vue.component('movie-modal', require('./components/MovieModal.vue'));
+Vue.component('poster-container', require('./components/PosterContainer.vue'));
+Vue.component('poster-row', require('./components/PosterRow.vue'));
+Vue.component('registration-modal', require('./components/RegistrationModal.vue'));
+Vue.component('search-modal', require('./components/SearchModal.vue'));
+Vue.component('show-modal', require('./components/ShowModal.vue'));
 Vue.component('watchlist-modal', require('./components/WatchlistModal.vue'));
-Vue.component('movie-poster-row', require('./components/MoviePosterRow.vue'));
-Vue.component('movie-poster-container', require('./components/MoviePosterContainer.vue'));
-Vue.component('show-poster-row', require('./components/ShowPosterRow.vue'));
-Vue.component('show-poster-container', require('./components/ShowPosterContainer.vue'));
-Vue.component('mixed-poster-row', require('./components/MixedPosterRow.vue'));
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue'));
 //

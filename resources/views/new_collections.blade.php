@@ -5,7 +5,7 @@
 >
 	<ol class="carousel-indicators">
 		<li
-				v-for="(col, index) in recent_collections"
+				v-for="(col, index) in recentCollections"
 				v-bind:class="{ active: index === 0 }"
 				data-target="#collections-carousel"
 				v-bind:data-slide-to="index">
@@ -14,7 +14,7 @@
 	</ol>
 	<div class="carousel-inner" role="listbox">
 		<div class="carousel-item" v-bind:class="{ active: index === 0 }"
-				v-for="(col, index) in recent_collections">
+				v-for="(col, index) in recentCollections">
 			<div class="collection-info-container hidden">
 				<div class="d-flex flex-column justify-content-center">
 					<img v-bind:src="'/img/logos/' + col.logo"

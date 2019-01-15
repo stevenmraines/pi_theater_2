@@ -62,6 +62,34 @@
     },
 
     methods: {
+      prepare(searchResults) {
+        var prepared = [];
+
+  			if(searchResults.movies) {
+  				searchResults.movies.forEach(function(movie) {
+  					prepared.push({
+  						id: movie.id,
+  						title: movie.title,
+  						poster: movie.poster,
+  						mediaType: 'movie',
+  					});
+  				});
+  			}
+
+  			if(searchResults.shows) {
+  				searchResults.shows.forEach(function(show) {
+  					prepared.push({
+  						id: show.id,
+  						title: show.title,
+  						poster: show.poster,
+  						mediaType: 'show',
+  					});
+  				});
+  			}
+
+  			return prepared;
+      },
+
       keyup() {
           clearTimeout(this.typingTimer);
           this.typingTimer = setTimeout(this.search, 750);
@@ -73,44 +101,36 @@
 
       search() {
           if(this.query === '') {
-              this.contents.movies.splice(0, this.contents.movies.length);
-              this.contents.shows.splice(0, this.contents.shows.length);
-              return true;
+              this.contents.splice(0, this.contents.length);
+              this.$forceUpdate();
           }
 
-          var self = this;
+          if(this.query !== '') {
+            var self = this;
 
-          axios.get('/search', {
-              params: {
-                  query: this.query
-              },
-          }).then(function(response) {
-              self.contents.movies.splice(0, self.contents.movies.length);
-              self.contents.shows.splice(0, self.contents.shows.length);
+            axios.get('/search', {
+                params: {
+                    query: this.query
+                },
+            }).then(function(response) {
+                var searchResults = self.prepare(response.data);
+                self.contents.splice(0, self.contents.length);
 
-              for(var i = 0; i < response.data.movies.length; i++) {
-                  self.contents.movies.push(response.data.movies[i]);
-              }
+                for(var i = 0; i < searchResults.length; i++) {
+                  self.contents.push(searchResults[i]);
+                }
 
-              for(var i = 0; i < response.data.shows.length; i++) {
-                  self.contents.shows.push(response.data.shows[i]);
-              }
-          });
-      },
-
-      clearResults() {
-          // this.contents.movies.splice(0, this.contents.movies.length);
-          // this.contents.shows.splice(0, this.contents.shows.length);
-          // this.contents.episodes.splice(0, this.contents.episodes.length);
+                self.$forceUpdate();
+            });
+          }
       },
 
       show() {
         var self = this;
+        document.getElementsByTagName('body')[0].classList.add('overflow-hidden');
         $(this.$refs.container).fadeIn();
 
         setTimeout(function() {
-          document.getElementsByTagName('body')[0]
-            .classList.add('overflow-hidden');
           self.$refs.input.focus();
         }, 400);
       },
@@ -121,10 +141,8 @@
 
         setTimeout(function() {
           self.query = '';
-          self.contents.movies.splice(0, self.contents.movies.length);
-          self.contents.shows.splice(0, self.contents.shows.length);
-          document.getElementsByTagName('body')[0]
-            .classList.remove('overflow-hidden');
+          self.contents.splice(0, self.contents.length);
+          document.getElementsByTagName('body')[0].classList.remove('overflow-hidden');
         }, 400);
       },
     },

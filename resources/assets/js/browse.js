@@ -68,7 +68,6 @@ const app = new Vue({
 			shows: [],
 		},
 
-		searchResults: [],
 		showModal: {},
 
 		watchlist: {

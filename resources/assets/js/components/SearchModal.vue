@@ -9,14 +9,14 @@
       </button>
       <input
         id="search-input"
-        v-model:value="query"
+        ref="input"
         placeholder="Search by Title"
         spellcheck="false"
-        ref="input"
-        v-on:keyup="keyup"
+        v-model:value="query"
         v-on:change="keyup"
-        v-on:paste="keyup"
         v-on:keydown="keydown"
+        v-on:keyup="keyup"
+        v-on:paste="keyup"
       />
       <div id="search-modal-count" class="mt-2">
         {{ contents.length }} results found

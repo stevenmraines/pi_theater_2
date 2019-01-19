@@ -66,10 +66,8 @@
         for(var i = 0; i < this.contents.length; i++) {
           if(this.contents[i].id == info.id
               && this.contents[i].mediaType == info.mediaType) {
-            console.log(this.contents);
-            console.log('splicing ' + i);
             this.contents.splice(i, 1);
-            console.log(this.contents);
+            this.$forceUpdate();
           }
         }
       },

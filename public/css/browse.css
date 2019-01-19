@@ -94,8 +94,7 @@ body {
   clear: both;
 }
 
-.fluid-modal-movies-container,
-.fluid-modal-shows-container {
+.fluid-modal-inner-poster-container {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;

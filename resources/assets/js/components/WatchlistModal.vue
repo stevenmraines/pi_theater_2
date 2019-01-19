@@ -2,7 +2,7 @@
   <div class="fluid-modal scrollbar" ref="container">
   <!-- <div class="fluid-modal scrollbar" ref="container" v-on:click.stop="hide"> -->
     <div class="fluid-modal-content">
-      <div class="fluid-modal-header">
+      <div class="fluid-modal-header mb-2">
         <span class="fluid-modal-title">
           Watchlist
         </span>
@@ -13,37 +13,23 @@
           <span>&times;</span>
         </button>
       </div>
+      <hr class="fluid-modal-hr" />
       <div class="fluid-modal-poster-container">
         <div
-          class="fluid-modal-movies-container mx-0 mb-2"
-          v-if="contents.movies.length > 0"
+          class="fluid-modal-inner-poster-container mx-0"
+          v-if="contents.length > 0"
         >
-          <movie-poster-container
+          <poster-container
             class="my-3"
-            ref="moviePosterContainers"
-            v-for="movie in contents.movies"
-            v-bind:key="movie.id"
-            v-bind:id="movie.id"
-            v-bind:title="movie.title"
-            v-bind:poster="movie.poster"
+            ref="posterContainers"
+            v-for="content in contents"
+            v-bind:key="content.mediaType + '_' + content.id"
+            v-bind:id="content.id"
+            v-bind:title="content.title"
+            v-bind:poster="content.poster"
+            v-bind:mediaType="content.mediaType"
             v-bind:event-dispatcher="eventDispatcher"
-			    ></movie-poster-container>
-        </div>
-        <hr class="fluid-modal-hr" v-if="bothFound" />
-        <div
-          class="fluid-modal-shows-container mx-0 mt-2"
-          v-if="contents.shows.length > 0"
-        >
-          <show-poster-container
-            class="my-3"
-            ref="showPosterContainers"
-            v-for="show in contents.shows"
-            v-bind:key="show.id"
-            v-bind:id="show.id"
-            v-bind:title="show.title"
-            v-bind:poster="show.poster"
-            v-bind:event-dispatcher="eventDispatcher"
-          ></show-poster-container>
+			    ></poster-container>
         </div>
       </div>
     </div>
@@ -58,12 +44,6 @@
       return {
         eventDispatcher: new Vue({}),
       }
-    },
-
-    computed: {
-      bothFound: function() {
-        return this.contents.movies.length > 0 && this.contents.shows.length > 0;
-      },
     },
 
     created() {
@@ -83,9 +63,11 @@
       },
 
       remove(info) {
-        for(var i = 0; i < this.contents[info.mediaType].length; i++) {
-          if(this.contents[info.mediaType][i].id == info.id) {
-            this.contents[info.mediaType].splice(i, 1);
+        for(var i = 0; i < this.contents.length; i++) {
+          if(this.contents[i].id == info.id
+              && this.contents[i].mediaType == info.mediaType) {
+            this.contents.splice(i, 1);
+            this.$forceUpdate();
           }
         }
       },

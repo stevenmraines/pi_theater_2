@@ -22,37 +22,35 @@ const app = new Vue({
 	el: '#vue-wrapper',
 
 	data: {
-		genres: [],
-		genre_columns: [],
-		genre_results: {
+		collections: [],
+		collectionResults: {
 			movies: [],
 			shows: [],
-		},
-		searchResults: {
-			movies: [],
-			shows: []
-		},
-		collection_results: {
-			movies: [],
-			shows: [],
-			episodes: [],
+			// episodes: [],
 			logo: '',
 		},
-		collections: [],
-		recent_collections: [],
-		recent_movies: [],
-		recent_shows: [],
+
+		displayNewHorror: false,
+		displayNewSciFi: false,
+		displayNewEpisodes: false,
+
+		genres: [],
+		genreColumns: [],
+		genreResults: {
+			movies: [],
+			shows: [],
+		},
+
 		history: {
 			movies: [],
 			shows: [],
 		},
-		watchlist: {
-			movies: [],
+
+		movieModal: {},
+
+		newEpisodes: {
 			shows: [],
 		},
-		watchlist_api: '',
-		movie_modal: {},
-		show_modal: {},
 		newHorror: {
 			movies: [],
 			shows: [],
@@ -61,17 +59,92 @@ const app = new Vue({
 			movies: [],
 			shows: [],
 		},
-		newEpisodes: [],
-		showNewEpisodes: false,
+
+		recentCollections: [],
+		recentMovies: {
+			movies: [],
+		},
+		recentShows: {
+			shows: [],
+		},
+
+		showModal: {},
+
+		watchlist: {
+			movies: [],
+			shows: [],
+		},
+	},
+
+	computed: {
+		collectionResultsPrepared: function() {
+			return this.prepare(this.collectionResults);
+		},
+
+		historyPrepared: function() {
+			return this.prepare(this.history);
+		},
+
+		newEpisodesPrepared: function() {
+			return this.prepare(this.newEpisodes);
+		},
+
+		newHorrorPrepared: function() {
+			return this.prepare(this.newHorror);
+		},
+
+		newSciFiPrepared: function() {
+			return this.prepare(this.newSciFi);
+		},
+
+		recentMoviesPrepared: function() {
+			return this.prepare(this.recentMovies);
+		},
+
+		recentShowsPrepared: function() {
+			return this.prepare(this.recentShows);
+		},
+
+		watchlistPrepared: function() {
+			return this.prepare(this.watchlist);
+		},
 	},
 
 	methods: {
+		prepare: function(contents) {
+			var prepared = [];
+
+			if(contents.movies) {
+				contents.movies.forEach(function(movie) {
+					prepared.push({
+						id: movie.id,
+						title: movie.title,
+						poster: movie.poster,
+						mediaType: 'movie',
+					});
+				});
+			}
+
+			if(contents.shows) {
+				contents.shows.forEach(function(show) {
+					prepared.push({
+						id: show.id,
+						title: show.title,
+						poster: show.poster,
+						mediaType: 'show',
+					});
+				});
+			}
+
+			return prepared;
+		},
+
 		newGenre: function(genre_id) {
 			var self = this;
 
 			axios.get('/api/movie/recentGenre/10/0/' + genre_id)
 				.then(function(response) {
-					self.something = response.data;
+					// self.something = response.data;
 				});
 		},
 
@@ -79,8 +152,8 @@ const app = new Vue({
 			var self = this;
 
 			axios.get('/api/show/newEpisodes/10/0').then(function(response) {
-				self.newEpisodes = response.data;
-				self.showNewEpisodes = true;
+				self.newEpisodes.shows = response.data;
+				self.displayNewEpisodes = true;
 			});
 		},
 
@@ -88,17 +161,17 @@ const app = new Vue({
 			var genre_column_count = this.genres.length % 5 === 0 ? 5 :
 				(this.genres.length % 4 === 0 ? 4 : 3);
 			var max_genres_per_column	= Math.ceil(this.genres.length / genre_column_count);
-			var genre_columns = [];
+			var genreColumns = [];
 
 			for(var i = 0; i < this.genres.length; i++) {
 				if(i % max_genres_per_column === 0 || i === 0) {
-					genre_columns.push([]);  // Add another column
+					genreColumns.push([]);  // Add another column
 				}
 
-				genre_columns[genre_columns.length - 1].push(this.genres[i]);
+				genreColumns[genreColumns.length - 1].push(this.genres[i]);
 			}
 
-			this.genre_columns = genre_columns;
+			this.genreColumns = genreColumns;
 		},
 
 		getGenre: function(id) {
@@ -107,8 +180,8 @@ const app = new Vue({
 			axios.get('/api/genre/allMedia/' + id)
 				.then(function(response) {
 					console.log(response.data);
-					self.genre_results.movies = response.data.movies;
-					self.genre_results.shows = response.data.shows;
+					self.genreResults.movies = response.data.movies;
+					self.genreResults.shows = response.data.shows;
 				});
 		},
 
@@ -117,7 +190,7 @@ const app = new Vue({
 
 			axios.get('/api/collection/allMedia/' + id)
 				.then(function(response) {
-					self.collection_results = response.data;
+					self.collectionResults = response.data;
 					Event.trigger('showCollectionModal');
 				});
 		},
@@ -154,17 +227,17 @@ const app = new Vue({
 
 		axios.get('/api/collection/recent/3')
 			.then(function(response) {
-				self.recent_collections = response.data;
+				self.recentCollections = response.data;
 			});
 
 		axios.get('/api/movie/recent/10/0')
 			.then(function(response) {
-				self.recent_movies = response.data;
+				self.recentMovies.movies = response.data;
 			});
 
 		axios.get('/api/show/recent/10/0')
 			.then(function(response) {
-				self.recent_shows = response.data;
+				self.recentShows.shows = response.data;
 			});
 	},
 });

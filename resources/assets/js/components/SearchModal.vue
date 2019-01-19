@@ -9,47 +9,36 @@
       </button>
       <input
         id="search-input"
-        v-model:value="query"
+        ref="input"
         placeholder="Search by Title"
         spellcheck="false"
-        ref="input"
-        v-on:keyup="keyup"
+        v-model:value="query"
         v-on:change="keyup"
-        v-on:paste="keyup"
         v-on:keydown="keydown"
+        v-on:keyup="keyup"
+        v-on:paste="keyup"
       />
       <div id="search-modal-count" class="mt-2">
-        {{ searchResultsLength }} results found
+        {{ contents.length }} results found
       </div>
     </div>
     <div id="search-modal-content" class="fluid-modal-content">
       <div>
-        <div>
-          <div class="fluid-modal-movies-container mx-0 mb-2" v-if="searchResults.movies.length > 0">
-            <movie-poster-container
-              class="my-3"
-              ref="moviePosterContainers"
-              v-for="movie in searchResults.movies"
-              v-bind:key="movie.id"
-              v-bind:id="movie.id"
-              v-bind:title="movie.title"
-              v-bind:poster="movie.poster"
-              v-bind:event-dispatcher="eventDispatcher"
-  		      ></movie-poster-container>
-          </div>
-          <hr class="fluid-modal-hr" v-if="bothFound" />
-          <div class="fluid-modal-shows-container mx-0 mt-2" v-if="searchResults.shows.length > 0">
-            <show-poster-container
-              class="my-3"
-              ref="showPosterContainers"
-              v-for="show in searchResults.shows"
-              v-bind:key="show.id"
-              v-bind:id="show.id"
-              v-bind:title="show.title"
-              v-bind:poster="show.poster"
-              v-bind:event-dispatcher="eventDispatcher"
-            ></show-poster-container>
-          </div>
+        <div
+          class="fluid-modal-inner-poster-container mx-0"
+          v-if="contents.length > 0"
+        >
+          <poster-container
+            class="my-3"
+            ref="posterContainers"
+            v-for="content in contents"
+            v-bind:key="content.mediaType + '_' + content.id"
+            v-bind:id="content.id"
+            v-bind:title="content.title"
+            v-bind:poster="content.poster"
+            v-bind:mediaType="content.mediaType"
+            v-bind:event-dispatcher="eventDispatcher"
+			    ></poster-container>
         </div>
       </div>
     </div>
@@ -58,7 +47,7 @@
 
 <script>
   export default {
-    props: ['searchResults'],
+    props: ['contents'],
 
     data() {
       return {
@@ -68,22 +57,39 @@
       }
     },
 
-    computed: {
-      searchResultsLength: function() {
-        return this.searchResults.movies.length + this.searchResults.shows.length;
-      },
-
-      bothFound: function() {
-        return this.searchResults.movies.length > 0 &&
-            this.searchResults.shows.length > 0;
-      },
-    },
-
     created() {
       Event.listen('showSearchModal', this.show);
     },
 
     methods: {
+      prepare(searchResults) {
+        var prepared = [];
+
+  			if(searchResults.movies) {
+  				searchResults.movies.forEach(function(movie) {
+  					prepared.push({
+  						id: movie.id,
+  						title: movie.title,
+  						poster: movie.poster,
+  						mediaType: 'movie',
+  					});
+  				});
+  			}
+
+  			if(searchResults.shows) {
+  				searchResults.shows.forEach(function(show) {
+  					prepared.push({
+  						id: show.id,
+  						title: show.title,
+  						poster: show.poster,
+  						mediaType: 'show',
+  					});
+  				});
+  			}
+
+  			return prepared;
+      },
+
       keyup() {
           clearTimeout(this.typingTimer);
           this.typingTimer = setTimeout(this.search, 750);
@@ -95,44 +101,36 @@
 
       search() {
           if(this.query === '') {
-              this.searchResults.movies.splice(0, this.searchResults.movies.length);
-              this.searchResults.shows.splice(0, this.searchResults.shows.length);
-              return true;
+              this.contents.splice(0, this.contents.length);
+              this.$forceUpdate();
           }
 
-          var self = this;
+          if(this.query !== '') {
+            var self = this;
 
-          axios.get('/search', {
-              params: {
-                  query: this.query
-              },
-          }).then(function(response) {
-              self.searchResults.movies.splice(0, self.searchResults.movies.length);
-              self.searchResults.shows.splice(0, self.searchResults.shows.length);
+            axios.get('/search', {
+                params: {
+                    query: this.query
+                },
+            }).then(function(response) {
+                var searchResults = self.prepare(response.data);
+                self.contents.splice(0, self.contents.length);
 
-              for(var i = 0; i < response.data.movies.length; i++) {
-                  self.searchResults.movies.push(response.data.movies[i]);
-              }
+                for(var i = 0; i < searchResults.length; i++) {
+                  self.contents.push(searchResults[i]);
+                }
 
-              for(var i = 0; i < response.data.shows.length; i++) {
-                  self.searchResults.shows.push(response.data.shows[i]);
-              }
-          });
-      },
-
-      clearResults() {
-          // this.searchResults.movies.splice(0, this.searchResults.movies.length);
-          // this.searchResults.shows.splice(0, this.searchResults.shows.length);
-          // this.searchResults.episodes.splice(0, this.searchResults.episodes.length);
+                self.$forceUpdate();
+            });
+          }
       },
 
       show() {
         var self = this;
+        document.getElementsByTagName('body')[0].classList.add('overflow-hidden');
         $(this.$refs.container).fadeIn();
 
         setTimeout(function() {
-          document.getElementsByTagName('body')[0]
-            .classList.add('overflow-hidden');
           self.$refs.input.focus();
         }, 400);
       },
@@ -143,10 +141,8 @@
 
         setTimeout(function() {
           self.query = '';
-          self.searchResults.movies.splice(0, self.searchResults.movies.length);
-          self.searchResults.shows.splice(0, self.searchResults.shows.length);
-          document.getElementsByTagName('body')[0]
-            .classList.remove('overflow-hidden');
+          self.contents.splice(0, self.contents.length);
+          document.getElementsByTagName('body')[0].classList.remove('overflow-hidden');
         }, 400);
       },
     },

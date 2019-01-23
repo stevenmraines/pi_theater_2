@@ -43,24 +43,26 @@
 				var self = this;
 
 				if(dir === 'left') {  // Right arrow clicked
-          if(this.api !== '') {
-            axios
-            .get(this.api + inc + '/' + this.offset)
-            .then(function(response) {
-              for(var i = 0; i < response.data.length; i++) {
-                self.contents.push(response.data[i]);
-              }
-            })
-            .catch(function(error) {
-              console.log(error);
-            });
-          }
+					if(this.api !== '') {
+						axios
+						.get(this.api + inc + '/' + this.offset)
+						.then(function(response) {
+							for(var i = 0; i < response.data.length; i++) {
+								self.contents.push(response.data[i]);
+							}
 
-          self.offset += inc;
-          return self.doSlide(dir, inc);
+							self.$forceUpdate();
+						})
+						.catch(function(error) {
+							console.log(error);
+						});
+					}
+
+					self.offset += inc;
+					return self.doSlide(dir, inc);
 				}
 
-				if(dir === 'right') {
+				if(dir === 'right') {  // Left arrow clicked
 					return this.doSlide(dir, inc);
 				}
 			},
@@ -102,13 +104,16 @@
 			shift(data) {
 				var p = this.$refs.posterContainers;
 				var found = false;
+
 				for(var i = 0; i < p.length; i++) {
 					if(!found) {
 						p[i].$el.classList.add('shift-left');
 						if(p[i].id === data.id) {
 							found = true;
 						}
-					}else {
+					}
+
+					else {
 						p[i].$el.classList.add('shift-right');
 					}
 				}
@@ -116,6 +121,7 @@
 
 			unshift() {
 				var p = this.$refs.posterContainers;
+				
 				for(var i = 0; i < p.length; i++) {
 					p[i].$el.classList.remove('shift-left');
 					p[i].$el.classList.remove('shift-right');

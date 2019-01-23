@@ -1,11 +1,17 @@
 <div v-if="recentMoviesPrepared.length > 0">
 	<h4 class="h4 pl-4">Recent Movies</h4>
-	<poster-row v-bind:contents="recentMoviesPrepared"></poster-row>
+	<poster-row
+		v-bind:contents="recentMoviesPrepared"
+		v-bind:api="'/api/movie/recent/'"
+	></poster-row>
 </div>
 
 <div v-if="recentShowsPrepared.length > 0">
 	<h4 class="h4 pl-4">Recent Shows</h4>
-	<poster-row v-bind:contents="recentShowsPrepared"></poster-row>
+	<poster-row
+		v-bind:contents="recentShowsPrepared"
+		v-bind:api="'/api/show/recent/'"
+	></poster-row>
 </div>
 
 <div v-if="displayNewHorror">
@@ -22,7 +28,10 @@
 
 <div v-if="displayNewEpisodes">
 	<h4 class="h4 pl-4">New Episodes</h4>
-	<poster-row v-bind:contents="newEpisodesPrepared"></poster-row>
+	<poster-row
+		v-bind:contents="newEpisodesPrepared"
+		v-bind:api="'/api/show/newEpisodes/'"
+	></poster-row>
 </div>
 
 @if($user)

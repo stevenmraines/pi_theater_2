@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Movie extends Model
 {
-  public function genres() {
+    use Searchable;
+
+    public function genres() {
 		return $this->belongsToMany(Genre::class, 'movie_genres', 'movie_id', 'genre_id');
 	}
 
@@ -16,4 +19,10 @@ class Movie extends Model
 				->offset($offset)
         ->get();
 	}
+
+    // public function toSearchableArray()
+    // {
+    //     $array = $this->toArray();
+    //     return ['title' => $array['title'], 'summary' => $array['summary']];
+    // }
 }

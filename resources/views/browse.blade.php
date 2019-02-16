@@ -6,6 +6,17 @@
 @section('content')
 	<link rel="stylesheet" href="{{ asset('css/browse.css') }}" />
 	<div id="vue-wrapper" class='container-fluid px-0'>
+		<ais-index
+		  app-id="{{ config('scout.algolia.id') }}"
+		  api-key="{{ env('ALGOLIA_SEARCH') }}"
+		  index-name="movies"
+		>
+			<!-- Other Algolia search components go here -->
+			<ais-input placeholder="Search movies..."></ais-input>
+
+  			<ais-results></ais-results>
+		</ais-index>
+
 		@include('header')
 		@include('new_collections')
 		@include('categories')

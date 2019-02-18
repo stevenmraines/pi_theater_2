@@ -22,6 +22,7 @@ const app = new Vue({
 	el: '#vue-wrapper',
 
 	data: {
+		query:'',
 		collections: [],
 		collectionResults: {
 			movies: [],

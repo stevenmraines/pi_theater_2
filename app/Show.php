@@ -5,9 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Episode;
+use Laravel\Scout\Searchable;
 
 class Show extends Model
 {
+    use Searchable;
+
   public function genres() {
 		return $this->belongsToMany(Genre::class, 'show_genres', 'show_id', 'genre_id');
 	}

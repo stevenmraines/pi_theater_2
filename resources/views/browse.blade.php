@@ -6,13 +6,26 @@
 @section('content')
 	<link rel="stylesheet" href="{{ asset('css/browse.css') }}" />
 	<div id="vue-wrapper" class='container-fluid px-0'>
+		<input v-model="query" placeholder="Search Movies and TV Shows...">
 		<ais-index
 		  app-id="{{ config('scout.algolia.id') }}"
 		  api-key="{{ env('ALGOLIA_SEARCH') }}"
 		  index-name="movies"
+		  :query="query"
 		>
 			<!-- Other Algolia search components go here -->
-			<ais-input placeholder="Search movies..."></ais-input>
+			{{-- <ais-input placeholder="Search movies..."></ais-input> --}}
+
+  			<ais-results></ais-results>
+		</ais-index>
+		<ais-index
+		  app-id="{{ config('scout.algolia.id') }}"
+		  api-key="{{ env('ALGOLIA_SEARCH') }}"
+		  index-name="shows"
+		  :query="query"
+		>
+			<!-- Other Algolia search components go here -->
+			{{-- <ais-input placeholder="Search movies..."></ais-input> --}}
 
   			<ais-results></ais-results>
 		</ais-index>

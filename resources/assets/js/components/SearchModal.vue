@@ -28,6 +28,7 @@
           index-name="movies"
           :query="query"
         >
+            <!-- <ais-pagination></ais-pagination> -->
             <ais-results inline-template>
                 <div>
                     <div
@@ -36,7 +37,7 @@
                     >
                         <img v-bind:src="'/img/posters/' + result.poster" class="img-fluid" />
                         <div class="poster-overlay d-flex flex-column justify-content-around">
-                            <span class="mx-auto px-2">@{{ result.title }}</span>
+                            <span class="mx-auto px-2">{{ result.title }}</span>
                             <a v-bind:href="'/theater/movie/' + result.objectId" class="mx-auto play text-center">
                                 &#9658;
                             </a>
@@ -62,7 +63,7 @@
                     >
                         <img v-bind:src="'/img/posters/' + result.poster" class="img-fluid" />
                         <div class="poster-overlay d-flex flex-column justify-content-around">
-                            <span class="mx-auto px-2">@{{ result.title }}</span>
+                            <span class="mx-auto px-2">{{ result.title }}</span>
                             <a v-bind:href="'/theater/movie/' + result.objectId" class="mx-auto play text-center">
                                 &#9658;
                             </a>

@@ -1,23 +1,28 @@
-@extends('layouts.app')
+<?php
+	$user = auth()->check();
+?>
 
+@extends('browse')
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+	<div id="vue-wrapper" class='container-fluid px-0'>
+		@include('navbar')
+		{{-- @include('newCollections')
+		@include('categories')
+		@include('posterRows')
+		<search-modal v-bind:contents="[]"></search-modal>
+		<collection-modal
+			v-bind:contents="collectionResultsPrepared"
+			v-bind:logo="collectionResults.logo"
+		></collection-modal>
+		<watchlist-modal v-bind:contents="watchlistPrepared"></watchlist-modal>
+		<movie-modal></movie-modal>
+		<show-modal></show-modal>
+		<login-modal></login-modal>
+		<registration-modal></registration-modal> --}}
+	</div>
+    <script>
+        window.__INITIAL_STATE__ = <?= $initialState ?>;
+    </script>
+    <script src='{{ asset('js/app.js') }}'></script>
+	<script src='{{ asset('js/browse.js') }}'></script>
 @endsection

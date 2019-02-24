@@ -10,3 +10,5 @@ Route::get('/', function() {
     ];
     return view('home')->with('initialState', json_encode($initialState));
 });
+
+Route::get('/upload', 'AuthViewController@upload');

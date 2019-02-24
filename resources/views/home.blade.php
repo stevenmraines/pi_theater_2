@@ -1,28 +1,16 @@
-<?php
-	$user = auth()->check();
-?>
-
-@extends('browse')
-@section('content')
-	<div id="vue-wrapper" class='container-fluid px-0'>
-		@include('navbar')
-		{{-- @include('newCollections')
-		@include('categories')
-		@include('posterRows')
-		<search-modal v-bind:contents="[]"></search-modal>
-		<collection-modal
-			v-bind:contents="collectionResultsPrepared"
-			v-bind:logo="collectionResults.logo"
-		></collection-modal>
-		<watchlist-modal v-bind:contents="watchlistPrepared"></watchlist-modal>
-		<movie-modal></movie-modal>
-		<show-modal></show-modal>
-		<login-modal></login-modal>
-		<registration-modal></registration-modal> --}}
-	</div>
-    <script>
-        window.__INITIAL_STATE__ = <?= $initialState ?>;
-    </script>
-    <script src='{{ asset('js/app.js') }}'></script>
-	<script src='{{ asset('js/browse.js') }}'></script>
-@endsection
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+	<head>
+		<title>{{ config('app.name', 'Laravel') }}</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+		<meta name="csrf-token" content="{{ csrf_token() }}" />
+		<link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" />
+		<link href="{{ asset('css/bootstrap_pi.css') }}" rel="stylesheet" />
+		<link rel="stylesheet" href="{{ asset('css/browse.css') }}" />
+	</head>
+	<body class="scrollbar">
+		@include('browse')
+	</body>
+</html>

@@ -9,20 +9,12 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    public function historyMovies() {
-        return $this->belongsToMany('App\Movie', 'history_movies');
+    public function history() {
+
     }
 
-    public function historyEpisodes() {
-        return $this->belongsToMany('App\Episode', 'history_episodes');
-    }
+    public function watchlist() {
 
-    public function watchlistMovies() {
-        return $this->belongsToMany('App\Movie', 'watchlist_movies');
-    }
-
-    public function watchlistShows() {
-        return $this->belongsToMany('App\Show', 'watchlist_shows');
     }
 
     /**

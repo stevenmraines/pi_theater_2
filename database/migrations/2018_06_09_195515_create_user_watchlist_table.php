@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMovieGenresTable extends Migration
+class CreateUserWatchlistTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateMovieGenresTable extends Migration
      */
     public function up()
     {
-        Schema::create('movie_genres', function (Blueprint $table) {
-            $table->increments('id');
-			$table->unsignedInteger('movie_id');
-			$table->unsignedInteger('genre_id');
+        Schema::create('user_watchlist', function (Blueprint $table) {
+			$table->unsignedInteger('user_id');
+			$table->unsignedInteger('media_id');
             $table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-			$table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
-			$table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade');
-			$table->unique(['movie_id', 'genre_id']);
+			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
+			$table->unique(['user_id', 'media_id']);
         });
     }
 
@@ -32,6 +31,6 @@ class CreateMovieGenresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('movie_genres');
+        Schema::dropIfExists('user_watchlist');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWatchlistShowsTable extends Migration
+class CreateUserHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateWatchlistShowsTable extends Migration
      */
     public function up()
     {
-        Schema::create('watchlist_shows', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('user_history', function (Blueprint $table) {
 			$table->unsignedInteger('user_id');
-			$table->unsignedInteger('show_id');
+			$table->unsignedInteger('media_id');
+			$table->unsignedInteger('progress')->default(0);
             $table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-			$table->foreign('show_id')->references('id')->on('shows')->onDelete('cascade');
-			$table->unique(['user_id', 'show_id']);
+			$table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
+			$table->unique(['user_id', 'media_id']);
         });
     }
 
@@ -32,6 +32,6 @@ class CreateWatchlistShowsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('watchlist_shows');
+        Schema::dropIfExists('user_history');
     }
 }

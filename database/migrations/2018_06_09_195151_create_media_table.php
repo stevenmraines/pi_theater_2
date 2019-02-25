@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCollectionEpisodesTable extends Migration
+class CreateMediaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateCollectionEpisodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('collection_episodes', function (Blueprint $table) {
+        Schema::create('media', function (Blueprint $table) {
             $table->increments('id');
-			$table->unsignedInteger('collection_id');
-			$table->unsignedInteger('episode_id');
+            $table->enum('media_type', ['movie', 'show']);
+			$table->string('title');
+			$table->string('summary', 4000);
+            $table->string('notes')->nullable();
+            $table->string('poster')->default('missing-poster.jpg');
+            $table->unsignedInteger('year_start')->nullable()->default(null);
+			$table->unsignedInteger('year_end')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-			$table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
-			$table->foreign('episode_id')->references('id')->on('episodes')->onDelete('cascade');
-			$table->unique(['collection_id', 'episode_id']);
         });
     }
 
@@ -32,6 +34,6 @@ class CreateCollectionEpisodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collection_episodes');
+        Schema::dropIfExists('media');
     }
 }

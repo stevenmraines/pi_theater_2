@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Genre extends Model
 {
     public function media() {
-		
+		return $this->belongsToMany('App\Media');
 	}
 }

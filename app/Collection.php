@@ -11,10 +11,6 @@ class Collection extends Model
     use Searchable;
 
     public function media() {
-        
-    }
-
-    public static function recent($limit) {
-
+        return $this->belongsToMany('App\Media');
     }
 }

@@ -10,11 +10,14 @@ class User extends Authenticatable
     use Notifiable;
 
     public function history() {
-
+        return
+            $this
+                ->belongsToMany('App\Media', 'history_user', 'user_id', 'media_id')
+                ->withPivot('progress');
     }
 
     public function watchlist() {
-
+        return $this->belongsToMany('App\Media', 'user_watchlist', 'user_id', 'media_id');
     }
 
     /**

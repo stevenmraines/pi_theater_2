@@ -22,15 +22,28 @@ const app = new Vue({
 	el: '#vue-wrapper',
 
 	data: {
-		query:'',
 		genres: window.__INITIAL_STATE__.genres,
 		genreColumns: [],
-		movieModal: {},
-		showModal: {},
-	},
-
-	computed: {
-
+		movieModal: {
+			id: 0,
+			title: '',
+			summary: '',
+			notes: null,
+			year_start: 0,
+			poster: 'missing-poster.jpg',
+			genres: [],
+		},
+		showModal: {
+			id: 0,
+            title: '',
+            summary: '',
+            notes: null,
+            year_start: 0,
+            year_end: 0,
+            poster: 'missing-poster.jpg',
+            episodes: [],
+            genres: [],
+		},
 	},
 
 	methods: {
@@ -51,12 +64,34 @@ const app = new Vue({
 			this.genreColumns = genreColumns;
 		},
 
-		showSearchModal: function() {
-			Event.trigger('showSearchModal');
+		getMedia: function(id) {
+			var self = this;
+
+			axios.get('/api/media/' + id).then(function(response) {
+				// Update modal props
+				var modal = response.data.media_type + 'Modal';
+				for(var key in response.data) {
+					if(self[modal].hasOwnProperty(key)) {
+						self[modal][key] = response.data[key];
+					}
+				}
+
+				// Display the modal
+				var event = 'display' + modal.charAt(0).toUpperCase() + modal.substring(1);
+				Event.trigger(event, response.data);
+			}).catch(function(error) {
+				console.log(error);
+			});
+
+			console.log(this.movieModal);
 		},
 	},
 
 	mounted: function() {
 		this.createGenreTable();
+	},
+
+	created: function() {
+		Event.listen('getMedia', this.getMedia);
 	},
 });

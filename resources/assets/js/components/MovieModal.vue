@@ -5,7 +5,7 @@
 				<div class="modal-header">
 					<h5 id="movie-modal-title" class="modal-title">
 						{{ title }}
-						<small class="ml-2 text-muted">({{ year }})</small>
+						<small class="ml-2 text-muted">({{ year_start }})</small>
 					</h5>
 					<button type="button" class="close" data-dismiss="modal">
 						<span>&times;</span>
@@ -51,64 +51,33 @@
 
 <script>
 	export default {
-		data() {
-			return {
-				id:		0,
-				title:			'',
-				summary:		'',
-				notes:			null,
-				year:			0,
-				poster:			'missing-poster.jpg',
-				genres:			[],
-				inWatchlist:	false,
-				logged:			false
-			};
-		},
+		props: [
+			'id',
+			'title',
+			'summary',
+			'notes',
+			'year_start',
+			'poster',
+			'genres',
+			'inWatchlist',
+			'logged',
+		],
 
 		created() {
-			Event.listen('movieInfo', this.load);
+			Event.listen('displayMovieModal', this.display);
 		},
 
 		methods: {
-			load(data) {
-				var self = this;
-				axios.get('/movie/info/' + data.id)
-					.then(function(response) {
-						self.id		= response.data.id;
-						self.title			= response.data.title;
-						self.summary		= response.data.summary;
-						self.notes			= response.data.notes;
-						self.year			= response.data.year;
-						self.poster			= response.data.poster;
-						self.genres			= response.data.genres;
-						self.logged			= response.data.logged;
-						self.inWatchlist	= response.data.inWatchlist;
-						$('#movie-modal').modal('show');
-					});
+			display() {
+				$('#movie-modal').modal('show');
 			},
 
 			addMovie() {
-				var self = this;
-				axios.get('/user/watchlist/addMovie/' + this.id)
-					.then(function(response) {
-						if(typeof response.data.success !== null && response.data.success) {
-							self.inWatchlist = true;
-						}
-					});
+
 			},
 
 			removeMovie() {
-				var self = this;
-				axios.get('/user/watchlist/removeMovie/' + this.id)
-					.then(function(response) {
-						if(typeof response.data.success !== null && response.data.success) {
-							self.inWatchlist = false;
-							Event.trigger('removeFromWatchlist', {
-								id: self.id,
-								mediaType: 'movie',
-							});
-						}
-					});
+
 			},
 		},
 	}

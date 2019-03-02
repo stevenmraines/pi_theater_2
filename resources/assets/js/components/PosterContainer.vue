@@ -7,10 +7,10 @@
 		<img v-bind:src="'/img/posters/' + poster" class="img-fluid" />
 		<div class="poster-overlay d-flex flex-column justify-content-around">
 			<span class="mx-auto px-2">{{ title }}</span>
-			<a v-bind:href="'/theater/movie/' + id" class="mx-auto play text-center">
+			<a href="javascript:void(0);" class="mx-auto play text-center">
 				&#9658;
 			</a>
-			<button class="mx-auto btn btn-outline-success" v-on:click="moreInfo">
+			<button class="mx-auto btn btn-outline-success" v-on:click="getMedia">
 				More Info
 			</button>
 		</div>
@@ -23,21 +23,20 @@
 			'id',
 			'title',
 			'poster',
-			'mediaType',
-			'eventDispatcher',
+			// 'eventDispatcher',
 		],
 
 		methods: {
-			moreInfo() {
-				Event.trigger(this.mediaType + 'Info', { id: this.id });
+			getMedia() {
+				Event.trigger('getMedia', this.id);
 			},
 
 			hover() {
-				this.eventDispatcher.$emit('posterContainerHover', { id: this.id });
+				// this.eventDispatcher.$emit('posterContainerHover', { id: this.id });
 			},
 
 			unhover() {
-				this.eventDispatcher.$emit('posterContainerUnhover');
+				// this.eventDispatcher.$emit('posterContainerUnhover');
 			},
 		},
 	}

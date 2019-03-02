@@ -2,13 +2,5 @@
 
 use Illuminate\Http\Request;
 
-/*
- * TODO
- * Add to watchlist
- * Remove from watchlist
- * Update history
- * Login
- * Register
- * Change email
- * Change password
- */
+Route::resource('media', 'MediaController');
+Route::resource('genre', 'GenreController');

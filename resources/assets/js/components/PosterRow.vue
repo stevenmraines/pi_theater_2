@@ -12,14 +12,14 @@
 					v-bind:query-parameters="queryParams"
 				>
 					<div>
-						<ais-stats />
-						<ais-results>
+						<ais-results ref="results">
 							<template slot-scope="{ result }">
 								<poster-container
 									v-bind:key="result.objectID"
 									v-bind:id="result.id"
 									v-bind:title="result.title"
 									v-bind:poster="result.poster"
+									v-bind:event-dispatcher="eventDispatcher"
 								></poster-container>
 							</template>
 						</ais-results>
@@ -34,8 +34,44 @@
 	export default {
 		props: ['title', 'index', 'queryParams'],
 
-		created() {
+		data() {
+			return {
+				eventDispatcher: new Vue({})
+			};
+		},
 
+		methods: {
+			shift(data) {
+				var p = this.$refs.results.$children;
+				var found = false;
+
+				for(var i = 0; i < p.length; i++) {
+					if(!found) {
+						p[i].$el.classList.add('shift-left');
+
+						if(p[i].id === data.id) {
+							found = true;
+						}
+					}
+					else {
+						p[i].$el.classList.add('shift-right');
+					}
+				}
+			},
+
+			unshift() {
+				var p = this.$refs.results.$children;
+
+				for(var i = 0; i < p.length; i++) {
+					p[i].$el.classList.remove('shift-left');
+					p[i].$el.classList.remove('shift-right');
+				}
+			},
+		},
+
+		created() {
+			this.eventDispatcher.$on('posterContainerHover', this.shift);
+			this.eventDispatcher.$on('posterContainerUnhover', this.unshift);
 		}
 	}
 </script>

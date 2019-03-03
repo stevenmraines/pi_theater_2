@@ -19,11 +19,15 @@
 
 <script>
 	export default {
+		/*
+		 * Use local event dispatcher to prevent
+		 * all posters on all rows from being shifted
+		 */
 		props: [
 			'id',
 			'title',
 			'poster',
-			// 'eventDispatcher',
+			'eventDispatcher',
 		],
 
 		methods: {
@@ -32,11 +36,11 @@
 			},
 
 			hover() {
-				// this.eventDispatcher.$emit('posterContainerHover', { id: this.id });
+				this.eventDispatcher.$emit('posterContainerHover', { id: this.id });
 			},
 
 			unhover() {
-				// this.eventDispatcher.$emit('posterContainerUnhover');
+				this.eventDispatcher.$emit('posterContainerUnhover');
 			},
 		},
 	}

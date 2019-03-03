@@ -24,6 +24,7 @@ const app = new Vue({
 	data: {
 		genres: window.__INITIAL_STATE__.genres,
 		genreColumns: [],
+
 		movieModal: {
 			id: 0,
 			title: '',
@@ -33,6 +34,7 @@ const app = new Vue({
 			poster: 'missing-poster.jpg',
 			genres: [],
 		},
+
 		showModal: {
 			id: 0,
             title: '',
@@ -82,8 +84,6 @@ const app = new Vue({
 			}).catch(function(error) {
 				console.log(error);
 			});
-
-			console.log(this.movieModal);
 		},
 	},
 

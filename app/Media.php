@@ -20,4 +20,13 @@ class Media extends Model
     public function collections() {
         return $this->belongsToMany('App\Collection');
     }
+
+    public function toSearchableArray() {
+        $array = $this->toArray();
+
+        $array['created_at_unix'] = $this->created_at->timestamp;
+        $array['updated_at_unix'] = $this->updated_at->timestamp;
+
+        return $array;
+    }
 }

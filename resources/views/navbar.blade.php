@@ -87,25 +87,19 @@
 			@if(!$user)
 				<li class="nav-item align-top">
 					<a
-						href="javascript:void(0);"
+						href="{{ route('login') }}"
 						id="show-login-modal"
 						class="nav-link"
-						data-toggle="modal"
-						data-target="#login-modal"
 					>Login</a>
 				</li>
 				<li class="nav-item align-top">
 					<a
+						href="{{ route('register') }}"
 						id="show-register-modal"
 						class="nav-link"
-						href="javascript:void(0);"
-						data-toggle="modal"
-						data-target="#register-modal"
 					>Register</a>
 				</li>
 			@else
-				<!--include('layouts.email_change')
-				include('layouts.password_change')-->
 				<li class="nav-item align-top">
 					<a
 						class="nav-link"

@@ -12,6 +12,8 @@
 					v-bind:query-parameters="queryParams"
 				>
 					<div>
+						<!-- <ais-pagination :show-first="false" :show-last="false" />
+						<ais-configure :hitsPerPage="4" /> -->
 						<ais-results ref="results">
 							<template slot-scope="{ result }">
 								<poster-container

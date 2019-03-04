@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 /*
  * This controller will return views only accessible
- * by registered users
+ * by registered users with admin access
  */
 class AuthViewController extends Controller
 {

@@ -76,7 +76,7 @@
 						id="search-menu"
 						class="nav-link py-0"
 						href="javascript:void(0);"
-						onclick="$('#search-modal-container').show()"
+						v-on:click="search"
 					>
 						<img src="{{ asset('img/search.png') }}" class="img-fluid" />
 					</a>

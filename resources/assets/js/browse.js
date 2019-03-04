@@ -115,6 +115,10 @@ const app = new Vue({
 				console.log(error);
 			});
 		},
+
+		search: function() {
+			Event.trigger('showSearchModal');
+		},
 	},
 
 	mounted: function() {

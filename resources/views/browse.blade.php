@@ -27,6 +27,12 @@
 		v-bind:genres="showModal.genres"
 	></show-modal>
 
+	<collection-modal v-bind:collection="collection"></collection-modal>
+
+	<genre-modal v-bind:genre="genre"></genre-modal>
+
+	<search-modal v-bind:query="''"></search-modal>
+
 	<poster-row
 		v-bind:title="'Recent Movies'"
 		v-bind:index="'recentMedia'"
@@ -39,9 +45,6 @@
 		v-bind:query-params="{ filters : 'media_type:show' }"
 	></poster-row>
 
-	<collection-modal v-bind:collection="collection"></collection-modal>
-
-	<genre-modal v-bind:genre="genre"></genre-modal>
 </div>
 
 <script>

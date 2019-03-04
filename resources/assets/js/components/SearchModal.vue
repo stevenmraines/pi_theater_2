@@ -1,5 +1,10 @@
 <template>
-    <div id="search-modal-container" class="fluid-modal scrollbar" ref="container">
+    <div
+        class="fluid-modal scrollbar"
+        id="search-modal-container"
+        ref="container"
+        v-on:keyup.esc="hide"
+    >
         <div id="search-modal-controls">
             <button
                 class="fluid-modal-close close d-block"
@@ -9,6 +14,7 @@
             </button>
             <input
                 id="search-input"
+                ref="input"
                 placeholder="Search for Movies and TV Shows..."
                 spellcheck="false"
                 v-model:value="query"

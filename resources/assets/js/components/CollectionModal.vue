@@ -5,6 +5,7 @@
             <div class="fluid-modal-header mb-2">
                 <img
                     class="fluid-modal-title"
+                    v-if="collection.menu_image"
                     v-bind:src="'/img/logos/' + collection.menu_image"
                 />
                 <button

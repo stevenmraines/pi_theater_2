@@ -4,6 +4,8 @@
 
 <div id="vue-wrapper" class="container-fluid px-0">
 	@include('navbar')
+	@include('recentCollections')
+	@include('categories')
 
 	<movie-modal
 		v-bind:id="movieModal.id"
@@ -44,7 +46,6 @@
 		v-bind:index="'recentMedia'"
 		v-bind:query-params="{ filters : 'media_type:show' }"
 	></poster-row>
-
 </div>
 
 <script>

@@ -39,6 +39,8 @@ const app = new Vue({
 			genres: [],
 		},
 
+		recentCollections: window.__INITIAL_STATE__.recentCollections,
+
 		showModal: {
 			id: 0,
             title: '',

@@ -62,13 +62,13 @@
 						id="collections-menu-container"
 						class="dropdown-menu dropdown-menu-left scrollbar"
 					>
-						{{-- <a href="javascript:void(0);" v-for="collection in collections">
+						<a href="javascript:void(0);" v-for="collection in collections">
 							<img
 								class="dropdown-item menu-logo"
-								v-bind:src="'/img/logos/' + collection.logo"
+								v-bind:src="'/img/logos/' + collection.menu_image"
 								v-on:click="getCollection(collection.id)"
 							/>
-						</a> --}}
+						</a>
 					</div>
 				</li>
 				<li class="nav-item dropdown">

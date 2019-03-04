@@ -12,4 +12,13 @@ class Genre extends Model
     public function media() {
 		return $this->belongsToMany('App\Media');
 	}
+
+    public function toSearchableArray() {
+        $array = $this->toArray();
+
+        $array['created_at_unix'] = $this->created_at->timestamp;
+        $array['updated_at_unix'] = $this->updated_at->timestamp;
+
+        return $array;
+    }
 }

@@ -36,11 +36,15 @@
 			},
 
 			hover() {
-				this.eventDispatcher.$emit('posterContainerHover', { id: this.id });
+				if(this.eventDispatcher.hasOwnProperty('$emit')) {
+					this.eventDispatcher.$emit('posterContainerHover', { id: this.id });
+				}
 			},
 
 			unhover() {
-				this.eventDispatcher.$emit('posterContainerUnhover');
+				if(this.eventDispatcher.hasOwnProperty('$emit')) {
+					this.eventDispatcher.$emit('posterContainerUnhover');
+				}
 			},
 		},
 	}

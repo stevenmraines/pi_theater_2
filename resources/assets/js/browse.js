@@ -22,6 +22,10 @@ const app = new Vue({
 	el: '#vue-wrapper',
 
 	data: {
+		collection: {},
+		collections: window.__INITIAL_STATE__.collections,
+
+		genre: {},
 		genres: window.__INITIAL_STATE__.genres,
 		genreColumns: [],
 
@@ -48,6 +52,10 @@ const app = new Vue({
 		},
 	},
 
+	computed: {
+
+	},
+
 	methods: {
 		createGenreTable: function() {
 			var genre_column_count = this.genres.length % 5 === 0 ? 5 :
@@ -64,6 +72,28 @@ const app = new Vue({
 			}
 
 			this.genreColumns = genreColumns;
+		},
+
+		getCollection: function(id) {
+			var self = this;
+
+			axios.get('/api/collection/' + id).then(function(response) {
+				self.collection = response.data;
+				Event.trigger('showCollectionModal');
+			}).catch(function(error) {
+				console.log(error);
+			});
+		},
+
+		getGenre: function(id) {
+			var self = this;
+
+			axios.get('/api/genre/' + id).then(function(response) {
+				self.genre = response.data;
+				Event.trigger('showGenreModal');
+			}).catch(function(error) {
+				console.log(error);
+			});
 		},
 
 		getMedia: function(id) {

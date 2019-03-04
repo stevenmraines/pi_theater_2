@@ -1,12 +1,11 @@
 <template>
-    <div class="fluid-modal scrollbar" ref="container">
+    <div class="fluid-modal scrollbar" id="genre-modal" ref="container">
     <!-- <div class="fluid-modal scrollbar" ref="container" v-on:click.stop="hide"> -->
         <div class="fluid-modal-content">
             <div class="fluid-modal-header mb-2">
-                <img
-                    class="fluid-modal-title"
-                    v-bind:src="'/img/logos/' + collection.menu_image"
-                />
+                <span class="fluid-modal-title">
+                    Genre: {{ genre.name }}
+                </span>
                 <button
                     class="fluid-modal-close close"
                     v-on:click="hide"
@@ -21,7 +20,7 @@
                 <div class="fluid-modal-inner-poster-container mx-0">
                     <poster-container
                         class="my-3"
-                        v-for="media in collection.media"
+                        v-for="media in genre.media"
                         v-bind:key="media.id"
                         v-bind:id="media.id"
                         v-bind:title="media.title"
@@ -36,11 +35,7 @@
 
 <script>
     export default {
-        props: ['collection'],
-
-        created() {
-            Event.listen('showCollectionModal', this.show);
-        },
+        props: ['genre'],
 
         methods: {
             show() {
@@ -52,6 +47,10 @@
                 $(this.$refs.container).fadeOut();
                 document.getElementsByTagName('body')[0].classList.remove('overflow-hidden');
             },
+        },
+
+        created() {
+            Event.listen('showGenreModal', this.show);
         },
     }
 </script>

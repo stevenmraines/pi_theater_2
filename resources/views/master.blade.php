@@ -11,6 +11,6 @@
 		<link rel="stylesheet" href="{{ asset('css/browse.css') }}" />
 	</head>
 	<body class="scrollbar">
-		@include('browse')
+		@yield('content')
 	</body>
 </html>

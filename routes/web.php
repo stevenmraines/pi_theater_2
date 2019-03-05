@@ -10,7 +10,7 @@ Route::get('/{home?}', function() {
         'collections' => App\Collection::all(),
         'recentCollections' => App\Collection::recent(3),
     ];
-    return view('home')->with('initialState', json_encode($initialState));
+    return view('browse')->with('initialState', json_encode($initialState));
 })->where('home', 'home');
 
 Route::get('/upload', 'AuthViewController@upload');

@@ -2,6 +2,8 @@
 	$user = auth()->check();
 ?>
 
+@extends('master')
+@section('content')
 <div id="vue-wrapper" class="container-fluid px-0">
 	@include('navbar')
 	@include('recentCollections')
@@ -53,3 +55,4 @@
 </script>
 <script src='{{ asset('js/app.js') }}'></script>
 <script src='{{ asset('js/browse.js') }}'></script>
+@endsection

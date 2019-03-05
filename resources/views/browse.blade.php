@@ -1,7 +1,3 @@
-<?php
-	$user = auth()->check();
-?>
-
 @extends('master')
 @section('content')
 <div id="vue-wrapper" class="container-fluid px-0">
@@ -17,6 +13,7 @@
 		v-bind:year_start="movieModal.year_start"
 		v-bind:poster="movieModal.poster"
 		v-bind:genres="movieModal.genres"
+		v-bind:user="user"
 	></movie-modal>
 
 	<show-modal
@@ -29,6 +26,7 @@
 		v-bind:poster="showModal.poster"
 		v-bind:episodes="showModal.episodes"
 		v-bind:genres="showModal.genres"
+		v-bind:user="user"
 	></show-modal>
 
 	<collection-modal v-bind:collection="collection"></collection-modal>
@@ -36,6 +34,8 @@
 	<genre-modal v-bind:genre="genre"></genre-modal>
 
 	<search-modal v-bind:query="''"></search-modal>
+
+	<watchlist-modal v-bind:user="user"></watchlist-modal>
 
 	<poster-row
 		v-bind:title="'Recent Movies'"

@@ -29,6 +29,8 @@ const app = new Vue({
 		genres: window.__INITIAL_STATE__.genres,
 		genreColumns: [],
 
+		history: {},
+
 		movieModal: {
 			id: 0,
 			title: '',
@@ -52,13 +54,33 @@ const app = new Vue({
             episodes: [],
             genres: [],
 		},
+
+		user: window.__INITIAL_STATE__.user,
+
+		watchlist: {},
 	},
 
-	computed: {
+	mounted: function() {
+		this.createGenreTable();
+	},
 
+	created: function() {
+		Event.listen('getMedia', this.getMedia);
+		Event.listen('addToWatchlist', this.addToWatchlist);
+		Event.listen('removeFromWatchlist', this.removeFromWatchlist);
 	},
 
 	methods: {
+		addToWatchlist: function(mediaId) {
+			axios.post('/api/watchlist/add/' + this.user.id + '/' + mediaId)
+			.then(function (response) {
+				console.log(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+		},
+
 		createGenreTable: function() {
 			var genre_column_count = this.genres.length % 5 === 0 ? 5 :
 				(this.genres.length % 4 === 0 ? 4 : 3);
@@ -118,16 +140,24 @@ const app = new Vue({
 			});
 		},
 
+		removeFromWatchlist: function(mediaId) {
+			axios.post('/api/watchlist/remove/' + this.user.id + '/' + mediaId)
+			.then(function (response) {
+				console.log(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+		},
+
+		showWatchlist: function() {
+			if(this.user) {
+				Event.trigger('showWatchlistModal');
+			}
+		},
+
 		search: function() {
 			Event.trigger('showSearchModal');
 		},
-	},
-
-	mounted: function() {
-		this.createGenreTable();
-	},
-
-	created: function() {
-		Event.listen('getMedia', this.getMedia);
 	},
 });

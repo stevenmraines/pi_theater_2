@@ -82,18 +82,17 @@
                         </span>
                     </div>
 
-                    <div v-if="logged">
+                    <div v-if="user">
                         <div class="modal-footer">
                             <button
                                 class="btn btn-success mx-auto ml-sm-0 mr-sm-auto btn-watchlist"
                                 v-if="!inWatchlist"
-                                v-on:click="addShow()"
+                                v-on:click="addToWatchlist"
                             >ADD TO WATCHLIST</button>
-
                             <button
                                 class="btn btn-warning mx-auto ml-sm-0 mr-sm-auto btn-watchlist"
                                 v-if="inWatchlist"
-                                v-on:click="removeShow()"
+                                v-on:click="removeFromWatchlist"
                             >REMOVE FROM WATCHLIST</button>
                         </div>
                     </div>
@@ -117,9 +116,20 @@
             'current_season',
             'episodes',
             'genres',
-            'inWatchlist',
-            'logged',
+            'user',
         ],
+
+        computed: {
+            inWatchlist: function() {
+                for(var i = 0; i < this.user.watchlist.length; i++) {
+                    if(this.id == this.user.watchlist[i].id) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        },
 
 		created() {
 			Event.listen('displayShowModal', this.display);
@@ -130,13 +140,13 @@
       			$('#show-modal').modal('show');
       		},
 
-            addShow() {
+            addToWatchlist() {
+				Event.trigger('addToWatchlist', this.id);
+			},
 
-            },
-
-            removeShow() {
-
-            },
+			removeFromWatchlist() {
+				Event.trigger('removeFromWatchlist', this.id);
+			},
 
             changeSeason(season) {
 

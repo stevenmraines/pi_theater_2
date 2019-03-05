@@ -1,5 +1,5 @@
 <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
-	<a href="/" class="navbar-brand img-fluid mr-4 py-0">
+	<a href="{{ route('browse') }}" class="navbar-brand img-fluid mr-4 py-0">
 		<img
 			id="nav-logo"
 			class="d-inline-block"
@@ -84,7 +84,7 @@
 			</ul>
 		</div>
 		<ul class="navbar-nav ml-auto d-flex align-items-center">
-			@if(!$user)
+			@if(!auth()->check())
 				<li class="nav-item align-top">
 					<a
 						href="{{ route('login') }}"
@@ -104,7 +104,7 @@
 					<a
 						class="nav-link"
 						href="javascript:void(0);"
-						v-on:click="getWatchlist()"
+						v-on:click="showWatchlist"
 					>Watchlist</a>
 				</li>
 				<li class="nav-item dropdown">
@@ -122,19 +122,17 @@
 						<h4 class="dropdown-item">{{ auth()->user()->name }}</h4><hr />
 						@if(auth()->user()->admin)
 							<h6 class="dropdown-header">Admin Functions</h6>
-							<a class="dropdown-item" href="/upload">Upload Content</a><hr />
+							<a class="dropdown-item" href="{{ route('upload') }}">
+								Upload Content
+							</a><hr />
 						@endif
 						<a
 							class="dropdown-item"
 							href="javascript:void(0);"
-							data-toggle="modal"
-							data-target="#change_email_modal"
 						>Change Email</a>
 						<a
 							class="dropdown-item"
 							href="javascript:void(0);"
-							data-toggle="modal"
-							data-target="#change_password_modal"
 						>Change Password</a><hr />
 						<a
 							id="logout-button"

@@ -13,11 +13,15 @@
 				</div>
 				<div class="modal-body">
 					<div class="d-flex flex-column flex-lg-row p-2 pb-4">
-						<img v-bind:src="'/img/posters/' + poster" id="movie-modal-poster" class="modal-poster mx-auto" />
+						<img
+							id="movie-modal-poster"
+							class="modal-poster mx-auto"
+							v-bind:src="'/img/posters/' + poster"
+						/>
 						<span id="movie-modal-info" class="card mt-4 mt-lg-0 ml-lg-4">
 							<div class="card-body">
 								<div id="movie-modal-summary" class="mb-2">{{ summary }}</div>
-								<div id="movie-modal-extras" class="font-italic mb-2" v-if="notes !== null">
+								<div id="movie-modal-extras" class="font-italic mb-2" v-if="notes">
 									{{ notes }}
 								</div>
 								<span class="font-weight-bold">Genres:</span>
@@ -30,16 +34,26 @@
 						</span>
 					</div>
 					<div class="modal-footer d-flex justify-content-between flex-column-reverse flex-sm-row">
-						<div v-if="logged">
-							<button class="btn btn-success btn-watchlist" v-if="!inWatchlist" v-on:click="addMovie()">
+						<div v-if="user">
+							<button
+								class="btn btn-success btn-watchlist"
+								v-if="!inWatchlist"
+								v-on:click="addToWatchlist"
+							>
 								ADD TO WATCHLIST
 							</button>
-							<button class="btn btn-warning btn-watchlist" v-if="inWatchlist" v-on:click="removeMovie()">
+							<button
+								class="btn btn-warning btn-watchlist"
+								v-if="inWatchlist"
+								v-on:click="removeFromWatchlist"
+							>
 								REMOVE FROM WATCHLIST
 							</button>
 						</div>
-						<a v-bind:href="'/theater/movie/' + id"
-								class="btn btn-primary ml-sm-auto ml-0 mb-4 mb-sm-0 btn-watchlist">
+						<a
+							class="btn btn-primary ml-sm-auto ml-0 mb-4 mb-sm-0 btn-watchlist"
+							v-bind:href="'/theater/movie/' + id"
+						>
 							WATCH NOW
 						</a>
 					</div>
@@ -59,9 +73,20 @@
 			'year_start',
 			'poster',
 			'genres',
-			'inWatchlist',
-			'logged',
+			'user',
 		],
+
+		computed: {
+			inWatchlist: function() {
+				for(var i = 0; i < this.user.watchlist.length; i++) {
+					if(this.id == this.user.watchlist[i].id) {
+						return true;
+					}
+				}
+
+				return false;
+			}
+		},
 
 		created() {
 			Event.listen('displayMovieModal', this.display);
@@ -72,12 +97,12 @@
 				$('#movie-modal').modal('show');
 			},
 
-			addMovie() {
-
+			addToWatchlist() {
+				Event.trigger('addToWatchlist', this.id);
 			},
 
-			removeMovie() {
-
+			removeFromWatchlist() {
+				Event.trigger('removeFromWatchlist', this.id);
 			},
 		},
 	}

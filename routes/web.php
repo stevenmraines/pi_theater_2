@@ -5,11 +5,17 @@ use Illuminate\Http\Request;
 Auth::routes();
 
 Route::get('/{home?}', function() {
+    $user = auth()->user();
+
+    if(!is_null($user)) {
+        $user->load('history')->load('watchlist');
+    }
+
     $initialState = [
         'genres' => App\Genre::all(),
         'collections' => App\Collection::all(),
         'recentCollections' => App\Collection::recent(3),
-        'user' => auth()->user()->load('history')->load('watchlist'),
+        'user' => $user,
     ];
 
     return view('browse')

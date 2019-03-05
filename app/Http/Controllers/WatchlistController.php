@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WatchlistController extends Controller
 {
     public function add($userId, $mediaId) {
-        $user = \App\User::find($userId)->load('watchlist');
-
-        if(!in_array($mediaId, $user->watchlist->pluck('id')->toArray())) {
-            return 'add';
-        }
-
-        return 'no add';
+        $user = \App\User::find($userId)->load('watchlist')->load('history');
+        $ids = $user->watchlist->pluck('id')->toArray();
+        $ids[] = $mediaId;
+        $user->watchlist()->sync($ids);
+        return \App\User::find($userId)->load('history')->load('watchlist');
     }
 
     public function remove($userId, $mediaId) {

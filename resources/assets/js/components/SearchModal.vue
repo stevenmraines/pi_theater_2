@@ -50,7 +50,13 @@
 
 <script>
     export default {
-        props: ['query', 'contents'],
+        props: ['contents'],
+
+        data() {
+            return {
+                query: '',
+            };
+        },
 
         created() {
             Event.listen('showSearchModal', this.show);

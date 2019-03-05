@@ -19,10 +19,11 @@
             <div class="fluid-modal-poster-container">
                 <div
                     class="fluid-modal-inner-poster-container mx-0"
-                    v-if="user.watchlist.length > 0"
+                    v-if="user && user.watchlist.length > 0"
                 >
                     <poster-container
                         class="my-3"
+                        v-if="user"
                         v-for="media in user.watchlist"
                         v-bind:key="media.id"
                         v-bind:id="media.id"

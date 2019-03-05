@@ -33,7 +33,7 @@
 
 	<genre-modal v-bind:genre="genre"></genre-modal>
 
-	<search-modal v-bind:query="''"></search-modal>
+	<search-modal></search-modal>
 
 	<watchlist-modal v-bind:user="user"></watchlist-modal>
 

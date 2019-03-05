@@ -74,7 +74,7 @@ const app = new Vue({
 		addToWatchlist: function(mediaId) {
 			axios.post('/api/watchlist/add/' + this.user.id + '/' + mediaId)
 			.then(function (response) {
-				console.log(response);
+				this.user.watchlist = response.data.watchlist;
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -141,9 +141,11 @@ const app = new Vue({
 		},
 
 		removeFromWatchlist: function(mediaId) {
+			var self = this;
+
 			axios.post('/api/watchlist/remove/' + this.user.id + '/' + mediaId)
 			.then(function (response) {
-				console.log(response);
+				self.user.watchlist = response.data.watchlist;
 			})
 			.catch(function (error) {
 				console.log(error);

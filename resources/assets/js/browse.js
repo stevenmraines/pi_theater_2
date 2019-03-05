@@ -72,9 +72,12 @@ const app = new Vue({
 
 	methods: {
 		addToWatchlist: function(mediaId) {
+			var self = this;
+
 			axios.post('/api/watchlist/add/' + this.user.id + '/' + mediaId)
 			.then(function (response) {
-				this.user.watchlist = response.data.watchlist;
+				self.user.watchlist = response.data.watchlist;
+				self.watchlist.user = response.data;
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -146,6 +149,7 @@ const app = new Vue({
 			axios.post('/api/watchlist/remove/' + this.user.id + '/' + mediaId)
 			.then(function (response) {
 				self.user.watchlist = response.data.watchlist;
+				self.watchlist.user = response.data;
 			})
 			.catch(function (error) {
 				console.log(error);

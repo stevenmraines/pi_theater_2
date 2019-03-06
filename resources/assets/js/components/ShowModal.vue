@@ -27,7 +27,7 @@
                             <div class="card-header">
                                 <div class="d-flex justify-content-between" style="min-height: 100%">
                                     <span class="my-auto font-weight-bold">
-                                        Season {{ current_season }}
+                                        Season {{ currentSeason }}
                                     </span>
 
                                     <div class="btn-group dropdown">
@@ -53,7 +53,7 @@
                             </div>
 
                             <div id="show-modal-episodes" class="card-body py-1 scrollbar">
-                                <div v-for="(episode, index) in episodes[current_season]">
+                                <div v-for="(episode, index) in currentSeasonEpisodes">
                                     <hr class="fluid-modal-hr my-1" v-if="index > 0" />
 
                                     <div
@@ -61,7 +61,7 @@
                                         v-bind:class="episodeListStyles(index)"
                                     >
                                         <span class="pr-2">
-                                        {{ episode.episode < 10 ? 0 : '' }}{{ episode.episode }}
+                                        {{ episode.episode_number < 10 ? 0 : '' }}{{ episode.episode_number }}
                                         - {{ episode.title }}
                                         </span>
 
@@ -112,12 +112,16 @@
             'year_start',
             'year_end',
             'poster',
-            'seasons',
-            'current_season',
             'episodes',
             'genres',
             'user',
         ],
+
+        data() {
+            return {
+                currentSeason: 1,
+            };
+        },
 
         computed: {
             inWatchlist: function() {
@@ -128,7 +132,26 @@
                 }
 
                 return false;
-            }
+            },
+
+            currentSeasonEpisodes: function() {
+                var self = this;
+                return this.episodes.filter(function(episode) {
+                    return episode.season == self.currentSeason;
+                });
+            },
+
+            seasons: function() {
+                var seasons = [];
+
+                for(var i = 0; i < this.episodes.length; i++) {
+                    if(seasons.indexOf(this.episodes[i].season) < 0) {
+                        seasons.push(this.episodes[i].season);
+                    }
+                }
+
+                return seasons;
+            },
         },
 
 		created() {
@@ -137,6 +160,7 @@
 
       	methods: {
       		display() {
+                this.currentSeason = this.getMinSeason();
       			$('#show-modal').modal('show');
       		},
 
@@ -148,14 +172,26 @@
 				Event.trigger('removeFromWatchlist', this.id);
 			},
 
-            changeSeason(season) {
+            getMinSeason: function() {
+                var min = 1;
 
+                for(var i = 0; i < this.episodes.length; i++) {
+                    if(this.episodes[i].season <= min) {
+                        min = this.episodes[i].season;
+                    }
+                }
+
+                return min;
+            },
+
+            changeSeason(season) {
+                this.currentSeason = season;
             },
 
             episodeListStyles(index) {
                 return {
                     'mt-1': index === 0,
-                    'mb-1': index === this.episodes[this.current_season].length - 1,
+                    'mb-1': index === this.currentSeasonEpisodes.length - 1,
                 };
             },
         },

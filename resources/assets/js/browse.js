@@ -53,6 +53,7 @@ const app = new Vue({
             poster: 'missing-poster.jpg',
             episodes: [],
             genres: [],
+			seasons: [],
 		},
 
 		user: window.__INITIAL_STATE__.user,
@@ -99,6 +100,19 @@ const app = new Vue({
 			}
 
 			this.genreColumns = genreColumns;
+		},
+
+		finishHistory: function(mediaId) {
+			var self = this;
+
+			axios.post('/api/history/finish' + this.user.id + '/' + mediaId)
+			.then(function(response) {
+				self.user = response.data;
+				self.watchlist.user = response.data;
+			})
+			.catch(function(error) {
+				console.log(error);
+			});
 		},
 
 		getCollection: function(id) {
@@ -164,6 +178,23 @@ const app = new Vue({
 
 		search: function() {
 			Event.trigger('showSearchModal');
+		},
+
+		updateHistory: function(mediaId, progress) {
+			var self = this;
+
+			axios.post(
+				'/api/history/update/' +
+				this.user.id + '/' +
+				mediaId + '/' +
+				progress
+			).then(function(response) {
+				self.user = response.data;
+				self.watchlist.user = response.data;
+			})
+			.catch(function(error) {
+				console.log(error);
+			});
 		},
 	},
 });

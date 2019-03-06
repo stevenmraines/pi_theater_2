@@ -26,6 +26,7 @@
 		v-bind:poster="showModal.poster"
 		v-bind:episodes="showModal.episodes"
 		v-bind:genres="showModal.genres"
+		v-bind:seasons="showModal.seasons"
 		v-bind:user="user"
 	></show-modal>
 

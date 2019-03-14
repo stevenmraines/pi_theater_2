@@ -15,6 +15,7 @@ Route::get('/{home?}', function() {
         'genres' => App\Genre::all(),
         'collections' => App\Collection::all(),
         'recentCollections' => App\Collection::recent(3),
+        'recentEpisodes' => App\Media::recentEpisodes(),
         'user' => $user,
     ];
 

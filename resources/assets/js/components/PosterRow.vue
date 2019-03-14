@@ -5,28 +5,15 @@
 			<span class="left-arrow">&#8249;</span>
 			<span class="right-arrow">&#8250;</span>
 			<div class="slider">
-				<ais-index
-					app-id="JUG06PFXKY"
-					api-key="713be18b5c43b5766349f0a144622559"
-					v-bind:index-name="index"
-					v-bind:query-parameters="queryParams"
-				>
-					<div>
-						<!-- <ais-pagination :show-first="false" :show-last="false" />
-						<ais-configure :hitsPerPage="4" /> -->
-						<ais-results ref="results">
-							<template slot-scope="{ result }">
-								<poster-container
-									v-bind:key="result.objectID"
-									v-bind:id="result.id"
-									v-bind:title="result.title"
-									v-bind:poster="result.poster"
-									v-bind:event-dispatcher="eventDispatcher"
-								></poster-container>
-							</template>
-						</ais-results>
-					</div>
-				</ais-index>
+                <poster-container
+                    ref="posterContainers"
+                    v-for="content in contents"
+                    v-bind:key="content.objectID"
+                    v-bind:id="content.id"
+                    v-bind:title="content.title"
+                    v-bind:poster="content.poster"
+                    v-bind:event-dispatcher="eventDispatcher"
+                ></poster-container>
 			</div>
 		</div>
 	</div>
@@ -34,7 +21,7 @@
 
 <script>
 	export default {
-		props: ['title', 'index', 'queryParams'],
+		props: ['title', 'contents'],
 
 		data() {
 			return {
@@ -44,7 +31,7 @@
 
 		methods: {
 			shift(data) {
-				var p = this.$refs.results.$children;
+				var p = this.$refs.posterContainers;
 				var found = false;
 
 				for(var i = 0; i < p.length; i++) {
@@ -62,7 +49,7 @@
 			},
 
 			unshift() {
-				var p = this.$refs.results.$children;
+				var p = this.$refs.posterContainers;
 
 				for(var i = 0; i < p.length; i++) {
 					p[i].$el.classList.remove('shift-left');

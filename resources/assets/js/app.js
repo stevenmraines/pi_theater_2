@@ -8,6 +8,7 @@ window.Vue = require('vue');
 
 Vue.use(InstantSearch);
 
+Vue.component('ais-poster-row', require('./components/AisPosterRow.vue'));
 Vue.component('collection-modal', require('./components/CollectionModal.vue'));
 Vue.component('genre-modal', require('./components/GenreModal.vue'));
 Vue.component('login-modal', require('./components/LoginModal.vue'));

@@ -38,16 +38,21 @@
 
 	<watchlist-modal v-bind:user="user"></watchlist-modal>
 
-	<poster-row
-		v-bind:title="'Recent Movies'"
+	<ais-poster-row
+		v-bind:title="'New Movies'"
 		v-bind:index="'recentMedia'"
 		v-bind:query-params="{ filters : 'media_type:movie' }"
-	></poster-row>
+	></ais-poster-row>
 
-	<poster-row
-		v-bind:title="'Recent Shows'"
+	<ais-poster-row
+		v-bind:title="'New TV Shows'"
 		v-bind:index="'recentMedia'"
 		v-bind:query-params="{ filters : 'media_type:show' }"
+	></ais-poster-row>
+
+	<poster-row
+		v-bind:title="'New Episodes'"
+		v-bind:contents="recentEpisodes"
 	></poster-row>
 </div>
 

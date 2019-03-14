@@ -42,6 +42,7 @@ const app = new Vue({
 		},
 
 		recentCollections: window.__INITIAL_STATE__.recentCollections,
+		recentEpisodes: window.__INITIAL_STATE__.recentEpisodes,
 
 		showModal: {
 			id: 0,

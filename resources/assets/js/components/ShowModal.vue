@@ -150,7 +150,16 @@
                     }
                 }
 
+                // These won't necessarily always be sorted out of the box...
+                seasons.sort(function(a, b) {
+                    return a - b;
+                });
+
                 return seasons;
+            },
+
+            minSeason: function() {
+                return this.seasons[0];
             },
         },
 
@@ -160,7 +169,7 @@
 
       	methods: {
       		display() {
-                this.currentSeason = this.getMinSeason();
+                this.changeSeason(this.minSeason);
       			$('#show-modal').modal('show');
       		},
 
@@ -172,17 +181,17 @@
 				Event.trigger('removeFromWatchlist', this.id);
 			},
 
-            getMinSeason: function() {
-                var min = 1;
-
-                for(var i = 0; i < this.episodes.length; i++) {
-                    if(this.episodes[i].season <= min) {
-                        min = this.episodes[i].season;
-                    }
-                }
-
-                return min;
-            },
+            // getMinSeason: function() {
+            //     var min = 1000000;
+            //
+            //     for(var i = 0; i < this.episodes.length; i++) {
+            //         if(this.episodes[i].season <= min) {
+            //             min = this.episodes[i].season;
+            //         }
+            //     }
+            //
+            //     return min;
+            // },
 
             changeSeason(season) {
                 this.currentSeason = season;

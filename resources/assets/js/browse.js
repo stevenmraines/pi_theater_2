@@ -58,8 +58,6 @@ const app = new Vue({
 		},
 
 		user: window.__INITIAL_STATE__.user,
-
-		watchlist: {},
 	},
 
 	mounted: function() {

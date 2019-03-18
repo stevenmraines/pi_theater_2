@@ -2,8 +2,8 @@
 	<div>
 		<h4 class="h4 pl-4">{{ title }}</h4>
 		<div class="container-fluid poster-row px-0 py-3 mb-5">
-			<span class="left-arrow">&#8249;</span>
-			<span class="right-arrow">&#8250;</span>
+			<span class="left-arrow" v-if="showArrows">&#8249;</span>
+			<span class="right-arrow" v-if="showArrows">&#8250;</span>
 			<div class="slider">
                 <poster-container
                     ref="posterContainers"
@@ -27,6 +27,23 @@
 			return {
 				eventDispatcher: new Vue({})
 			};
+		},
+
+		computed: {
+			increment: function() {
+				var width = window.innerWidth;
+				var inc = 0;
+
+				while((inc + 1) * 230 < width) {
+					inc++;
+				}
+
+				return inc;
+			},
+
+			showArrows: function() {
+				return this.contents.length > this.increment;
+			},
 		},
 
 		methods: {

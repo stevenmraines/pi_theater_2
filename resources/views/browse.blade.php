@@ -38,6 +38,18 @@
 
 	<watchlist-modal v-bind:user="user"></watchlist-modal>
 
+	<poster-row
+		v-if="user && user.history"
+		v-bind:title="'Continue Watching'"
+		v-bind:contents="user.history"
+	></poster-row>
+
+	<poster-row
+		v-if="user && user.watchlist"
+		v-bind:title="'Watchlist'"
+		v-bind:contents="user.watchlist"
+	></poster-row>
+
 	<ais-poster-row
 		v-bind:title="'New Movies'"
 		v-bind:index="'recentMedia'"

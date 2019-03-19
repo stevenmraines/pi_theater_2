@@ -2,8 +2,12 @@
 	<div>
 		<h4 class="h4 pl-4">{{ title }}</h4>
 		<div class="container-fluid poster-row px-0 py-3 mb-5">
-			<span class="left-arrow" v-if="showArrows">&#8249;</span>
-			<span class="right-arrow" v-if="showArrows">&#8250;</span>
+			<span class="left-arrow" v-if="showArrows" v-on:click="scroll('right')">
+				&#8249;
+			</span>
+			<span class="right-arrow" v-if="showArrows" v-on:click="scroll('left')">
+				&#8250;
+			</span>
 			<div class="slider">
                 <poster-container
                     ref="posterContainers"
@@ -30,19 +34,14 @@
 		},
 
 		computed: {
-			increment: function() {
-				var width = window.innerWidth;
-				var inc = 0;
-
-				while((inc + 1) * 230 < width) {
-					inc++;
-				}
-
-				return inc;
-			},
-
 			showArrows: function() {
-				return this.contents.length > this.increment;
+				/*
+				 * May want to sometimes duplicate elements, like if the increment
+				 * is 9 and there are 5-6 elements.
+				 * If there are fewer than that, then the arrows should be hidden.
+				 */
+				// return this.contents.length > this.getIncrement();
+				return true;
 			},
 		},
 
@@ -71,6 +70,37 @@
 				for(var i = 0; i < p.length; i++) {
 					p[i].$el.classList.remove('shift-left');
 					p[i].$el.classList.remove('shift-right');
+				}
+			},
+
+			getIncrement() {
+				var width = window.innerWidth;
+				var inc = 0;
+
+				while((inc + 1) * 230 < width) {
+					inc++;
+				}
+
+				return inc - 1;
+			},
+
+			scroll(dir) {
+				var inc = this.getIncrement();
+
+				if(dir === 'left') {  // Right arrow clicked
+					// Take posters from front of row and append them to end
+					for(var i = 0; i < inc; i++) {
+						var content = this.contents.shift();
+						this.contents.push(content);
+					}
+				}
+
+				if(dir === 'right') {  // Left arrow clicked
+					// take posters from end of row and prepend to front
+					for(var i = 0; i < inc; i++) {
+						var content = this.contents.pop();
+						this.contents.unshift(content);
+					}
 				}
 			},
 		},

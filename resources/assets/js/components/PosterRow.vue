@@ -35,13 +35,7 @@
 
 		computed: {
 			showArrows: function() {
-				/*
-				 * May want to sometimes duplicate elements, like if the increment
-				 * is 9 and there are 5-6 elements.
-				 * If there are fewer than that, then the arrows should be hidden.
-				 */
-				// return this.contents.length > this.getIncrement();
-				return true;
+				return this.contents.length > this.getIncrement();
 			},
 		},
 

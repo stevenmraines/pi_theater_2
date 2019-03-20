@@ -2,8 +2,12 @@
 	<div>
 		<h4 class="h4 pl-4">{{ title }}</h4>
 		<div class="container-fluid poster-row px-0 py-3 mb-5">
-			<span class="left-arrow">&#8249;</span>
-			<span class="right-arrow">&#8250;</span>
+			<span class="left-arrow" v-if="showArrows" v-on:click="scroll('right')">
+				&#8249;
+			</span>
+			<span class="right-arrow" v-if="showArrows" v-on:click="scroll('left')">
+				&#8250;
+			</span>
 			<div class="slider">
 				<ais-index
 					app-id="JUG06PFXKY"
@@ -12,8 +16,6 @@
 					v-bind:query-parameters="queryParams"
 				>
 					<div>
-						<!-- <ais-pagination :show-first="false" :show-last="false" />
-						<ais-configure :hits-per-page.camel="4" /> -->
 						<ais-results ref="results">
 							<template slot-scope="{ result }">
 								<poster-container
@@ -42,6 +44,13 @@
 			};
 		},
 
+		computed: {
+			showArrows: function() {
+				return true;
+				return this.$refs.results.$children.length > this.getIncrement();
+			},
+		},
+
 		methods: {
 			shift(data) {
 				var p = this.$refs.results.$children;
@@ -67,6 +76,37 @@
 				for(var i = 0; i < p.length; i++) {
 					p[i].$el.classList.remove('shift-left');
 					p[i].$el.classList.remove('shift-right');
+				}
+			},
+
+			getIncrement() {
+				var width = window.innerWidth;
+				var inc = 0;
+
+				while((inc + 1) * 230 < width) {
+					inc++;
+				}
+
+				return inc - 1;
+			},
+
+			scroll(dir) {
+				var inc = this.getIncrement();
+				return;
+				if(dir === 'left') {  // Right arrow clicked
+					// Take posters from front of row and append them to end
+					for(var i = 0; i < inc; i++) {
+						var content = this.$refs.results.$children.shift();
+						this.$refs.results.$children.push(content);
+					}
+				}
+
+				if(dir === 'right') {  // Left arrow clicked
+					// take posters from end of row and prepend to front
+					for(var i = 0; i < inc; i++) {
+						var content = this.$refs.results.$children.pop();
+						this.$refs.results.$children.unshift(content);
+					}
 				}
 			},
 		},

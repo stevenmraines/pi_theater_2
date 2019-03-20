@@ -50,17 +50,15 @@
 		v-bind:contents="user.watchlist"
 	></poster-row>
 
-	<ais-poster-row
+	<poster-row
 		v-bind:title="'New Movies'"
-		v-bind:index="'recentMedia'"
-		v-bind:query-params="{ filters : 'media_type:movie' }"
-	></ais-poster-row>
+		v-bind:contents="recentMovies"
+	></poster-row>
 
-	<ais-poster-row
+	<poster-row
 		v-bind:title="'New TV Shows'"
-		v-bind:index="'recentMedia'"
-		v-bind:query-params="{ filters : 'media_type:show' }"
-	></ais-poster-row>
+		v-bind:contents="recentShows"
+	></poster-row>
 
 	<poster-row
 		v-bind:title="'New Episodes'"

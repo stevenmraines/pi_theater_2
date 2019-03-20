@@ -11,16 +11,29 @@ Route::get('/{home?}', function() {
         $user->load('history')->load('watchlist');
     }
 
+    $recentMovies =
+        App\Media
+            ::where('media_type', '=', 'movie')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+    $recentShows =
+        App\Media
+            ::where('media_type', '=', 'show')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
     $initialState = [
         'genres' => App\Genre::all(),
         'collections' => App\Collection::all(),
         'recentCollections' => App\Collection::recent(3),
         'recentEpisodes' => App\Media::recentEpisodes(),
+        'recentMovies' => $recentMovies,
+        'recentShows' => $recentShows,
         'user' => $user,
     ];
 
-    return view('browse')
-        ->with('initialState', json_encode($initialState));
+    return view('browse')->with('initialState', json_encode($initialState));
 
 })->name('browse')->where('home', 'home');
 

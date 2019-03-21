@@ -63,4 +63,39 @@ class Media extends Model
 
         return $array;
     }
+
+    public function pending() {
+        // Will look over each known drive and get
+        // things that have yet to be uploaded to the DB
+
+        // Will probably need to look something like this:
+        // May need to add new column to media table? file_or_folder_name...
+        return [
+            'hdd1' => [
+                'movies' => [
+                    'file_or_folder_name' => 'Some Movie.mp4',
+                    'title' => 'some-movie.mp4',
+                    'summary' => '',
+                    'notes' => NULL,
+                    'poster' => '',
+                    'year_start' => date('Y'),
+                    'year_end' => date('Y'),
+                    'genres' => [],
+                    'collections' => []
+                ],
+
+                'shows' => [
+                    'file_or_folder_name' => 'Some Show',
+                    'title' => '',
+                    'summary' => '',
+                    'notes' => NULL,
+                    'poster' => '',
+                    'year_start' => date('Y'),
+                    'year_end' => date('Y'),
+                    'genres' => [],
+                    'collections' => []
+                ]
+            ]
+        ];
+    }
 }

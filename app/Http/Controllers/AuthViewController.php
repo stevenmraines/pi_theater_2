@@ -15,6 +15,11 @@ class AuthViewController extends Controller
     }
 
     public function upload() {
-        return view('admin.upload');
+        $initialState = [
+            'genres' => \App\Genre::all(),
+            'collections' => \App\Collection::all()
+        ];
+
+        return view('admin.upload')->with('initialState', json_encode($initialState));
     }
 }

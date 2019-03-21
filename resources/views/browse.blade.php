@@ -34,6 +34,11 @@
 
 	<genre-modal v-bind:genre="genre"></genre-modal>
 
+	<fluid-modal
+		v-bind:title="fluidModal.title"
+		v-bind:contents="fluidModal.contents"
+	></fluid-modal>
+
 	<search-modal></search-modal>
 
 	<watchlist-modal v-bind:user="user"></watchlist-modal>

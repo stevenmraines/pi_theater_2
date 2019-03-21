@@ -25,6 +25,11 @@ const app = new Vue({
 		collection: {},
 		collections: window.__INITIAL_STATE__.collections,
 
+		fluidModal: {
+			title: '',
+			contents: [],
+		},
+
 		genre: {},
 		genres: window.__INITIAL_STATE__.genres,
 		genreColumns: [],
@@ -114,6 +119,37 @@ const app = new Vue({
 			.catch(function(error) {
 				console.log(error);
 			});
+		},
+
+		fluidModalRecentEpisodes: function() {
+			this.fluidModal.title = 'New Episodes';
+			this.fluidModal.contents = this.recentEpisodes;
+			Event.trigger('showFluidModal');
+		},
+
+		fluidModalRecentGenre: function(id) {
+			var self = this;
+
+			axios.get('/api/genre/' + id).then(function(response) {
+				self.fluidModal.title = 'New in ' + response.data.name;
+				// Sort media by created_at date
+				self.fluidModal.contents = response.data.media;
+				Event.trigger('showFluidModal');
+			}).catch(function(error) {
+				console.log(error);
+			});
+		},
+
+		fluidModalRecentMovies: function() {
+			this.fluidModal.title = 'New Movies';
+			this.fluidModal.contents = this.recentMovies;
+			Event.trigger('showFluidModal');
+		},
+
+		fluidModalRecentShows: function() {
+			this.fluidModal.title = 'New Shows';
+			this.fluidModal.contents = this.recentShows;
+			Event.trigger('showFluidModal');
 		},
 
 		getCollection: function(id) {

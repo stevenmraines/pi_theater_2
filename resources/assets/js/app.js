@@ -9,6 +9,7 @@ window.Vue = require('vue');
 Vue.use(InstantSearch);
 
 Vue.component('collection-modal', require('./components/CollectionModal.vue'));
+Vue.component('fluid-modal', require('./components/FluidModal.vue'));
 Vue.component('genre-modal', require('./components/GenreModal.vue'));
 Vue.component('login-modal', require('./components/LoginModal.vue'));
 Vue.component('movie-modal', require('./components/MovieModal.vue'));

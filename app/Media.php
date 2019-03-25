@@ -33,6 +33,7 @@ class Media extends Model
             GROUP BY
                 m.id,
                 m.media_type,
+                m.file_or_folder_name,
                 m.title,
                 m.summary,
                 m.notes,
@@ -55,16 +56,7 @@ class Media extends Model
                 ->get();
     }
 
-    public function toSearchableArray() {
-        $array = $this->toArray();
-
-        $array['created_at_unix'] = $this->created_at->timestamp;
-        $array['updated_at_unix'] = $this->updated_at->timestamp;
-
-        return $array;
-    }
-
-    public function pending() {
+    public static function pending() {
         // Will look over each known drive and get
         // things that have yet to be uploaded to the DB
 
@@ -73,11 +65,12 @@ class Media extends Model
         return [
             'hdd1' => [
                 'movies' => [
+                    'media_type' => 'movie',
                     'file_or_folder_name' => 'Some Movie.mp4',
                     'title' => 'some-movie.mp4',
                     'summary' => '',
                     'notes' => NULL,
-                    'poster' => '',
+                    'poster' => 'missing-poster.jpg',
                     'year_start' => date('Y'),
                     'year_end' => date('Y'),
                     'genres' => [],
@@ -85,11 +78,12 @@ class Media extends Model
                 ],
 
                 'shows' => [
+                    'media_type' => 'show',
                     'file_or_folder_name' => 'Some Show',
                     'title' => '',
                     'summary' => '',
                     'notes' => NULL,
-                    'poster' => '',
+                    'poster' => 'missing-poster.jpg',
                     'year_start' => date('Y'),
                     'year_end' => date('Y'),
                     'genres' => [],
@@ -97,5 +91,14 @@ class Media extends Model
                 ]
             ]
         ];
+    }
+
+    public function toSearchableArray() {
+        $array = $this->toArray();
+
+        $array['created_at_unix'] = $this->created_at->timestamp;
+        $array['updated_at_unix'] = $this->updated_at->timestamp;
+
+        return $array;
     }
 }

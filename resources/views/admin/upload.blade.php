@@ -13,10 +13,10 @@
     				<form class="form-inline" novalidate>
     					<div class="form-group">
     						<label for="drive">Hard drive</label>
-    						<select id="drive" class="form-control ml-3">
+    						<select id="drive" class="form-control ml-3" v-model="currentDrive">
     							<option value="" selected>Please Select...</option>
-    							<option v-for="drive in drives" v-bind:value="drive">
-                                    @{{ drive }}
+    							<option v-for="drive in drives" v-bind:value="drive.name">
+                                    @{{ drive.name }}
                                 </option>
     						</select>
     					</div>
@@ -24,28 +24,28 @@
     			</div>
     		</div>
 
-    		<div class="row">
+    		<div class="row" v-if="currentDrive != ''">
     			<div class="col">
     				<h3>
-    					@{{ movies.length > 0 ? movies.length : 'No' }} New Movie@{{ movies.length === 1 ? '' : 's' }}
+    					@{{ newUploadsMessage }}
     				</h3><hr class="mt-0" />
-    				<form name="movie_form" v-if="movies.length > 0" novalidate>
+    				<form novalidate>
     					<div class="form-group">
-    						<label for="movie-file">Filename</label>
+    						<label for="file-or-folder-name">File or Folder Name</label>
     						<input
-                                id="movie-file"
+                                id="file-or-folder-name"
                                 class="form-control font-italic text-muted border-secondary"
-                                v-bind:value="current_movie.video_file"
+                                v-bind:value=""
                                 disabled
                             />
     					</div>
     					<div class="form-group">
-    						<label for="movie-title">Title</label>
+    						<label for="title">Title</label>
     						<input
-                                id="movie-title"
+                                id="title"
                                 class="form-control"
                                 name="title"
-                                v-model="current_movie.title"
+                                v-model=""
                                 required
                             />
     					</div>

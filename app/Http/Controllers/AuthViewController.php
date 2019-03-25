@@ -18,7 +18,8 @@ class AuthViewController extends Controller
         $initialState = [
             'pending' => \App\Media::pending(),
             'genres' => \App\Genre::all(),
-            'collections' => \App\Collection::all()
+            'collections' => \App\Collection::all(),
+            'drives' => \App\Drive::all()
         ];
 
         return view('admin.upload')->with('initialState', json_encode($initialState));

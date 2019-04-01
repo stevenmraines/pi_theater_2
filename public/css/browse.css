@@ -367,13 +367,174 @@ body {
 }
 
 /*
- * Video
+ * Video Player
  */
 /* This container helps keep vid properly centered in fullscreen on PS4 */
  #movie-container {
 	display: block;
 	width: 100%;
 	text-align: center;
+}
+
+#video-player {
+	position: absolute;
+	margin: auto;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.video-loader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 180px;
+	height: 180px;
+	border: 12px solid #ddd;
+    border-top: 12px solid transparent;
+	border-right: 12px solid transparent;
+    border-radius: 50%;
+	transform: translate(-50%, -50%);
+	animation: spin 0.6s ease-out infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: translate(-50%, -50%) rotate(0deg);  /* Order of these is important */
+		border-bottom: 12px solid #ddd;
+		border-left: 12px solid #ddd;
+	}
+
+	100% {
+		transform: translate(-50%, -50%) rotate(360deg);  /* Order of these is important */
+		border-bottom: 12px solid #ddd;
+		border-left: 12px solid #ddd;
+	}
+}
+
+#time-range-container {
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+	width: 100%;
+	height: 80px;
+	z-index: 2147483647;
+	transform: translateX(-50%);
+	background-color: #333;
+}
+
+#time-range {
+	position: relative;
+	top: 50%;
+	width: 90% !important;
+	margin: auto;
+	transform: translateY(-50%);
+	-webkit-appearance: none;  /* Allows custom styling */
+}
+
+/* Custom styling for PS4 */
+input[type=range] {
+	-webkit-appearance: none;
+	margin: 18px 0;
+	width: 100%;
+}
+
+input[type=range]:focus {
+	outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+	width: 100%;
+	height: 8.4px;
+	cursor: pointer;
+	animate: 0.2s;
+	-webkit-box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	background: #3071a9;
+	border-radius: 1.3px;
+	border: 0.2px solid #010101;
+}
+
+input[type=range]::-webkit-slider-thumb {
+	-webkit-box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	border: 1px solid #000000;
+	height: 36px;
+	width: 16px;
+	border-radius: 3px;
+	background: #ffffff;
+	cursor: pointer;
+	-webkit-appearance: none;
+	margin-top: -14px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+	background: #367ebd;
+}
+
+input[type=range]::-moz-range-track {
+	width: 100%;
+	height: 8.4px;
+	cursor: pointer;
+	animate: 0.2s;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	background: #3071a9;
+	border-radius: 1.3px;
+	border: 0.2px solid #010101;
+}
+
+input[type=range]::-moz-range-thumb {
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	border: 1px solid #000000;
+	height: 36px;
+	width: 16px;
+	border-radius: 3px;
+	background: #ffffff;
+	cursor: pointer;
+}
+
+input[type=range]::-ms-track {
+	width: 100%;
+	height: 8.4px;
+	cursor: pointer;
+	animate: 0.2s;
+	background: transparent;
+	border-color: transparent;
+	border-width: 16px 0;
+	color: transparent;
+}
+
+input[type=range]::-ms-fill-lower {
+	background: #2a6495;
+	border: 0.2px solid #010101;
+	border-radius: 2.6px;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+input[type=range]::-ms-fill-upper {
+	background: #3071a9;
+	border: 0.2px solid #010101;
+	border-radius: 2.6px;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+input[type=range]::-ms-thumb {
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	border: 1px solid #000000;
+	height: 36px;
+	width: 16px;
+	border-radius: 3px;
+	background: #ffffff;
+	cursor: pointer;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+	background: #3071a9;
+}
+
+input[type=range]:focus::-ms-fill-upper {
+	background: #367ebd;
 }
 
 /*

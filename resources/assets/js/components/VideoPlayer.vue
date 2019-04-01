@@ -45,7 +45,7 @@
 
         computed: {
             src: function() {
-                return this.drive + '/' + this.mediaType + 's/' + this.filename;
+                return '/video/' + this.drive + '/' + this.mediaType + 's/' + this.filename;
             },
 
             videoType: function() {
@@ -63,7 +63,7 @@
                     default:
                         type = ext;
                 }
-                
+
                 return 'video/' + type;
             },
         },

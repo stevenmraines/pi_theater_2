@@ -18,7 +18,6 @@ class CreateEpisodesTable extends Migration
             $table->unsignedInteger('media_id');
 			$table->unsignedInteger('season');
 			$table->unsignedInteger('episode_number');
-			$table->string('filename');
 			$table->string('title');
 			$table->string('summary', 4000);
             $table->timestamp('created_at')->useCurrent();

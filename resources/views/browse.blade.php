@@ -3,8 +3,8 @@
 @section('content')
 
 <div id="vue-wrapper" class="container-fluid px-0">
-	@include('modals')
 	@include('navbar')
+	@include('modals')
 	@include('recentCollections')
 	@include('categories')
 	@include('posterRows')

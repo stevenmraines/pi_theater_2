@@ -18,4 +18,5 @@ Vue.component('poster-row', require('./components/PosterRow.vue'));
 Vue.component('registration-modal', require('./components/RegistrationModal.vue'));
 Vue.component('search-modal', require('./components/SearchModal.vue'));
 Vue.component('show-modal', require('./components/ShowModal.vue'));
+Vue.component('video-player', require('./components/VideoPlayer.vue'));
 Vue.component('watchlist-modal', require('./components/WatchlistModal.vue'));

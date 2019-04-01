@@ -367,6 +367,16 @@ body {
 }
 
 /*
+ * Video
+ */
+/* This container helps keep vid properly centered in fullscreen on PS4 */
+ #movie-container {
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+
+/*
  * Media queries
  */
 

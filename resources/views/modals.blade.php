@@ -35,3 +35,9 @@
 <search-modal></search-modal>
 
 <watchlist-modal v-bind:user="user"></watchlist-modal>
+
+<video-player
+    v-bind:drive="video.drive"
+    v-bind:filename="video.filename"
+    v-bind:media-type="video.mediaType"
+></video-player>

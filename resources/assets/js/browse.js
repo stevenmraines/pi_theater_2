@@ -65,6 +65,12 @@ const app = new Vue({
 		},
 
 		user: window.__INITIAL_STATE__.user,
+
+		video: {
+			drive: '',
+			filename: '',
+			mediaType: '',
+		},
 	},
 
 	mounted: function() {

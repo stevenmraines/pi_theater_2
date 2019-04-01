@@ -1,43 +1,26 @@
-<div v-if="recentMoviesPrepared.length > 0">
-	<h4 class="h4 pl-4">Recent Movies</h4>
-	<poster-row
-		v-bind:contents="recentMoviesPrepared"
-		v-bind:api="'/api/movie/recent/'"
-	></poster-row>
-</div>
+<poster-row
+	v-if="user && user.history"
+	v-bind:title="'Continue Watching'"
+	v-bind:contents="user.history"
+></poster-row>
 
-<div v-if="recentShowsPrepared.length > 0">
-	<h4 class="h4 pl-4">Recent Shows</h4>
-	<poster-row
-		v-bind:contents="recentShowsPrepared"
-		v-bind:api="'/api/show/recent/'"
-	></poster-row>
-</div>
+<poster-row
+	v-if="user && user.watchlist"
+	v-bind:title="'Watchlist'"
+	v-bind:contents="user.watchlist"
+></poster-row>
 
-<div v-if="displayNewHorror">
-	<h4 class="h4 pl-4">New in Horror</h4>
-	<poster-row v-bind:contents="newHorrorPrepared">
-	</poster-row>
-</div>
+<poster-row
+	v-bind:title="'New Movies'"
+	v-bind:contents="recentMovies"
+></poster-row>
 
-<div v-if="displayNewSciFi">
-	<h4 class="h4 pl-4">New in Sci-Fi</h4>
-	<poster-row v-bind:contents="newSciFiPrepared">
-	</poster-row>
-</div>
+<poster-row
+	v-bind:title="'New TV Shows'"
+	v-bind:contents="recentShows"
+></poster-row>
 
-<div v-if="displayNewEpisodes">
-	<h4 class="h4 pl-4">New Episodes</h4>
-	<poster-row
-		v-bind:contents="newEpisodesPrepared"
-		v-bind:api="'/api/show/newEpisodes/'"
-	></poster-row>
-</div>
-
-@if($user)
-<div v-if="historyPrepared.length > 0">
-	<h4 class="h4 pl-4">Recently Viewed</h4>
-	<poster-row v-bind:contents="historyPrepared">
-	</poster-row>
-</div>
-@endif
+<poster-row
+	v-bind:title="'New Episodes'"
+	v-bind:contents="recentEpisodes"
+></poster-row>

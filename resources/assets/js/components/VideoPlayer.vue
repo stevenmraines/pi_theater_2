@@ -1,10 +1,16 @@
 <template>
     <div>
         <div id="movie-container">
-            <div class="video-loader" v-if="!loaded"></div>
+            <div
+                class="video-loader top-most"
+                v-if="showVideoPlayer && !loaded"
+            ></div>
             <video
                 id="video-player"
-                v-if="loaded"
+                ref="video"
+                v-if="showVideoPlayer && src !== ''"
+                class="top-most"
+                v-bind:class="{ hidden: !loaded }"
                 v-on:click="togglePlay"
                 controls
                 autoplay
@@ -16,6 +22,7 @@
         <div id="time-range-container" v-if="showTimeRange">
             <input
                 id="time-range"
+                ref="timeRange"
                 type="range"
                 min="0"
                 v-bind:max="duration"
@@ -40,12 +47,20 @@
                 duration: 0,
                 loaded: false,
                 showTimeRange: false,
+                showVideoPlayer: false,
             }
         },
 
         computed: {
             src: function() {
-                return '/video/' + this.drive + '/' + this.mediaType + 's/' + this.filename;
+                if(this.filename !== '') {
+                    return
+                        '/video/' + this.drive +
+                        '/' + this.mediaType +
+                        's/' + this.filename;
+                }
+
+                return '';
             },
 
             videoType: function() {
@@ -69,6 +84,29 @@
         },
 
         methods: {
+            display: function() {
+                if(this.src === '') {
+                    return;
+                }
+
+                this.showVideoPlayer = true;
+                this.loaded = false;
+
+                var self = this;
+
+                setTimeout(function() {
+                    var interval = setInterval(function() {
+                        var video = self.$refs.video;
+                        if(video.readyState > 0) {
+                            self.loaded = true;
+                            self.duration = Math.round(video.duration);
+                            self.currentTime = video.currentTime;
+                            clearInterval(interval);
+                        }
+                    }, 500);
+                }, 800);
+            },
+
             togglePlay: function() {
                 var video = document.getElementById('video-player');
 
@@ -81,5 +119,10 @@
                 }
             },
         },
+
+        created() {
+            Event.listen('displayVideoPlayer', this.display);
+            this.display();
+        }
     }
 </script>

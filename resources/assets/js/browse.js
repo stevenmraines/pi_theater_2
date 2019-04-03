@@ -78,9 +78,10 @@ const app = new Vue({
 	},
 
 	created: function() {
-		Event.listen('getMedia', this.getMedia);
 		Event.listen('addToWatchlist', this.addToWatchlist);
+		Event.listen('getMedia', this.getMedia);
 		Event.listen('removeFromWatchlist', this.removeFromWatchlist);
+		Event.listen('setVideo', this.setVideo);
 	},
 
 	methods: {
@@ -221,6 +222,18 @@ const app = new Vue({
 
 		search: function() {
 			Event.trigger('showSearchModal');
+		},
+
+		setVideo: function() {
+			// Get the drive, filename, and mediaType
+			this.video.drive = 'hdd1';
+			this.video.filename = 'Alien.mp4';
+			this.video.mediaType = 'movie';
+
+			// Hide modal and trigger the display of the video player
+			Event.trigger('hideMovieModal');
+			Event.trigger('hideShowModal');
+			Event.trigger('displayVideoPlayer');
 		},
 
 		updateHistory: function(mediaId, progress) {

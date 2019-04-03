@@ -50,12 +50,12 @@
 								REMOVE FROM WATCHLIST
 							</button>
 						</div>
-						<a
+						<button
 							class="btn btn-primary ml-sm-auto ml-0 mb-4 mb-sm-0 btn-watchlist"
-							v-bind:href="'/theater/movie/' + id"
+							v-on:click="watch"
 						>
 							WATCH NOW
-						</a>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -90,11 +90,16 @@
 
 		created() {
 			Event.listen('displayMovieModal', this.display);
+			Event.listen('hideMovieModal', this.hide);
 		},
 
 		methods: {
 			display() {
 				$('#movie-modal').modal('show');
+			},
+
+			hide() {
+				$('#movie-modal').modal('hide');
 			},
 
 			addToWatchlist() {
@@ -103,6 +108,10 @@
 
 			removeFromWatchlist() {
 				Event.trigger('removeFromWatchlist', this.id);
+			},
+
+			watch() {
+				Event.trigger('setVideo', this.id);
 			},
 		},
 	}

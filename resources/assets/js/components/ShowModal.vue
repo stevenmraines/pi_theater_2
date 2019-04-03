@@ -65,7 +65,7 @@
                                         - {{ episode.title }}
                                         </span>
 
-                                        <button class="btn btn-success">WATCH NOW</button>
+                                        <button class="btn btn-primary">WATCH NOW</button>
                                     </div>
                                 </div>
                             </div>
@@ -165,6 +165,7 @@
 
 		created() {
 			Event.listen('displayShowModal', this.display);
+            Event.listen('hideShowModal', this.hide);
 		},
 
       	methods: {
@@ -172,6 +173,10 @@
                 this.changeSeason(this.minSeason);
       			$('#show-modal').modal('show');
       		},
+
+            hide() {
+                $('#show-modal').modal('hide');
+            },
 
             addToWatchlist() {
 				Event.trigger('addToWatchlist', this.id);

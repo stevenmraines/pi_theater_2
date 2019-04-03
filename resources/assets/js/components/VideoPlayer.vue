@@ -15,7 +15,7 @@
                 controls
                 autoplay
             >
-                <source v-bind:src="src"></source>
+                <source v-bind:src="src" v-bind:type="videoType"></source>
             </video>
         </div>
 
@@ -122,7 +122,6 @@
 
         created() {
             Event.listen('displayVideoPlayer', this.display);
-            this.display();
         }
     }
 </script>

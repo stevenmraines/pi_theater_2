@@ -60,6 +60,7 @@
 
         created() {
             Event.listen('showSearchModal', this.show);
+            Event.listen('hideModal', this.hide);
         },
 
         methods: {

@@ -51,6 +51,7 @@
 
         created() {
             Event.listen('showFluidModal', this.show);
+            Event.listen('hideModal', this.hide);
         },
     }
 </script>

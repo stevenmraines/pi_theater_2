@@ -41,6 +41,7 @@
 
         created() {
             Event.listen('showCollectionModal', this.show);
+            Event.listen('hideModal', this.hide);
         },
 
         methods: {

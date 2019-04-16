@@ -227,12 +227,11 @@ const app = new Vue({
 		setVideo: function() {
 			// Get the drive, filename, and mediaType
 			this.video.drive = 'hdd1';
-			this.video.filename = 'Alien.mp4';
-			this.video.mediaType = 'movie';
+			this.video.filename = 'game-of-thrones_s01e04.mp4';
+			this.video.mediaType = 'show';
 
-			// Hide modal and trigger the display of the video player
-			Event.trigger('hideMovieModal');
-			Event.trigger('hideShowModal');
+			// Hide all modals and trigger the display of the video player
+			Event.trigger('hideModal');
 			Event.trigger('displayVideoPlayer');
 		},
 

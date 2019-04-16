@@ -166,6 +166,7 @@
 		created() {
 			Event.listen('displayShowModal', this.display);
             Event.listen('hideShowModal', this.hide);
+            Event.listen('hideModal', this.hide);
 		},
 
       	methods: {

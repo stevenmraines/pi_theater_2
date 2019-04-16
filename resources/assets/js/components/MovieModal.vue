@@ -91,6 +91,7 @@
 		created() {
 			Event.listen('displayMovieModal', this.display);
 			Event.listen('hideMovieModal', this.hide);
+			Event.listen('hideModal', this.hide);
 		},
 
 		methods: {

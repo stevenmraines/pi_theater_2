@@ -64,7 +64,7 @@
             },
 
             videoType: function() {
-                var ext = this.filename.slice(-3);
+                var ext = this.filename.split('.')[1];
                 var type = '';
 
                 switch(ext) {
@@ -81,6 +81,10 @@
 
                 return 'video/' + type;
             },
+        },
+
+        created() {
+            Event.listen('displayVideoPlayer', this.display);
         },
 
         methods: {
@@ -119,9 +123,5 @@
                 }
             },
         },
-
-        created() {
-            Event.listen('displayVideoPlayer', this.display);
-        }
     }
 </script>

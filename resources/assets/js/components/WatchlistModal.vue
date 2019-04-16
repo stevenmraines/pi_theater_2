@@ -44,6 +44,7 @@
 
         created() {
             Event.listen('showWatchlistModal', this.show);
+            Event.listen('hideModal', this.hide);
         },
 
         methods: {

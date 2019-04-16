@@ -51,6 +51,7 @@
 
         created() {
             Event.listen('showGenreModal', this.show);
+            Event.listen('hideModal', this.hide);
         },
     }
 </script>

@@ -54,10 +54,11 @@
         computed: {
             src: function() {
                 if(this.filename !== '') {
-                    return
+                    return (
                         '/video/' + this.drive +
                         '/' + this.mediaType +
-                        's/' + this.filename;
+                        's/' + this.filename
+                    );
                 }
 
                 return '';
@@ -112,7 +113,7 @@
             },
 
             togglePlay: function() {
-                var video = document.getElementById('video-player');
+                var video = this.$refs.video;
 
                 if(video.paused) {
                     video.play();

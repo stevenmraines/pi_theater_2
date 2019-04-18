@@ -3,7 +3,6 @@
         class="fluid-modal scrollbar"
         id="search-modal-container"
         ref="container"
-        v-on:keyup.esc="hide"
     >
         <div id="search-modal-controls">
             <button
@@ -59,8 +58,9 @@
         },
 
         created() {
-            Event.listen('showSearchModal', this.show);
             Event.listen('hideModal', this.hide);
+            Event.listen('hideSearchModal', this.hide);
+            Event.listen('showSearchModal', this.show);
         },
 
         methods: {

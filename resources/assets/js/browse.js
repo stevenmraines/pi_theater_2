@@ -16,6 +16,27 @@ window.Event = new class {
 };
 
 /*
+ * REGISTER KEYBOARD EVENTS
+ */
+$(document).keyup(function(event) {
+	if(event.which == 27) {  // Esc
+		Event.trigger('hideModal');
+	}
+
+	if(event.which == 38) {  // Up arrow
+		Event.trigger('togglePlay');
+	}
+
+	if(event.which == 40) {  // Down arrow
+		Event.trigger('toggleTimeRange');
+	}
+
+	if(event.which == 83 && event.shiftKey && event.ctrlKey) {  // Shift + Ctrl + s
+		Event.trigger('showSearchModal');
+	}
+});
+
+/*
  * ROOT VUE INSTANCE
  */
 const app = new Vue({
@@ -232,7 +253,8 @@ const app = new Vue({
 
 			// Hide all modals and trigger the display of the video player
 			Event.trigger('hideModal');
-			Event.trigger('displayVideoPlayer');
+			Event.trigger('setVideoPlayerSrc', this.video);
+			Event.trigger('showVideoPlayer');
 		},
 
 		updateHistory: function(mediaId, progress) {

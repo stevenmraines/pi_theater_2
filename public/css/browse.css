@@ -370,6 +370,10 @@ body {
  * Video Player
  */
 /* This container helps keep vid properly centered in fullscreen on PS4 */
+video {
+	outline: none;
+}
+
  #movie-container {
 	display: block;
 	width: 100%;

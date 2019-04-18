@@ -11,7 +11,6 @@
                 v-if="showVideoPlayer && src !== ''"
                 class="top-most"
                 v-bind:class="{ hidden: !loaded }"
-                v-on:click="togglePlay"
                 controls
                 autoplay
             >
@@ -35,17 +34,14 @@
 
 <script>
     export default {
-        props: [
-            'drive',
-            'filename',
-            'mediaType',
-        ],
-
         data() {
             return {
                 currentTime: 0,
+                drive: '',
                 duration: 0,
+                filename: '',
                 loaded: false,
+                mediaType: '',
                 showTimeRange: false,
                 showVideoPlayer: false,
             }
@@ -85,11 +81,30 @@
         },
 
         created() {
-            Event.listen('displayVideoPlayer', this.display);
+            Event.listen('hideModal', this.hide);
+            Event.listen('hideVideoPlayer', this.hide);
+            Event.listen('showVideoPlayer', this.show);
+            Event.listen('setVideoPlayerSrc', this.setSrc);
+            Event.listen('togglePlay', this.togglePlay);
+            Event.listen('toggleTimeRange', this.toggleTimeRange);
         },
 
         methods: {
-            display: function() {
+            hide: function() {
+                this.setSrc({
+                    drive: '',
+                    filename: '',
+                    mediaType: '',
+                });
+            },
+
+            setSrc: function(video) {
+                this.drive = video.drive;
+                this.filename = video.filename;
+                this.mediaType = video.mediaType;
+            },
+
+            show: function() {
                 if(this.src === '') {
                     return;
                 }
@@ -117,11 +132,17 @@
 
                 if(video.paused) {
                     video.play();
+                    return;
                 }
 
                 if(!video.paused) {
                     video.pause();
+                    return;
                 }
+            },
+
+            toggleTimeRange: function() {
+                this.showTimeRange = !this.showTimeRange;
             },
         },
     }

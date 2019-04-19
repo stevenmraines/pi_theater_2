@@ -22,6 +22,10 @@ class Media extends Model
         return $this->belongsToMany('App\Collection');
     }
 
+    public function filename() {
+        return $this->hasOne('App\FileMovie');
+    }
+
     public static function recentEpisodes() {
         $query = "
             SELECT

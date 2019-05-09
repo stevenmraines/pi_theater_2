@@ -104,30 +104,29 @@
 
 <script>
     export default {
-        props: [
-            'id',
-            'title',
-            'summary',
-            'notes',
-            'year_start',
-            'year_end',
-            'poster',
-            'episodes',
-            'genres',
-            'user',
-        ],
-
         data() {
             return {
                 currentSeason: 1,
+                id: 0,
+                title: '',
+                summary: '',
+                notes: null,
+                'year_start': 0,
+                'year_end': 0,
+                poster: 'missing-poster.jpg',
+                episodes: [],
+                genres: [],
+                user: {},
             };
         },
 
         computed: {
             inWatchlist: function() {
-                for(var i = 0; i < this.user.watchlist.length; i++) {
-                    if(this.id == this.user.watchlist[i].id) {
-                        return true;
+                if(this.user && this.user.watchlist) {
+                    for(var i = 0; i < this.user.watchlist.length; i++) {
+                        if(this.id == this.user.watchlist[i].id) {
+                            return true;
+                        }
                     }
                 }
 
@@ -150,7 +149,6 @@
                     }
                 }
 
-                // These won't necessarily always be sorted out of the box...
                 seasons.sort(function(a, b) {
                     return a - b;
                 });
@@ -167,6 +165,7 @@
 			Event.listen('displayShowModal', this.display);
             Event.listen('hideShowModal', this.hide);
             Event.listen('hideModal', this.hide);
+            Event.listen('setShow', this.setShow);
 		},
 
       	methods: {
@@ -187,18 +186,6 @@
 				Event.trigger('removeFromWatchlist', this.id);
 			},
 
-            // getMinSeason: function() {
-            //     var min = 1000000;
-            //
-            //     for(var i = 0; i < this.episodes.length; i++) {
-            //         if(this.episodes[i].season <= min) {
-            //             min = this.episodes[i].season;
-            //         }
-            //     }
-            //
-            //     return min;
-            // },
-
             changeSeason(season) {
                 this.currentSeason = season;
             },
@@ -208,6 +195,19 @@
                     'mt-1': index === 0,
                     'mb-1': index === this.currentSeasonEpisodes.length - 1,
                 };
+            },
+
+            setShow(data) {
+                this.id = data.id;
+                this.title = data.title;
+                this.poster = data.poster;
+                this.summary = data.summary;
+                this.notes = data.notes;
+                this['year_start'] = data['year_start'];
+                this['year_end'] = data['year_end'];
+                this.genres = data.genres;
+                this.user = data.user;
+                this.episodes = data.episodes;
             },
         },
     }

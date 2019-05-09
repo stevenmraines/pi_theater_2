@@ -37,7 +37,6 @@ class Media extends Model
             GROUP BY
                 m.id,
                 m.media_type,
-                m.file_or_folder_name,
                 m.title,
                 m.summary,
                 m.notes,

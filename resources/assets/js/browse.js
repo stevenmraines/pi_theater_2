@@ -216,6 +216,10 @@ const app = new Vue({
 
 				// Display the modal
 				var event = 'display' + modal.charAt(0).toUpperCase() + modal.substring(1);
+				if(response.data.media_type === 'show') {
+					response.data.user = self.user;
+					Event.trigger('setShow', response.data);
+				}
 				Event.trigger(event, response.data);
 			}).catch(function(error) {
 				console.log(error);

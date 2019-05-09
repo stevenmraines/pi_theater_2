@@ -1,11 +1,11 @@
 <poster-row
-	v-if="user && user.history"
+	v-if="user && user.history && user.history.length > 0"
 	v-bind:title="'Continue Watching'"
 	v-bind:contents="user.history"
 ></poster-row>
 
 <poster-row
-	v-if="user && user.watchlist"
+	v-if="user && user.watchlist && user.watchlist.length > 0"
 	v-bind:title="'Watchlist'"
 	v-bind:contents="user.watchlist"
 ></poster-row>

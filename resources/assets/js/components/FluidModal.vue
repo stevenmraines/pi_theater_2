@@ -1,5 +1,5 @@
 <template>
-    <div class="fluid-modal scrollbar" id="genre-modal" ref="container">
+    <div class="fluid-modal scrollbar" ref="container">
     <!-- <div class="fluid-modal scrollbar" ref="container" v-on:click.stop="hide"> -->
         <div class="fluid-modal-content">
             <div class="fluid-modal-header mb-2">

@@ -160,7 +160,12 @@ const app = new Vue({
 
 			axios.get('/api/genre/' + id).then(function(response) {
 				self.fluidModal.title = 'New in ' + response.data.name;
+
 				// Sort media by created_at date
+				response.data.media.sort(function(a, b) {
+					return new Date(b['created_at']) - new Date(a['created_at']);
+				});
+				
 				self.fluidModal.contents = response.data.media;
 				Event.trigger('showFluidModal');
 			}).catch(function(error) {

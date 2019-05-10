@@ -5,7 +5,7 @@
 <div id="vue-wrapper" class="container-fluid px-0">
 	@include('navbar')
 	@include('modals')
-	@include('recentCollections')
+	@include('jumbotronCarousel')
 	@include('categories')
 	@include('posterRows')
 </div>

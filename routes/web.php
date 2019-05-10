@@ -26,10 +26,10 @@ Route::get('/{home?}', function() {
     $initialState = [
         'genres' => App\Genre::all(),
         'collections' => App\Collection::all(),
-        'recentCollections' => App\Collection::recent(3),
         'recentEpisodes' => App\Media::recentEpisodes(),
         'recentMovies' => $recentMovies,
         'recentShows' => $recentShows,
+        'recentSpotlight' => App\Media::spotlight(),
         'user' => $user,
     ];
 

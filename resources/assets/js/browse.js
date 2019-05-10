@@ -71,6 +71,7 @@ const app = new Vue({
 		recentEpisodes: window.__INITIAL_STATE__.recentEpisodes,
 		recentMovies: window.__INITIAL_STATE__.recentMovies,
 		recentShows: window.__INITIAL_STATE__.recentShows,
+		recentSpotlight: window.__INITIAL_STATE__.recentSpotlight,
 
 		showModal: {
 			id: 0,
@@ -119,6 +120,22 @@ const app = new Vue({
 			});
 		},
 
+		checkInWatchlist: function(id) {
+			if(
+				this.user &&
+				this.user.watchlist &&
+				this.user.watchlist.length > 0
+			){
+				for(var i = 0; i < this.user.watchlist.length; i++) {
+					if(this.user.watchlist[i].id == id) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		},
+
 		createGenreTable: function() {
 			var genre_column_count = this.genres.length % 5 === 0 ? 5 :
 				(this.genres.length % 4 === 0 ? 4 : 3);
@@ -165,7 +182,7 @@ const app = new Vue({
 				response.data.media.sort(function(a, b) {
 					return new Date(b['created_at']) - new Date(a['created_at']);
 				});
-				
+
 				self.fluidModal.contents = response.data.media;
 				Event.trigger('showFluidModal');
 			}).catch(function(error) {
@@ -254,7 +271,7 @@ const app = new Vue({
 			Event.trigger('showSearchModal');
 		},
 
-		setVideo: function() {
+		setVideo: function(id) {
 			// Get the drive, filename, and mediaType
 			this.video.drive = 'hdd1';
 			this.video.filename = 'game-of-thrones_s01e04.mp4';

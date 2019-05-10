@@ -26,6 +26,15 @@ class Media extends Model
         return $this->hasOne('App\FileMovie');
     }
 
+    public static function spotlight() {
+        return
+            self
+                ::where('jumbotron', '!=', NULL)
+                ->orderBy('created_at', 'desc')
+                ->limit(3)
+                ->get();
+    }
+
     public static function recentEpisodes() {
         $query = "
             SELECT
@@ -41,6 +50,7 @@ class Media extends Model
                 m.summary,
                 m.notes,
                 m.poster,
+                m.jumbotron,
                 m.year_start,
                 m.year_end,
                 m.created_at,

@@ -20,6 +20,7 @@ class CreateMediaTable extends Migration
 			$table->string('summary', 4000);
             $table->string('notes')->nullable();
             $table->string('poster')->default('missing-poster.jpg');
+            $table->string('jumbotron')->default(null);
             $table->unsignedInteger('year_start')->nullable()->default(null);
 			$table->unsignedInteger('year_end')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();

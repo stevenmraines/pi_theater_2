@@ -36,8 +36,12 @@ class MediaController extends Controller
      */
     public function show(Media $media, $id)
     {
-        // return $media->load('genres');
-        return Media::find($id)->load('genres')->load('episodes');
+        return
+            Media::find($id)
+                ->load('genres')
+                ->load('episodes')
+                ->load('release')
+                ->load('filename');
     }
 
     /**

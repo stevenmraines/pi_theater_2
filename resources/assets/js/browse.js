@@ -62,9 +62,9 @@ const app = new Vue({
 			title: '',
 			summary: '',
 			notes: null,
-			year_start: 0,
 			poster: 'missing-poster.jpg',
 			genres: [],
+			release: [],
 		},
 
 		recentCollections: window.__INITIAL_STATE__.recentCollections,
@@ -78,12 +78,11 @@ const app = new Vue({
             title: '',
             summary: '',
             notes: null,
-            year_start: 0,
-            year_end: 0,
             poster: 'missing-poster.jpg',
             episodes: [],
             genres: [],
 			seasons: [],
+			release: [],
 		},
 
 		user: window.__INITIAL_STATE__.user,
@@ -230,10 +229,32 @@ const app = new Vue({
 			axios.get('/api/media/' + id).then(function(response) {
 				// Update modal props
 				var modal = response.data.media_type + 'Modal';
-				for(var key in response.data) {
-					if(self[modal].hasOwnProperty(key)) {
-						self[modal][key] = response.data[key];
-					}
+				// for(var key in response.data) {
+				// 	if(self[modal].hasOwnProperty(key)) {
+				// 		self[modal][key] = response.data[key];
+				// 	}
+				// }
+
+				if(response.data.media_type === 'movie') {
+					self.movieModal.id = response.data.id;
+					self.movieModal.title = response.data.title;
+					self.movieModal.summary = response.data.summary;
+					self.movieModal.notes = response.data.notes;
+					self.movieModal.poster = response.data.poster;
+					self.movieModal.release = response.data.release;
+					self.movieModal.genres = response.data.genres;
+				}
+
+				if(response.data.media_type === 'show') {
+					self.showModal.id = response.data.id;
+					self.showModal.title = response.data.title;
+					self.showModal.summary = response.data.summary;
+					self.showModal.notes = response.data.notes;
+					self.showModal.poster = response.data.poster;
+					self.showModal.episodes = response.data.episodes;
+					self.showModal.genres = response.data.genres;
+					self.showModal.seasons = response.data.seasons;
+					self.showModal.release = response.data.release;
 				}
 
 				// Display the modal

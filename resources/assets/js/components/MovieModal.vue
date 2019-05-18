@@ -5,7 +5,9 @@
 				<div class="modal-header">
 					<h5 id="movie-modal-title" class="modal-title">
 						{{ title }}
-						<small class="ml-2 text-muted">({{ year_start }})</small>
+						<small class="ml-2 text-muted" v-if="release.year_released">
+							({{ release.year_released }})
+						</small>
 					</h5>
 					<button type="button" class="close" data-dismiss="modal">
 						<span>&times;</span>
@@ -70,7 +72,7 @@
 			'title',
 			'summary',
 			'notes',
-			'year_start',
+			'release',
 			'poster',
 			'genres',
 			'user',

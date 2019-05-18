@@ -3,7 +3,7 @@
     v-bind:title="movieModal.title"
     v-bind:summary="movieModal.summary"
     v-bind:notes="movieModal.notes"
-    v-bind:year_start="movieModal.year_start"
+    v-bind:release="movieModal.release"
     v-bind:poster="movieModal.poster"
     v-bind:genres="movieModal.genres"
     v-bind:user="user"

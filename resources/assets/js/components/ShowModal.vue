@@ -5,8 +5,11 @@
                 <div class="modal-header">
                     <h5 id="show-modal-title" class="modal-title">
                         {{ title }}
-                        <small class="ml-2 text-muted text-nowrap d-inline-block">
-                            ({{ year_start }} - {{ year_end > 0 ? year_end : 'Present' }})
+                        <small
+                            class="ml-2 text-muted text-nowrap d-inline-block"
+                            v-if="release.year_start"
+                        >
+                            ({{ release.year_start }} - {{ (release.year_end) ? release.year_end : 'Present' }})
                         </small>
                     </h5>
 
@@ -111,8 +114,7 @@
                 title: '',
                 summary: '',
                 notes: null,
-                'year_start': 0,
-                'year_end': 0,
+                release: [],
                 poster: 'missing-poster.jpg',
                 episodes: [],
                 genres: [],
@@ -203,8 +205,7 @@
                 this.poster = data.poster;
                 this.summary = data.summary;
                 this.notes = data.notes;
-                this['year_start'] = data['year_start'];
-                this['year_end'] = data['year_end'];
+                this.release = data.release;
                 this.genres = data.genres;
                 this.user = data.user;
                 this.episodes = data.episodes;

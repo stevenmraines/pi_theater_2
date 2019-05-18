@@ -14,16 +14,26 @@ class Media extends Model
         return $this->belongsToMany('App\Genre');
     }
 
-    public function episodes() {
-        return $this->hasMany('App\Episode', 'media_id', 'id');
-    }
-
     public function collections() {
         return $this->belongsToMany('App\Collection');
     }
 
+    public function release() {
+        if($this->media_type === 'movie') {
+            return $this->hasOne('App\MovieYear');
+        }
+
+        if($this->media_type === 'show') {
+            return $this->hasOne('App\ShowYear');
+        }
+    }
+
     public function filename() {
         return $this->hasOne('App\FileMovie');
+    }
+
+    public function episodes() {
+        return $this->hasMany('App\Episode', 'media_id', 'id');
     }
 
     public static function spotlight() {
@@ -51,8 +61,6 @@ class Media extends Model
                 m.notes,
                 m.poster,
                 m.jumbotron,
-                m.year_start,
-                m.year_end,
                 m.created_at,
                 m.updated_at
             ORDER BY newest_episode DESC

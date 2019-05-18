@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMediaTable extends Migration
+class CreateMovieYearTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,13 @@ class CreateMediaTable extends Migration
      */
     public function up()
     {
-        Schema::create('media', function (Blueprint $table) {
-            $table->increments('id');
-            $table->enum('media_type', ['movie', 'show']);
-			$table->string('title');
-			$table->string('summary', 4000);
-            $table->string('notes')->nullable();
-            $table->string('poster')->default('missing-poster.jpg');
-            $table->string('jumbotron')->default(null);
+        Schema::create('movie_year', function (Blueprint $table) {
+            $table->unsignedInteger('media_id');
+            $table->unsignedInteger('year_released')->default(NULL);
             $table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+			$table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
+			$table->unique(['media_id']);
         });
     }
 
@@ -33,6 +30,6 @@ class CreateMediaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('movie_year');
     }
 }

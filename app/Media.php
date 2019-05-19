@@ -40,7 +40,9 @@ class Media extends Model
         return
             self
                 ::where('jumbotron', '!=', NULL)
-                ->orderBy('created_at', 'desc')
+                ->where('media_type', '=', 'movie')
+                ->leftJoin('movie_year as my', 'my.media_id', '=', 'media.id')
+                ->orderBy('my.year_released', 'desc')
                 ->limit(3)
                 ->get();
     }

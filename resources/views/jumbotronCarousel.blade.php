@@ -19,9 +19,8 @@
 		>
 			<div class="jumbo-carousel-overlay">
 				<div class="jumbo-carousel-info">
-					<h1 class="">@{{ media.title }}</h1>
 					<button
-						class="btn btn-outline-primary jumbo-carousel-button mr-3"
+						class="btn btn-outline-primary jumbo-carousel-button mr-5"
 						v-on:click="setVideo(media.id)"
 					>
 						Watch Now
@@ -29,24 +28,24 @@
 					@if(auth()->check())
 						<button
 							v-if="!checkInWatchlist(media.id)"
-							class="btn btn-outline-success jumbo-carousel-button mr-3"
+							class="btn btn-outline-success jumbo-carousel-button"
 							v-on:click="addToWatchlist(media.id)"
 						>
-							Add to Watchlist
+							+ Watchlist
 						</button>
 						<button
 							v-if="checkInWatchlist(media.id)"
 							class="btn btn-outline-warning jumbo-carousel-button"
 							v-on:click="removeFromWatchlist(media.id)"
 						>
-							Remove from Watchlist
+							&minus; Watchlist
 						</button>
 					@endif
 				</div>
 			</div>
 			<img
 				class="jumbo-carousel-img d-none d-lg-inline"
-				v-bind:src="'/img/jumbo/' + media.jumbotron"
+				v-bind:src="'/img/jumbotron/' + media.jumbotron"
 			/>
 		</div>
 	</div>

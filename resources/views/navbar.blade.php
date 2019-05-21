@@ -126,14 +126,14 @@
 								Upload Content
 							</a><hr />
 						@endif
-						<a
+						{{-- <a
 							class="dropdown-item"
 							href="javascript:void(0);"
 						>Change Email</a>
 						<a
 							class="dropdown-item"
 							href="javascript:void(0);"
-						>Change Password</a><hr />
+						>Change Password</a><hr /> --}}
 						<a
 							id="logout-button"
 							class="dropdown-item"

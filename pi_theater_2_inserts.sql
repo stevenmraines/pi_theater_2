@@ -7,8 +7,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `admin`, `remember_token
 	(3, 'Stephan', 'stephan@urkel.com', '$2y$10$ViNXR1w5sCpSPtJ1AAVPwu4kCBGDaZbOo7ZxJBJk1ixM2CZHpE6JC', 0, 'IR7hKvLvcnXwc7YRqsVX5pKLdag8vWYLYoUDo4L5I3T3wEOi61bE35n5sKqG', '2018-11-30 17:57:51', '2018-11-30 13:00:43'),
 	(4, '1234', 'fdsa', '$2y$10$0714Cj0L6o/nTd1/VdJXDeZ7/L64SvwTbCiq7mG6HMVjcKv2rsOU.', 0, NULL, '2018-11-30 18:01:33', '2018-11-30 18:01:33'),
 	(5, 'John Smith', 'john@smith.com', '$2y$10$2BS1oUxM7YJ2qHb0M31JIukaeQMjSZ5bD1ZDDHFYo3F2DiZL.KEAu', 0, 'sZuvVLZEUiUf5LONjoFuuKVNFuEZJOuliFDFU9cvrNbYVgUQdvwySdWc2goq', '2018-11-30 20:56:20', '2018-11-30 16:06:03');
-	
-	
+
+
 INSERT INTO `collections` (`id`, `name`, `menu_image`, `jumbotron_image`, `created_at`, `updated_at`) VALUES
 	(1, '80s Classics', 'menu-80s-classics.png', 'col-1-jumbotron.jpg', '2018-03-04 08:45:24', '2018-03-04 08:45:24'),
 	(2, 'Batman', 'menu-batman.png', 'col-2-jumbotron.jpg', '2018-03-04 08:45:24', '2018-03-04 08:45:24'),
@@ -21,7 +21,7 @@ INSERT INTO `collections` (`id`, `name`, `menu_image`, `jumbotron_image`, `creat
 	(9, 'Spider-Man', 'menu-spider-man.png', 'col-9-jumbotron.jpg', '2018-03-04 08:45:24', '2018-03-04 08:45:24'),
 	(10, 'Star Wars', 'menu-star-wars.png', 'col-10-jumbotron.jpg', '2018-03-04 08:45:24', '2018-03-04 08:45:24'),
 	(11, 'The King of Horror', 'menu-stephen-king.png', 'col-11-jumbotron.jpg', '2018-03-04 08:45:24', '2018-03-04 08:45:24');
-	
+
 	INSERT INTO `genres` (`id`, `name`, `created_at`, `updated_at`) VALUES
 	(1, 'Action', '2018-03-04 08:42:36', '2018-03-04 08:42:36'),
 	(2, 'Adventure', '2018-03-04 08:42:37', '2018-03-04 08:42:37'),
@@ -48,7 +48,7 @@ INSERT INTO `collections` (`id`, `name`, `menu_image`, `jumbotron_image`, `creat
 	(23, 'Suspense', '2018-03-04 08:42:37', '2018-03-04 08:42:37'),
 	(24, 'Travel', '2018-03-04 08:42:37', '2018-03-04 08:42:37'),
 	(25, 'Western', '2018-03-04 08:42:37', '2018-03-04 08:42:37');
-	
+
 INSERT INTO `media` (`id`, `title`, `summary`, `notes`, `poster`, `created_at`, `updated_at`, `media_type`) VALUES
 	(1, 'Alien Resurrection', 'Two centuries after her death, Ellen Ripley is revived as a powerful human/alien hybrid clone who must continue her war against the aliens.', NULL, 'alien-resurrection.jpg', '2017-09-10 08:56:03', '2017-09-10 08:56:03', 'movie'),
 	(2, 'Alien', 'After a space merchant vessel perceives an unknown transmission as a distress call, its landing on the source moon finds one of the crew attacked by a mysterious life-form, and they soon realize that its life cycle has merely begun.', NULL, 'alien.jpg', '2017-09-10 09:14:47', '2017-09-10 09:14:47', 'movie'),
@@ -224,7 +224,11 @@ INSERT INTO `media` (`id`, `title`, `summary`, `notes`, `poster`, `created_at`, 
 	(170, 'Ash vs Evil Dead', 'Having spent the last 30 years of his life avoiding responsibility and maturity, Ash must now face the resurrected threat of the Deadites. Accompanied by two co-workers, he must try to find a way to use the Necronomicon Ex-Mortis to put an end to the demonic forces and save the world from sure destruction.', NULL, 'ash-vs-evil-dead.jpg', '2017-11-04 14:35:14', '2017-11-04 14:35:14', 'show'),
 	(171, 'Summer Heights High', 'The daily routines and dysfunctional relationships of several students and teachers at an Australian public school are captured in this mockumentary series.', NULL, 'summer-heights-high.jpg', '2017-11-05 09:10:21', '2017-11-05 09:10:21', 'show'),
 	(172, 'Community', 'A disgraced lawyer with a fake law degree is forced to enroll in a cut-rate community college with an eclectic, and eccentric, student body.', NULL, 'community.jpg', '2017-11-05 12:16:13', '2017-11-05 12:16:13', 'show');
-	
+
+INSERT INTO `media` SET `id` = 173, `title` = 'Avengers: Infinity War', `summary` = 'fdsa', `notes` = NULL, `poster` = 'infinity-war.jpg', `jumbotron` = 'infinity-war.jpg', `media_type` = 'movie';
+INSERT INTO `media` SET `id` = 174, `title` = 'Suspiria', `summary` = 'fdsa', `notes` = NULL, `poster` = 'suspiria.jpg', `jumbotron` = 'suspiria.jpg', `media_type` = 'movie';
+INSERT INTO `media` SET `id` = 175, `title` = 'Glass', `summary` = 'fdsa', `notes` = NULL, `poster` = 'glass.jpg', `jumbotron` = 'glass.jpg', `media_type` = 'movie';
+
 INSERT INTO `collection_media` (`collection_id`, `media_id`, `created_at`, `updated_at`) VALUES
 	(1, 3, '2017-11-04 10:36:37', '2017-11-04 10:36:37'),
 	(1, 12, '2017-11-04 10:36:37', '2017-11-04 10:36:37'),
@@ -339,7 +343,7 @@ INSERT INTO `collection_media` (`collection_id`, `media_id`, `created_at`, `upda
 	(11, 86, '2018-01-05 21:54:00', '2018-01-05 21:54:00'),
 	(11, 112, '2018-01-05 21:54:00', '2018-01-05 21:54:00'),
 	(11, 138, '2018-01-13 14:56:04', '2018-01-13 14:56:04');
-	
+
 INSERT INTO `collection_media` (`collection_id`, `media_id`, `created_at`, `updated_at`) VALUES
 	(2, 155, '2017-10-26 20:54:36', '2017-10-26 20:54:36'),
 	(2, 156, '2017-10-26 20:54:37', '2017-10-26 20:54:37'),
@@ -352,7 +356,7 @@ INSERT INTO `collection_media` (`collection_id`, `media_id`, `created_at`, `upda
 	(9, 166, '2017-10-26 21:04:55', '2017-10-26 21:04:55'),
 	(10, 162, '2017-10-14 10:18:06', '2017-10-14 10:18:06'),
 	(10, 163, '2017-10-14 10:18:06', '2017-10-14 10:18:06');
-	
+
 INSERT INTO `genre_media` (`media_id`, `genre_id`, `created_at`, `updated_at`) VALUES
 	(1, 1, '2017-10-07 22:09:01', '2017-10-07 22:09:01'),
 	(3, 1, '2017-10-07 09:02:11', '2017-10-07 09:02:11'),
@@ -1428,8 +1432,8 @@ INSERT INTO `episodes` (`media_id`, `season`, `episode_number`, `title`, `summar
 	 (172, 5, 11, 'G.I. Jeff', '', '2018-02-18 18:55:23', '2018-12-27 09:51:15'),
 	 (172, 5, 12, 'Basic Story', '', '2018-02-18 18:55:26', '2018-12-27 09:51:15'),
 	 (172, 5, 13, 'Basic Sandwich', '', '2018-02-18 18:55:28', '2018-12-27 09:51:15');
-	 
-	 
+
+
 INSERT INTO show_year SET media_id = 152, year_start = 2010, year_end = 2012;
 INSERT INTO show_year SET media_id = 153, year_start = 1990, year_end = 2000;
 INSERT INTO show_year SET media_id = 154, year_start = 2008, year_end = 2008;
@@ -1604,5 +1608,8 @@ INSERT INTO movie_year SET media_id = 148, year_released = 1982;
 INSERT INTO movie_year SET media_id = 149, year_released = 1988;
 INSERT INTO movie_year SET media_id = 150, year_released = 2013;
 INSERT INTO movie_year SET media_id = 151, year_released = 2015;
+INSERT INTO movie_year SET media_id = 173, year_released = 2017;
+INSERT INTO movie_year SET media_id = 174, year_released = 2018;
+INSERT INTO movie_year SET media_id = 175, year_released = 2019;
 
 INSERT INTO drives SET name = 'hdd1';

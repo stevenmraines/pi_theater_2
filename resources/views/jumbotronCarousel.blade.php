@@ -25,22 +25,29 @@
 					>
 						Watch Now
 					</button>
-					@if(auth()->check())
+					@if(!auth()->check())
+						<a
+							href="/login"
+							class="btn btn-outline-success jumbo-carousel-button"
+						>
+							+ Watchlist
+						</a>
+					@else
 						<button
-							v-if="!checkInWatchlist(media.id)"
+							v-if="user !== null && !checkInWatchlist(media.id)"
 							class="btn btn-outline-success jumbo-carousel-button"
 							v-on:click="addToWatchlist(media.id)"
 						>
 							+ Watchlist
 						</button>
-						<button
-							v-if="checkInWatchlist(media.id)"
-							class="btn btn-outline-warning jumbo-carousel-button"
-							v-on:click="removeFromWatchlist(media.id)"
-						>
-							&minus; Watchlist
-						</button>
 					@endif
+					<button
+						v-if="user !== null && checkInWatchlist(media.id)"
+						class="btn btn-outline-warning jumbo-carousel-button"
+						v-on:click="removeFromWatchlist(media.id)"
+					>
+						&minus; Watchlist
+					</button>
 				</div>
 			</div>
 			<img

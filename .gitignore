@@ -6,13 +6,11 @@
 /public/img/posters
 /public/img/*.psd
 /public/img/banners/*.psd
+/public/img/jumbotron/*
 /public/img/logos/*.psd
-/public/js/app.js
-/public/js/browse.js
-/public/js/episode.js
-/public/js/movie.js
-/public/js/upload.js
+/public/js/*
 /public/mix-manifest.json
+/public/video/*
 /storage/*.key
 /vendor
 /.idea

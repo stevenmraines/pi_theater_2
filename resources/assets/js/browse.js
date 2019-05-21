@@ -152,6 +152,12 @@ const app = new Vue({
 			this.genreColumns = genreColumns;
 		},
 
+		findEpisode: function(episode_id) {
+			return function(episode) {
+				return episode.id == episode_id;
+			};
+		},
+
 		finishHistory: function(mediaId) {
 			var self = this;
 
@@ -292,16 +298,29 @@ const app = new Vue({
 			Event.trigger('showSearchModal');
 		},
 
-		setVideo: function(id) {
-			// Get the drive, filename, and mediaType
-			this.video.drive = 'hdd1';
-			this.video.filename = 'game-of-thrones_s01e04.mp4';
-			this.video.mediaType = 'show';
+		setVideo: function(id, episode_id = null) {
+			var self = this;
 
-			// Hide all modals and trigger the display of the video player
-			Event.trigger('hideModal');
-			Event.trigger('setVideoPlayerSrc', this.video);
-			Event.trigger('showVideoPlayer');
+			axios.get('/api/media/' + id).then(function(response) {
+				// Get the drive, filename, and mediaType
+				this.video.mediaType = response.data.media_type;
+
+				if(response.data.media_type === 'movie') {
+					this.video.drive = 'hdd1';
+					this.video.filename = response.data.filename.filename;
+				}
+
+				if(response.data.media_type === 'show' && episode_id !== null) {
+					var episode = response.data.episodes.filter(findEpisode(episode_id));
+					this.video.drive = 'hdd1';
+					this.video.filename = episode.filename.filename;
+				}
+
+				// Hide all modals and trigger the display of the video player
+				Event.trigger('hideModal');
+				Event.trigger('setVideoPlayerSrc', this.video);
+				Event.trigger('showVideoPlayer');
+			});
 		},
 
 		updateHistory: function(mediaId, progress) {

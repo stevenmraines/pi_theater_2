@@ -39,7 +39,7 @@ class Media extends Model
     public static function spotlight() {
         return
             self
-                ::where('jumbotron', '!=', NULL)
+                ::where('jumbotron', '!=', '')
                 ->where('media_type', '=', 'movie')
                 ->leftJoin('movie_year as my', 'my.media_id', '=', 'media.id')
                 ->orderBy('my.year_released', 'desc')

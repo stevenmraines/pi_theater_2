@@ -41,7 +41,7 @@ class MediaController extends Controller
                 ->load('genres')
                 ->load('episodes')
                 ->load('release')
-                ->load('filename');
+                ->load('drive');
     }
 
     /**

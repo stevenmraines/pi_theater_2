@@ -21,7 +21,7 @@
 				<div class="jumbo-carousel-info">
 					<button
 						class="btn btn-outline-primary jumbo-carousel-button mr-5"
-						v-on:click="setVideo(media.id)"
+						v-on:click="setVideo({ 'id' : media.id })"
 					>
 						Watch Now
 					</button>

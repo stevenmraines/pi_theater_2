@@ -298,29 +298,44 @@ const app = new Vue({
 			Event.trigger('showSearchModal');
 		},
 
-		setVideo: function(id, episode_id = null) {
+		setVideo: function(data) {
 			var self = this;
+			var id = data.id;
 
-			axios.get('/api/media/' + id).then(function(response) {
-				// Get the drive, filename, and mediaType
-				this.video.mediaType = response.data.media_type;
+			if(data.episode_id) {
+				var episode_id = data.episode_id;
+			}
 
-				if(response.data.media_type === 'movie') {
-					this.video.drive = 'hdd1';
-					this.video.filename = response.data.filename.filename;
-				}
+			axios.get('/api/media/' + id)
+				.then(function (response) {
+				  	// Get the drive, filename, and mediaType
+				  	self.video.mediaType = response.data.media_type;
+					console.log(response.data);
+				  	if(response.data.media_type === 'movie') {
+				  		self.video.drive = response.data.drive[0].name;
+				  		self.video.filename = response.data.drive[0].pivot.filename;
+				  	}
 
-				if(response.data.media_type === 'show' && episode_id !== null) {
-					var episode = response.data.episodes.filter(findEpisode(episode_id));
-					this.video.drive = 'hdd1';
-					this.video.filename = episode.filename.filename;
-				}
+				  	if(response.data.media_type === 'show' && episode_id) {
+				  		var filtered_episodes =
+							response
+								.data
+								.episodes
+								.filter(self.findEpisode(episode_id));
 
-				// Hide all modals and trigger the display of the video player
-				Event.trigger('hideModal');
-				Event.trigger('setVideoPlayerSrc', this.video);
-				Event.trigger('showVideoPlayer');
-			});
+						var episode = filtered_episodes[0];
+				  		self.video.drive = episode.drive[0].name;
+				  		self.video.filename = episode.drive[0].pivot.filename;
+				  	}
+
+				  	// Hide all modals and trigger the display of the video player
+				  	Event.trigger('hideModal');
+				  	Event.trigger('setVideoPlayerSrc', self.video);
+				  	Event.trigger('showVideoPlayer');
+				})
+				.catch(function (error) {
+					console.log(error);
+				});
 		},
 
 		updateHistory: function(mediaId, progress) {

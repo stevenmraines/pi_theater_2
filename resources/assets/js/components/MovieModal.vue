@@ -114,7 +114,7 @@
 			},
 
 			watch() {
-				Event.trigger('setVideo', this.id);
+				Event.trigger('setVideo', { 'id' : this.id });
 			},
 		},
 	}

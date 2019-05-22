@@ -68,7 +68,12 @@
                                         - {{ episode.title }}
                                         </span>
 
-                                        <button class="btn btn-primary">WATCH NOW</button>
+                                        <button
+                                            class="btn btn-primary"
+                                            v-on:click="watch(episode.id)"
+                                        >
+                                            WATCH NOW
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -209,6 +214,13 @@
                 this.genres = data.genres;
                 this.user = data.user;
                 this.episodes = data.episodes;
+            },
+
+            watch(episode_id) {
+                Event.trigger('setVideo', {
+                    'id' : this.id,
+                    'episode_id' : episode_id
+                });
             },
         },
     }

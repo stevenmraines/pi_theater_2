@@ -28,8 +28,8 @@ class Media extends Model
         }
     }
 
-    public function filename() {
-        return $this->hasOne('App\FileMovie');
+    public function drive() {
+        return $this->belongsToMany('App\Drive')->withPivot('filename');
     }
 
     public function episodes() {

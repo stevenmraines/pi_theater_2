@@ -19,20 +19,28 @@ window.Event = new class {
  * REGISTER KEYBOARD EVENTS
  */
 $(document).keyup(function(event) {
-	if(event.which == 27) {  // Esc
-		Event.trigger('hideModal');
-	}
-
-	if(event.which == 38) {  // Up arrow
-		Event.trigger('togglePlay');
-	}
-
-	if(event.which == 40) {  // Down arrow
-		Event.trigger('toggleTimeRange');
-	}
-
-	if(event.which == 83 && event.shiftKey && event.ctrlKey) {  // Shift + Ctrl + s
-		Event.trigger('showSearchModal');
+	switch(event.which) {
+		case 27:  // Esc
+			Event.trigger('hideModal');
+			break;
+		case 37:  // Left arrow
+			Event.trigger('rewind');
+			break;
+		case 32:  // Space
+		case 38:  // Up arrow
+			Event.trigger('togglePlay');
+			break;
+		case 39:  // Right arrow
+			Event.trigger('fastForward');
+			break;
+		case 40:  // Down arrow
+			Event.trigger('toggleTimeRange');
+			break;
+		case 83:  // S key
+			if(event.shiftKey && event.ctrlKey) {
+				Event.trigger('showSearchModal');
+			}
+			break;
 	}
 });
 
@@ -235,11 +243,6 @@ const app = new Vue({
 			axios.get('/api/media/' + id).then(function(response) {
 				// Update modal props
 				var modal = response.data.media_type + 'Modal';
-				// for(var key in response.data) {
-				// 	if(self[modal].hasOwnProperty(key)) {
-				// 		self[modal][key] = response.data[key];
-				// 	}
-				// }
 
 				if(response.data.media_type === 'movie') {
 					self.movieModal.id = response.data.id;
@@ -306,7 +309,8 @@ const app = new Vue({
 				var episode_id = data.episode_id;
 			}
 
-			axios.get('/api/media/' + id)
+			axios
+				.get('/api/media/' + id)
 				.then(function (response) {
 				  	// Get the drive, filename, and mediaType
 				  	self.video.mediaType = response.data.media_type;

@@ -25,7 +25,7 @@
                 type="range"
                 min="0"
                 v-bind:max="duration"
-                step="30"
+                v-bind:step="step"
                 v-model:value="currentTime"
             />
         </div>
@@ -44,6 +44,8 @@
                 mediaType: '',
                 showTimeRange: false,
                 showVideoPlayer: false,
+                step: 15,
+                timeRangeSync: {}
             }
         },
 
@@ -87,15 +89,35 @@
             Event.listen('setVideoPlayerSrc', this.setSrc);
             Event.listen('togglePlay', this.togglePlay);
             Event.listen('toggleTimeRange', this.toggleTimeRange);
+            Event.listen('rewind', this.rewind);
+            Event.listen('fastForward', this.fastForward);
         },
 
         methods: {
+            fastForward: function() {
+                var video = this.$refs.video;
+
+                video.currentTime = video.currentTime + this.step;
+
+                this.currentTime = video.currentTime;
+            },
+
             hide: function() {
                 this.setSrc({
                     drive: '',
                     filename: '',
                     mediaType: '',
                 });
+
+                clearInterval(this.timeRangeSync);
+            },
+
+            rewind: function() {
+                var video = this.$refs.video;
+
+                video.currentTime = video.currentTime - this.step;
+
+                this.currentTime = video.currentTime;
             },
 
             setSrc: function(video) {
@@ -125,6 +147,12 @@
                         }
                     }, 500);
                 }, 800);
+
+                // Why does this update so infrequently????
+                this.timeRangeSync = setInterval(function() {
+                    var video = self.$refs.video;
+                    self.currentTime = video.currentTime;
+                }, 100);
             },
 
             togglePlay: function() {

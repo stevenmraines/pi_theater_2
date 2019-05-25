@@ -1,21 +1,32 @@
 <template>
     <div>
-        <div id="movie-container">
-            <div
-                class="video-loader top-most"
-                v-if="showVideoPlayer && !loaded"
-            ></div>
-            <video
-                id="video-player"
-                ref="video"
-                v-if="showVideoPlayer && src !== ''"
-                class="top-most"
-                v-bind:class="{ hidden: !loaded }"
-                controls
-                autoplay
-            >
-                <source v-bind:src="src" v-bind:type="videoType"></source>
-            </video>
+        <div class="fluid-modal scrollbar d-block" v-if="showVideoPlayer">
+            <div class="fluid-modal-content">
+                <div class="fluid-modal-header">
+                    <!-- Empty element just to have close button floated to the right -->
+                    <span></span>
+                    <button
+                        class="fluid-modal-close close topmost"
+                        v-on:click="hide"
+                    >
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div
+                    class="video-loader"
+                    v-if="showVideoPlayer && !loaded"
+                ></div>
+                <video
+                    class="fluid-modal-centered"
+                    ref="video"
+                    v-if="showVideoPlayer && src !== ''"
+                    v-bind:class="{ hidden: !loaded }"
+                    controls
+                    autoplay
+                >
+                    <source v-bind:src="src" v-bind:type="videoType"></source>
+                </video>
+            </div>
         </div>
 
         <div id="time-range-container" v-if="showTimeRange">
@@ -110,6 +121,9 @@
                 });
 
                 clearInterval(this.timeRangeSync);
+
+                this.showVideoPlayer = false;
+                this.loaded = false;
             },
 
             rewind: function() {

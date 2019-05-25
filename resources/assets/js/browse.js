@@ -24,20 +24,21 @@ $(document).keyup(function(event) {
 			Event.trigger('hideModal');
 			break;
 		case 37:  // Left arrow
-			Event.trigger('rewind');
+			// Event.trigger('rewind');
 			break;
-		case 32:  // Space
+		// case 32:  // Space
 		case 38:  // Up arrow
 			Event.trigger('togglePlay');
 			break;
 		case 39:  // Right arrow
-			Event.trigger('fastForward');
+			// Event.trigger('fastForward');
 			break;
 		case 40:  // Down arrow
 			Event.trigger('toggleTimeRange');
 			break;
 		case 83:  // S key
 			if(event.shiftKey && event.ctrlKey) {
+				Event.trigger('hideModal');
 				Event.trigger('showSearchModal');
 			}
 			break;

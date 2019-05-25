@@ -29,4 +29,10 @@
       class="banner img-fluid"
     />
   </div>
+  <div class="col-xs-12 col-md-6 col-lg-4" v-on:click="fluidModalRecentGenre(1)">
+    <img
+      src="{{ asset('img/banners/new-action-banner.jpg') }}"
+      class="banner img-fluid"
+    />
+  </div>
 </div>

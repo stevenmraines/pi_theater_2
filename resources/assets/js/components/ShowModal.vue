@@ -96,12 +96,12 @@
                                 class="btn btn-success mx-auto ml-sm-0 mr-sm-auto btn-watchlist"
                                 v-if="!inWatchlist"
                                 v-on:click="addToWatchlist"
-                            >ADD TO WATCHLIST</button>
+                            >+ WATCHLIST</button>
                             <button
                                 class="btn btn-warning mx-auto ml-sm-0 mr-sm-auto btn-watchlist"
                                 v-if="inWatchlist"
                                 v-on:click="removeFromWatchlist"
-                            >REMOVE FROM WATCHLIST</button>
+                            >&minus; WATCHLIST</button>
                         </div>
                     </div>
                 </div>

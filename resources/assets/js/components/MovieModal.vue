@@ -42,14 +42,14 @@
 								v-if="!inWatchlist"
 								v-on:click="addToWatchlist"
 							>
-								ADD TO WATCHLIST
+								+ WATCHLIST
 							</button>
 							<button
 								class="btn btn-warning btn-watchlist"
 								v-if="inWatchlist"
 								v-on:click="removeFromWatchlist"
 							>
-								REMOVE FROM WATCHLIST
+								&minus; WATCHLIST
 							</button>
 						</div>
 						<button

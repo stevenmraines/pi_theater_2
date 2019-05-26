@@ -37,7 +37,7 @@
                 min="0"
                 v-bind:max="duration"
                 v-bind:step="step"
-                v-model:value="currentTime"
+                v-model:value="progress"
             />
         </div>
     </div>
@@ -47,16 +47,20 @@
     export default {
         data() {
             return {
-                currentTime: 0,
                 drive: '',
                 duration: 0,
+                episode_id: 0,
                 filename: '',
                 loaded: false,
-                mediaType: '',
+                media_id: 0,
+                media_type: '',
+                progress: 0,
                 showTimeRange: false,
                 showVideoPlayer: false,
                 step: 15,
-                timeRangeSync: {}
+                timeRangeSync: {},
+                updateHistory: {},
+                userLoggedIn: false
             }
         },
 
@@ -65,7 +69,7 @@
                 if(this.filename !== '') {
                     return (
                         '/video/' + this.drive +
-                        '/' + this.mediaType +
+                        '/' + this.media_type +
                         's/' + this.filename
                     );
                 }
@@ -110,17 +114,18 @@
 
                 video.currentTime = video.currentTime + this.step;
 
-                this.currentTime = video.currentTime;
+                this.progress = video.currentTime;
             },
 
             hide: function() {
                 this.setSrc({
                     drive: '',
                     filename: '',
-                    mediaType: '',
+                    media_type: '',
                 });
 
                 clearInterval(this.timeRangeSync);
+                clearInterval(this.updateHistory);
 
                 this.showVideoPlayer = false;
                 this.loaded = false;
@@ -131,22 +136,29 @@
 
                 video.currentTime = video.currentTime - this.step;
 
-                this.currentTime = video.currentTime;
+                this.progress = video.currentTime;
             },
 
             setSrc: function(video) {
                 this.drive = video.drive;
+                this.episode_id = video.episode_id;
                 this.filename = video.filename;
-                this.mediaType = video.mediaType;
+                this.media_id = video.media_id;
+                this.media_type = video.mediaType;
+
+                if(video.progress > 0) {
+                    this.progress = video.progress;
+                }
             },
 
-            show: function() {
+            show: function(data) {
                 if(this.src === '') {
                     return;
                 }
 
                 this.showVideoPlayer = true;
                 this.loaded = false;
+                this.userLoggedIn = data.userLoggedIn;
 
                 var self = this;
 
@@ -156,7 +168,11 @@
                         if(video.readyState > 0) {
                             self.loaded = true;
                             self.duration = Math.round(video.duration);
-                            self.currentTime = video.currentTime;
+
+                            if(self.progress > 0) {
+                                video.currentTime = self.progress;
+                            }
+
                             clearInterval(interval);
                         }
                     }, 500);
@@ -165,8 +181,19 @@
                 // Why does this update so infrequently????
                 this.timeRangeSync = setInterval(function() {
                     var video = self.$refs.video;
-                    self.currentTime = video.currentTime;
+                    self.progress = video.currentTime;
                 }, 100);
+
+                if(this.userLoggedIn) {
+                    this.updateHistory = setInterval(function() {
+                        var video = self.$refs.video;
+                        Event.trigger('updateHistory', {
+                            media_id: self.media_id,
+                            episode_id: self.episode_id,
+                            progress: self.progress
+                        });
+                    }, 3000);
+                }
             },
 
             togglePlay: function() {

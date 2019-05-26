@@ -8,7 +8,10 @@ Route::get('/{home?}', function() {
     $user = auth()->user();
 
     if(!is_null($user)) {
-        $user->load('history')->load('watchlist');
+        $user
+            ->load('history_movie')
+            ->load('episode_history')
+            ->load('watchlist');
     }
 
     $recentMovies =

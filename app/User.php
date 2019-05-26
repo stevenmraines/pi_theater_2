@@ -9,17 +9,6 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    public function history() {
-        return
-            $this
-                ->belongsToMany('App\Media', 'history_user', 'user_id', 'media_id')
-                ->withPivot('progress');
-    }
-
-    public function watchlist() {
-        return $this->belongsToMany('App\Media', 'user_watchlist', 'user_id', 'media_id');
-    }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -37,4 +26,22 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function episode_history() {
+        return
+            $this
+                ->belongsToMany('App\Episode', 'episode_history', 'user_id', 'episode_id')
+                ->withPivot('progress');
+    }
+
+    public function history_movie() {
+        return
+            $this
+                ->belongsToMany('App\Media', 'history_movie', 'user_id', 'media_id')
+                ->withPivot('progress');
+    }
+
+    public function watchlist() {
+        return $this->belongsToMany('App\Media', 'user_watchlist', 'user_id', 'media_id');
+    }
 }

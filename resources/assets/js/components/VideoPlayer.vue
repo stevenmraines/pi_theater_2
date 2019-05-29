@@ -187,11 +187,13 @@
                 if(this.userLoggedIn) {
                     this.updateHistory = setInterval(function() {
                         var video = self.$refs.video;
-                        Event.trigger('updateHistory', {
-                            media_id: self.media_id,
-                            episode_id: self.episode_id,
-                            progress: self.progress
-                        });
+                        if(!video.paused) {
+                            Event.trigger('updateHistory', {
+                                media_id: self.media_id,
+                                episode_id: self.episode_id,
+                                progress: self.progress
+                            });
+                        }
                     }, 3000);
                 }
             },

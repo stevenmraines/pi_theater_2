@@ -13,7 +13,12 @@ class WatchlistController extends Controller
             ->watchlist()
             ->syncWithoutDetaching($mediaId);
 
-        return User::find($userId)->load('watchlist')->load('history');
+        return
+            User
+                ::find($userId)
+                ->load('watchlist')
+                ->load('episode_history')
+                ->load('history_movie');
     }
 
     public function remove($userId, $mediaId) {
@@ -21,6 +26,11 @@ class WatchlistController extends Controller
             ->watchlist()
             ->detach($mediaId);
 
-        return User::find($userId)->load('watchlist')->load('history');
+        return
+            User
+                ::find($userId)
+                ->load('watchlist')
+                ->load('episode_history')
+                ->load('history_movie');
     }
 }

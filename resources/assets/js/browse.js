@@ -102,6 +102,7 @@ const app = new Vue({
 			filename: '',
 			media_id: 0,
 			mediaType: '',
+			progress: 0,
 		},
 	},
 
@@ -124,7 +125,6 @@ const app = new Vue({
 			axios.post('/api/watchlist/add/' + this.user.id + '/' + mediaId)
 			.then(function (response) {
 				self.user.watchlist = response.data.watchlist;
-				self.watchlist.user = response.data;
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -288,7 +288,6 @@ const app = new Vue({
 			axios.post('/api/watchlist/remove/' + this.user.id + '/' + mediaId)
 			.then(function (response) {
 				self.user.watchlist = response.data.watchlist;
-				self.watchlist.user = response.data;
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -326,6 +325,15 @@ const app = new Vue({
 				  	if(response.data.media_type === 'movie') {
 				  		self.video.drive = response.data.drive[0].name;
 				  		self.video.filename = response.data.drive[0].pivot.filename;
+
+						// Try to find movie in user's history and get current progress
+						if(self.user) {
+							for(var i = 0; i < self.user.history_movie.length; i++) {
+								if(self.user.history_movie[i].id == id) {
+									self.video.progress = self.user.history_movie[i].pivot.progress;
+								}
+							}
+						}
 				  	}
 
 				  	if(response.data.media_type === 'show' && episode_id) {
@@ -338,6 +346,15 @@ const app = new Vue({
 						var episode = filtered_episodes[0];
 				  		self.video.drive = episode.drive[0].name;
 				  		self.video.filename = episode.drive[0].pivot.filename;
+
+						// Try to find the episode in user's history and get current progress
+						if(self.user) {
+							for(var i = 0; i < self.user.episode_history.length; i++) {
+								if(self.user.episode_history[i].id == episode_id) {
+									self.video.progress = self.user.episode_history[i].pivot.progress;
+								}
+							}
+						}
 				  	}
 
 				  	// Hide all modals and trigger the display of the video player
@@ -362,7 +379,7 @@ const app = new Vue({
 				)
 				.then(function(response) {
 					self.user = response.data;
-					self.watchlist.user = response.data.watchlist;
+					self.user.watchlist = response.data.watchlist;
 				})
 				.catch(function(error) {
 					console.log(error);

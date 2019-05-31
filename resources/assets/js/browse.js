@@ -381,7 +381,7 @@ const app = new Vue({
 				)
 				.then(function(response) {
 					self.user = response.data;
-					self.watchlist.user = response.data.watchlist;
+					// self.user.watchlist = response.data.watchlist;
 				})
 				.catch(function(error) {
 					console.log(error);

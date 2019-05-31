@@ -57,8 +57,8 @@
                 progress: 0,
                 showTimeRange: false,
                 showVideoPlayer: false,
-                step: 15,
-                timeRangeSync: {},
+                step: 10,
+                timeSync: {},
                 updateHistory: {},
                 userLoggedIn: false
             }
@@ -109,11 +109,28 @@
         },
 
         methods: {
+            checkIfLoaded: function() {
+                var self = this;
+
+                var interval = setInterval(function() {
+                    var video = self.$refs.video;
+
+                    if(video.readyState > 0) {
+                        self.loaded = true;
+                        self.duration = Math.round(video.duration);
+
+                        if(self.progress > 0) {
+                            video.currentTime = self.progress;
+                        }
+
+                        clearInterval(interval);
+                    }
+                }, 500);
+            },
+
             fastForward: function() {
                 var video = this.$refs.video;
-
                 video.currentTime = video.currentTime + this.step;
-
                 this.progress = video.currentTime;
             },
 
@@ -124,7 +141,7 @@
                     media_type: '',
                 });
 
-                clearInterval(this.timeRangeSync);
+                clearInterval(this.timeSync);
                 clearInterval(this.updateHistory);
 
                 this.showVideoPlayer = false;
@@ -133,9 +150,7 @@
 
             rewind: function() {
                 var video = this.$refs.video;
-
                 video.currentTime = video.currentTime - this.step;
-
                 this.progress = video.currentTime;
             },
 
@@ -163,39 +178,43 @@
                 var self = this;
 
                 setTimeout(function() {
-                    var interval = setInterval(function() {
-                        var video = self.$refs.video;
-                        if(video.readyState > 0) {
-                            self.loaded = true;
-                            self.duration = Math.round(video.duration);
-
-                            if(self.progress > 0) {
-                                video.currentTime = self.progress;
-                            }
-
-                            clearInterval(interval);
-                        }
-                    }, 500);
+                    self.checkIfLoaded();
                 }, 800);
 
-                // Why does this update so infrequently????
-                this.timeRangeSync = setInterval(function() {
-                    var video = self.$refs.video;
-                    self.progress = video.currentTime;
-                }, 100);
+                this.startTimeSync();
 
                 if(this.userLoggedIn) {
-                    this.updateHistory = setInterval(function() {
-                        var video = self.$refs.video;
-                        if(!video.paused) {
-                            Event.trigger('updateHistory', {
-                                media_id: self.media_id,
-                                episode_id: self.episode_id,
-                                progress: self.progress
-                            });
-                        }
-                    }, 3000);
+                    this.startUpdatingHistory();
                 }
+            },
+
+            startTimeSync: function() {
+                var self = this;
+                // Why does this update so infrequently????
+                this.timeSync = setInterval(function() {
+                    var video = self.$refs.video;
+
+                    if(!video.paused) {
+                        self.progress = video.currentTime;
+                        self.duration = video.duration;
+                    }
+                }, 1000);
+            },
+
+            startUpdatingHistory: function() {
+                var self = this;
+
+                this.updateHistory = setInterval(function() {
+                    var video = self.$refs.video;
+
+                    if(!video.paused) {
+                        Event.trigger('updateHistory', {
+                            media_id: self.media_id,
+                            episode_id: self.episode_id,
+                            progress: self.progress
+                        });
+                    }
+                }, 3000);
             },
 
             togglePlay: function() {

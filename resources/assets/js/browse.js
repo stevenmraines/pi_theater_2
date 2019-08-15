@@ -36,6 +36,8 @@ $(document).keyup(function(event) {
 		case 40:  // Down arrow
 			Event.trigger('toggleTimeRange');
 			break;
+		case 70:  // F key
+			Event.trigger('fullscreen');
 		case 83:  // S key
 			if(event.shiftKey && event.ctrlKey) {
 				Event.trigger('hideModal');

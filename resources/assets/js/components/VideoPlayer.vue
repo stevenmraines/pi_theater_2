@@ -102,6 +102,7 @@
             Event.listen('hideVideoPlayer', this.hide);
             Event.listen('showVideoPlayer', this.show);
             Event.listen('setVideoPlayerSrc', this.setSrc);
+            Event.listen('fullscreen', this.toggleFullscreen);
             Event.listen('togglePlay', this.togglePlay);
             Event.listen('toggleTimeRange', this.toggleTimeRange);
             Event.listen('rewind', this.rewind);
@@ -128,6 +129,18 @@
                 }, 500);
             },
 
+            exitFullscreen: function() {
+                if(document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if(document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if(document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if(document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            },
+
             fastForward: function() {
                 var video = this.$refs.video;
                 video.currentTime = video.currentTime + this.step;
@@ -146,6 +159,20 @@
 
                 this.showVideoPlayer = false;
                 this.loaded = false;
+            },
+
+            requestFullscreen: function() {
+                var video = this.$refs.video;
+
+                if(video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if(video.mozRequestFullScreen) {
+                    video.mozRequestFullScreen();
+                } else if(video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                } else if(video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
             },
 
             rewind: function() {
@@ -215,6 +242,16 @@
                         });
                     }
                 }, 3000);
+            },
+
+            toggleFullscreen: function() {
+                if(this.showVideoPlayer) {
+                    if(document.fullscreenElement) {
+                        return this.exitFullscreen();
+                    }
+
+                    return this.requestFullscreen();
+                }
             },
 
             togglePlay: function() {

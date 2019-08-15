@@ -11,9 +11,6 @@ class Drive extends Model
     }
 
     public function episodes() {
-        return
-            $this
-                ->belongsToMany('App\Episode', 'drive_id')
-                ->withPivot('filename');
+        return $this->belongsToMany('App\Episode')->withPivot('filename');
     }
 }

@@ -26,41 +26,75 @@ class Media extends Model
         return $this->belongsToMany('App\Genre');
     }
 
-    public static function pending() {
-        // Will look over each known drive and get
-        // things that have yet to be uploaded to the DB
-
-        // Will probably need to look something like this:
-        // May need to add new column to media table? file_or_folder_name...
-        return [
-            'hdd1' => [
-                'movies' => [
-                    'media_type' => 'movie',
-                    'file_or_folder_name' => 'Some Movie.mp4',
-                    'title' => 'some-movie.mp4',
-                    'summary' => '',
-                    'notes' => NULL,
-                    'poster' => 'missing-poster.jpg',
-                    'year_start' => date('Y'),
-                    'year_end' => date('Y'),
-                    'genres' => [],
-                    'collections' => []
-                ],
-
-                'shows' => [
-                    'media_type' => 'show',
-                    'file_or_folder_name' => 'Some Show',
-                    'title' => '',
-                    'summary' => '',
-                    'notes' => NULL,
-                    'poster' => 'missing-poster.jpg',
-                    'year_start' => date('Y'),
-                    'year_end' => date('Y'),
-                    'genres' => [],
-                    'collections' => []
-                ]
-            ]
+    public static function pending($drive) {
+        $pending = [
+            'movies' => [],
+            'episodes' => [],
+            'shows' => [],
         ];
+
+        // Scan for new movies
+        $movies = new \DirectoryIterator(
+            public_path() . '/video/' . $drive . '/movies'
+        );
+
+        foreach($movies as $movie) {
+            if($movie->isDot() || $movie->isDir()) {
+                continue;
+            }
+
+            if(!in_array($movie->getFilename(), $pending['movies'])) {
+                $pending['movies'][] = $movie->getFilename();
+            }
+        }
+
+        // Scan for new episodes
+        $episodes = new \DirectoryIterator(
+            public_path() . '/video/' . $drive . '/shows'
+        );
+
+        foreach($episodes as $episode) {
+            if($episode->isDot() || $episode->isDir()) {
+                continue;
+            }
+
+            if(!in_array($episode->getFilename(), $pending['episodes'])) {
+                $pending['episodes'][] = $episode->getFilename();
+            }
+        }
+
+        // Remove filenames that are already accounted for
+        $processed_movies =
+            Drive
+                ::where('name', $drive)
+                ->get()
+                ->load('media')
+                ->first()
+                ->media
+                ->pluck('pivot')
+                ->pluck('filename')
+                ->toArray();
+
+        $pending['movies'] = array_values(
+            array_diff($pending['movies'], $processed_movies)
+        );
+
+        $processed_episodes =
+            Drive
+                ::where('name', $drive)
+                ->get()
+                ->load('episodes')
+                ->first()
+                ->episodes
+                ->pluck('pivot')
+                ->pluck('filename')
+                ->toArray();
+
+        $pending['episodes'] = array_values(
+            array_diff($pending['episodes'], $processed_episodes)
+        );
+
+        return $pending;
     }
 
     public static function recentEpisodes() {

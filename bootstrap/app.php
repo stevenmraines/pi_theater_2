@@ -15,6 +15,10 @@ $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
 );
 
+$app->bind('path.public', function() {
+    return base_path().'/../html/pi_theater_2';
+});
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces

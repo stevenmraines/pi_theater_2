@@ -24,7 +24,7 @@
                         v-bind:key="content.id"
                         v-bind:id="content.id"
                         v-bind:title="content.title"
-                        v-bind:poster="content.poster"
+                        v-bind:poster="paths.posters + '/' + content.poster"
                         v-bind:event-dispatcher="{}"
                     ></poster-container>
                 </div>
@@ -35,7 +35,7 @@
 
 <script>
     export default {
-        props: ['title', 'contents'],
+        props: ['title', 'contents', 'paths'],
 
         methods: {
             show() {

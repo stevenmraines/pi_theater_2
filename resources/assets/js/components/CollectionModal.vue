@@ -6,7 +6,7 @@
                 <img
                     class="fluid-modal-title"
                     v-if="collection.menu_image"
-                    v-bind:src="'/img/logos/' + collection.menu_image"
+                    v-bind:src="paths.logos + '/' + collection.menu_image"
                 />
                 <button
                     class="fluid-modal-close close"
@@ -26,7 +26,7 @@
                         v-bind:key="media.id"
                         v-bind:id="media.id"
                         v-bind:title="media.title"
-                        v-bind:poster="media.poster"
+                        v-bind:poster="paths.posters + '/' + media.poster"
                         v-bind:event-dispatcher="{}"
                     ></poster-container>
                 </div>
@@ -37,7 +37,7 @@
 
 <script>
     export default {
-        props: ['collection'],
+        props: ['collection', 'paths'],
 
         created() {
             Event.listen('showCollectionModal', this.show);

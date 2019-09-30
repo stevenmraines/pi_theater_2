@@ -60,6 +60,7 @@ const app = new Vue({
 		fluidModal: {
 			title: '',
 			contents: [],
+			paths: window.__INITIAL_STATE__.paths,
 		},
 
 		genre: {},
@@ -73,10 +74,12 @@ const app = new Vue({
 			title: '',
 			summary: '',
 			notes: null,
-			poster: 'missing-poster.jpg',
+			poster: window.__INITIAL_STATE__.paths.posters + '/missing-poster.jpg',
 			genres: [],
 			release: [],
 		},
+
+        paths: window.__INITIAL_STATE__.paths,
 
 		recentCollections: window.__INITIAL_STATE__.recentCollections,
 		recentEpisodes: window.__INITIAL_STATE__.recentEpisodes,
@@ -89,7 +92,7 @@ const app = new Vue({
             title: '',
             summary: '',
             notes: null,
-            poster: 'missing-poster.jpg',
+            poster: window.__INITIAL_STATE__.paths.posters + '/missing-poster.jpg',
             episodes: [],
             genres: [],
 			seasons: [],
@@ -118,6 +121,7 @@ const app = new Vue({
 		Event.listen('removeFromWatchlist', this.removeFromWatchlist);
 		Event.listen('setVideo', this.setVideo);
 		Event.listen('updateHistory', this.updateHistory);
+        console.log(this.paths);
 	},
 
 	methods: {
@@ -276,6 +280,7 @@ const app = new Vue({
 				var event = 'display' + modal.charAt(0).toUpperCase() + modal.substring(1);
 				if(response.data.media_type === 'show') {
 					response.data.user = self.user;
+                    response.data.poster = self.paths.posters + response.data.poster;
 					Event.trigger('setShow', response.data);
 				}
 				Event.trigger(event, response.data);

@@ -65,7 +65,7 @@
 						<a href="javascript:void(0);" v-for="collection in collections">
 							<img
 								class="dropdown-item menu-logo"
-								v-bind:src="'/img/logos/' + collection.menu_image"
+								v-bind:src="paths.logos + '/' + collection.menu_image"
 								v-on:click="getCollection(collection.id)"
 							/>
 						</a>

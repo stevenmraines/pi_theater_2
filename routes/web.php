@@ -34,6 +34,13 @@ Route::get('/{home?}', function() {
         'recentShows' => $recentShows,
         'recentSpotlight' => App\Media::spotlight(),
         'user' => $user,
+        'paths' => (object) [
+            'img' => asset('img'),
+            'banners' => asset('img/banners'),
+            'jumbotron' => asset('img/jumbotron'),
+            'logos' => asset('img/logos'),
+            'posters' => asset('img/posters')
+        ]
     ];
 
     return view('browse')->with('initialState', json_encode($initialState));

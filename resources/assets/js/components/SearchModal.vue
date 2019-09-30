@@ -35,7 +35,7 @@
                                     v-bind:key="result.objectID"
                                     v-bind:id="result.id"
                                     v-bind:title="result.title"
-                                    v-bind:poster="result.poster"
+                                    v-bind:poster="paths.posters + '/' + result.poster"
                                     v-bind:event-dispatcher="{}"
                                 ></poster-container>
                             </template>
@@ -49,7 +49,7 @@
 
 <script>
     export default {
-        props: ['contents'],
+        props: ['contents', 'paths'],
 
         data() {
             return {

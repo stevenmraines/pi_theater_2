@@ -52,7 +52,7 @@
 			</div>
 			<img
 				class="jumbo-carousel-img d-none d-lg-inline"
-				v-bind:src="'/img/jumbotron/' + media.jumbotron"
+				v-bind:src="paths.jumbotron + '/' + media.jumbotron"
 			/>
 		</div>
 	</div>

@@ -4,7 +4,7 @@
 		v-on:mouseover="hover"
 		v-on:mouseleave="unhover"
 	>
-		<img v-bind:src="'/img/posters/' + poster" class="img-fluid" />
+		<img v-bind:src="poster" class="img-fluid" />
 		<div class="poster-overlay d-flex flex-column justify-content-around">
 			<span class="mx-auto px-2">{{ title }}</span>
 			<a href="javascript:void(0);" class="mx-auto play text-center">

@@ -24,7 +24,7 @@
                         v-bind:key="media.id"
                         v-bind:id="media.id"
                         v-bind:title="media.title"
-                        v-bind:poster="media.poster"
+                        v-bind:poster="paths.posters + '/' + media.poster"
                         v-bind:event-dispatcher="{}"
                     ></poster-container>
                 </div>
@@ -35,7 +35,7 @@
 
 <script>
     export default {
-        props: ['genre'],
+        props: ['genre', 'paths'],
 
         methods: {
             show() {

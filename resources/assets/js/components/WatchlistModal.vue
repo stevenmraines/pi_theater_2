@@ -28,7 +28,7 @@
                         v-bind:key="media.id"
                         v-bind:id="media.id"
                         v-bind:title="media.title"
-                        v-bind:poster="media.poster"
+                        v-bind:poster="paths.posters + '/' + media.poster"
                         v-bind:mediaType="media.mediaType"
                         v-bind:event-dispatcher="{}"
                     ></poster-container>
@@ -40,7 +40,7 @@
 
 <script>
     export default {
-        props: ['user'],
+        props: ['user', 'paths'],
 
         created() {
             Event.listen('showWatchlistModal', this.show);

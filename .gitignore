@@ -10,7 +10,7 @@
 /public/img/logos/*.psd
 /public/js/*
 /public/mix-manifest.json
-/public/video/*
+/public/videos/*
 /storage/*.key
 /vendor
 /.idea

@@ -39,7 +39,8 @@ Route::get('/{home?}', function() {
             'banners' => asset('img/banners'),
             'jumbotron' => asset('img/jumbotron'),
             'logos' => asset('img/logos'),
-            'posters' => asset('img/posters')
+            'posters' => asset('img/posters'),
+            'videos' => asset('videos')
         ]
     ];
 

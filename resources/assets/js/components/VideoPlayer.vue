@@ -45,6 +45,8 @@
 
 <script>
     export default {
+        props: ['paths'],
+
         data() {
             return {
                 drive: '',
@@ -68,9 +70,10 @@
             src: function() {
                 if(this.filename !== '') {
                     return (
-                        '/video/' + this.drive +
-                        '/' + this.media_type +
-                        's/' + this.filename
+                        this.paths.videos +
+                            '/' + this.drive +
+                            '/' + this.media_type +
+                            's/' + this.filename
                     );
                 }
 

@@ -20,7 +20,7 @@ class CreateMediaTable extends Migration
 			$table->string('summary', 4000);
             $table->string('notes')->nullable();
             $table->string('poster')->default('missing-poster.jpg');
-            $table->string('jumbotron')->default(null);
+            $table->string('jumbotron')->nullable();
             $table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

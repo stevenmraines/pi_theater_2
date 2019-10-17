@@ -17,7 +17,7 @@ class CreateCollectionsTable extends Migration
             $table->increments('id');
 			$table->string('name');
 			$table->string('menu_image');
-			$table->string('jumbotron_image');
+			$table->string('jumbotron_image')->nullable();
             $table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

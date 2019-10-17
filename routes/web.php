@@ -27,6 +27,10 @@ Route::get('/{home?}', function() {
             ->get();
 
     $initialState = [
+        'algoliaKeys' => (object) [
+            'appId' => config('app.algolia_app_id'),
+            'apiKey' => config('app.algolia_api_key')
+        ],
         'genres' => App\Genre::all(),
         'collections' => App\Collection::all(),
         'recentEpisodes' => App\Media::recentEpisodes(),

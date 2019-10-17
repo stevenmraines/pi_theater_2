@@ -24,8 +24,8 @@
             <div>
                 <div class="fluid-modal-inner-poster-container mx-0" v-if="query !== ''">
                     <ais-index
-                        app-id="JUG06PFXKY"
-                        api-key="713be18b5c43b5766349f0a144622559"
+                        v-bind:app-id="keys.appId"
+                        v-bind:api-key="keys.apiKey"
                         index-name="media"
                         v-bind:query="query"
                     >
@@ -49,7 +49,7 @@
 
 <script>
     export default {
-        props: ['contents', 'paths'],
+        props: ['contents', 'paths', 'keys'],
 
         data() {
             return {

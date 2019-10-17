@@ -27,7 +27,10 @@
     v-bind:paths="paths"
 ></fluid-modal>
 
-<search-modal v-bind:paths="paths"></search-modal>
+<search-modal
+    v-bind:paths="paths"
+    v-bind:keys="algoliaKeys"
+></search-modal>
 
 <watchlist-modal
     v-bind:user="user"

@@ -54,6 +54,8 @@ const app = new Vue({
 	el: '#vue-wrapper',
 
 	data: {
+		algoliaKeys: window.__INITIAL_STATE__.algoliaKeys,
+
 		collection: {},
 		collections: window.__INITIAL_STATE__.collections,
 

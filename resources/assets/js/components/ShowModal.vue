@@ -23,7 +23,7 @@
                         <img
                             id="show-modal-poster"
                             class="modal-poster mx-auto"
-                            v-bind:src="poster"
+                            v-bind:src="paths.posters + '/' + poster"
                         />
 
                         <span id="show-modal-info" class="card mt-4 mt-lg-0 ml-lg-4">
@@ -112,6 +112,8 @@
 
 <script>
     export default {
+        props: ['paths'],
+
         data() {
             return {
                 currentSeason: 1,

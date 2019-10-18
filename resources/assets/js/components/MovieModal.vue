@@ -18,7 +18,7 @@
 						<img
 							id="movie-modal-poster"
 							class="modal-poster mx-auto"
-							v-bind:src="poster"
+							v-bind:src="paths.posters + '/' + poster"
 						/>
 						<span id="movie-modal-info" class="card mt-4 mt-lg-0 ml-lg-4">
 							<div class="card-body">
@@ -73,6 +73,7 @@
 			'summary',
 			'notes',
 			'release',
+			'paths',
 			'poster',
 			'genres',
 			'user',

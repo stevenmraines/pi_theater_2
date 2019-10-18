@@ -4,12 +4,14 @@
     v-bind:summary="movieModal.summary"
     v-bind:notes="movieModal.notes"
     v-bind:release="movieModal.release"
-    v-bind:poster="paths.posters + '/' + movieModal.poster"
+    v-bind:paths="paths"
+    v-bind:poster="movieModal.poster"
     v-bind:genres="movieModal.genres"
     v-bind:user="user"
 ></movie-modal>
 
-<show-modal></show-modal>
+<!-- TODO should show-modal work like movie-modal by binding all the data? -->
+<show-modal v-bind:paths="paths"></show-modal>
 
 <collection-modal
     v-bind:collection="collection"

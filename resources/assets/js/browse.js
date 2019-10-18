@@ -76,7 +76,7 @@ const app = new Vue({
 			title: '',
 			summary: '',
 			notes: null,
-			poster: window.__INITIAL_STATE__.paths.posters + '/missing-poster.jpg',
+			poster: 'missing-poster.jpg',
 			genres: [],
 			release: [],
 		},
@@ -94,7 +94,7 @@ const app = new Vue({
             title: '',
             summary: '',
             notes: null,
-            poster: window.__INITIAL_STATE__.paths.posters + '/missing-poster.jpg',
+            poster: 'missing-poster.jpg',
             episodes: [],
             genres: [],
 			seasons: [],
@@ -123,7 +123,6 @@ const app = new Vue({
 		Event.listen('removeFromWatchlist', this.removeFromWatchlist);
 		Event.listen('setVideo', this.setVideo);
 		Event.listen('updateHistory', this.updateHistory);
-        console.log(this.paths);
 	},
 
 	methods: {

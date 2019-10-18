@@ -1,16 +1,5 @@
 /node_modules
-/public/css/app.css
-/public/css/bootstrap_pi.css
-/public/hot
-/public/storage
-/public/img/posters
-/public/img/*.psd
-/public/img/banners/*.psd
-/public/img/jumbotron/*
-/public/img/logos/*.psd
-/public/js/*
-/public/mix-manifest.json
-/public/videos/*
+/public/
 /storage/*.key
 /vendor
 /.idea

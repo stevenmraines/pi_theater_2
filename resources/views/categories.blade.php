@@ -11,7 +11,7 @@
       class="banner img-fluid"
     />
   </div>
-  <div class="col-xs-12 col-md-6 col-lg-4" v-on:click="fluidModalRecentGenre(20)">
+  <div class="col-xs-12 col-md-6 col-lg-4" v-on:click="fluidModalRecentGenre(21)">
     <img
       src="{{ asset('img/banners/new-sci-fi-banner.jpg') }}"
       class="banner img-fluid"

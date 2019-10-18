@@ -281,7 +281,6 @@ const app = new Vue({
 				var event = 'display' + modal.charAt(0).toUpperCase() + modal.substring(1);
 				if(response.data.media_type === 'show') {
 					response.data.user = self.user;
-                    // response.data.poster = self.paths.posters + '/' + response.data.poster;
 					Event.trigger('setShow', response.data);
 				}
 				Event.trigger(event, response.data);

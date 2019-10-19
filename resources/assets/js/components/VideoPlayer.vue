@@ -21,6 +21,12 @@
                     ref="video"
                     v-if="showVideoPlayer && src !== ''"
                     v-bind:class="{ hidden: !loaded }"
+                    v-bind:style="
+                        {
+                            'max-width': maxWidth + 'px',
+                            'max-height': maxHeight + 'px'
+                        }
+                    "
                     controls
                     autoplay
                 >
@@ -54,6 +60,8 @@
                 episode_id: 0,
                 filename: '',
                 loaded: false,
+                maxWidth: 300,
+                maxHeight: 200,
                 media_id: 0,
                 media_type: '',
                 progress: 0,
@@ -201,9 +209,12 @@
                     return;
                 }
 
+                this.progress = 0;
                 this.showVideoPlayer = true;
                 this.loaded = false;
                 this.userLoggedIn = data.userLoggedIn;
+                this.maxWidth = window.innerWidth;
+                this.maxHeight = window.innerHeight;
 
                 var self = this;
 

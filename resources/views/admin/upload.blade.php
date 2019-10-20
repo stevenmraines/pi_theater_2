@@ -14,8 +14,8 @@
     					<div class="form-group">
     						<label for="drive">Hard drive</label>
     						<select id="drive" class="form-control ml-3" v-model="currentDrive">
-    							<option value="" selected>Please Select...</option>
-    							<option v-for="drive in drives" v-bind:value="drive.name">
+    							<option v-bind:key="0" v-bind:value="0" selected>Please Select...</option>
+    							<option v-for="drive in drives" v-bind:key="drive.id" v-bind:value="drive.id">
                                     @{{ drive.name }}
                                 </option>
     						</select>
@@ -24,7 +24,7 @@
     			</div>
     		</div>
 
-    		<div class="row" v-if="currentDrive != ''">
+    		{{-- <div class="row" v-if="currentDrive != {}">
     			<div class="col">
     				<h3>
     					@{{ newUploadsMessage }}
@@ -113,7 +113,7 @@
     						The poster image is required
     					</div>
     					<label for="genres">Genres</label>
-    					{{-- <div v-for="g in genre_count"> --}}
+    					{{-- <div v-for="g in genre_count"> --}/}
     						<form name="genre_form">
     							<div class="input-group mb-3">
     								<div class="input-group-prepend">
@@ -143,9 +143,9 @@
     								</div>
     							</div>
     						</form>
-    					{{-- </div> --}}
+    					{{-- </div> --}/}
     					<label for="movie-collections">Collections</label>
-    					{{-- <div ng-repeat="c in collection_count"> --}}
+    					{{-- <div ng-repeat="c in collection_count"> --}/}
     						<form name="col_form">
     							<div class="input-group mb-3">
     								<div class="input-group-prepend">
@@ -170,7 +170,7 @@
     								</div>
     							</div>
     						</form>
-    					{{-- </div> --}}
+    					{{-- </div> --}/}
     					<div class="form-group d-flex justify-content-center">
     						<button class="btn btn-secondary ml-auto">
                                 &larr; Prev
@@ -187,7 +187,7 @@
     					</div>
     				</form>
     			</div>
-    		</div>
+    		</div> --}}
 
     		{{-- <div class="row" v-if="false">
     			<div class="col">

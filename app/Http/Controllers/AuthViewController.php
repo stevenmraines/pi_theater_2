@@ -16,7 +16,7 @@ class AuthViewController extends Controller
 
     public function upload() {
         $initialState = [
-            'pending' => \App\Media::pending(),
+            'pending' => \App\Drive::pending(),
             'genres' => \App\Genre::all(),
             'collections' => \App\Collection::all(),
             'drives' => \App\Drive::all()

@@ -21,16 +21,11 @@
                     ref="video"
                     v-if="showVideoPlayer && src !== ''"
                     v-bind:class="{ hidden: !loaded }"
-                    v-bind:style="
-                        {
-                            'max-width': maxWidth + 'px',
-                            'max-height': maxHeight + 'px'
-                        }
-                    "
+                    v-bind:style="{ 'max-width': maxWidth + 'px', 'max-height': maxHeight + 'px' }"
                     controls
                     autoplay
                 >
-                    <source v-bind:src="src" v-bind:type="videoType"></source>
+                    <source v-bind:src="src" v-bind:type="videoType" />
                 </video>
             </div>
         </div>

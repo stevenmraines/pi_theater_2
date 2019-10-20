@@ -55,4 +55,4 @@ Route::get('/{home?}', function() {
 Route::get('/upload', 'AuthViewController@upload')->name('upload');
 
 Route::post('/login', 'Auth\LoginController@login');
-Route::post('/register', 'Auth\LoginController@register');
+Route::post('/register', 'Auth\RegisterController@register');

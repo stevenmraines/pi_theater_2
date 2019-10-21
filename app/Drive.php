@@ -16,61 +16,69 @@ class Drive extends Model
     }
 
     public static function pending() {
-        return [
-            'movies' => self::getMoviesFromDrives(),
-            'episodes' => self::getEpisodesFromDrives()
-        ];
+        // Get all current drives
+        $drives = Drive::all();
+
+        $pending = [];
+
+        // Get pending files for each drive
+        $drives->each(function($drive) use(&$pending) {
+            $pending[$drive['id']] = [
+                'movies' => self::getMoviesFromDrive($drive['id']),
+                'episodes' => self::getEpisodesFromDrive($drive['id'])
+            ];
+        });
+
+        return $pending;
     }
 
-    private static function getMoviesFromDrives() {
+    private static function getMoviesFromDrive($driveId) {
         // Get movie filenames present in database
         $existingMovies =
             DB
                 ::table('drive_media')
                 ->select('filename')
+                ->where('drive_id', '=', $driveId)
                 ->get()
                 ->pluck('filename')
                 ->toArray();
 
-        return self::getNewVideos('movies', $existingMovies);
+        return self::getNewVideos($driveId, 'movies', $existingMovies);
     }
 
-    private static function getEpisodesFromDrives() {
+    private static function getEpisodesFromDrive($driveId) {
         // Get movie filenames present in database
         $existingEpisodes =
             DB
                 ::table('drive_episode')
                 ->select('filename')
+                ->where('drive_id', '=', $driveId)
                 ->get()
                 ->pluck('filename')
                 ->toArray();
 
-        return self::getNewVideos('shows', $existingEpisodes);
+        return self::getNewVideos($driveId, 'shows', $existingEpisodes);
     }
 
-    private static function getNewVideos($directory, $filesToExclude) {
+    private static function getNewVideos($driveId, $directory, $filesToExclude) {
         $files = [];
 
-        // Get all current drives
-        $drives = Drive::all();
+        $drive = self::find($driveId);
 
-        // Loop through them to get movie filenames from each disk
-        foreach($drives as $drive) {
-            // Get the files on the current disk
-            $items = new \DirectoryIterator(
-                public_path() . '/videos/' . $drive['name'] . '/' . $directory
-            );
+        // Get the files on the selected drive
+        $items = new \DirectoryIterator(
+            public_path() . '/videos/' . $drive['name'] . '/' . $directory
+        );
 
-            // Iterate over the files
-            foreach($items as $item) {
-                // Skip directories
-                if($item->isDot() || $item->isDir()) {
-                    continue;
-                }
+        // Iterate over the files
+        foreach($items as $item) {
+            // Skip directories
+            if($item->isDot() || $item->isDir()) {
+                continue;
+            }
 
-                if(!in_array($item->getFilename(), $files)) {
-                    $files[] = $item->getFilename();
-                }
+            if(!in_array($item->getFilename(), $files)) {
+                $files[] = $item->getFilename();
             }
         }
 

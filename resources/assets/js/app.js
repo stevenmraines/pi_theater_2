@@ -1,3 +1,9 @@
+/*
+    TODO pull out some of this stuff into browse.js,
+     instantsearch and these components aren't needed
+     for the upload content page.
+ */
+
 import axios from 'axios';
 import InstantSearch from 'vue-instantsearch';
 

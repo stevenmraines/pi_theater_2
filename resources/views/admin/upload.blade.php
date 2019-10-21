@@ -7,7 +7,10 @@
 
     @else
 
+		{{-- Main Vue container --}}
         <div id="app" class="container mt-3">
+
+			{{-- Drive selection row --}}
     		<div class="row">
     			<div class="col">
     				<form class="form-inline" novalidate>
@@ -24,82 +27,78 @@
     			</div>
     		</div>
 
-    		{{-- <div class="row" v-if="currentDrive != {}">
+			{{-- Total new uploads --}}
+			<div class="row" v-if="currentDrive > 0">
+				<div class="col">
+					<h3>
+						@{{ newUploadsMessage }}
+					</h3><hr class="mt-0" />
+				</div>
+			</div>
+
+			{{-- Movie row --}}
+    		<div class="row" v-if="currentDrive > 0 && movieCount > 0">
     			<div class="col">
-    				<h3>
-    					@{{ newUploadsMessage }}
-    				</h3><hr class="mt-0" />
     				<form novalidate>
     					<div class="form-group">
-    						<label for="file-or-folder-name">File or Folder Name</label>
+							{{-- TODO This should have a dropdown to select from --}}
+    						<label for="filename">Filename</label>
     						<input
-                                id="file-or-folder-name"
+                                id="filename"
                                 class="form-control font-italic text-muted border-secondary"
-                                v-bind:value=""
+                                v-model="currentMovie.filename"
                                 disabled
                             />
     					</div>
+
     					<div class="form-group">
     						<label for="title">Title</label>
     						<input
                                 id="title"
                                 class="form-control"
                                 name="title"
-                                v-model=""
+                                v-model="currentMovie.title"
                                 required
                             />
     					</div>
+
     					<div class="text-danger mb-3" v-if="false">
     						The title is required
     					</div>
+
     					<div class="form-group">
-    						<label for="year-start">Year Start
+    						<label for="year-released">Year Released
                                 <a
-                                    v-bind:href="'https://www.google.com/search?q=' + current_movie.title + '+year+released'"
+                                    v-bind:href="'https://www.google.com/search?q=' + currentMovie.title + '+year+released'"
                                     target="_blank"
                                 >(search)</a>
                             </label>
     						<input
                                 type="number"
-                                id="year-start"
+                                id="year-released"
                                 class="form-control"
                                 min="1900"
                                 max="{{ date('Y') }}"
-                                v-model="current_movie.year_start"
+                                v-model="currentMovie.yearReleased"
                                 required
                             />
     					</div>
-    					<div class="form-group">
-    						<label for="year-end">Year End
-                                <a
-                                    v-bind:href="'https://www.google.com/search?q=' + current_movie.title + '+year+released'"
-                                    target="_blank"
-                                >(search)</a>
-                            </label>
-    						<input
-                                type="number"
-                                id="year-end"
-                                class="form-control"
-                                min="1900"
-                                max="{{ date('Y') }}"
-                                v-model="current_movie.year_end"
-                                required
-                            />
-    					</div>
+
     					<div class="form-group">
     						<label for="movie-summary">Summary</label>
     						<textarea
                                 id="movie-summary"
                                 class="form-control"
                                 rows="4"
-                                v-model="current_movie.summary"
+                                v-model="currentMovie.summary"
                                 required
                             ></textarea>
     					</div>
+
     					<div class="form-group">
     						<label for="movie-poster">Poster Image
                                 <a
-                                    v-bind:href="'https://www.google.com/search?q=' + current_movie.title + '+poster&tbm=isch'"
+                                    v-bind:href="'https://www.google.com/search?q=' + currentMovie.title + '+poster&tbm=isch'"
                                     target="_blank"
                                 >(search)</a>
                             </label>
@@ -109,11 +108,13 @@
                                 class="form-control-file"
                             />
     					</div>
+
     					<div class="text-danger mb-3" v-if="false">
     						The poster image is required
     					</div>
+
     					<label for="genres">Genres</label>
-    					{{-- <div v-for="g in genre_count"> --}/}
+    					<div v-for="g in currentMovie.genres">
     						<form name="genre_form">
     							<div class="input-group mb-3">
     								<div class="input-group-prepend">
@@ -121,7 +122,9 @@
                                             type="button"
                                             class="btn btn-primary dropdown-toggle"
                                             data-toggle="dropdown"
-                                        >Options</button>
+                                        >
+											Options
+										</button>
     									<div class="dropdown-menu">
     										<a
                                                 href="#"
@@ -136,16 +139,21 @@
                                         id="genres"
                                         class="form-control"
                                         name="genres"
-                                        v-model="current_movie.genres"
+										v-bind:value="g.name"
                                     />
     								<div class="input-group-append">
-    									<button class="btn btn-primary" type="button">+</button>
+    									<button
+											class="btn btn-primary"
+											type="button"
+											v-on:click="addCurrentMovieGenre()"
+										>+</button>
     								</div>
     							</div>
     						</form>
-    					{{-- </div> --}/}
+    					</div>
+
     					<label for="movie-collections">Collections</label>
-    					{{-- <div ng-repeat="c in collection_count"> --}/}
+    					<div v-for="c in currentMovie.collections">
     						<form name="col_form">
     							<div class="input-group mb-3">
     								<div class="input-group-prepend">
@@ -153,7 +161,9 @@
                                             type="button"
                                             class="btn btn-primary dropdown-toggle"
                                             data-toggle="dropdown"
-                                        >Options</button>
+                                        >
+											Options
+										</button>
     									<div class="dropdown-menu">
     										<a
                                                 href="#"
@@ -164,13 +174,23 @@
                                             </a>
     									</div>
     								</div>
-    								<input type="text" id="movie-collections" class="form-control">
+    								<input
+										type="text"
+										id="movie-collections"
+										class="form-control"
+										v-bind:value="c.name"
+									/>
     								<div class="input-group-append">
-    									<button class="btn btn-primary" type="button" ng-click="add_to_array(collection_count)">+</button>
+    									<button
+											class="btn btn-primary"
+											type="button"
+											v-on:click="addCurrentMovieCollection()"
+										>+</button>
     								</div>
     							</div>
     						</form>
-    					{{-- </div> --}/}
+    					</div>
+
     					<div class="form-group d-flex justify-content-center">
     						<button class="btn btn-secondary ml-auto">
                                 &larr; Prev
@@ -182,36 +202,37 @@
                                 Next &rarr;
                             </button>
     					</div>
+
     					<div class="mb-3 d-xs-block d-md-none font-italic text-muted text-center">
-    						(@{{ current_movie.video_file }})
+    						(@{{ currentMovie.filename }})
     					</div>
     				</form>
     			</div>
-    		</div> --}}
+    		</div>  {{-- end Movie row --}}
 
-    		{{-- <div class="row" v-if="false">
-    			<div class="col">
-    				<h3>
-    					{{ shows.length > 0 ? shows.length : 'No' }} New Show{{ shows.length === 1 ? '' : 's' }}
-    				</h3><hr class="mt-0" />
-    				<form name="show_form" ng-show="shows.length > 0" novalidate>
+			{{-- <div class="row" v-if="false">
+				<div class="col">
+					<h3>
+						{{ shows.length > 0 ? shows.length : 'No' }} New Show{{ shows.length === 1 ? '' : 's' }}
+					</h3><hr class="mt-0" />
+					<form name="show_form" ng-show="shows.length > 0" novalidate>
 
-    				</form>
-    			</div>
-    		</div> --}}
+					</form>
+				</div>
+			</div> --}}
 
-    		{{-- <div class="row" v-if="false">
-    			<div class="col">
-    				<h3>
-    					{{ episodes.length > 0 ? episodes.length : 'No' }} New Episode{{ episodes.length === 1 ? '' : 's' }}
-    				</h3><hr class="mt-0" />
-    				<form name="episode_form" ng-show="episodes.length > 0" novalidate>
+			{{-- <div class="row" v-if="false">
+                <div class="col">
+                    <h3>
+                        {{ episodes.length > 0 ? episodes.length : 'No' }} New Episode{{ episodes.length === 1 ? '' : 's' }}
+                    </h3><hr class="mt-0" />
+                    <form name="episode_form" ng-show="episodes.length > 0" novalidate>
 
-    				</form>
-    			</div>
-    		</div> --}}
+                    </form>
+                </div>
+            </div> --}}
 
-    	</div>
+    	</div>  {{-- end #app div --}}
 
         <script>
             window.__INITIAL_STATE__ = <?= $initialState ?>;

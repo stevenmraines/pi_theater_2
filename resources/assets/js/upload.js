@@ -4,6 +4,12 @@ const app = new Vue({
     data: {
         collections: window.__INITIAL_STATE__.collections,
         currentDrive: 0,
+        currentEpisode: {
+            episodeNumber: 0,
+            season: 0,
+            show: {},
+            title: '',
+        },
         currentMovie: {
             collections: [window.__INITIAL_STATE__.collections[0]],
             filename: '',
@@ -17,6 +23,7 @@ const app = new Vue({
         drives: window.__INITIAL_STATE__.drives,
         genres: window.__INITIAL_STATE__.genres,
         pending: window.__INITIAL_STATE__.pending,
+        shows: window.__INITIAL_STATE__.shows,
     },
 
     computed: {
@@ -64,8 +71,18 @@ const app = new Vue({
                 // Set filename
                 this.currentMovie.filename = this.pending[this.currentDrive].movies[0];
 
-                // Set title
+                // TODO Set title
+            }
 
+            // Set the currentEpisode as well
+            if(typeof this.pending[this.currentDrive] !== 'undefined'
+                    && this.pending[this.currentDrive].episodes.length > 0) {
+                // Set filename
+                this.currentEpisode.filename = this.pending[this.currentDrive].episodes[0];
+
+                // TODO Set show from filename
+                // TODO Set season from filename
+                // TODO Set episode from filename
             }
         }
     },

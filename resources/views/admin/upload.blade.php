@@ -41,14 +41,18 @@
     			<div class="col">
     				<form novalidate>
     					<div class="form-group">
-							{{-- TODO This should have a dropdown to select from --}}
-    						<label for="filename">Filename</label>
-    						<input
+    						<label for="filename">File</label>
+    						<select
                                 id="filename"
-                                class="form-control font-italic text-muted border-secondary"
+                                class="form-control"
                                 v-model="currentMovie.filename"
-                                disabled
-                            />
+							>
+								<option
+									v-for="file in pending[currentDrive].movies"
+									v-bind:key="file"
+									v-bind:value="file"
+								>@{{ file }}</option>
+							</select>
     					</div>
 
     					<div class="form-group">
@@ -191,15 +195,9 @@
     						</form>
     					</div>
 
-    					<div class="form-group d-flex justify-content-center">
-    						<button class="btn btn-secondary ml-auto">
-                                &larr; Prev
-                            </button>
-    						<button class="btn btn-success mx-3" v-if="true">
+    					<div class="form-group d-flex justify-content-around mt-3">
+    						<button class="btn btn-success" v-if="true">
                                 Submit
-                            </button>
-    						<button class="btn btn-secondary mr-auto">
-                                Next &rarr;
                             </button>
     					</div>
 

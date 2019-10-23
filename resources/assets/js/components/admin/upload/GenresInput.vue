@@ -14,7 +14,7 @@
                         </button>
                         <div class="dropdown-menu">
                             <a
-                                href="#"
+                                href="javascript:void(0);"
                                 class="dropdown-item"
                                 v-for="g in allGenres"
                             >
@@ -23,7 +23,6 @@
                         </div>
                     </div>
                     <input
-                        id="genres"
                         class="form-control"
                         name="genres"
                         v-bind:value="genre.name"
@@ -32,7 +31,7 @@
                         <button
                             class="btn btn-primary"
                             type="button"
-                            v-on:click=""
+                            v-on:click="addGenre()"
                         >+</button>
                     </div>
                 </div>
@@ -47,12 +46,14 @@
 
         data() {
             return {
-                genres: []
+                genres: ['']
             };
         },
 
-        created: function() {
-            this.genres.push(this.allGenres[0]);
+        methods: {
+            addGenre() {
+                this.genres.push('');
+            },
         },
     }
 </script>

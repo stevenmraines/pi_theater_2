@@ -69,6 +69,7 @@ class Media extends Model
     }
 
     public static function spotlight() {
+        // TODO should this be ordered by created_at date instead?
         return
             self
                 ::where('jumbotron', '!=', '')

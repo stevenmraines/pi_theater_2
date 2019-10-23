@@ -28,26 +28,26 @@
     		</div>
 
 			<div v-if="currentDrive > 0">
-				<div class="card p-3" role="tablist">
+				<div class="card" role="tablist">
 					<h5 class="card-header mb-0">
-						<a data-toggle="collapse" href="#movie-form">
+						<a data-toggle="collapse" href="#movie-form" role="tab">
 							Movies (@{{ movies.length }} pending)
 						</a>
 					</h5>
 					<movie-form
-							id="movie-form"
-							class="card-body collapse mt-3"
-							role="tabpanel"
-							v-bind:collections="collections"
-							v-bind:drive="currentDrive"
-							v-bind:files="movies"
-							v-bind:genres="genres"
+						id="movie-form"
+						class="card-body collapse"
+						role="tabpanel"
+						v-bind:collections="collections"
+						v-bind:drive="currentDrive"
+						v-bind:files="movies"
+						v-bind:genres="genres"
 					></movie-form>
 				</div>
 
-				<div class="card p-3" role="tablist">
+				<div class="card" role="tablist">
 					<h5 class="card-header mb-0">
-						<a data-toggle="collapse" href="#episode-form">
+						<a data-toggle="collapse" href="#episode-form" role="tab">
 							Episodes (@{{ episodes.length }} pending)
 						</a>
 					</h5>

@@ -24,7 +24,6 @@
                     </div>
                     <input
                         type="text"
-                        id="movie-collections"
                         class="form-control"
                         v-bind:value="collection.name"
                     />
@@ -32,7 +31,7 @@
                         <button
                             class="btn btn-primary"
                             type="button"
-                            v-on:click=""
+                            v-on:click="addCollection()"
                         >+</button>
                     </div>
                 </div>
@@ -47,12 +46,14 @@
 
         data() {
             return {
-                collections: []
+                collections: ['']
             };
         },
 
-        created: function() {
-            this.collections.push(this.allCollections[0]);
+        methods: {
+            addCollection() {
+                this.collections.push('');
+            },
         },
     }
 </script>

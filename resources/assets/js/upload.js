@@ -77,4 +77,8 @@ const app = new Vue({
             this.currentDrive = this.drives[0].id;
         }
     },
+
+    methods: {
+
+    },
 });

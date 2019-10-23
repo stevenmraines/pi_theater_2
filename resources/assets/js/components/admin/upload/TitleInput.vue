@@ -19,6 +19,10 @@
 <script>
     export default {
         props: ['title'],
+
+        created() {
+
+        },
     }
 </script>
 

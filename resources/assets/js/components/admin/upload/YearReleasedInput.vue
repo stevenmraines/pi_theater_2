@@ -26,7 +26,7 @@
             return {
                 currentYear: new Date().getFullYear()
             };
-        }
+        },
     }
 </script>
 

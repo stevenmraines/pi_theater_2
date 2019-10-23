@@ -16,6 +16,8 @@
 
                 <poster-input></poster-input>
 
+                <jumbotron-input></jumbotron-input>
+
                 <genres-input
                     v-bind:allGenres="genres"
                 ></genres-input>
@@ -35,7 +37,9 @@
 </template>
 
 <script>
+    import JumbotronInput from "./JumbotronInput";
     export default {
+        components: {JumbotronInput},
         props: [
             'collections',
             'drive',

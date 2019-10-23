@@ -23,7 +23,7 @@
             return {
                 filename: this.files[0]
             };
-        }
+        },
     }
 </script>
 

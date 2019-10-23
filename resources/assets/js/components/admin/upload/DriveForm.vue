@@ -1,0 +1,128 @@
+<template>
+    <div>
+        <div class="row">
+            <div class="col">
+                <form class="form-inline" novalidate>
+                    <div class="form-group">
+                        <label for="drive">Hard drive</label>
+                        <select id="drive" class="form-control ml-3" v-model="currentDrive">
+                            <option v-bind:key="0" v-bind:value="0" selected>Please Select...</option>
+                            <option v-for="drive in drives" v-bind:key="drive.id" v-bind:value="drive.id">
+                                {{ drive.name }}
+                            </option>
+                        </select>
+                        <h3 class="d-inline mb-0 ml-3" v-if="currentDrive > 0">
+                            {{ newUploadsMessage }}
+                        </h3>
+                    </div>
+                </form><hr />
+            </div>
+        </div>
+
+        <div v-if="currentDrive > 0">
+            <div class="card" role="tablist">
+                <h5 class="card-header mb-0">
+                    <a data-toggle="collapse" href="#movie-form" role="tab">
+                        Add Movies ({{ movies.length }} pending)
+                    </a>
+                </h5>
+                <movie-form
+                    id="movie-form"
+                    class="card-body collapse"
+                    role="tabpanel"
+                    v-bind:collections="collections"
+                    v-bind:drive="currentDrive"
+                    v-bind:files="movies"
+                    v-bind:genres="genres"
+                ></movie-form>
+            </div>
+
+            <div class="card" role="tablist">
+                <h5 class="card-header mb-0">
+                    <a data-toggle="collapse" href="#episode-form" role="tab">
+                        Add Episodes ({{ episodes.length }} pending)
+                    </a>
+                </h5>
+            </div>
+
+            <div class="card" role="tablist">
+                <h5 class="card-header mb-0">
+                    <a data-toggle="collapse" href="#show-form" role="tab">
+                        Add Shows
+                    </a>
+                </h5>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        props: ['initialState'],
+
+        data() {
+            return {
+                collections: this.initialState.collections,
+                currentDrive: 0,
+                drives: this.initialState.drives,
+                genres: this.initialState.genres,
+                pending: this.initialState.pending,
+                shows: this.initialState.shows,
+            };
+        },
+
+        computed: {
+            episodes: function() {
+                if(this.currentDrive <= 0
+                        || typeof this.pending[this.currentDrive] === 'undefined') {
+                    return [];
+                }
+
+                return this.pending[this.currentDrive].episodes;
+            },
+
+            movies: function() {
+                if(this.currentDrive <= 0
+                        || typeof this.pending[this.currentDrive] === 'undefined') {
+                    return [];
+                }
+
+                return this.pending[this.currentDrive].movies;
+            },
+
+            newUploadsMessage: function() {
+                if(this.currentDrive <= 0
+                        || typeof this.pending[this.currentDrive] === 'undefined') {
+                    return '';
+                }
+
+                var newVideos = 0;
+
+                if(this.pending[this.currentDrive].movies.length > 0) {
+                    newVideos += this.pending[this.currentDrive].movies.length;
+                }
+
+                if(this.pending[this.currentDrive].episodes.length > 0) {
+                    newVideos += this.pending[this.currentDrive].episodes.length;
+                }
+
+                var message = (newVideos > 0 ? newVideos : 'No')
+                    + ' New Upload'
+                    + (newVideos === 1 ? '' : 's');
+
+                return message;
+            },
+        },
+
+        created() {
+            if(this.drives.length > 0) {
+                // Set the currentDrive
+                this.currentDrive = this.drives[0].id;
+            }
+        },
+    }
+</script>
+
+<style scoped>
+
+</style>

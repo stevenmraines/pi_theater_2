@@ -37,9 +37,7 @@
 </template>
 
 <script>
-    import JumbotronInput from "./JumbotronInput";
     export default {
-        components: {JumbotronInput},
         props: [
             'collections',
             'drive',

@@ -1,11 +1,15 @@
-@extends('admin.master')
+@extends('admin.upload.head')
 @section('content')
 
     @if(!auth()->check())
 
-        <?php die('You must be logged in to view this page'); ?>
+		<?php redirect('/login'); ?>
 
-    @else
+    @elseif(!auth()->user()->admin)
+
+		<?php abort(403, 'You do not have admin access') ?>
+
+	@else
 
         <div id="app" class="container mt-3">
     		<div class="row">

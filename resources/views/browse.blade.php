@@ -1,5 +1,4 @@
-@extends('master')
-
+@extends('head')
 @section('content')
 
 <div id="vue-wrapper" class="container-fluid px-0">

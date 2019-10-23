@@ -23,6 +23,6 @@ class AuthViewController extends Controller
             'shows' => \App\Media::where('media_type', '=', 'show')->get()
         ];
 
-        return view('admin.upload')->with('initialState', json_encode($initialState));
+        return view('admin.upload.upload')->with('initialState', json_encode($initialState));
     }
 }

@@ -11,9 +11,12 @@ Vue.component('genres-input', require('./components/admin/upload/GenresInput.vue
 Vue.component('poster-input', require('./components/admin/upload/PosterInput.vue'));
 Vue.component('summary-input', require('./components/admin/upload/SummaryInput.vue'));
 Vue.component('notes-input', require('./components/admin/upload/NotesInput.vue'));
-Vue.component('title-input', require('./components/admin/upload/TitleInput.vue'));
+Vue.component('movie-title-input', require('./components/admin/upload/MovieTitleInput.vue'));
 Vue.component('year-released-input', require('./components/admin/upload/YearReleasedInput.vue'));
 Vue.component('jumbotron-input', require('./components/admin/upload/JumbotronInput.vue'));
+Vue.component('season-input', require('./components/admin/upload/SeasonInput.vue'));
+Vue.component('episode-number-input', require('./components/admin/upload/EpisodeNumberInput.vue'));
+Vue.component('shows-input', require('./components/admin/upload/ShowsInput.vue'));
 
 /*
  * ROOT VUE INSTANCE

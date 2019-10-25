@@ -1,27 +1,28 @@
 <template>
     <div class="form-group">
-        <label for="filename">File</label>
+        <label for="file">File</label>
         <select
-            id="filename"
+            id="file"
             class="form-control"
-            v-model="filename"
+            v-model="file"
+            v-on:change="eventDispatcher.$emit('fileChange', file)"
         >
             <option
-                v-for="file in files"
-                v-bind:key="file"
-                v-bind:value="file"
-            >{{ file }}</option>
+                v-for="f in files"
+                v-bind:key="f"
+                v-bind:value="f"
+            >{{ f }}</option>
         </select>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['files'],
+        props: ['files', 'eventDispatcher'],
 
         data() {
             return {
-                filename: this.files[0]
+                file: this.files[0],
             };
         },
     }

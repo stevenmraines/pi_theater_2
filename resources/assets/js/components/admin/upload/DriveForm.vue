@@ -32,6 +32,7 @@
                     role="tabpanel"
                     v-bind:collections="collections"
                     v-bind:drive="currentDrive"
+                    v-bind:driveEventDispatcher="eventDispatcher"
                     v-bind:files="movies"
                     v-bind:genres="genres"
                 ></movie-form>
@@ -43,6 +44,14 @@
                         Add Episodes ({{ episodes.length }} pending)
                     </a>
                 </h5>
+<!--                <episode-form-->
+<!--                    id="episode-form"-->
+<!--                    class="card-body collapse"-->
+<!--                    role="tabpanel"-->
+<!--                    v-bind:drive="currentDrive"-->
+<!--                    v-bind:files="episodes"-->
+<!--                    v-bind:shows="shows"-->
+<!--                ></episode-form>-->
             </div>
 
             <div class="card" role="tablist">
@@ -65,6 +74,7 @@
                 collections: this.initialState.collections,
                 currentDrive: 0,
                 drives: this.initialState.drives,
+                eventDispatcher: new Vue({}),
                 genres: this.initialState.genres,
                 pending: this.initialState.pending,
                 shows: this.initialState.shows,
@@ -118,7 +128,26 @@
             if(this.drives.length > 0) {
                 // Set the currentDrive
                 this.currentDrive = this.drives[0].id;
+
+                // Listen for child form events
+                this.eventDispatcher.$on('movieSubmit', this.movieSubmit);
+                this.eventDispatcher.$on('episodeSubmit', this.episodeSubmit);
+                this.eventDispatcher.$on('showSubmit', this.showSubmit);
             }
+        },
+
+        methods: {
+            movieSubmit() {
+
+            },
+
+            episodeSubmit() {
+
+            },
+
+            showSubmit() {
+
+            },
         },
     }
 </script>

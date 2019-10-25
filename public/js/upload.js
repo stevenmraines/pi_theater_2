@@ -511,9 +511,12 @@ Vue.component('genres-input', __webpack_require__(448));
 Vue.component('poster-input', __webpack_require__(453));
 Vue.component('summary-input', __webpack_require__(458));
 Vue.component('notes-input', __webpack_require__(463));
-Vue.component('title-input', __webpack_require__(468));
+Vue.component('movie-title-input', __webpack_require__(468));
 Vue.component('year-released-input', __webpack_require__(473));
 Vue.component('jumbotron-input', __webpack_require__(478));
+Vue.component('season-input', __webpack_require__(483));
+Vue.component('episode-number-input', __webpack_require__(488));
+Vue.component('shows-input', __webpack_require__(493));
 
 /*
  * ROOT VUE INSTANCE
@@ -615,7 +618,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -685,6 +688,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['initialState'],
@@ -694,6 +706,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             collections: this.initialState.collections,
             currentDrive: 0,
             drives: this.initialState.drives,
+            eventDispatcher: new Vue({}),
             genres: this.initialState.genres,
             pending: this.initialState.pending,
             shows: this.initialState.shows
@@ -743,7 +756,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         if (this.drives.length > 0) {
             // Set the currentDrive
             this.currentDrive = this.drives[0].id;
+
+            // Listen for child form events
+            this.eventDispatcher.$on('movieSubmit', this.movieSubmit);
+            this.eventDispatcher.$on('episodeSubmit', this.episodeSubmit);
+            this.eventDispatcher.$on('showSubmit', this.showSubmit);
         }
+    },
+
+
+    methods: {
+        movieSubmit: function movieSubmit() {},
+        episodeSubmit: function episodeSubmit() {},
+        showSubmit: function showSubmit() {}
     }
 });
 
@@ -805,9 +830,9 @@ var render = function() {
                     { key: drive.id, domProps: { value: drive.id } },
                     [
                       _vm._v(
-                        "\n                            " +
+                        "\n                                " +
                           _vm._s(drive.name) +
-                          "\n                        "
+                          "\n                            "
                       )
                     ]
                   )
@@ -819,9 +844,9 @@ var render = function() {
             _vm.currentDrive > 0
               ? _c("h3", { staticClass: "d-inline mb-0 ml-3" }, [
                   _vm._v(
-                    "\n                        " +
+                    "\n                            " +
                       _vm._s(_vm.newUploadsMessage) +
-                      "\n                    "
+                      "\n                        "
                   )
                 ])
               : _vm._e()
@@ -849,9 +874,9 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                    Add Movies (" +
+                      "\n                        Add Movies (" +
                         _vm._s(_vm.movies.length) +
-                        " pending)\n                "
+                        " pending)\n                    "
                     )
                   ]
                 )
@@ -864,6 +889,7 @@ var render = function() {
                   role: "tabpanel",
                   collections: _vm.collections,
                   drive: _vm.currentDrive,
+                  driveEventDispatcher: _vm.eventDispatcher,
                   files: _vm.movies,
                   genres: _vm.genres
                 }
@@ -885,9 +911,9 @@ var render = function() {
                 },
                 [
                   _vm._v(
-                    "\n                    Add Episodes (" +
+                    "\n                        Add Episodes (" +
                       _vm._s(_vm.episodes.length) +
-                      " pending)\n                "
+                      " pending)\n                    "
                   )
                 ]
               )
@@ -915,7 +941,7 @@ var staticRenderFns = [
               role: "tab"
             }
           },
-          [_vm._v("\n                    Add Shows\n                ")]
+          [_vm._v("\n                        Add Shows\n                    ")]
         )
       ])
     ])
@@ -1019,7 +1045,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1069,9 +1095,54 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['collections', 'drive', 'files', 'genres']
+    props: ['collections', 'drive', 'driveEventDispatcher', 'files', 'genres'],
+
+    data: function data() {
+        return {
+            currentFile: this.files[0],
+            eventDispatcher: new Vue({}),
+            movies: []
+        };
+    },
+    created: function created() {
+        // Register events
+        this.eventDispatcher.$on('fileChange', this.fileChange);
+        this.eventDispatcher.$on('titleChange', this.titleChange);
+
+        // Initialize movies array
+        for (var i = 0; i < this.files.length; i++) {
+            this.movies[this.files[i]] = {
+                collections: [],
+                file: this.files[i],
+                genres: [],
+                jumbotron: '',
+                notes: '',
+                poster: '',
+                summary: '',
+                title: '',
+                yearReleased: 0
+            };
+        }
+    },
+
+
+    methods: {
+        fileChange: function fileChange(file) {
+            this.currentFile = file;
+        },
+        submit: function submit() {
+            driveEventDispatcher.$emit('movieSubmit');
+        },
+        titleChange: function titleChange(title) {
+            this.movies[this.currentFile].title = title;
+        }
+    }
 });
 
 /***/ }),
@@ -1090,9 +1161,19 @@ var render = function() {
             "form",
             { attrs: { novalidate: "" } },
             [
-              _c("file-input", { attrs: { files: _vm.files } }),
+              _c("file-input", {
+                attrs: {
+                  files: _vm.files,
+                  eventDispatcher: _vm.eventDispatcher
+                }
+              }),
               _vm._v(" "),
-              _c("title-input"),
+              _c("movie-title-input", {
+                attrs: {
+                  file: _vm.currentFile,
+                  eventDispatcher: _vm.eventDispatcher
+                }
+              }),
               _vm._v(" "),
               _c("year-released-input"),
               _vm._v(" "),
@@ -1118,9 +1199,18 @@ var render = function() {
                 },
                 [
                   true
-                    ? _c("button", { staticClass: "btn btn-success" }, [
-                        _vm._v("\n                    Submit\n                ")
-                      ])
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success",
+                          on: { click: _vm.submit }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Submit\n                "
+                          )
+                        ]
+                      )
                     : _vm._e()
                 ]
               )
@@ -1230,7 +1320,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1246,8 +1336,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['drive', 'files', 'shows']
+});
 
 /***/ }),
 
@@ -1258,7 +1376,45 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _vm.drive > 0 && _vm.files.length > 0
+    ? _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "form",
+            { attrs: { novalidate: "" } },
+            [
+              _c("file-input", { attrs: { files: _vm.files } }),
+              _vm._v(" "),
+              _c("shows-input", { attrs: { shows: _vm.shows } }),
+              _vm._v(" "),
+              _c("season-input"),
+              _vm._v(" "),
+              _c("episode-number-input"),
+              _vm._v(" "),
+              _c("episode-title-input"),
+              _vm._v(" "),
+              _c("summary-input"),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "form-group d-flex justify-content-around mt-3 mb-0"
+                },
+                [
+                  true
+                    ? _c("button", { staticClass: "btn btn-success" }, [
+                        _vm._v("\n                    Submit\n                ")
+                      ])
+                    : _vm._e()
+                ]
+              )
+            ],
+            1
+          )
+        ])
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -1744,7 +1900,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1773,13 +1929,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['files'],
+    props: ['files', 'eventDispatcher'],
 
     data: function data() {
         return {
-            filename: this.files[0]
+            file: this.files[0]
         };
     }
 });
@@ -1794,7 +1951,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "form-group" }, [
-    _c("label", { attrs: { for: "filename" } }, [_vm._v("File")]),
+    _c("label", { attrs: { for: "file" } }, [_vm._v("File")]),
     _vm._v(" "),
     _c(
       "select",
@@ -1803,31 +1960,36 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.filename,
-            expression: "filename"
+            value: _vm.file,
+            expression: "file"
           }
         ],
         staticClass: "form-control",
-        attrs: { id: "filename" },
+        attrs: { id: "file" },
         on: {
-          change: function($event) {
-            var $$selectedVal = Array.prototype.filter
-              .call($event.target.options, function(o) {
-                return o.selected
-              })
-              .map(function(o) {
-                var val = "_value" in o ? o._value : o.value
-                return val
-              })
-            _vm.filename = $event.target.multiple
-              ? $$selectedVal
-              : $$selectedVal[0]
-          }
+          change: [
+            function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.file = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            },
+            function($event) {
+              _vm.eventDispatcher.$emit("fileChange", _vm.file)
+            }
+          ]
         }
       },
-      _vm._l(_vm.files, function(file) {
-        return _c("option", { key: file, domProps: { value: file } }, [
-          _vm._v(_vm._s(file))
+      _vm._l(_vm.files, function(f) {
+        return _c("option", { key: f, domProps: { value: f } }, [
+          _vm._v(_vm._s(f))
         ])
       })
     )
@@ -2634,7 +2796,7 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-ce45768e"
+var __vue_scopeId__ = "data-v-7a88706a"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -2645,7 +2807,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/admin/upload/TitleInput.vue"
+Component.options.__file = "resources/assets/js/components/admin/upload/MovieTitleInput.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -2654,9 +2816,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-ce45768e", Component.options)
+    hotAPI.createRecord("data-v-7a88706a", Component.options)
   } else {
-    hotAPI.reload("data-v-ce45768e", Component.options)
+    hotAPI.reload("data-v-7a88706a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -2678,13 +2840,13 @@ var content = __webpack_require__(470);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("63904d41", content, false, {});
+var update = __webpack_require__(3)("ada92484", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-ce45768e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TitleInput.vue", function() {
-     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-ce45768e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TitleInput.vue");
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7a88706a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MovieTitleInput.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7a88706a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MovieTitleInput.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -2703,7 +2865,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2733,11 +2895,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['title'],
+    props: ['eventDispatcher', 'file'],
 
-    created: function created() {}
+    data: function data() {
+        return {
+            title: ''
+        };
+    },
+
+
+    computed: {
+        placeholder: function placeholder() {
+            var filename = this.file.substr(0, this.file.length - 4);
+
+            var tokens = filename.split('-');
+
+            var exceptions = ['a', 'an', 'for', 'in', 'of', 'on', 'the'];
+
+            for (var i = 0; i < tokens.length; i++) {
+                if (exceptions.indexOf(tokens[i].toLowerCase()) === -1) {
+                    tokens[i] = tokens[i].substr(0, 1).toUpperCase() + tokens[i].substr(1);
+                }
+            }
+
+            return tokens.join(' ');
+        }
+    },
+
+    created: function created() {},
+
+
+    methods: {}
 });
 
 /***/ }),
@@ -2763,7 +2954,12 @@ var render = function() {
           }
         ],
         staticClass: "form-control",
-        attrs: { id: "title", name: "title", required: "" },
+        attrs: {
+          id: "title",
+          name: "title",
+          placeholder: _vm.placeholder,
+          required: ""
+        },
         domProps: { value: _vm.title },
         on: {
           input: function($event) {
@@ -2789,7 +2985,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-ce45768e", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-7a88706a", module.exports)
   }
 }
 
@@ -3142,6 +3338,459 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-ab48bf36", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 483:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(484)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(486)
+/* template */
+var __vue_template__ = __webpack_require__(487)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-027024d0"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/upload/SeasonInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-027024d0", Component.options)
+  } else {
+    hotAPI.reload("data-v-027024d0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 484:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(485);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("57840cba", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-027024d0\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SeasonInput.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-027024d0\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SeasonInput.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 485:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 486:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+
+/***/ 487:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div")
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-027024d0", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 488:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(489)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(491)
+/* template */
+var __vue_template__ = __webpack_require__(492)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-48729f26"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/upload/EpisodeNumberInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-48729f26", Component.options)
+  } else {
+    hotAPI.reload("data-v-48729f26", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 489:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(490);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("9abea17c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-48729f26\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EpisodeNumberInput.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-48729f26\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EpisodeNumberInput.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 490:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 491:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+
+/***/ 492:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div")
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-48729f26", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 493:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(494)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(496)
+/* template */
+var __vue_template__ = __webpack_require__(497)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-63dc17bb"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/upload/ShowsInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-63dc17bb", Component.options)
+  } else {
+    hotAPI.reload("data-v-63dc17bb", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 494:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(495);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("7af930b4", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-63dc17bb\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ShowsInput.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-63dc17bb\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ShowsInput.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 495:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 496:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['shows'],
+
+    data: function data() {
+        return {
+            show: this.sortedShows[0]
+        };
+    },
+
+
+    computed: {
+        sortedShows: function sortedShows() {
+            return this.shows.sort(function (a, b) {
+                return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+            });
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 497:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: "show" } }, [_vm._v("Show")]),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.show,
+            expression: "show"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { id: "show" },
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.show = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+          }
+        }
+      },
+      _vm._l(_vm.sortedShows, function(s) {
+        return _c("option", { key: s.id, domProps: { value: s.id } }, [
+          _vm._v(_vm._s(s.title))
+        ])
+      })
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-63dc17bb", module.exports)
   }
 }
 

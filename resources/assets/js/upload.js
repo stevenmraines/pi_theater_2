@@ -17,6 +17,7 @@ Vue.component('jumbotron-input', require('./components/admin/upload/JumbotronInp
 Vue.component('season-input', require('./components/admin/upload/SeasonInput.vue'));
 Vue.component('episode-number-input', require('./components/admin/upload/EpisodeNumberInput.vue'));
 Vue.component('shows-input', require('./components/admin/upload/ShowsInput.vue'));
+Vue.component('submit-input', require('./components/admin/upload/SubmitInput.vue'));
 
 /*
  * ROOT VUE INSTANCE

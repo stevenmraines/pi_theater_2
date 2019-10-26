@@ -30,11 +30,9 @@
                     v-bind:allCollections="collections"
                 ></collections-input>
 
-                <div class="form-group d-flex justify-content-around mt-3 mb-0">
-                    <button class="btn btn-success" v-if="true" v-on:click="submit">
-                        Submit
-                    </button>
-                </div>
+                <submit-input
+                    v-bind:eventDispatcher="eventDispatcher"
+                ></submit-input>
             </form>
         </div>
     </div>
@@ -54,7 +52,7 @@
             return {
                 currentFile: this.files[0],
                 eventDispatcher: new Vue({}),
-                movies: [],
+                movies: {},
             };
         },
 
@@ -62,6 +60,7 @@
             // Register events
             this.eventDispatcher.$on('fileChange', this.fileChange);
             this.eventDispatcher.$on('titleChange', this.titleChange);
+            this.eventDispatcher.$on('submit', this.submit);
 
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
@@ -85,7 +84,8 @@
             },
 
             submit() {
-                driveEventDispatcher.$emit('movieSubmit');
+                this.driveEventDispatcher.$emit('movieSubmit');
+                delete this.movies[this.currentFile];
             },
 
             titleChange(title) {

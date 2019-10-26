@@ -175,7 +175,7 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ 2:
+/***/ 1:
 /***/ (function(module, exports) {
 
 /*
@@ -517,6 +517,7 @@ Vue.component('jumbotron-input', __webpack_require__(478));
 Vue.component('season-input', __webpack_require__(483));
 Vue.component('episode-number-input', __webpack_require__(488));
 Vue.component('shows-input', __webpack_require__(493));
+Vue.component('submit-input', __webpack_require__(498));
 
 /*
  * ROOT VUE INSTANCE
@@ -613,7 +614,7 @@ if(false) {
 /***/ 420:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -1040,7 +1041,7 @@ if(false) {
 /***/ 425:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -1097,8 +1098,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['collections', 'drive', 'driveEventDispatcher', 'files', 'genres'],
@@ -1107,13 +1106,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             currentFile: this.files[0],
             eventDispatcher: new Vue({}),
-            movies: []
+            movies: {}
         };
     },
     created: function created() {
         // Register events
         this.eventDispatcher.$on('fileChange', this.fileChange);
         this.eventDispatcher.$on('titleChange', this.titleChange);
+        this.eventDispatcher.$on('submit', this.submit);
 
         // Initialize movies array
         for (var i = 0; i < this.files.length; i++) {
@@ -1137,7 +1137,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.currentFile = file;
         },
         submit: function submit() {
-            driveEventDispatcher.$emit('movieSubmit');
+            this.driveEventDispatcher.$emit('movieSubmit');
+            delete this.movies[this.currentFile];
         },
         titleChange: function titleChange(title) {
             this.movies[this.currentFile].title = title;
@@ -1191,29 +1192,9 @@ var render = function() {
                 attrs: { allCollections: _vm.collections }
               }),
               _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "form-group d-flex justify-content-around mt-3 mb-0"
-                },
-                [
-                  true
-                    ? _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-success",
-                          on: { click: _vm.submit }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    Submit\n                "
-                          )
-                        ]
-                      )
-                    : _vm._e()
-                ]
-              )
+              _c("submit-input", {
+                attrs: { eventDispatcher: _vm.eventDispatcher }
+              })
             ],
             1
           )
@@ -1315,7 +1296,7 @@ if(false) {
 /***/ 430:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -1510,7 +1491,7 @@ if(false) {
 /***/ 435:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -1639,7 +1620,7 @@ if(false) {
 /***/ 440:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -1895,7 +1876,7 @@ if(false) {
 /***/ 445:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -2089,7 +2070,7 @@ if(false) {
 /***/ 450:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -2343,7 +2324,7 @@ if(false) {
 /***/ 455:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -2521,7 +2502,7 @@ if(false) {
 /***/ 460:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -2693,7 +2674,7 @@ if(false) {
 /***/ 465:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -2860,7 +2841,7 @@ if(false) {
 /***/ 470:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -3073,7 +3054,7 @@ if(false) {
 /***/ 475:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -3269,7 +3250,7 @@ if(false) {
 /***/ 480:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -3425,7 +3406,7 @@ if(false) {
 /***/ 485:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -3554,7 +3535,7 @@ if(false) {
 /***/ 490:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -3683,7 +3664,7 @@ if(false) {
 /***/ 495:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
@@ -3791,6 +3772,172 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-63dc17bb", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 498:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(499)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(501)
+/* template */
+var __vue_template__ = __webpack_require__(502)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-1d025b3b"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/upload/SubmitInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1d025b3b", Component.options)
+  } else {
+    hotAPI.reload("data-v-1d025b3b", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 499:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(500);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("41bd6ffe", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d025b3b\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitInput.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d025b3b\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitInput.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 500:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 501:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher'],
+
+    methods: {
+        submit: function submit() {
+            this.eventDispatcher.$emit('submit');
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 502:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "form-group d-flex justify-content-around mt-3 mb-0" },
+    [
+      true
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-success",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  $event.stopPropagation()
+                  return _vm.submit($event)
+                }
+              }
+            },
+            [_vm._v("\n        Submit\n    ")]
+          )
+        : _vm._e()
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1d025b3b", module.exports)
   }
 }
 

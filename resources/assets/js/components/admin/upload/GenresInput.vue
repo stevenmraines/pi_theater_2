@@ -9,11 +9,13 @@
                             type="button"
                             class="btn btn-primary dropdown-toggle"
                             data-toggle="dropdown"
+                            data-target="#all-genres"
                         >
                             Options
                         </button>
                         <div class="dropdown-menu">
                             <a
+                                id="all-genres"
                                 href="javascript:void(0);"
                                 class="dropdown-item"
                                 v-for="g in allGenres"
@@ -23,9 +25,11 @@
                         </div>
                     </div>
                     <input
+                        id="genres"
                         class="form-control"
                         name="genres"
-                        v-bind:value="genre.name"
+                        v-model="genre.name"
+                        v-on:change="eventDispatcher.$emit('genresChange', genres)"
                     />
                     <div class="input-group-append">
                         <button
@@ -42,17 +46,25 @@
 
 <script>
     export default {
-        props: ['allGenres'],
+        props: [
+            'allGenres',
+            'eventDispatcher',
+        ],
 
         data() {
             return {
-                genres: ['']
+                genres: [
+                    {
+                        name: '',
+                    },
+                ],
             };
         },
 
         methods: {
             addGenre() {
-                this.genres.push('');
+                this.genres.push({ name: '' });
+                this.eventDispatcher.$emit('genresChange', this.genres);
             },
         },
     }

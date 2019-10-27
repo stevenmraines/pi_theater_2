@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label for="movie-collections">Collections</label>
+        <label for="collections">Collections</label>
         <div v-for="collection in collections">
             <form name="col_form">
                 <div class="input-group mb-3">
@@ -9,11 +9,13 @@
                             type="button"
                             class="btn btn-primary dropdown-toggle"
                             data-toggle="dropdown"
+                            data-target="#all-collections"
                         >
                             Options
                         </button>
                         <div class="dropdown-menu">
                             <a
+                                id="all-collections"
                                 href="javascript:void(0);"
                                 class="dropdown-item"
                                 v-for="c in allCollections"
@@ -23,9 +25,11 @@
                         </div>
                     </div>
                     <input
+                        id="collections"
                         type="text"
                         class="form-control"
-                        v-bind:value="collection.name"
+                        v-model="collection.name"
+                        v-on:change="eventDispatcher.$emit('collectionsChange', collections)"
                     />
                     <div class="input-group-append">
                         <button
@@ -42,17 +46,25 @@
 
 <script>
     export default {
-        props: ['allCollections'],
+        props: [
+            'allCollections',
+            'eventDispatcher',
+        ],
 
         data() {
             return {
-                collections: ['']
+                collections: [
+                    {
+                        name: '',
+                    },
+                ],
             };
         },
 
         methods: {
             addCollection() {
-                this.collections.push('');
+                this.collections.push({ name: '' });
+                this.eventDispatcher.$emit('collectionsChange', this.collections);
             },
         },
     }

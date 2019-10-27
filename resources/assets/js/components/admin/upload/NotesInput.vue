@@ -6,12 +6,15 @@
             class="form-control font-italic"
             name="notes"
             v-model="notes"
+            v-on:change="eventDispatcher.$emit('notesChange', notes)"
         />
     </div>
 </template>
 
 <script>
     export default {
+        props: ['eventDispatcher'],
+
         data() {
             return {
                 notes: '',

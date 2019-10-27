@@ -1,11 +1,12 @@
 <template>
     <div class="form-group">
-        <label for="movie-summary">Summary</label>
+        <label for="summary">* Summary</label>
         <textarea
-            id="movie-summary"
+            id="summary"
             class="form-control"
             rows="4"
             v-model="summary"
+            v-on:change="eventDispatcher.$emit('summaryChange', summary)"
         ></textarea>
         <div class="text-warning mb-3" v-if="false">
             The summary field is empty
@@ -14,8 +15,15 @@
 </template>
 
 <script>
+    // TODO pass bool for required?
     export default {
-        props: ['summary']
+        props: ['eventDispatcher'],
+
+        data() {
+            return {
+                summary: '',
+            };
+        },
     }
 </script>
 

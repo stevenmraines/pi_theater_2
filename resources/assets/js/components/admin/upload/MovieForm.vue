@@ -3,31 +3,44 @@
         <div class="col">
             <form novalidate>
                 <file-input
-                    v-bind:files="files"
                     v-bind:eventDispatcher="eventDispatcher"
+                    v-bind:files="files"
                 ></file-input>
 
-                <movie-title-input
-                    v-bind:file="currentFile"
+                <title-input
                     v-bind:eventDispatcher="eventDispatcher"
-                ></movie-title-input>
+                    v-bind:default="movies[currentFile].title"
+                ></title-input>
 
-                <year-released-input></year-released-input>
+                <year-input
+                    v-bind:default="movies[currentFile].yearReleased"
+                    v-bind:eventDispatcher="eventDispatcher"
+                    v-bind:label="'Year Released'"
+                ></year-input>
 
-                <summary-input></summary-input>
+                <summary-input
+                    v-bind:eventDispatcher="eventDispatcher"
+                ></summary-input>
 
-                <notes-input></notes-input>
+                <notes-input
+                    v-bind:eventDispatcher="eventDispatcher"
+                ></notes-input>
 
-                <poster-input></poster-input>
+                <poster-input
+                    v-bind:eventDispatcher="eventDispatcher"
+                    v-bind:title="movies[currentFile].title"
+                ></poster-input>
 
                 <jumbotron-input></jumbotron-input>
 
                 <genres-input
                     v-bind:allGenres="genres"
+                    v-bind:eventDispatcher="eventDispatcher"
                 ></genres-input>
 
                 <collections-input
                     v-bind:allCollections="collections"
+                    v-bind:eventDispatcher="eventDispatcher"
                 ></collections-input>
 
                 <submit-input
@@ -58,38 +71,91 @@
 
         created() {
             // Register events
+            this.eventDispatcher.$on('collectionsChange', this.collectionsChange);
             this.eventDispatcher.$on('fileChange', this.fileChange);
-            this.eventDispatcher.$on('titleChange', this.titleChange);
+            this.eventDispatcher.$on('genresChange', this.genresChange);
+            this.eventDispatcher.$on('notesChange', this.notesChange);
+            this.eventDispatcher.$on('posterChange', this.posterChange);
             this.eventDispatcher.$on('submit', this.submit);
+            this.eventDispatcher.$on('summaryChange', this.summaryChange);
+            this.eventDispatcher.$on('titleChange', this.titleChange);
+            this.eventDispatcher.$on('yearChange', this.yearChange);
 
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
                 this.movies[this.files[i]] = {
-                    collections: [],
+                    collections: [
+                        {
+                            name: '',
+                        },
+                    ],
                     file: this.files[i],
-                    genres: [],
+                    genres: [
+                        {
+                            name: '',
+                        },
+                    ],
                     jumbotron: '',
                     notes: '',
                     poster: '',
                     summary: '',
-                    title: '',
-                    yearReleased: 0,
+                    title: this.getTitleFromFile(this.files[i]),
+                    yearReleased: new Date().getFullYear(),
                 };
             }
         },
 
         methods: {
+            collectionsChange(collections) {
+                this.movies[this.currentFile].collections = collections;
+            },
+
             fileChange(file) {
                 this.currentFile = file;
             },
 
+            genresChange(genres) {
+                this.movies[this.currentFile].genres = genres;
+            },
+
+            getTitleFromFile(file) {
+                var filename = file.substr(0, file.length - 4);
+
+                var tokens = filename.split('-');
+
+                var exceptions = ['a', 'an', 'for', 'in', 'of', 'on', 'the'];
+
+                for(var i = 0; i < tokens.length; i++) {
+                    if(exceptions.indexOf(tokens[i].toLowerCase()) === -1) {
+                        tokens[i] = tokens[i].substr(0, 1).toUpperCase() + tokens[i].substr(1);
+                    }
+                }
+
+                return tokens.join(' ');
+            },
+
+            notesChange(notes) {
+                this.movies[this.currentFile].notes = notes;
+            },
+
+            posterChange(poster) {
+                this.movies[this.currentFile].poster = poster;
+            },
+
             submit() {
                 this.driveEventDispatcher.$emit('movieSubmit');
-                delete this.movies[this.currentFile];
+            },
+
+            summaryChange(summary) {
+                this.movies[this.currentFile].summary = summary;
             },
 
             titleChange(title) {
                 this.movies[this.currentFile].title = title;
+            },
+
+            yearChange(year) {
+                this.movies[this.currentFile].yearReleased = parseInt(year);
             },
         },
     }

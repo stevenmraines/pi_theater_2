@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label for="genres">Genres</label>
+        <label for="genres">* Genres</label>
         <div v-for="genre in genres">
             <form name="genre_form">
                 <div class="input-group mb-3">
@@ -45,26 +45,17 @@
 </template>
 
 <script>
+    // TODO implement required warning
     export default {
         props: [
             'allGenres',
             'eventDispatcher',
+            'genres',
         ],
-
-        data() {
-            return {
-                genres: [
-                    {
-                        name: '',
-                    },
-                ],
-            };
-        },
 
         methods: {
             addGenre() {
-                this.genres.push({ name: '' });
-                this.eventDispatcher.$emit('genresChange', this.genres);
+                this.eventDispatcher.$emit('genresAdd');
             },
         },
     }

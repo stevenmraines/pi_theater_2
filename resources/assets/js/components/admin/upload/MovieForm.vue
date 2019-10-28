@@ -9,26 +9,29 @@
 
                 <title-input
                     v-bind:eventDispatcher="eventDispatcher"
-                    v-bind:default="movies[currentFile].title"
+                    v-bind:title="movies[currentFile].title"
                 ></title-input>
 
                 <year-input
-                    v-bind:default="movies[currentFile].yearReleased"
                     v-bind:eventDispatcher="eventDispatcher"
                     v-bind:label="'Year Released'"
+                    v-bind:title="movies[currentFile].title"
+                    v-bind:year="movies[currentFile].yearReleased"
                 ></year-input>
 
                 <summary-input
                     v-bind:eventDispatcher="eventDispatcher"
+                    v-bind:required="true"
+                    v-bind:summary="movies[currentFile].summary"
                 ></summary-input>
 
                 <notes-input
                     v-bind:eventDispatcher="eventDispatcher"
+                    v-bind:notes="movies[currentFile].notes"
                 ></notes-input>
 
                 <poster-input
                     v-bind:eventDispatcher="eventDispatcher"
-                    v-bind:title="movies[currentFile].title"
                 ></poster-input>
 
                 <jumbotron-input></jumbotron-input>
@@ -36,10 +39,12 @@
                 <genres-input
                     v-bind:allGenres="genres"
                     v-bind:eventDispatcher="eventDispatcher"
+                    v-bind:genres="movies[currentFile].genres"
                 ></genres-input>
 
                 <collections-input
                     v-bind:allCollections="collections"
+                    v-bind:collections="movies[currentFile].collections"
                     v-bind:eventDispatcher="eventDispatcher"
                 ></collections-input>
 
@@ -71,8 +76,10 @@
 
         created() {
             // Register events
+            this.eventDispatcher.$on('collectionsAdd', this.collectionsAdd);
             this.eventDispatcher.$on('collectionsChange', this.collectionsChange);
             this.eventDispatcher.$on('fileChange', this.fileChange);
+            this.eventDispatcher.$on('genresAdd', this.genresAdd);
             this.eventDispatcher.$on('genresChange', this.genresChange);
             this.eventDispatcher.$on('notesChange', this.notesChange);
             this.eventDispatcher.$on('posterChange', this.posterChange);
@@ -106,12 +113,28 @@
         },
 
         methods: {
+            collectionsAdd() {
+                this.movies[this.currentFile].collections.push(
+                    {
+                        name: ''
+                    }
+                );
+            },
+
             collectionsChange(collections) {
                 this.movies[this.currentFile].collections = collections;
             },
 
             fileChange(file) {
                 this.currentFile = file;
+            },
+
+            genresAdd() {
+                this.movies[this.currentFile].genres.push(
+                    {
+                        name: ''
+                    }
+                );
             },
 
             genresChange(genres) {

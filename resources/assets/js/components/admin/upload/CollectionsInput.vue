@@ -48,23 +48,13 @@
     export default {
         props: [
             'allCollections',
+            'collections',
             'eventDispatcher',
         ],
 
-        data() {
-            return {
-                collections: [
-                    {
-                        name: '',
-                    },
-                ],
-            };
-        },
-
         methods: {
             addCollection() {
-                this.collections.push({ name: '' });
-                this.eventDispatcher.$emit('collectionsChange', this.collections);
+                this.eventDispatcher.$emit('collectionsAdd');
             },
         },
     }

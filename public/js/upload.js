@@ -1046,7 +1046,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1058,6 +1058,11 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1124,8 +1129,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     created: function created() {
         // Register events
+        this.eventDispatcher.$on('collectionsAdd', this.collectionsAdd);
         this.eventDispatcher.$on('collectionsChange', this.collectionsChange);
         this.eventDispatcher.$on('fileChange', this.fileChange);
+        this.eventDispatcher.$on('genresAdd', this.genresAdd);
         this.eventDispatcher.$on('genresChange', this.genresChange);
         this.eventDispatcher.$on('notesChange', this.notesChange);
         this.eventDispatcher.$on('posterChange', this.posterChange);
@@ -1156,11 +1163,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     methods: {
+        collectionsAdd: function collectionsAdd() {
+            this.movies[this.currentFile].collections.push({
+                name: ''
+            });
+        },
         collectionsChange: function collectionsChange(collections) {
             this.movies[this.currentFile].collections = collections;
         },
         fileChange: function fileChange(file) {
             this.currentFile = file;
+        },
+        genresAdd: function genresAdd() {
+            this.movies[this.currentFile].genres.push({
+                name: ''
+            });
         },
         genresChange: function genresChange(genres) {
             this.movies[this.currentFile].genres = genres;
@@ -1227,31 +1244,36 @@ var render = function() {
               _c("title-input", {
                 attrs: {
                   eventDispatcher: _vm.eventDispatcher,
-                  default: _vm.movies[_vm.currentFile].title
+                  title: _vm.movies[_vm.currentFile].title
                 }
               }),
               _vm._v(" "),
               _c("year-input", {
                 attrs: {
-                  default: _vm.movies[_vm.currentFile].yearReleased,
                   eventDispatcher: _vm.eventDispatcher,
-                  label: "Year Released"
+                  label: "Year Released",
+                  title: _vm.movies[_vm.currentFile].title,
+                  year: _vm.movies[_vm.currentFile].yearReleased
                 }
               }),
               _vm._v(" "),
               _c("summary-input", {
-                attrs: { eventDispatcher: _vm.eventDispatcher }
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  required: true,
+                  summary: _vm.movies[_vm.currentFile].summary
+                }
               }),
               _vm._v(" "),
               _c("notes-input", {
-                attrs: { eventDispatcher: _vm.eventDispatcher }
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  notes: _vm.movies[_vm.currentFile].notes
+                }
               }),
               _vm._v(" "),
               _c("poster-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  title: _vm.movies[_vm.currentFile].title
-                }
+                attrs: { eventDispatcher: _vm.eventDispatcher }
               }),
               _vm._v(" "),
               _c("jumbotron-input"),
@@ -1259,13 +1281,15 @@ var render = function() {
               _c("genres-input", {
                 attrs: {
                   allGenres: _vm.genres,
-                  eventDispatcher: _vm.eventDispatcher
+                  eventDispatcher: _vm.eventDispatcher,
+                  genres: _vm.movies[_vm.currentFile].genres
                 }
               }),
               _vm._v(" "),
               _c("collections-input", {
                 attrs: {
                   allCollections: _vm.collections,
+                  collections: _vm.movies[_vm.currentFile].collections,
                   eventDispatcher: _vm.eventDispatcher
                 }
               }),
@@ -1703,7 +1727,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1763,21 +1787,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['allCollections', 'eventDispatcher'],
-
-    data: function data() {
-        return {
-            collections: [{
-                name: ''
-            }]
-        };
-    },
-
+    props: ['allCollections', 'collections', 'eventDispatcher'],
 
     methods: {
         addCollection: function addCollection() {
-            this.collections.push({ name: '' });
-            this.eventDispatcher.$emit('collectionsChange', this.collections);
+            this.eventDispatcher.$emit('collectionsAdd');
         }
     }
 });
@@ -2187,7 +2201,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2246,22 +2260,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+// TODO implement required warning
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['allGenres', 'eventDispatcher'],
-
-    data: function data() {
-        return {
-            genres: [{
-                name: ''
-            }]
-        };
-    },
-
+    props: ['allGenres', 'eventDispatcher', 'genres'],
 
     methods: {
         addGenre: function addGenre() {
-            this.genres.push({ name: '' });
-            this.eventDispatcher.$emit('genresChange', this.genres);
+            this.eventDispatcher.$emit('genresAdd');
         }
     }
 });
@@ -2278,7 +2283,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("label", { attrs: { for: "genres" } }, [_vm._v("Genres")]),
+      _c("label", { attrs: { for: "genres" } }, [_vm._v("* Genres")]),
       _vm._v(" "),
       _vm._l(_vm.genres, function(genre) {
         return _c("div", [
@@ -2471,7 +2476,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2506,16 +2511,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
+// TODO implement required warning
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['eventDispatcher', 'title'],
-
-    data: function data() {
-        return {
-            poster: ''
-        };
-    },
-
+    props: ['eventDispatcher', 'poster', 'title'],
 
     methods: {
         posterChange: function posterChange() {
@@ -2542,7 +2542,7 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "form-group" }, [
       _c("label", { attrs: { for: "poster" } }, [
-        _vm._v("Poster Image\n            "),
+        _vm._v("* Poster Image\n            "),
         _c(
           "a",
           {
@@ -2561,7 +2561,7 @@ var render = function() {
       _c("input", {
         ref: "posterInput",
         staticClass: "form-control-file",
-        attrs: { type: "file", id: "poster" },
+        attrs: { type: "file", id: "poster", required: "" },
         on: {
           change: function($event) {
             _vm.posterChange()
@@ -2676,7 +2676,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2704,16 +2704,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
-// TODO pass bool for required?
+// TODO implement required warning
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['eventDispatcher'],
-
-    data: function data() {
-        return {
-            summary: ''
-        };
-    }
+    props: ['eventDispatcher', 'required', 'summary']
 });
 
 /***/ }),
@@ -2726,34 +2723,23 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "form-group" }, [
-    _c("label", { attrs: { for: "summary" } }, [_vm._v("* Summary")]),
+    _c("label", { attrs: { for: "summary" } }, [
+      _vm.required ? _c("span", [_vm._v(_vm._s("* "))]) : _vm._e(),
+      _vm._v("Summary\n    ")
+    ]),
     _vm._v(" "),
     _c("textarea", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.summary,
-          expression: "summary"
-        }
-      ],
       staticClass: "form-control",
-      attrs: { id: "summary", rows: "4" },
+      attrs: { id: "summary", rows: "4", required: _vm.required },
       domProps: { value: _vm.summary },
       on: {
         change: function($event) {
           _vm.eventDispatcher.$emit("summaryChange", _vm.summary)
-        },
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.summary = $event.target.value
         }
       }
     }),
     _vm._v(" "),
-    false
+    _vm.required && false
       ? _c("div", { staticClass: "text-warning mb-3" }, [
           _vm._v("\n        The summary field is empty\n    ")
         ])
@@ -2859,7 +2845,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2886,13 +2872,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['eventDispatcher'],
-
-    data: function data() {
-        return {
-            notes: ''
-        };
-    }
+    props: ['eventDispatcher', 'notes']
 });
 
 /***/ }),
@@ -2908,26 +2888,12 @@ var render = function() {
     _c("label", { attrs: { for: "notes" } }, [_vm._v("Notes")]),
     _vm._v(" "),
     _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.notes,
-          expression: "notes"
-        }
-      ],
       staticClass: "form-control font-italic",
       attrs: { id: "notes", name: "notes" },
       domProps: { value: _vm.notes },
       on: {
         change: function($event) {
           _vm.eventDispatcher.$emit("notesChange", _vm.notes)
-        },
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.notes = $event.target.value
         }
       }
     })
@@ -3032,7 +2998,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3068,14 +3034,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 // TODO separate search into separate component? Or pass bool?
-// TODO does this need a default? Or can this and the data in MovieForm just be initialized separately?
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['default', 'eventDispatcher', 'label', 'title'],
+    props: ['eventDispatcher', 'label', 'title', 'year'],
 
     data: function data() {
         return {
-            currentYear: new Date().getFullYear(),
-            year: this.default
+            max: new Date().getFullYear()
         };
     }
 });
@@ -3106,32 +3070,18 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.year,
-          expression: "year"
-        }
-      ],
       staticClass: "form-control",
       attrs: {
         type: "number",
         id: "year",
         min: "1900",
-        max: _vm.currentYear,
+        max: _vm.max,
         required: ""
       },
       domProps: { value: _vm.year },
       on: {
         change: function($event) {
           _vm.eventDispatcher.$emit("yearChange", _vm.year)
-        },
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.year = $event.target.value
         }
       }
     })
@@ -4011,7 +3961,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -4043,14 +3993,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+// TODO implement required warning
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['default', 'eventDispatcher'],
-
-    data: function data() {
-        return {
-            title: this.default
-        };
-    }
+    props: ['eventDispatcher', 'title']
 });
 
 /***/ }),

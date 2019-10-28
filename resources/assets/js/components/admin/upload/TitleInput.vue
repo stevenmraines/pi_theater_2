@@ -18,17 +18,12 @@
 </template>
 
 <script>
+    // TODO implement required warning
     export default {
         props: [
-            'default',
             'eventDispatcher',
+            'title',
         ],
-
-        data() {
-            return {
-                title: this.default,
-            };
-        },
     }
 </script>
 

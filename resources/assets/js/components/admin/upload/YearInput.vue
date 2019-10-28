@@ -12,8 +12,8 @@
             id="year"
             class="form-control"
             min="1900"
-            v-bind:max="currentYear"
-            v-model="year"
+            v-bind:max="max"
+            v-bind:value="year"
             v-on:change="eventDispatcher.$emit('yearChange', year)"
             required
         />
@@ -22,19 +22,17 @@
 
 <script>
     // TODO separate search into separate component? Or pass bool?
-    // TODO does this need a default? Or can this and the data in MovieForm just be initialized separately?
     export default {
         props: [
-            'default',
             'eventDispatcher',
             'label',
             'title',
+            'year',
         ],
 
         data() {
             return {
-                currentYear: new Date().getFullYear(),
-                year: this.default,
+                max: new Date().getFullYear(),
             };
         },
     }

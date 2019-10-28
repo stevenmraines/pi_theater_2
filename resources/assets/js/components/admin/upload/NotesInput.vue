@@ -5,7 +5,7 @@
             id="notes"
             class="form-control font-italic"
             name="notes"
-            v-model="notes"
+            v-bind:value="notes"
             v-on:change="eventDispatcher.$emit('notesChange', notes)"
         />
     </div>
@@ -13,13 +13,10 @@
 
 <script>
     export default {
-        props: ['eventDispatcher'],
-
-        data() {
-            return {
-                notes: '',
-            };
-        },
+        props: [
+            'eventDispatcher',
+            'notes',
+        ],
     }
 </script>
 

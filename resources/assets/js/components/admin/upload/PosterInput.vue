@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="form-group">
-            <label for="poster">Poster Image
+            <label for="poster">* Poster Image
                 <a
                     v-bind:href="'https://www.google.com/search?q=' + title + '+poster&tbm=isch'"
                     target="_blank"
@@ -13,6 +13,7 @@
                 class="form-control-file"
                 ref="posterInput"
                 v-on:change="posterChange()"
+                required
             />
         </div>
         <div class="text-danger mb-3" v-if="false">
@@ -22,17 +23,13 @@
 </template>
 
 <script>
+    // TODO implement required warning
     export default {
         props: [
             'eventDispatcher',
+            'poster',
             'title',
         ],
-
-        data() {
-            return {
-                poster: '',
-            };
-        },
 
         methods: {
             posterChange() {

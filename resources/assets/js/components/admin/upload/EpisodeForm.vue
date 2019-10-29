@@ -3,11 +3,11 @@
         <div class="col">
             <form novalidate>
                 <file-input
-                    v-bind:files="files"
+                    :files="files"
                 ></file-input>
 
                 <shows-input
-                    v-bind:shows="shows"
+                    :shows="shows"
                 ></shows-input>
 
                 <season-input></season-input>

@@ -1,7 +1,6 @@
 <template>
     <div class="form-group">
-        <label for="year">
-            * {{ label }}
+        <label for="year-released">Year Released
             <a
                 :href="'https://www.google.com/search?q=' + title + '+year+released'"
                 target="_blank"
@@ -9,30 +8,23 @@
         </label>
         <input
             type="number"
-            id="year"
+            id="year-released"
             class="form-control"
             min="1900"
-            :max="max"
-            :value="year"
-            @change="eventDispatcher.$emit('yearChange', year)"
+            :max="currentYear"
+            v-model="yearReleased"
             required
         />
     </div>
 </template>
 
 <script>
-    // TODO separate search into separate component? Or pass bool?
     export default {
-        props: [
-            'eventDispatcher',
-            'label',
-            'title',
-            'year',
-        ],
+        props: ['yearReleased', 'title'],
 
         data() {
             return {
-                max: new Date().getFullYear(),
+                currentYear: new Date().getFullYear()
             };
         },
     }

@@ -3,7 +3,7 @@
         <div class="form-group">
             <label for="poster">* Poster Image
                 <a
-                    v-bind:href="'https://www.google.com/search?q=' + title + '+poster&tbm=isch'"
+                    :href="'https://www.google.com/search?q=' + title + '+poster&tbm=isch'"
                     target="_blank"
                 >(search)</a>
             </label>
@@ -12,7 +12,7 @@
                 id="poster"
                 class="form-control-file"
                 ref="posterInput"
-                v-on:change="posterChange()"
+                @change="posterChange()"
                 required
             />
         </div>

@@ -29,13 +29,13 @@
                         class="form-control"
                         name="genres"
                         v-model="genre.name"
-                        v-on:change="eventDispatcher.$emit('genresChange', genres)"
+                        @change="eventDispatcher.$emit('genresChange', genres)"
                     />
                     <div class="input-group-append">
                         <button
                             class="btn btn-primary"
                             type="button"
-                            v-on:click="addGenre()"
+                            @click="addGenre()"
                         >+</button>
                     </div>
                 </div>

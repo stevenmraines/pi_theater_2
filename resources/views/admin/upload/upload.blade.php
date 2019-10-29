@@ -13,7 +13,7 @@
 
         <div id="app" class="container mt-3">
 			<drive-form
-				v-bind:initial-state.camel="initialState"
+				:initial-state.camel="initialState"
 			></drive-form>
     	</div>
 

@@ -7,7 +7,7 @@
                 class="form-control"
                 name="title"
                 v-model="title"
-                v-on:change="eventDispatcher.$emit('titleChange', title)"
+                @change="eventDispatcher.$emit('titleChange', title)"
                 required
             />
         </div>

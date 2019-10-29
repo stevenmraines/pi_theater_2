@@ -3,7 +3,7 @@
         <button
             class="btn btn-success"
             v-if="true"
-            v-on:click.prevent.stop="submit"
+            @click.prevent.stop="submit"
         >
             Submit
         </button>

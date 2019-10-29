@@ -3,53 +3,53 @@
         <div class="col">
             <form novalidate>
                 <file-input
-                    v-bind:eventDispatcher="eventDispatcher"
-                    v-bind:files="files"
+                    :eventDispatcher="eventDispatcher"
+                    :files="files"
                 ></file-input>
 
                 <title-input
-                    v-bind:eventDispatcher="eventDispatcher"
-                    v-bind:title="movies[currentFile].title"
+                    :eventDispatcher="eventDispatcher"
+                    :title="movies[currentFile].title"
                 ></title-input>
 
                 <year-input
-                    v-bind:eventDispatcher="eventDispatcher"
-                    v-bind:label="'Year Released'"
-                    v-bind:title="movies[currentFile].title"
-                    v-bind:year="movies[currentFile].yearReleased"
+                    :eventDispatcher="eventDispatcher"
+                    :label="'Year Released'"
+                    :title="movies[currentFile].title"
+                    :year="movies[currentFile].yearReleased"
                 ></year-input>
 
                 <summary-input
-                    v-bind:eventDispatcher="eventDispatcher"
-                    v-bind:required="true"
-                    v-bind:summary="movies[currentFile].summary"
+                    :eventDispatcher="eventDispatcher"
+                    :required="true"
+                    :summary="movies[currentFile].summary"
                 ></summary-input>
 
                 <notes-input
-                    v-bind:eventDispatcher="eventDispatcher"
-                    v-bind:notes="movies[currentFile].notes"
+                    :eventDispatcher="eventDispatcher"
+                    :notes="movies[currentFile].notes"
                 ></notes-input>
 
                 <poster-input
-                    v-bind:eventDispatcher="eventDispatcher"
+                    :eventDispatcher="eventDispatcher"
                 ></poster-input>
 
                 <jumbotron-input></jumbotron-input>
 
                 <genres-input
-                    v-bind:allGenres="genres"
-                    v-bind:eventDispatcher="eventDispatcher"
-                    v-bind:genres="movies[currentFile].genres"
+                    :allGenres="genres"
+                    :eventDispatcher="eventDispatcher"
+                    :genres="movies[currentFile].genres"
                 ></genres-input>
 
                 <collections-input
-                    v-bind:allCollections="collections"
-                    v-bind:collections="movies[currentFile].collections"
-                    v-bind:eventDispatcher="eventDispatcher"
+                    :allCollections="collections"
+                    :collections="movies[currentFile].collections"
+                    :eventDispatcher="eventDispatcher"
                 ></collections-input>
 
                 <submit-input
-                    v-bind:eventDispatcher="eventDispatcher"
+                    :eventDispatcher="eventDispatcher"
                 ></submit-input>
             </form>
         </div>

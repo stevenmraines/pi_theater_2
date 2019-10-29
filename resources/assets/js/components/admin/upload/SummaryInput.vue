@@ -7,9 +7,9 @@
             id="summary"
             class="form-control"
             rows="4"
-            v-bind:value="summary"
-            v-on:change="eventDispatcher.$emit('summaryChange', summary)"
-            v-bind:required="required"
+            :value="summary"
+            @change="eventDispatcher.$emit('summaryChange', summary)"
+            :required="required"
         ></textarea>
         <div class="text-warning mb-3" v-if="required && false">
             The summary field is empty

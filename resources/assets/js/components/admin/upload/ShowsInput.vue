@@ -8,8 +8,8 @@
         >
             <option
                 v-for="s in sortedShows"
-                v-bind:key="s.id"
-                v-bind:value="s.id"
+                :key="s.id"
+                :value="s.id"
             >{{ s.title }}</option>
         </select>
     </div>

@@ -29,13 +29,13 @@
                         type="text"
                         class="form-control"
                         v-model="collection.name"
-                        v-on:change="eventDispatcher.$emit('collectionsChange', collections)"
+                        @change="eventDispatcher.$emit('collectionsChange', collections)"
                     />
                     <div class="input-group-append">
                         <button
                             class="btn btn-primary"
                             type="button"
-                            v-on:click="addCollection()"
+                            @click="addCollection()"
                         >+</button>
                     </div>
                 </div>

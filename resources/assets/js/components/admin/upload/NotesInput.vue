@@ -5,8 +5,8 @@
             id="notes"
             class="form-control font-italic"
             name="notes"
-            v-bind:value="notes"
-            v-on:change="eventDispatcher.$emit('notesChange', notes)"
+            :value="notes"
+            @change="eventDispatcher.$emit('notesChange', notes)"
         />
     </div>
 </template>

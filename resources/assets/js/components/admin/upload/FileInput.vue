@@ -5,12 +5,12 @@
             id="file"
             class="form-control"
             v-model="file"
-            v-on:change="eventDispatcher.$emit('fileChange', file)"
+            @change="eventDispatcher.$emit('fileChange', file)"
         >
             <option
                 v-for="f in files"
-                v-bind:key="f"
-                v-bind:value="f"
+                :key="f"
+                :value="f"
             >{{ f }}</option>
         </select>
     </div>

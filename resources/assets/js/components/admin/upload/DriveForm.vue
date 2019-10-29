@@ -6,8 +6,8 @@
                     <div class="form-group">
                         <label for="drive">Hard drive</label>
                         <select id="drive" class="form-control ml-3" v-model="currentDrive">
-                            <option v-bind:key="0" v-bind:value="0" selected>Please Select...</option>
-                            <option v-for="drive in drives" v-bind:key="drive.id" v-bind:value="drive.id">
+                            <option :key="0" :value="0" selected>Please Select...</option>
+                            <option v-for="drive in drives" :key="drive.id" :value="drive.id">
                                 {{ drive.name }}
                             </option>
                         </select>
@@ -30,11 +30,11 @@
                     id="movie-form"
                     class="card-body collapse"
                     role="tabpanel"
-                    v-bind:collections="collections"
-                    v-bind:drive="currentDrive"
-                    v-bind:driveEventDispatcher="eventDispatcher"
-                    v-bind:files="movies"
-                    v-bind:genres="genres"
+                    :collections="collections"
+                    :drive="currentDrive"
+                    :driveEventDispatcher="eventDispatcher"
+                    :files="movies"
+                    :genres="genres"
                 ></movie-form>
             </div>
 
@@ -48,9 +48,9 @@
 <!--                    id="episode-form"-->
 <!--                    class="card-body collapse"-->
 <!--                    role="tabpanel"-->
-<!--                    v-bind:drive="currentDrive"-->
-<!--                    v-bind:files="episodes"-->
-<!--                    v-bind:shows="shows"-->
+<!--                    :drive="currentDrive"-->
+<!--                    :files="episodes"-->
+<!--                    :shows="shows"-->
 <!--                ></episode-form>-->
             </div>
 

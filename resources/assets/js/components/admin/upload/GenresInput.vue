@@ -1,41 +1,40 @@
 <template>
     <div>
         <label for="genres">* Genres</label>
-        <div v-for="genre in genres">
+        <div v-for="(genre, index) in genres">
             <form name="genre_form">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button
-                            type="button"
-                            class="btn btn-primary dropdown-toggle"
-                            data-toggle="dropdown"
-                            data-target="#all-genres"
-                        >
-                            Options
-                        </button>
-                        <div class="dropdown-menu">
-                            <a
-                                id="all-genres"
-                                href="javascript:void(0);"
-                                class="dropdown-item"
-                                v-for="g in allGenres"
+                        <div class="dropdown">
+                            <button
+                                type="button"
+                                class="btn btn-primary dropdown-toggle"
+                                data-toggle="dropdown"
                             >
-                                {{ g.name }}
-                            </a>
+                                Options
+                            </button>
+                            <div class="dropdown-menu">
+                                <a
+                                    href="javascript:void(0);"
+                                    class="dropdown-item"
+                                    v-for="g in allGenres"
+                                    @click="setGenre(index, g)"
+                                >
+                                    {{ g.name }}
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <input
-                        id="genres"
                         class="form-control"
-                        name="genres"
                         v-model="genre.name"
-                        @change="eventDispatcher.$emit('genresChange', genres)"
+                        @change="changeGenre"
                     />
                     <div class="input-group-append">
                         <button
                             class="btn btn-primary"
                             type="button"
-                            @click="addGenre()"
+                            @click="addGenre"
                         >+</button>
                     </div>
                 </div>
@@ -56,6 +55,21 @@
         methods: {
             addGenre() {
                 this.eventDispatcher.$emit('genresAdd');
+                this.$forceUpdate();
+            },
+
+            changeGenre() {
+                this.eventDispatcher.$emit('genresChange', this.genres);
+                this.$forceUpdate();
+            },
+
+            setGenre(index, genre) {
+                this.eventDispatcher.$emit('genresSet', {
+                    index: index,
+                    genre: genre,
+                });
+
+                this.$forceUpdate();
             },
         },
     }

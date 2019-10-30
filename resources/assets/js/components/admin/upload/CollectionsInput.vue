@@ -1,41 +1,40 @@
 <template>
     <div>
         <label for="collections">Collections</label>
-        <div v-for="collection in collections">
+        <div v-for="(collection, index) in collections">
             <form name="col_form">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button
-                            type="button"
-                            class="btn btn-primary dropdown-toggle"
-                            data-toggle="dropdown"
-                            data-target="#all-collections"
-                        >
-                            Options
-                        </button>
-                        <div class="dropdown-menu">
-                            <a
-                                id="all-collections"
-                                href="javascript:void(0);"
-                                class="dropdown-item"
-                                v-for="c in allCollections"
+                        <div class="dropdown">
+                            <button
+                                type="button"
+                                class="btn btn-primary dropdown-toggle"
+                                data-toggle="dropdown"
                             >
-                                {{ c.name }}
-                            </a>
+                                Options
+                            </button>
+                            <div class="dropdown-menu">
+                                <a
+                                    href="javascript:void(0);"
+                                    class="dropdown-item"
+                                    v-for="c in allCollections"
+                                    @click="setCollection(index, c)"
+                                >
+                                    {{ c.name }}
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <input
-                        id="collections"
-                        type="text"
                         class="form-control"
                         v-model="collection.name"
-                        @change="eventDispatcher.$emit('collectionsChange', collections)"
+                        @change="changeCollection"
                     />
                     <div class="input-group-append">
                         <button
                             class="btn btn-primary"
                             type="button"
-                            @click="addCollection()"
+                            @click="addCollection"
                         >+</button>
                     </div>
                 </div>
@@ -55,6 +54,21 @@
         methods: {
             addCollection() {
                 this.eventDispatcher.$emit('collectionsAdd');
+                this.$forceUpdate();
+            },
+
+            changeCollection() {
+                this.eventDispatcher.$emit('collectionsChange', this.collections);
+                this.$forceUpdate();
+            },
+
+            setCollection(index, collection) {
+                this.eventDispatcher.$emit('collectionsSet', {
+                    index: index,
+                    collection: collection,
+                });
+
+                this.$forceUpdate();
             },
         },
     }

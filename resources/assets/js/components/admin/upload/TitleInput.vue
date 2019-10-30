@@ -3,9 +3,7 @@
         <div class="form-group">
             <label for="title">* Title</label>
             <input
-                id="title"
                 class="form-control"
-                name="title"
                 v-model="title"
                 @change="eventDispatcher.$emit('titleChange', title)"
                 required

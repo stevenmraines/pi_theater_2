@@ -1046,7 +1046,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1131,9 +1131,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // Register events
         this.eventDispatcher.$on('collectionsAdd', this.collectionsAdd);
         this.eventDispatcher.$on('collectionsChange', this.collectionsChange);
+        this.eventDispatcher.$on('collectionsSet', this.collectionsSet);
         this.eventDispatcher.$on('fileChange', this.fileChange);
         this.eventDispatcher.$on('genresAdd', this.genresAdd);
         this.eventDispatcher.$on('genresChange', this.genresChange);
+        this.eventDispatcher.$on('genresSet', this.genresSet);
         this.eventDispatcher.$on('notesChange', this.notesChange);
         this.eventDispatcher.$on('posterChange', this.posterChange);
         this.eventDispatcher.$on('submit', this.submit);
@@ -1171,6 +1173,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         collectionsChange: function collectionsChange(collections) {
             this.movies[this.currentFile].collections = collections;
         },
+        collectionsSet: function collectionsSet(data) {
+            Vue.set(this.movies[this.currentFile].collections, data.index, data.collection);
+        },
         fileChange: function fileChange(file) {
             this.currentFile = file;
         },
@@ -1181,6 +1186,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         genresChange: function genresChange(genres) {
             this.movies[this.currentFile].genres = genres;
+        },
+        genresSet: function genresSet(data) {
+            Vue.set(this.movies[this.currentFile].genres, data.index, data.genre);
         },
         getTitleFromFile: function getTitleFromFile(file) {
             var filename = file.substr(0, file.length - 4);
@@ -1727,7 +1735,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1784,7 +1792,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['allCollections', 'collections', 'eventDispatcher'],
@@ -1792,6 +1799,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         addCollection: function addCollection() {
             this.eventDispatcher.$emit('collectionsAdd');
+            this.$forceUpdate();
+        },
+        changeCollection: function changeCollection() {
+            this.eventDispatcher.$emit('collectionsChange', this.collections);
+            this.$forceUpdate();
+        },
+        setCollection: function setCollection(index, collection) {
+            this.eventDispatcher.$emit('collectionsSet', {
+                index: index,
+                collection: collection
+            });
+
+            this.$forceUpdate();
         }
     }
 });
@@ -1810,51 +1830,51 @@ var render = function() {
     [
       _c("label", { attrs: { for: "collections" } }, [_vm._v("Collections")]),
       _vm._v(" "),
-      _vm._l(_vm.collections, function(collection) {
+      _vm._l(_vm.collections, function(collection, index) {
         return _c("div", [
           _c("form", { attrs: { name: "col_form" } }, [
             _c("div", { staticClass: "input-group mb-3" }, [
               _c("div", { staticClass: "input-group-prepend" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary dropdown-toggle",
-                    attrs: {
-                      type: "button",
-                      "data-toggle": "dropdown",
-                      "data-target": "#all-collections"
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        Options\n                    "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "dropdown-menu" },
-                  _vm._l(_vm.allCollections, function(c) {
-                    return _c(
-                      "a",
-                      {
-                        staticClass: "dropdown-item",
-                        attrs: {
-                          id: "all-collections",
-                          href: "javascript:void(0);"
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(c.name) +
-                            "\n                        "
-                        )
-                      ]
-                    )
-                  })
-                )
+                _c("div", { staticClass: "dropdown" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary dropdown-toggle",
+                      attrs: { type: "button", "data-toggle": "dropdown" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Options\n                        "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "dropdown-menu" },
+                    _vm._l(_vm.allCollections, function(c) {
+                      return _c(
+                        "a",
+                        {
+                          staticClass: "dropdown-item",
+                          attrs: { href: "javascript:void(0);" },
+                          on: {
+                            click: function($event) {
+                              _vm.setCollection(index, c)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(c.name) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    })
+                  )
+                ])
               ]),
               _vm._v(" "),
               _c("input", {
@@ -1867,15 +1887,9 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { id: "collections", type: "text" },
                 domProps: { value: collection.name },
                 on: {
-                  change: function($event) {
-                    _vm.eventDispatcher.$emit(
-                      "collectionsChange",
-                      _vm.collections
-                    )
-                  },
+                  change: _vm.changeCollection,
                   input: function($event) {
                     if ($event.target.composing) {
                       return
@@ -1891,11 +1905,7 @@ var render = function() {
                   {
                     staticClass: "btn btn-primary",
                     attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        _vm.addCollection()
-                      }
-                    }
+                    on: { click: _vm.addCollection }
                   },
                   [_vm._v("+")]
                 )
@@ -2201,7 +2211,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2258,7 +2268,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 // TODO implement required warning
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2267,6 +2276,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         addGenre: function addGenre() {
             this.eventDispatcher.$emit('genresAdd');
+            this.$forceUpdate();
+        },
+        changeGenre: function changeGenre() {
+            this.eventDispatcher.$emit('genresChange', this.genres);
+            this.$forceUpdate();
+        },
+        setGenre: function setGenre(index, genre) {
+            this.eventDispatcher.$emit('genresSet', {
+                index: index,
+                genre: genre
+            });
+
+            this.$forceUpdate();
         }
     }
 });
@@ -2285,48 +2307,51 @@ var render = function() {
     [
       _c("label", { attrs: { for: "genres" } }, [_vm._v("* Genres")]),
       _vm._v(" "),
-      _vm._l(_vm.genres, function(genre) {
+      _vm._l(_vm.genres, function(genre, index) {
         return _c("div", [
           _c("form", { attrs: { name: "genre_form" } }, [
             _c("div", { staticClass: "input-group mb-3" }, [
               _c("div", { staticClass: "input-group-prepend" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary dropdown-toggle",
-                    attrs: {
-                      type: "button",
-                      "data-toggle": "dropdown",
-                      "data-target": "#all-genres"
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        Options\n                    "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "dropdown-menu" },
-                  _vm._l(_vm.allGenres, function(g) {
-                    return _c(
-                      "a",
-                      {
-                        staticClass: "dropdown-item",
-                        attrs: { id: "all-genres", href: "javascript:void(0);" }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(g.name) +
-                            "\n                        "
-                        )
-                      ]
-                    )
-                  })
-                )
+                _c("div", { staticClass: "dropdown" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary dropdown-toggle",
+                      attrs: { type: "button", "data-toggle": "dropdown" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Options\n                        "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "dropdown-menu" },
+                    _vm._l(_vm.allGenres, function(g) {
+                      return _c(
+                        "a",
+                        {
+                          staticClass: "dropdown-item",
+                          attrs: { href: "javascript:void(0);" },
+                          on: {
+                            click: function($event) {
+                              _vm.setGenre(index, g)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(g.name) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    })
+                  )
+                ])
               ]),
               _vm._v(" "),
               _c("input", {
@@ -2339,12 +2364,9 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { id: "genres", name: "genres" },
                 domProps: { value: genre.name },
                 on: {
-                  change: function($event) {
-                    _vm.eventDispatcher.$emit("genresChange", _vm.genres)
-                  },
+                  change: _vm.changeGenre,
                   input: function($event) {
                     if ($event.target.composing) {
                       return
@@ -2360,11 +2382,7 @@ var render = function() {
                   {
                     staticClass: "btn btn-primary",
                     attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        _vm.addGenre()
-                      }
-                    }
+                    on: { click: _vm.addGenre }
                   },
                   [_vm._v("+")]
                 )
@@ -3961,7 +3979,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3973,8 +3991,6 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
 //
 //
 //
@@ -4021,7 +4037,7 @@ var render = function() {
           }
         ],
         staticClass: "form-control",
-        attrs: { id: "title", name: "title", required: "" },
+        attrs: { required: "" },
         domProps: { value: _vm.title },
         on: {
           change: function($event) {

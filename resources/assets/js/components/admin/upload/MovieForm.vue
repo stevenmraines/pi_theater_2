@@ -78,9 +78,11 @@
             // Register events
             this.eventDispatcher.$on('collectionsAdd', this.collectionsAdd);
             this.eventDispatcher.$on('collectionsChange', this.collectionsChange);
+            this.eventDispatcher.$on('collectionsSet', this.collectionsSet);
             this.eventDispatcher.$on('fileChange', this.fileChange);
             this.eventDispatcher.$on('genresAdd', this.genresAdd);
             this.eventDispatcher.$on('genresChange', this.genresChange);
+            this.eventDispatcher.$on('genresSet', this.genresSet);
             this.eventDispatcher.$on('notesChange', this.notesChange);
             this.eventDispatcher.$on('posterChange', this.posterChange);
             this.eventDispatcher.$on('submit', this.submit);
@@ -125,6 +127,14 @@
                 this.movies[this.currentFile].collections = collections;
             },
 
+            collectionsSet(data) {
+                Vue.set(
+                    this.movies[this.currentFile].collections,
+                    data.index,
+                    data.collection
+                );
+            },
+
             fileChange(file) {
                 this.currentFile = file;
             },
@@ -139,6 +149,14 @@
 
             genresChange(genres) {
                 this.movies[this.currentFile].genres = genres;
+            },
+
+            genresSet(data) {
+                Vue.set(
+                    this.movies[this.currentFile].genres,
+                    data.index,
+                    data.genre
+                );
             },
 
             getTitleFromFile(file) {

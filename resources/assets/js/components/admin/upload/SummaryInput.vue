@@ -8,7 +8,7 @@
             class="form-control"
             rows="4"
             :value="summary"
-            @change="eventDispatcher.$emit('summaryChange', summary)"
+            @change="eventDispatcher.$emit('summaryChange', $event.target.value)"
             :required="required"
         ></textarea>
         <div class="text-warning mb-3" v-if="required && false">
@@ -19,6 +19,7 @@
 
 <script>
     // TODO implement required warning
+    // TODO figure out how to do labels without IDs
     export default {
         props: [
             'eventDispatcher',

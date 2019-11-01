@@ -4,14 +4,14 @@
         <input
             id="notes"
             class="form-control font-italic"
-            name="notes"
             :value="notes"
-            @change="eventDispatcher.$emit('notesChange', notes)"
+            @change="eventDispatcher.$emit('notesChange', $event.target.value)"
         />
     </div>
 </template>
 
 <script>
+    // TODO figure out how to do labels without IDs
     export default {
         props: [
             'eventDispatcher',

@@ -45,6 +45,7 @@
 
 <script>
     // TODO implement required warning
+    // TODO figure out how to make this work without v-model
     export default {
         props: [
             'allGenres',

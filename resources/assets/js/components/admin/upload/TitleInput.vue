@@ -4,8 +4,8 @@
             <label for="title">* Title</label>
             <input
                 class="form-control"
-                v-model="title"
-                @change="eventDispatcher.$emit('titleChange', title)"
+                :value="title"
+                @change="eventDispatcher.$emit('titleChange', $event.target.value)"
                 required
             />
         </div>

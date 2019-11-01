@@ -11,8 +11,8 @@
                 type="file"
                 id="poster"
                 class="form-control-file"
-                ref="posterInput"
-                @change="posterChange()"
+                :value="poster"
+                @change="eventDispatcher.$emit('posterChange', $event.target.value)"
                 required
             />
         </div>
@@ -30,18 +30,6 @@
             'poster',
             'title',
         ],
-
-        methods: {
-            posterChange() {
-                var filepath = this.$refs.posterInput.value;
-
-                var tokens = filepath.split('\\');
-
-                this.poster = tokens.pop();
-
-                this.eventDispatcher.$emit('posterChange', this.poster);
-            },
-        },
     }
 </script>
 

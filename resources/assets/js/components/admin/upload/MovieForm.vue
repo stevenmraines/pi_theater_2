@@ -15,6 +15,7 @@
                 <year-input
                     :eventDispatcher="eventDispatcher"
                     :label="'Year Released'"
+                    :search="true"
                     :title="movies[currentFile].title"
                     :year="movies[currentFile].yearReleased"
                 ></year-input>
@@ -32,9 +33,14 @@
 
                 <poster-input
                     :eventDispatcher="eventDispatcher"
+                    :poster="movies[currentFile].poster"
+                    :title="movies[currentFile].title"
                 ></poster-input>
 
-                <jumbotron-input></jumbotron-input>
+                <jumbotron-input
+                    :eventDispatcher="eventDispatcher"
+                    :jumbotron="movies[currentFile].jumbotron"
+                ></jumbotron-input>
 
                 <genres-input
                     :allGenres="genres"
@@ -83,6 +89,7 @@
             this.eventDispatcher.$on('genresAdd', this.genresAdd);
             this.eventDispatcher.$on('genresChange', this.genresChange);
             this.eventDispatcher.$on('genresSet', this.genresSet);
+            this.eventDispatcher.$on('jumbotronChange', this.jumbotronChange);
             this.eventDispatcher.$on('notesChange', this.notesChange);
             this.eventDispatcher.$on('posterChange', this.posterChange);
             this.eventDispatcher.$on('submit', this.submit);
@@ -173,6 +180,10 @@
                 }
 
                 return tokens.join(' ');
+            },
+
+            jumbotronChange(jumbotron) {
+                this.movies[this.currentFile].jumbotron = jumbotron;
             },
 
             notesChange(notes) {

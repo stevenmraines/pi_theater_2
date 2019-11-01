@@ -3,6 +3,7 @@
         <label for="year">
             * {{ label }}
             <a
+                v-if="search"
                 :href="'https://www.google.com/search?q=' + title + '+year+released'"
                 target="_blank"
             >(search)</a>
@@ -14,18 +15,18 @@
             min="1900"
             :max="max"
             :value="year"
-            @change="eventDispatcher.$emit('yearChange', year)"
+            @change="eventDispatcher.$emit('yearChange', $event.target.value)"
             required
         />
     </div>
 </template>
 
 <script>
-    // TODO separate search into separate component? Or pass bool?
     export default {
         props: [
             'eventDispatcher',
             'label',
+            'search',
             'title',
             'year',
         ],

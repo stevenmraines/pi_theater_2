@@ -1,19 +1,24 @@
 <template>
     <div class="form-group">
-        <label for="movie-jumbotron">
+        <label for="jumbotron">
             Jumbotron Image
         </label>
         <input
             type="file"
-            id="movie-jumbotron"
+            id="jumbotron"
             class="form-control-file"
+            :value="jumbotron"
+            @change="eventDispatcher.$emit('jumbotronChange', $event.target.value)"
         />
     </div>
 </template>
 
 <script>
     export default {
-        props: ['filename']
+        props: [
+            'eventDispatcher',
+            'jumbotron',
+        ],
     }
 </script>
 

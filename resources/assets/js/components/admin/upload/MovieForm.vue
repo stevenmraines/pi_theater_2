@@ -3,6 +3,7 @@
         <div class="col">
             <form novalidate>
                 <file-input
+                    :currentFile="currentFile"
                     :eventDispatcher="eventDispatcher"
                     :files="files"
                 ></file-input>

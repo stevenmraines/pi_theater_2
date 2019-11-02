@@ -4,8 +4,8 @@
         <select
             id="file"
             class="form-control"
-            v-model="file"
-            @change="eventDispatcher.$emit('fileChange', file)"
+            :value="currentFile"
+            @change="eventDispatcher.$emit('fileChange', $event.target.value)"
         >
             <option
                 v-for="f in files"
@@ -17,14 +17,13 @@
 </template>
 
 <script>
+    // TODO figure out how to do bootstrap labels without ID
     export default {
-        props: ['files', 'eventDispatcher'],
-
-        data() {
-            return {
-                file: this.files[0],
-            };
-        },
+        props: [
+            'currentFile',
+            'eventDispatcher',
+            'files',
+        ],
     }
 </script>
 

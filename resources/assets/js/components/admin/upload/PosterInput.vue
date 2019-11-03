@@ -1,21 +1,18 @@
 <template>
     <div>
         <div class="form-group">
-            <label for="poster">* Poster Image
-                <a
-                    :href="'https://www.google.com/search?q=' + title + '+poster&tbm=isch'"
-                    target="_blank"
-                >(search)</a>
-            </label>
-            <input
-                type="file"
-                id="poster"
-                class="form-control-file"
+            <file-input
+                :label="'Poster Image'"
+                :required="true"
                 :value="poster"
-                @change="eventDispatcher.$emit('posterChange', $event.target.value)"
-                required
-            />
+            ></file-input>
         </div>
+        <a
+            :href="'https://www.google.com/search?q=' + title + '+poster&tbm=isch'"
+            target="_blank"
+        >
+            (search)
+        </a>
         <div class="text-danger mb-3" v-if="false">
             The poster image is required
         </div>
@@ -24,6 +21,7 @@
 
 <script>
     // TODO implement required warning
+    // TODO figure out how to do bootstrap labels without IDs
     export default {
         props: [
             'eventDispatcher',

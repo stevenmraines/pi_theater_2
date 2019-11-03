@@ -2,11 +2,11 @@
     <div class="row" v-if="drive > 0 && files.length > 0">
         <div class="col">
             <form novalidate>
-                <file-input
+                <video-file-input
                     :currentFile="currentFile"
                     :eventDispatcher="eventDispatcher"
                     :files="files"
-                ></file-input>
+                ></video-file-input>
 
                 <title-input
                     :eventDispatcher="eventDispatcher"
@@ -32,7 +32,7 @@
                     :notes="movies[currentFile].notes"
                 ></notes-input>
 
-                <poster-input
+                <!--<poster-input
                     :eventDispatcher="eventDispatcher"
                     :poster="movies[currentFile].poster"
                     :title="movies[currentFile].title"
@@ -41,19 +41,19 @@
                 <jumbotron-input
                     :eventDispatcher="eventDispatcher"
                     :jumbotron="movies[currentFile].jumbotron"
-                ></jumbotron-input>
+                ></jumbotron-input>-->
 
-                <genres-input
+                <multi-genre-input
                     :allGenres="genres"
                     :eventDispatcher="eventDispatcher"
                     :genres="movies[currentFile].genres"
-                ></genres-input>
+                ></multi-genre-input>
 
-                <collections-input
+                <multi-collection-input
                     :allCollections="collections"
                     :collections="movies[currentFile].collections"
                     :eventDispatcher="eventDispatcher"
-                ></collections-input>
+                ></multi-collection-input>
 
                 <submit-input
                     :eventDispatcher="eventDispatcher"
@@ -85,14 +85,14 @@
             // Register events
             this.eventDispatcher.$on('collectionsAdd', this.collectionsAdd);
             this.eventDispatcher.$on('collectionsChange', this.collectionsChange);
-            this.eventDispatcher.$on('collectionsSet', this.collectionsSet);
-            this.eventDispatcher.$on('fileChange', this.fileChange);
+            this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
             this.eventDispatcher.$on('genresAdd', this.genresAdd);
             this.eventDispatcher.$on('genresChange', this.genresChange);
-            this.eventDispatcher.$on('genresSet', this.genresSet);
             this.eventDispatcher.$on('jumbotronChange', this.jumbotronChange);
             this.eventDispatcher.$on('notesChange', this.notesChange);
             this.eventDispatcher.$on('posterChange', this.posterChange);
+            this.eventDispatcher.$on('removeCollection', this.removeCollection);
+            this.eventDispatcher.$on('removeGenre', this.removeGenre);
             this.eventDispatcher.$on('submit', this.submit);
             this.eventDispatcher.$on('summaryChange', this.summaryChange);
             this.eventDispatcher.$on('titleChange', this.titleChange);
@@ -101,17 +101,9 @@
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
                 this.movies[this.files[i]] = {
-                    collections: [
-                        {
-                            name: '',
-                        },
-                    ],
+                    collections: [''],
                     file: this.files[i],
-                    genres: [
-                        {
-                            name: '',
-                        },
-                    ],
+                    genres: [''],
                     jumbotron: '',
                     notes: '',
                     poster: '',
@@ -124,46 +116,26 @@
 
         methods: {
             collectionsAdd() {
-                this.movies[this.currentFile].collections.push(
-                    {
-                        name: ''
-                    }
-                );
+                this.movies[this.currentFile].collections.push('');
             },
 
-            collectionsChange(collections) {
-                this.movies[this.currentFile].collections = collections;
-            },
-
-            collectionsSet(data) {
+            collectionsChange(data) {
                 Vue.set(
                     this.movies[this.currentFile].collections,
                     data.index,
-                    data.collection
+                    data.value
                 );
-            },
-
-            fileChange(file) {
-                this.currentFile = file;
             },
 
             genresAdd() {
-                this.movies[this.currentFile].genres.push(
-                    {
-                        name: ''
-                    }
-                );
+                this.movies[this.currentFile].genres.push('');
             },
 
-            genresChange(genres) {
-                this.movies[this.currentFile].genres = genres;
-            },
-
-            genresSet(data) {
+            genresChange(data) {
                 Vue.set(
                     this.movies[this.currentFile].genres,
                     data.index,
-                    data.genre
+                    data.value
                 );
             },
 
@@ -184,15 +156,61 @@
             },
 
             jumbotronChange(jumbotron) {
-                this.movies[this.currentFile].jumbotron = jumbotron;
+                Vue.set(
+                    this.movies[this.currentFile],
+                    'jumbotron',
+                    jumbotron
+                );
             },
 
             notesChange(notes) {
-                this.movies[this.currentFile].notes = notes;
+                Vue.set(
+                    this.movies[this.currentFile],
+                    'notes',
+                    notes
+                );
             },
 
             posterChange(poster) {
-                this.movies[this.currentFile].poster = poster;
+                Vue.set(
+                    this.movies[this.currentFile],
+                    'poster',
+                    poster
+                );
+            },
+
+            removeCollection(index) {
+                var newCollections =
+                    this.movies[this.currentFile]
+                        .collections
+                        .splice(index, 1);
+
+                if(this.movies[this.currentFile].collections.length === 1 && index === 0) {
+                    newCollections = [''];
+                }
+
+                Vue.set(
+                    this.movies[this.currentFile],
+                    'collections',
+                    newCollections
+                );
+            },
+
+            removeGenre(index) {
+                var newGenres =
+                    this.movies[this.currentFile]
+                        .genres
+                        .splice(index, 1);
+
+                if(this.movies[this.currentFile].genres.length === 1 && index === 0) {
+                    newGenres = [''];
+                }
+
+                Vue.set(
+                    this.movies[this.currentFile],
+                    'genres',
+                    newGenres
+                );
             },
 
             submit() {
@@ -200,15 +218,31 @@
             },
 
             summaryChange(summary) {
-                this.movies[this.currentFile].summary = summary;
+                Vue.set(
+                    this.movies[this.currentFile],
+                    'summary',
+                    summary
+                );
             },
 
             titleChange(title) {
-                this.movies[this.currentFile].title = title;
+                Vue.set(
+                    this.movies[this.currentFile],
+                    'title',
+                    title
+                );
             },
 
-            yearChange(year) {
-                this.movies[this.currentFile].yearReleased = parseInt(year);
+            videoFileChange(file) {
+                this.currentFile = file;
+            },
+
+            yearChange(yearReleased) {
+                Vue.set(
+                    this.movies[this.currentFile],
+                    'yearReleased',
+                    parseInt(yearReleased)
+                );
             },
         },
     }

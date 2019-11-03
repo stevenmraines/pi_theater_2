@@ -67,21 +67,33 @@
 
 <script>
     export default {
-        props: ['initialState'],
+        props: [
+            'initialState',
+        ],
 
         data() {
             return {
-                collections: this.initialState.collections,
                 currentDrive: 0,
                 drives: this.initialState.drives,
                 eventDispatcher: new Vue({}),
-                genres: this.initialState.genres,
                 pending: this.initialState.pending,
                 shows: this.initialState.shows,
             };
         },
 
         computed: {
+            collections: function() {
+                var collections = [];
+
+                for(var i = 0; i < this.initialState.collections.length; i++) {
+                    collections.push(
+                        this.initialState.collections[i].name
+                    );
+                }
+
+                return collections;
+            },
+
             episodes: function() {
                 if(this.currentDrive <= 0
                         || typeof this.pending[this.currentDrive] === 'undefined') {
@@ -89,6 +101,18 @@
                 }
 
                 return this.pending[this.currentDrive].episodes;
+            },
+
+            genres: function() {
+                var genres = [];
+
+                for(var i = 0; i < this.initialState.genres.length; i++) {
+                    genres.push(
+                        this.initialState.genres[i].name
+                    );
+                }
+
+                return genres;
             },
 
             movies: function() {

@@ -32,16 +32,21 @@
                     :notes="movies[currentFile].notes"
                 ></notes-input>
 
-                <!--<poster-input
+                <image-file-input
+                    :event="'posterChange'"
                     :eventDispatcher="eventDispatcher"
-                    :poster="movies[currentFile].poster"
-                    :title="movies[currentFile].title"
-                ></poster-input>
+                    :label="'Poster Image'"
+                    :required="true"
+                    :value="movies[currentFile].poster"
+                ></image-file-input>
 
-                <jumbotron-input
+                <image-file-input
+                    :event="'jumbotronChange'"
                     :eventDispatcher="eventDispatcher"
-                    :jumbotron="movies[currentFile].jumbotron"
-                ></jumbotron-input>-->
+                    :label="'Jumbotron Image'"
+                    :required="false"
+                    :value="movies[currentFile].jumbotron"
+                ></image-file-input>
 
                 <multi-genre-input
                     :allGenres="genres"
@@ -104,9 +109,9 @@
                     collections: [''],
                     file: this.files[i],
                     genres: [''],
-                    jumbotron: '',
+                    jumbotron: [],
                     notes: '',
-                    poster: '',
+                    poster: [],
                     summary: '',
                     title: this.getTitleFromFile(this.files[i]),
                     yearReleased: new Date().getFullYear(),
@@ -125,6 +130,18 @@
                     data.index,
                     data.value
                 );
+            },
+
+            fileListToArray(fileList) {
+                var files = [];
+
+                for(var i = 0; i < fileList.length; i++) {
+                    if(typeof fileList.item(i) !== 'undefined') {
+                        files.push(fileList.item(i));
+                    }
+                }
+
+                return files;
             },
 
             genresAdd() {
@@ -155,11 +172,11 @@
                 return tokens.join(' ');
             },
 
-            jumbotronChange(jumbotron) {
+            jumbotronChange(fileList) {
                 Vue.set(
                     this.movies[this.currentFile],
                     'jumbotron',
-                    jumbotron
+                    this.fileListToArray(fileList)
                 );
             },
 
@@ -171,11 +188,11 @@
                 );
             },
 
-            posterChange(poster) {
+            posterChange(fileList) {
                 Vue.set(
                     this.movies[this.currentFile],
                     'poster',
-                    poster
+                    this.fileListToArray(fileList)
                 );
             },
 

@@ -32,21 +32,16 @@
                     :notes="movies[currentFileEscaped].notes"
                 ></notes-input>
 
-                <image-file-input
-                    :event="'posterChange'"
+                <poster-input
                     :eventDispatcher="eventDispatcher"
-                    :label="'Poster Image'"
-                    :required="true"
+                    :title="movies[currentFileEscaped].title"
                     :value="movies[currentFileEscaped].poster"
-                ></image-file-input>
+                ></poster-input>
 
-                <image-file-input
-                    :event="'jumbotronChange'"
+                <jumbotron-input
                     :eventDispatcher="eventDispatcher"
-                    :label="'Jumbotron Image'"
-                    :required="false"
                     :value="movies[currentFileEscaped].jumbotron"
-                ></image-file-input>
+                ></jumbotron-input>
 
                 <multi-genre-input
                     :allGenres="genres"

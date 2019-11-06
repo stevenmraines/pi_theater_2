@@ -10,26 +10,26 @@
 
                 <title-input
                     :eventDispatcher="eventDispatcher"
-                    :title="movies[currentFile].title"
+                    :title="movies[currentFileEscaped].title"
                 ></title-input>
 
                 <year-input
                     :eventDispatcher="eventDispatcher"
                     :label="'Year Released'"
                     :search="true"
-                    :title="movies[currentFile].title"
-                    :year="movies[currentFile].yearReleased"
+                    :title="movies[currentFileEscaped].title"
+                    :year="movies[currentFileEscaped].yearReleased"
                 ></year-input>
 
                 <summary-input
                     :eventDispatcher="eventDispatcher"
                     :required="true"
-                    :summary="movies[currentFile].summary"
+                    :summary="movies[currentFileEscaped].summary"
                 ></summary-input>
 
                 <notes-input
                     :eventDispatcher="eventDispatcher"
-                    :notes="movies[currentFile].notes"
+                    :notes="movies[currentFileEscaped].notes"
                 ></notes-input>
 
                 <image-file-input
@@ -37,7 +37,7 @@
                     :eventDispatcher="eventDispatcher"
                     :label="'Poster Image'"
                     :required="true"
-                    :value="movies[currentFile].poster"
+                    :value="movies[currentFileEscaped].poster"
                 ></image-file-input>
 
                 <image-file-input
@@ -45,18 +45,18 @@
                     :eventDispatcher="eventDispatcher"
                     :label="'Jumbotron Image'"
                     :required="false"
-                    :value="movies[currentFile].jumbotron"
+                    :value="movies[currentFileEscaped].jumbotron"
                 ></image-file-input>
 
                 <multi-genre-input
                     :allGenres="genres"
                     :eventDispatcher="eventDispatcher"
-                    :genres="movies[currentFile].genres"
+                    :genres="movies[currentFileEscaped].genres"
                 ></multi-genre-input>
 
                 <multi-collection-input
                     :allCollections="collections"
-                    :collections="movies[currentFile].collections"
+                    :collections="movies[currentFileEscaped].collections"
                     :eventDispatcher="eventDispatcher"
                 ></multi-collection-input>
 
@@ -86,6 +86,13 @@
             };
         },
 
+        computed: {
+            // TODO find a better way to index the files in the movie object
+            currentFileEscaped() {
+                return this.escapeFile(this.currentFile);
+            },
+        },
+
         created() {
             // Register events
             this.eventDispatcher.$on('collectionsAdd', this.collectionsAdd);
@@ -105,13 +112,13 @@
 
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
-                this.movies[this.files[i]] = {
+                this.movies[this.escapeFile(this.files[i])] = {
                     collections: [''],
                     file: this.files[i],
                     genres: [''],
-                    jumbotron: [],
+                    jumbotron: null,
                     notes: '',
-                    poster: [],
+                    poster: null,
                     summary: '',
                     title: this.getTitleFromFile(this.files[i]),
                     yearReleased: new Date().getFullYear(),
@@ -121,15 +128,19 @@
 
         methods: {
             collectionsAdd() {
-                this.movies[this.currentFile].collections.push('');
+                this.movies[this.currentFileEscaped].collections.push('');
             },
 
             collectionsChange(data) {
                 Vue.set(
-                    this.movies[this.currentFile].collections,
+                    this.movies[this.currentFileEscaped].collections,
                     data.index,
                     data.value
                 );
+            },
+
+            escapeFile(file) {
+                return file.replace('.', '');
             },
 
             fileListToArray(fileList) {
@@ -145,12 +156,12 @@
             },
 
             genresAdd() {
-                this.movies[this.currentFile].genres.push('');
+                this.movies[this.currentFileEscaped].genres.push('');
             },
 
             genresChange(data) {
                 Vue.set(
-                    this.movies[this.currentFile].genres,
+                    this.movies[this.currentFileEscaped].genres,
                     data.index,
                     data.value
                 );
@@ -174,15 +185,16 @@
 
             jumbotronChange(fileList) {
                 Vue.set(
-                    this.movies[this.currentFile],
+                    this.movies[this.currentFileEscaped],
                     'jumbotron',
-                    this.fileListToArray(fileList)
+                    // this.fileListToArray(fileList)
+                    fileList
                 );
             },
 
             notesChange(notes) {
                 Vue.set(
-                    this.movies[this.currentFile],
+                    this.movies[this.currentFileEscaped],
                     'notes',
                     notes
                 );
@@ -190,24 +202,25 @@
 
             posterChange(fileList) {
                 Vue.set(
-                    this.movies[this.currentFile],
+                    this.movies[this.currentFileEscaped],
                     'poster',
-                    this.fileListToArray(fileList)
+                    // this.fileListToArray(fileList)
+                    fileList
                 );
             },
 
             removeCollection(index) {
                 var newCollections =
-                    this.movies[this.currentFile]
+                    this.movies[this.currentFileEscaped]
                         .collections
                         .splice(index, 1);
 
-                if(this.movies[this.currentFile].collections.length === 1 && index === 0) {
+                if(this.movies[this.currentFileEscaped].collections.length === 1 && index === 0) {
                     newCollections = [''];
                 }
 
                 Vue.set(
-                    this.movies[this.currentFile],
+                    this.movies[this.currentFileEscaped],
                     'collections',
                     newCollections
                 );
@@ -215,16 +228,16 @@
 
             removeGenre(index) {
                 var newGenres =
-                    this.movies[this.currentFile]
+                    this.movies[this.currentFileEscaped]
                         .genres
                         .splice(index, 1);
 
-                if(this.movies[this.currentFile].genres.length === 1 && index === 0) {
+                if(this.movies[this.currentFileEscaped].genres.length === 1 && index === 0) {
                     newGenres = [''];
                 }
 
                 Vue.set(
-                    this.movies[this.currentFile],
+                    this.movies[this.currentFileEscaped],
                     'genres',
                     newGenres
                 );
@@ -236,7 +249,7 @@
 
             summaryChange(summary) {
                 Vue.set(
-                    this.movies[this.currentFile],
+                    this.movies[this.currentFileEscaped],
                     'summary',
                     summary
                 );
@@ -244,7 +257,7 @@
 
             titleChange(title) {
                 Vue.set(
-                    this.movies[this.currentFile],
+                    this.movies[this.currentFileEscaped],
                     'title',
                     title
                 );
@@ -256,7 +269,7 @@
 
             yearChange(yearReleased) {
                 Vue.set(
-                    this.movies[this.currentFile],
+                    this.movies[this.currentFileEscaped],
                     'yearReleased',
                     parseInt(yearReleased)
                 );

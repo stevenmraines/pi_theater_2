@@ -1,27 +1,13 @@
 <template>
-    <div>
-        <div class="form-group">
-            <label for="video-file">
-                <span v-if="required">* </span>
-                {{ label }}
-            </label>
-            <file-input
-                id="video-file"
-                class="form-control-file"
-                :eventDispatcher="fileEventDispatcher"
-                :required="required"
-                :value="value"
-            ></file-input>
-        </div>
-        <div class="text-danger mb-3" v-if="false">
-            The poster image is required
-        </div>
-    </div>
+    <file-input
+        :eventDispatcher="fileEventDispatcher"
+        :label="label"
+        :required="required"
+        :value="value"
+    ></file-input>
 </template>
 
 <script>
-    // TODO implement required warning message
-    // TODO implement optional search with title
     export default {
         props: [
             'event',

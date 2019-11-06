@@ -10,6 +10,7 @@
                     >
                         Options
                     </button>
+
                     <div class="dropdown-menu">
                         <a
                             href="javascript:void(0);"
@@ -22,23 +23,26 @@
                     </div>
                 </div>
             </div>
+
             <input
                 class="form-control"
                 :value="genre"
                 @change="genreChange"
             />
+
             <div class="input-group-append">
                 <button
                     class="btn btn-primary"
                     type="button"
-                    @click="eventDispatcher.$emit('addGenre')"
+                    @click="eventDispatcher.$emit('genreAdd')"
                 >
                     +
                 </button>
+
                 <button
-                        class="btn btn-danger"
-                        type="button"
-                        @click="eventDispatcher.$emit('removeGenre', index)"
+                    class="btn btn-danger"
+                    type="button"
+                    @click="eventDispatcher.$emit('genreRemove', index)"
                 >
                     x
                 </button>

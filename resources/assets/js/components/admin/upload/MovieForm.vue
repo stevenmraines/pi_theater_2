@@ -90,19 +90,19 @@
 
         created() {
             // Register events
-            this.eventDispatcher.$on('collectionsAdd', this.collectionsAdd);
-            this.eventDispatcher.$on('collectionsChange', this.collectionsChange);
-            this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
-            this.eventDispatcher.$on('genresAdd', this.genresAdd);
-            this.eventDispatcher.$on('genresChange', this.genresChange);
+            this.eventDispatcher.$on('collectionAdd', this.collectionAdd);
+            this.eventDispatcher.$on('collectionChange', this.collectionChange);
+            this.eventDispatcher.$on('collectionRemove', this.collectionRemove);
+            this.eventDispatcher.$on('genreAdd', this.genreAdd);
+            this.eventDispatcher.$on('genreChange', this.genreChange);
+            this.eventDispatcher.$on('genreRemove', this.genreRemove);
             this.eventDispatcher.$on('jumbotronChange', this.jumbotronChange);
             this.eventDispatcher.$on('notesChange', this.notesChange);
             this.eventDispatcher.$on('posterChange', this.posterChange);
-            this.eventDispatcher.$on('removeCollection', this.removeCollection);
-            this.eventDispatcher.$on('removeGenre', this.removeGenre);
             this.eventDispatcher.$on('submit', this.submit);
             this.eventDispatcher.$on('summaryChange', this.summaryChange);
             this.eventDispatcher.$on('titleChange', this.titleChange);
+            this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
             this.eventDispatcher.$on('yearChange', this.yearChange);
 
             // Initialize movies array
@@ -129,15 +129,32 @@
         },
 
         methods: {
-            collectionsAdd() {
+            collectionAdd() {
                 this.movies[this.currentFileEscaped].collections.push('');
             },
 
-            collectionsChange(data) {
+            collectionChange(data) {
                 Vue.set(
                     this.movies[this.currentFileEscaped].collections,
                     data.index,
                     data.value
+                );
+            },
+
+            collectionRemove(index) {
+                var newCollections = [''];
+
+                if(this.movies[this.currentFileEscaped].collections.length > 1) {
+                    newCollections =
+                        this.movies[this.currentFileEscaped]
+                            .collections
+                            .splice(index, 1);
+                }
+
+                Vue.set(
+                    this.movies[this.currentFileEscaped],
+                    'collections',
+                    newCollections
                 );
             },
 
@@ -157,15 +174,32 @@
                 return files;
             },
 
-            genresAdd() {
+            genreAdd() {
                 this.movies[this.currentFileEscaped].genres.push('');
             },
 
-            genresChange(data) {
+            genreChange(data) {
                 Vue.set(
                     this.movies[this.currentFileEscaped].genres,
                     data.index,
                     data.value
+                );
+            },
+
+            genreRemove(index) {
+                var newGenres = [''];
+
+                if(this.movies[this.currentFileEscaped].genres.length > 1) {
+                    newGenres =
+                        this.movies[this.currentFileEscaped]
+                            .genres
+                            .splice(index, 1);
+                }
+
+                Vue.set(
+                    this.movies[this.currentFileEscaped],
+                    'genres',
+                    newGenres
                 );
             },
 
@@ -208,40 +242,6 @@
                     'poster',
                     // this.fileListToArray(fileList)
                     fileList
-                );
-            },
-
-            removeCollection(index) {
-                var newCollections =
-                    this.movies[this.currentFileEscaped]
-                        .collections
-                        .splice(index, 1);
-
-                if(this.movies[this.currentFileEscaped].collections.length === 1 && index === 0) {
-                    newCollections = [''];
-                }
-
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'collections',
-                    newCollections
-                );
-            },
-
-            removeGenre(index) {
-                var newGenres =
-                    this.movies[this.currentFileEscaped]
-                        .genres
-                        .splice(index, 1);
-
-                if(this.movies[this.currentFileEscaped].genres.length === 1 && index === 0) {
-                    newGenres = [''];
-                }
-
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'genres',
-                    newGenres
                 );
             },
 

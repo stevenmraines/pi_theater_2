@@ -31,14 +31,14 @@
                 <button
                     class="btn btn-primary"
                     type="button"
-                    @click="eventDispatcher.$emit('addCollection')"
+                    @click="eventDispatcher.$emit('collectionAdd')"
                 >
                     +
                 </button>
                 <button
                     class="btn btn-danger"
                     type="button"
-                    @click="eventDispatcher.$emit('removeCollection', index)"
+                    @click="eventDispatcher.$emit('collectionRemove', index)"
                 >
                     x
                 </button>

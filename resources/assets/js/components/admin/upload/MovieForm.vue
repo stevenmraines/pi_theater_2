@@ -112,7 +112,7 @@
 
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
-                this.movies[this.escapeFile(this.files[i])] = {
+                var objectDefaults = {
                     collections: [''],
                     file: this.files[i],
                     genres: [''],
@@ -123,6 +123,13 @@
                     title: this.getTitleFromFile(this.files[i]),
                     yearReleased: new Date().getFullYear(),
                 };
+
+                // Use set function to maintain reactivity
+                Vue.set(
+                    this.movies,
+                    this.escapeFile(this.files[i]),
+                    objectDefaults
+                );
             }
         },
 

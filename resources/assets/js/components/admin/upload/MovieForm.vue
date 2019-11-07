@@ -145,10 +145,11 @@
                 var newCollections = [''];
 
                 if(this.movies[this.currentFileEscaped].collections.length > 1) {
-                    newCollections =
-                        this.movies[this.currentFileEscaped]
-                            .collections
-                            .splice(index, 1);
+                    this.movies[this.currentFileEscaped]
+                        .collections
+                        .splice(index, 1);
+
+                    newCollections = this.movies[this.currentFileEscaped].collections;
                 }
 
                 Vue.set(
@@ -190,10 +191,11 @@
                 var newGenres = [''];
 
                 if(this.movies[this.currentFileEscaped].genres.length > 1) {
-                    newGenres =
-                        this.movies[this.currentFileEscaped]
-                            .genres
-                            .splice(index, 1);
+                    this.movies[this.currentFileEscaped]
+                        .genres
+                        .splice(index, 1);
+
+                    newGenres = this.movies[this.currentFileEscaped].genres;
                 }
 
                 Vue.set(

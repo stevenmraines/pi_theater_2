@@ -1,54 +1,47 @@
 <template>
-    <div>
-        <div class="form-group">
-            <label for="file-upload">
-                <span v-if="required">* </span>
-                {{ label }}
-                <a
-                    v-if="search"
-                    :href="'https://www.google.com/search?q=' + title + '+poster&tbm=isch'"
-                    target="_blank"
-                > (search)</a>
-            </label>
+    <div class="form-group">
+        <label for="file-upload">
+            <span v-if="required">* </span>
+            {{ label }}
+            <a
+                v-if="search"
+                :href="'https://www.google.com/search?q=' + title + '+poster&tbm=isch'"
+                target="_blank"
+            > (search)</a>
+        </label>
 
-            <div
-                id="file-upload"
-                class="file-drop p-5"
-                :class="{ drag : isDrag }"
-                @dragenter.prevent.stop="isDrag = true"
-                @dragover.prevent.stop="isDrag = true"
-                @dragleave.prevent.stop="isDrag = false"
-                @drop.prevent.stop="fileChange"
-                @click="triggerFileClick"
+        <div
+            id="file-upload"
+            class="file-drop p-5"
+            :class="{ drag : isDrag }"
+            @dragenter.prevent.stop="isDrag = true"
+            @dragover.prevent.stop="isDrag = true"
+            @dragleave.prevent.stop="isDrag = false"
+            @drop.prevent.stop="fileChange"
+            @click="triggerFileClick"
+        >
+            <button
+                type="button"
+                class="btn btn-primary"
             >
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                >
-                    Upload
-                </button>
-            </div>
-
-            <span>
-                {{ message }}
-            </span>
-
-            <input
-                type="file"
-                accept="image/*"
-                @change="fileChange"
-                ref="fileInput"
-            />
+                Upload
+            </button>
         </div>
 
-        <div class="text-danger mb-3" v-if="required && false">
-            The poster image is required
-        </div>
+        <span>
+            {{ message }}
+        </span>
+
+        <input
+            type="file"
+            accept="image/*"
+            @change="fileChange"
+            ref="fileInput"
+        />
     </div>
 </template>
 
 <script>
-    // TODO implement required warning message
     // TODO implement optional search with title
     export default {
         props: [

@@ -9,16 +9,11 @@
             rows="4"
             :value="summary"
             @change="eventDispatcher.$emit('summaryChange', $event.target.value)"
-            :required="required"
         ></textarea>
-        <div class="text-warning mb-3" v-if="required && false">
-            The summary field is empty
-        </div>
     </div>
 </template>
 
 <script>
-    // TODO implement required warning
     // TODO figure out how to do labels without IDs
     export default {
         props: [

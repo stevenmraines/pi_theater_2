@@ -1,22 +1,15 @@
 <template>
-    <div>
-        <div class="form-group">
-            <label for="title">* Title</label>
-            <input
-                class="form-control"
-                :value="title"
-                @change="eventDispatcher.$emit('titleChange', $event.target.value)"
-                required
-            />
-        </div>
-        <div class="text-danger mb-3" v-if="false">
-            The title is required
-        </div>
+    <div class="form-group">
+        <label for="title">* Title</label>
+        <input
+            class="form-control"
+            :value="title"
+            @change="eventDispatcher.$emit('titleChange', $event.target.value)"
+        />
     </div>
 </template>
 
 <script>
-    // TODO implement required warning
     export default {
         props: [
             'eventDispatcher',
@@ -24,7 +17,3 @@
         ],
     }
 </script>
-
-<style scoped>
-
-</style>

@@ -12,11 +12,10 @@
             type="number"
             id="year"
             class="form-control"
-            min="1900"
+            :min="min"
             :max="max"
             :value="year"
             @change="eventDispatcher.$emit('yearChange', $event.target.value)"
-            required
         />
     </div>
 </template>
@@ -26,19 +25,11 @@
         props: [
             'eventDispatcher',
             'label',
+            'min',
+            'max',
             'search',
             'title',
             'year',
         ],
-
-        data() {
-            return {
-                max: new Date().getFullYear(),
-            };
-        },
     }
 </script>
-
-<style scoped>
-
-</style>

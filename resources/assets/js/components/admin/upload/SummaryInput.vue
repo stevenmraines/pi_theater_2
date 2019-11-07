@@ -1,7 +1,7 @@
 <template>
     <div class="form-group">
         <label for="summary">
-            <span v-if="required">{{ '* ' }}</span>Summary
+            <span v-if="required">* </span>Summary
         </label>
         <textarea
             id="summary"
@@ -23,7 +23,3 @@
         ],
     }
 </script>
-
-<style scoped>
-
-</style>

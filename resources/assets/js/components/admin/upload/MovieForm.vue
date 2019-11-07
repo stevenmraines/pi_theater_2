@@ -76,6 +76,10 @@
                     :genres="movies[currentFileEscaped].genres"
                 ></multi-genre-input>
 
+                <div class="alert alert-danger mb-2" role="alert" v-if="genreEmpty()">
+                    <strong>Error: </strong>The Genres are required
+                </div>
+
                 <!-- Collections -->
                 <multi-collection-input
                     :allCollections="collections"
@@ -86,6 +90,7 @@
                 <!-- Submit -->
                 <submit-input
                     :eventDispatcher="eventDispatcher"
+                    :disabled="submitDisabled"
                 ></submit-input>
             </form>
         </div>
@@ -116,6 +121,10 @@
             // TODO find a better way to index the files in the movie object
             currentFileEscaped() {
                 return this.escapeFile(this.currentFile);
+            },
+
+            submitDisabled() {
+                return !this.valid();
             },
         },
 
@@ -218,6 +227,18 @@
                 );
             },
 
+            genreEmpty() {
+                var empty = true;
+
+                for(var i = 0; i < this.movies[this.currentFileEscaped].genres.length; i++) {
+                    if(this.movies[this.currentFileEscaped].genres[i] !== '') {
+                        empty = false;
+                    }
+                }
+
+                return empty;
+            },
+
             genreRemove(index) {
                 var newGenres = [''];
 
@@ -308,6 +329,16 @@
 
             titleEmpty() {
                 return this.movies[this.currentFileEscaped].title === '';
+            },
+
+            valid() {
+                return (
+                    !this.titleEmpty()
+                    && this.yearValid()
+                    && !this.summaryEmpty()
+                    && !this.posterEmpty()
+                    && !this.genreEmpty()
+                );
             },
 
             videoFileChange(file) {

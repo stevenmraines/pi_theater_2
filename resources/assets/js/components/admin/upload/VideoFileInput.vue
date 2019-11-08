@@ -4,7 +4,7 @@
         <select
             id="file"
             class="form-control"
-            :value="currentFile"
+            :value="value"
             @change="eventDispatcher.$emit('videoFileChange', $event.target.value)"
         >
             <option
@@ -22,13 +22,9 @@
     // TODO figure out how to do bootstrap labels without ID
     export default {
         props: [
-            'currentFile',
             'eventDispatcher',
             'files',
+            'value',
         ],
     }
 </script>
-
-<style scoped>
-
-</style>

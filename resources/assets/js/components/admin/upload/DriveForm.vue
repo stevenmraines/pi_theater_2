@@ -44,14 +44,15 @@
                         Add Episodes ({{ episodes.length }} pending)
                     </a>
                 </h5>
-<!--                <episode-form-->
-<!--                    id="episode-form"-->
-<!--                    class="card-body collapse"-->
-<!--                    role="tabpanel"-->
-<!--                    :drive="currentDrive"-->
-<!--                    :files="episodes"-->
-<!--                    :shows="shows"-->
-<!--                ></episode-form>-->
+                <episode-form
+                    id="episode-form"
+                    class="card-body collapse"
+                    role="tabpanel"
+                    :drive="currentDrive"
+                    :driveEventDispatcher="eventDispatcher"
+                    :files="episodes"
+                    :shows="shows"
+                ></episode-form>
             </div>
 
             <div class="card" role="tablist">
@@ -77,7 +78,7 @@
                 drives: this.initialState.drives,
                 eventDispatcher: new Vue({}),
                 pending: this.initialState.pending,
-                shows: this.initialState.shows,
+                shows: this.sortShows(this.initialState.shows),
             };
         },
 
@@ -172,10 +173,12 @@
             showSubmit() {
 
             },
+
+            sortShows(shows) {
+                return shows.sort(function(a, b) {
+                    return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+                });
+            },
         },
     }
 </script>
-
-<style scoped>
-
-</style>

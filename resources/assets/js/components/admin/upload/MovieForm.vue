@@ -4,19 +4,19 @@
             <form novalidate>
                 <!-- File -->
                 <video-file-input
-                    :currentFile="currentFile"
                     :eventDispatcher="eventDispatcher"
                     :files="files"
+                    :value="currentFile"
                 ></video-file-input>
 
                 <!-- Title -->
                 <title-input
                     :eventDispatcher="eventDispatcher"
-                    :title="movies[currentFileEscaped].title"
+                    :value="movies[currentFileEscaped].title"
                 ></title-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="titleEmpty()">
-                    <strong>Error: </strong>The Title is required
+                    <strong>Error: </strong>The Title field is required
                 </div>
 
                 <!-- Year Released -->
@@ -27,29 +27,29 @@
                     :max="yearMax"
                     :search="true"
                     :title="movies[currentFileEscaped].title"
-                    :year="movies[currentFileEscaped].yearReleased"
+                    :value="movies[currentFileEscaped].yearReleased"
                 ></year-input>
 
                 <!-- TODO figure out how to get empty / required warning -->
                 <div class="alert alert-danger mb-2" role="alert" v-if="!yearValid()">
-                    <strong>Error: </strong>The Year Released is not valid
+                    <strong>Error: </strong>The Year Released field is not valid
                 </div>
 
                 <!-- Summary -->
                 <summary-input
                     :eventDispatcher="eventDispatcher"
                     :required="true"
-                    :summary="movies[currentFileEscaped].summary"
+                    :value="movies[currentFileEscaped].summary"
                 ></summary-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="summaryEmpty()">
-                    <strong>Error: </strong>The Summary is required
+                    <strong>Error: </strong>The Summary field is required
                 </div>
 
                 <!-- Notes -->
                 <notes-input
                     :eventDispatcher="eventDispatcher"
-                    :notes="movies[currentFileEscaped].notes"
+                    :value="movies[currentFileEscaped].notes"
                 ></notes-input>
 
                 <!-- Poster -->
@@ -60,7 +60,7 @@
                 ></poster-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="posterEmpty()">
-                    <strong>Error: </strong>The Poster Image is required
+                    <strong>Error: </strong>The Poster Image field is required
                 </div>
 
                 <!-- Jumbotron -->
@@ -77,7 +77,11 @@
                 ></multi-genre-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="genreEmpty()">
-                    <strong>Error: </strong>The Genres are required
+                    <strong>Error: </strong>The Genres field is required
+                </div>
+
+                <div class="alert alert-danger mb-2" role="alert" v-if="genreDuplicates()">
+                    <strong>Error: </strong>There are duplicate values in the Genre fields
                 </div>
 
                 <!-- Collections -->
@@ -86,6 +90,10 @@
                     :collections="movies[currentFileEscaped].collections"
                     :eventDispatcher="eventDispatcher"
                 ></multi-collection-input>
+
+                <div class="alert alert-danger mb-2" role="alert" v-if="collectionDuplicates()">
+                    <strong>Error: </strong>There are duplicate values in the Collection fields
+                </div>
 
                 <!-- Submit -->
                 <submit-input
@@ -181,6 +189,22 @@
                 );
             },
 
+            collectionDuplicates() {
+                var previousCollections = [];
+
+                for(var i = 0; i < this.movies[this.currentFileEscaped].collections.length; i++) {
+                    var currentCollection = this.movies[this.currentFileEscaped].collections[i];
+
+                    if(previousCollections.indexOf(currentCollection) >= 0) {
+                        return true;
+                    }
+
+                    previousCollections.push(currentCollection);
+                }
+
+                return false;
+            },
+
             collectionRemove(index) {
                 var newCollections = [''];
 
@@ -227,16 +251,30 @@
                 );
             },
 
-            genreEmpty() {
-                var empty = true;
+            genreDuplicates() {
+                var previousGenres = [];
 
                 for(var i = 0; i < this.movies[this.currentFileEscaped].genres.length; i++) {
-                    if(this.movies[this.currentFileEscaped].genres[i] !== '') {
-                        empty = false;
+                    var currentGenre = this.movies[this.currentFileEscaped].genres[i];
+
+                    if(previousGenres.indexOf(currentGenre) >= 0) {
+                        return true;
+                    }
+
+                    previousGenres.push(currentGenre);
+                }
+
+                return false;
+            },
+
+            genreEmpty() {
+                for(var i = 0; i < this.movies[this.currentFileEscaped].genres.length; i++) {
+                    if(this.movies[this.currentFileEscaped].genres[i] === '') {
+                        return true;
                     }
                 }
 
-                return empty;
+                return false;
             },
 
             genreRemove(index) {
@@ -338,6 +376,8 @@
                     && !this.summaryEmpty()
                     && !this.posterEmpty()
                     && !this.genreEmpty()
+                    && !this.genreDuplicates()
+                    && !this.collectionDuplicates()
                 );
             },
 

@@ -4,8 +4,9 @@
         <input
             id="notes"
             class="form-control font-italic"
-            :value="notes"
-            @change="eventDispatcher.$emit('notesChange', $event.target.value)"
+            :value="value"
+            @change="notesChange"
+            @input="notesChange"
         />
     </div>
 </template>
@@ -15,11 +16,13 @@
     export default {
         props: [
             'eventDispatcher',
-            'notes',
+            'value',
         ],
+
+        methods: {
+            notesChange(event) {
+                this.eventDispatcher.$emit('notesChange', event.target.value);
+            },
+        },
     }
 </script>
-
-<style scoped>
-
-</style>

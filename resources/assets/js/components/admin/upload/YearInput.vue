@@ -14,8 +14,9 @@
             class="form-control"
             :min="min"
             :max="max"
-            :value="year"
-            @change="eventDispatcher.$emit('yearChange', $event.target.value)"
+            :value="value"
+            @change="yearChange"
+            @input="yearChange"
         />
     </div>
 </template>
@@ -29,7 +30,13 @@
             'max',
             'search',
             'title',
-            'year',
+            'value',
         ],
+
+        methods: {
+            yearChange(event) {
+                this.eventDispatcher.$emit('yearChange', event.target.value);
+            },
+        },
     }
 </script>

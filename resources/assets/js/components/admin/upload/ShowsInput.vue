@@ -4,37 +4,25 @@
         <select
             id="show"
             class="form-control"
-            v-model="show"
+            :value="value"
+            @change="eventDispatcher.$emit('showChange', $event.target.value)"
         >
             <option
-                v-for="s in sortedShows"
-                :key="s.id"
+                v-for="s in shows"
                 :value="s.id"
-            >{{ s.title }}</option>
+            >
+                {{ s.title }}
+            </option>
         </select>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['shows'],
-
-        data() {
-            return {
-                show: this.sortedShows[0],
-            };
-        },
-
-        computed: {
-            sortedShows() {
-                return this.shows.sort(function(a, b) {
-                    return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
-                });
-            }
-        }
+        props: [
+            'eventDispatcher',
+            'shows',
+            'value',
+        ],
     }
 </script>
-
-<style scoped>
-
-</style>

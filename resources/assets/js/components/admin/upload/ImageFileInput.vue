@@ -42,7 +42,7 @@
 </template>
 
 <script>
-    // TODO implement optional search with title
+    // TODO fix bug where escaping from file selection without picking anything still sets a FileList to value
     export default {
         props: [
             'event',

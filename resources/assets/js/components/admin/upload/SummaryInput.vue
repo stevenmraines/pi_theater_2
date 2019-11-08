@@ -7,8 +7,9 @@
             id="summary"
             class="form-control"
             rows="4"
-            :value="summary"
-            @change="eventDispatcher.$emit('summaryChange', $event.target.value)"
+            :value="value"
+            @change="summaryChange"
+            @input="summaryChange"
         ></textarea>
     </div>
 </template>
@@ -19,7 +20,13 @@
         props: [
             'eventDispatcher',
             'required',
-            'summary',
+            'value',
         ],
+
+        methods: {
+            summaryChange(event) {
+                this.eventDispatcher.$emit('summaryChange', event.target.value);
+            },
+        },
     }
 </script>

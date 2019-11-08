@@ -20,7 +20,7 @@ class AuthViewController extends Controller
             'drives' => \App\Drive::all(),
             'genres' => \App\Genre::all(),
             'pending' => \App\Drive::pending(),
-            'shows' => \App\Media::where('media_type', '=', 'show')->get()
+            'shows' => \App\Media::where('media_type', '=', 'show')->with('episodes')->get()
         ];
 
         return view('admin.upload.upload')->with('initialState', json_encode($initialState));

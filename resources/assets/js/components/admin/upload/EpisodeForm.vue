@@ -15,9 +15,15 @@
                     :value="episodes[currentFileEscaped].show"
                 ></shows-input>
 
-<!--                <season-input></season-input>-->
+                <season-input
+                    :eventDispatcher="eventDispatcher"
+                    :value="episodes[currentFileEscaped].season"
+                ></season-input>
 
-<!--                <episode-number-input></episode-number-input>-->
+                <episode-number-input
+                    :eventDispatcher="eventDispatcher"
+                    :value="episodes[currentFileEscaped].episodeNumber"
+                ></episode-number-input>
 
                 <!-- Title -->
                 <title-input
@@ -70,6 +76,34 @@
                 return this.escapeFile(this.currentFile);
             },
 
+            currentShow() {
+                var showId = this.episodes[this.currentFileEscaped].show;
+
+                for(var i = 0; i < this.shows.length; i++) {
+                    if(this.shows[i].id == showId) {
+                        return this.shows[i];
+                    }
+                }
+
+                return null;
+            },
+
+            currentShowSeasons() {
+                var seasons = [];
+
+                if(!this.currentShow) {
+                    return seasons;
+                }
+
+                for(var i = 0; i < this.currentShow.episodes.length; i++) {
+                    if(seasons.indexOf(this.currentShow.episodes[i].season) === -1) {
+                        seasons.push(this.currentShow.episodes[i].season);
+                    }
+                }
+
+                return seasons;
+            },
+
             submitDisabled() {
                 return !this.valid();
             },
@@ -77,8 +111,10 @@
 
         created() {
             // Register events
-            this.eventDispatcher.$on('submit', this.submit);
+            this.eventDispatcher.$on('episodeNumberChange', this.episodeNumberChange);
+            this.eventDispatcher.$on('seasonChange', this.seasonChange);
             this.eventDispatcher.$on('showChange', this.showChange);
+            this.eventDispatcher.$on('submit', this.submit);
             this.eventDispatcher.$on('summaryChange', this.summaryChange);
             this.eventDispatcher.$on('titleChange', this.titleChange);
             this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
@@ -89,8 +125,8 @@
                 var objectDefaults = {
                     file: this.files[i],
                     show: this.getShowFromFile(this.files[i]),
-                    season: 1,
-                    episodeNumber: 1,
+                    season: this.getSeasonFromFile(this.files[i]),
+                    episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
                     summary: '',
                     title: '',
                     yearStart: this.yearMax,
@@ -107,16 +143,24 @@
         },
 
         methods: {
+            episodeNumberChange(episodeNumber) {
+                Vue.set(
+                    this.episodes[this.currentFileEscaped],
+                    'episodeNumber',
+                    episodeNumber
+                );
+            },
+
             escapeFile(file) {
                 return file.replace('.', '');
             },
 
             getEpisodeNumberFromFile(file) {
-
+                return parseInt(file.replace(/.+_s\d{2}-e([0-9]{2}).+/, '$1'));
             },
 
             getSeasonFromFile(file) {
-
+                return parseInt(file.replace(/.+_s(\d{2})-e.+/, '$1'));
             },
 
             getShowFromFile(file) {
@@ -130,6 +174,14 @@
                 }
 
                 return this.shows[0].id;
+            },
+
+            seasonChange(season) {
+                Vue.set(
+                    this.episodes[this.currentFileEscaped],
+                    'season',
+                    season
+                );
             },
 
             showChange(show) {

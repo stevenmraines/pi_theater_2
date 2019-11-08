@@ -1,6 +1,6 @@
 <template>
     <div class="form-group">
-        <label for="show">Show</label>
+        <label for="show">* Show</label>
         <select
             id="show"
             class="form-control"

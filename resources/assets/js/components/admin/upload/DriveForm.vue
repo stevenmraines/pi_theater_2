@@ -61,6 +61,13 @@
                         Add Shows
                     </a>
                 </h5>
+                <show-form
+                    id="show-form"
+                    class="card-body collapse"
+                    role="tabpanel"
+                    :drive="currentDrive"
+                    :driveEventDispatcher="eventDispatcher"
+                ></show-form>
             </div>
         </div>
     </div>

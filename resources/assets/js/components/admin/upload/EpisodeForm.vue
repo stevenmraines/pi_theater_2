@@ -66,8 +66,6 @@
                 currentFile: this.files[0],
                 eventDispatcher: new Vue({}),
                 episodes: {},
-                yearMax: new Date().getFullYear(),
-                yearMin: 1900,
             };
         },
 
@@ -118,7 +116,6 @@
             this.eventDispatcher.$on('summaryChange', this.summaryChange);
             this.eventDispatcher.$on('titleChange', this.titleChange);
             this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
-            // this.eventDispatcher.$on('yearChange', this.yearChange);
 
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
@@ -129,8 +126,6 @@
                     episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
                     summary: '',
                     title: '',
-                    yearStart: this.yearMax,
-                    yearEnd: this.yearMax,
                 };
 
                 // Use set function to maintain reactivity

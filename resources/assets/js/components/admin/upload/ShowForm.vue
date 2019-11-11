@@ -1,5 +1,5 @@
 <template>
-    <div class="row" v-if="drive > 0">
+    <div class="row">
         <div class="col">
             <form novalidate>
                 <!-- Title -->

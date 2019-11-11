@@ -54,23 +54,23 @@
                     :shows="shows"
                 ></episode-form>
             </div>
+        </div>
 
-            <div class="card" role="tablist">
-                <h5 class="card-header mb-0">
-                    <a data-toggle="collapse" href="#show-form" role="tab">
-                        Add Shows
-                    </a>
-                </h5>
-                <show-form
-                    id="show-form"
-                    class="card-body collapse"
-                    role="tabpanel"
-                    :collections="collections"
-                    :drive="currentDrive"
-                    :driveEventDispatcher="eventDispatcher"
-                    :genres="genres"
-                ></show-form>
-            </div>
+        <div class="card" role="tablist">
+            <h5 class="card-header mb-0">
+                <a data-toggle="collapse" href="#show-form" role="tab">
+                    Add Shows
+                </a>
+            </h5>
+            <show-form
+                id="show-form"
+                class="card-body collapse"
+                role="tabpanel"
+                :collections="collections"
+                :drive="currentDrive"
+                :driveEventDispatcher="eventDispatcher"
+                :genres="genres"
+            ></show-form>
         </div>
     </div>
 </template>

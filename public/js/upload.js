@@ -841,30 +841,30 @@ var render = function() {
               })
             ],
             1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "card", attrs: { role: "tablist" } },
-            [
-              _vm._m(0),
-              _vm._v(" "),
-              _c("show-form", {
-                staticClass: "card-body collapse",
-                attrs: {
-                  id: "show-form",
-                  role: "tabpanel",
-                  collections: _vm.collections,
-                  drive: _vm.currentDrive,
-                  driveEventDispatcher: _vm.eventDispatcher,
-                  genres: _vm.genres
-                }
-              })
-            ],
-            1
           )
         ])
-      : _vm._e()
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "card", attrs: { role: "tablist" } },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("show-form", {
+          staticClass: "card-body collapse",
+          attrs: {
+            id: "show-form",
+            role: "tabpanel",
+            collections: _vm.collections,
+            drive: _vm.currentDrive,
+            driveEventDispatcher: _vm.eventDispatcher,
+            genres: _vm.genres
+          }
+        })
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = [
@@ -878,7 +878,7 @@ var staticRenderFns = [
         {
           attrs: { "data-toggle": "collapse", href: "#show-form", role: "tab" }
         },
-        [_vm._v("\n                    Add Shows\n                ")]
+        [_vm._v("\n                Add Shows\n            ")]
       )
     ])
   }
@@ -3408,225 +3408,223 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.drive > 0
-    ? _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "form",
-            { attrs: { novalidate: "" } },
-            [
-              _c("title-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  value: _vm.show.title
-                }
-              }),
-              _vm._v(" "),
-              _vm.titleEmpty()
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "alert alert-danger mb-2",
-                      attrs: { role: "alert" }
-                    },
-                    [
-                      _c("strong", [_vm._v("Error: ")]),
-                      _vm._v("The Title field is required\n            ")
-                    ]
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col" }, [
+      _c(
+        "form",
+        { attrs: { novalidate: "" } },
+        [
+          _c("title-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.title
+            }
+          }),
+          _vm._v(" "),
+          _vm.titleEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Title field is required\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("year-start-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              title: _vm.show.title,
+              value: _vm.show.yearStart
+            }
+          }),
+          _vm._v(" "),
+          !_vm.yearStartValid()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Year Start field is not valid\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.startGreaterThanEnd()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-warning mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Warning: ")]),
+                  _vm._v(
+                    "The Year Start field should be less than the Year End\n            "
                   )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("year-start-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  title: _vm.show.title,
-                  value: _vm.show.yearStart
-                }
-              }),
-              _vm._v(" "),
-              !_vm.yearStartValid()
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "alert alert-danger mb-2",
-                      attrs: { role: "alert" }
-                    },
-                    [
-                      _c("strong", [_vm._v("Error: ")]),
-                      _vm._v("The Year Start field is not valid\n            ")
-                    ]
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("year-end-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.yearEnd
+            }
+          }),
+          _vm._v(" "),
+          !_vm.yearEndValid()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Year End field is not valid\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("summary-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              required: true,
+              value: _vm.show.summary
+            }
+          }),
+          _vm._v(" "),
+          _vm.summaryEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Summary field is required\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("notes-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.notes
+            }
+          }),
+          _vm._v(" "),
+          _c("poster-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              title: _vm.show.title,
+              value: _vm.show.poster
+            }
+          }),
+          _vm._v(" "),
+          _vm.posterEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Poster Image field is required\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("jumbotron-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.jumbotron
+            }
+          }),
+          _vm._v(" "),
+          _c("multi-genre-input", {
+            attrs: {
+              allGenres: _vm.genres,
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.genres
+            }
+          }),
+          _vm._v(" "),
+          _vm.genreEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Genres field is required\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.genreDuplicates()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v(
+                    "There are duplicate values in the Genre fields\n            "
                   )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.startGreaterThanEnd()
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "alert alert-warning mb-2",
-                      attrs: { role: "alert" }
-                    },
-                    [
-                      _c("strong", [_vm._v("Warning: ")]),
-                      _vm._v(
-                        "The Year Start field should be less than the Year End\n            "
-                      )
-                    ]
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("multi-collection-input", {
+            attrs: {
+              allCollections: _vm.collections,
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.collections
+            }
+          }),
+          _vm._v(" "),
+          _vm.collectionDuplicates()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v(
+                    "There are duplicate values in the Collection fields\n            "
                   )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("year-end-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  value: _vm.show.yearEnd
-                }
-              }),
-              _vm._v(" "),
-              !_vm.yearEndValid()
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "alert alert-danger mb-2",
-                      attrs: { role: "alert" }
-                    },
-                    [
-                      _c("strong", [_vm._v("Error: ")]),
-                      _vm._v("The Year End field is not valid\n            ")
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("summary-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  required: true,
-                  value: _vm.show.summary
-                }
-              }),
-              _vm._v(" "),
-              _vm.summaryEmpty()
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "alert alert-danger mb-2",
-                      attrs: { role: "alert" }
-                    },
-                    [
-                      _c("strong", [_vm._v("Error: ")]),
-                      _vm._v("The Summary field is required\n            ")
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("notes-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  value: _vm.show.notes
-                }
-              }),
-              _vm._v(" "),
-              _c("poster-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  title: _vm.show.title,
-                  value: _vm.show.poster
-                }
-              }),
-              _vm._v(" "),
-              _vm.posterEmpty()
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "alert alert-danger mb-2",
-                      attrs: { role: "alert" }
-                    },
-                    [
-                      _c("strong", [_vm._v("Error: ")]),
-                      _vm._v("The Poster Image field is required\n            ")
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("jumbotron-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  value: _vm.show.jumbotron
-                }
-              }),
-              _vm._v(" "),
-              _c("multi-genre-input", {
-                attrs: {
-                  allGenres: _vm.genres,
-                  eventDispatcher: _vm.eventDispatcher,
-                  value: _vm.show.genres
-                }
-              }),
-              _vm._v(" "),
-              _vm.genreEmpty()
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "alert alert-danger mb-2",
-                      attrs: { role: "alert" }
-                    },
-                    [
-                      _c("strong", [_vm._v("Error: ")]),
-                      _vm._v("The Genres field is required\n            ")
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.genreDuplicates()
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "alert alert-danger mb-2",
-                      attrs: { role: "alert" }
-                    },
-                    [
-                      _c("strong", [_vm._v("Error: ")]),
-                      _vm._v(
-                        "There are duplicate values in the Genre fields\n            "
-                      )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("multi-collection-input", {
-                attrs: {
-                  allCollections: _vm.collections,
-                  eventDispatcher: _vm.eventDispatcher,
-                  value: _vm.show.collections
-                }
-              }),
-              _vm._v(" "),
-              _vm.collectionDuplicates()
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "alert alert-danger mb-2",
-                      attrs: { role: "alert" }
-                    },
-                    [
-                      _c("strong", [_vm._v("Error: ")]),
-                      _vm._v(
-                        "There are duplicate values in the Collection fields\n            "
-                      )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("submit-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  disabled: _vm.submitDisabled
-                }
-              })
-            ],
-            1
-          )
-        ])
-      ])
-    : _vm._e()
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("submit-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              disabled: _vm.submitDisabled
+            }
+          })
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -1000,6 +1000,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 // TODO abstract EpisodeForm and MovieForm into generic component
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1017,32 +1025,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         currentFileEscaped: function currentFileEscaped() {
             return this.escapeFile(this.currentFile);
-        },
-        currentShow: function currentShow() {
-            var showId = this.episodes[this.currentFileEscaped].show;
-
-            for (var i = 0; i < this.shows.length; i++) {
-                if (this.shows[i].id == showId) {
-                    return this.shows[i];
-                }
-            }
-
-            return null;
-        },
-        currentShowSeasons: function currentShowSeasons() {
-            var seasons = [];
-
-            if (!this.currentShow) {
-                return seasons;
-            }
-
-            for (var i = 0; i < this.currentShow.episodes.length; i++) {
-                if (seasons.indexOf(this.currentShow.episodes[i].season) === -1) {
-                    seasons.push(this.currentShow.episodes[i].season);
-                }
-            }
-
-            return seasons;
         },
         submitDisabled: function submitDisabled() {
             return !this.valid();
@@ -1062,10 +1044,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // Initialize movies array
         for (var i = 0; i < this.files.length; i++) {
             var objectDefaults = {
-                file: this.files[i],
-                show: this.getShowFromFile(this.files[i]),
-                season: this.getSeasonFromFile(this.files[i]),
                 episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
+                file: this.files[i],
+                season: this.getSeasonFromFile(this.files[i]),
+                show: this.getShowFromFile(this.files[i]),
                 summary: '',
                 title: ''
             };
@@ -1078,7 +1060,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         episodeNumberChange: function episodeNumberChange(episodeNumber) {
-            Vue.set(this.episodes[this.currentFileEscaped], 'episodeNumber', episodeNumber);
+            Vue.set(this.episodes[this.currentFileEscaped], 'episodeNumber', parseInt(episodeNumber));
+        },
+        episodeNumberValid: function episodeNumberValid() {
+            return this.numberValid(this.episodes[this.currentFileEscaped].episodeNumber);
         },
         escapeFile: function escapeFile(file) {
             return file.replace('.', '');
@@ -1101,8 +1086,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             return this.shows[0].id;
         },
+        numberValid: function numberValid(number) {
+            return number > 0 && !isNaN(number);
+        },
         seasonChange: function seasonChange(season) {
-            Vue.set(this.episodes[this.currentFileEscaped], 'season', season);
+            Vue.set(this.episodes[this.currentFileEscaped], 'season', parseInt(season));
+        },
+        seasonValid: function seasonValid() {
+            return this.numberValid(this.episodes[this.currentFileEscaped].season);
         },
         showChange: function showChange(show) {
             Vue.set(this.episodes[this.currentFileEscaped], 'show', show);
@@ -1120,7 +1111,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.episodes[this.currentFileEscaped].title === '';
         },
         valid: function valid() {
-            return !this.titleEmpty();
+            return !this.titleEmpty() && this.seasonValid() && this.episodeNumberValid();
         },
         videoFileChange: function videoFileChange(file) {
             this.currentFile = file;
@@ -1167,12 +1158,42 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
+              !_vm.seasonValid()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Season field is not valid\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _c("episode-number-input", {
                 attrs: {
                   eventDispatcher: _vm.eventDispatcher,
                   value: _vm.episodes[_vm.currentFileEscaped].episodeNumber
                 }
               }),
+              _vm._v(" "),
+              !_vm.episodeNumberValid()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v(
+                        "The Episode Number field is not valid\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
               _vm._v(" "),
               _c("title-input", {
                 attrs: {

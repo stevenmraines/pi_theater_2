@@ -20,10 +20,18 @@
                     :value="episodes[currentFileEscaped].season"
                 ></season-input>
 
+                <div class="alert alert-danger mb-2" role="alert" v-if="!seasonValid()">
+                    <strong>Error: </strong>The Season field is not valid
+                </div>
+
                 <episode-number-input
                     :eventDispatcher="eventDispatcher"
                     :value="episodes[currentFileEscaped].episodeNumber"
                 ></episode-number-input>
+
+                <div class="alert alert-danger mb-2" role="alert" v-if="!episodeNumberValid()">
+                    <strong>Error: </strong>The Episode Number field is not valid
+                </div>
 
                 <!-- Title -->
                 <title-input
@@ -74,34 +82,6 @@
                 return this.escapeFile(this.currentFile);
             },
 
-            currentShow() {
-                var showId = this.episodes[this.currentFileEscaped].show;
-
-                for(var i = 0; i < this.shows.length; i++) {
-                    if(this.shows[i].id == showId) {
-                        return this.shows[i];
-                    }
-                }
-
-                return null;
-            },
-
-            currentShowSeasons() {
-                var seasons = [];
-
-                if(!this.currentShow) {
-                    return seasons;
-                }
-
-                for(var i = 0; i < this.currentShow.episodes.length; i++) {
-                    if(seasons.indexOf(this.currentShow.episodes[i].season) === -1) {
-                        seasons.push(this.currentShow.episodes[i].season);
-                    }
-                }
-
-                return seasons;
-            },
-
             submitDisabled() {
                 return !this.valid();
             },
@@ -120,10 +100,10 @@
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
                 var objectDefaults = {
-                    file: this.files[i],
-                    show: this.getShowFromFile(this.files[i]),
-                    season: this.getSeasonFromFile(this.files[i]),
                     episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
+                    file: this.files[i],
+                    season: this.getSeasonFromFile(this.files[i]),
+                    show: this.getShowFromFile(this.files[i]),
                     summary: '',
                     title: '',
                 };
@@ -142,8 +122,12 @@
                 Vue.set(
                     this.episodes[this.currentFileEscaped],
                     'episodeNumber',
-                    episodeNumber
+                    parseInt(episodeNumber)
                 );
+            },
+
+            episodeNumberValid() {
+                return this.numberValid(this.episodes[this.currentFileEscaped].episodeNumber);
             },
 
             escapeFile(file) {
@@ -171,12 +155,20 @@
                 return this.shows[0].id;
             },
 
+            numberValid(number) {
+                return number > 0 && !isNaN(number);
+            },
+
             seasonChange(season) {
                 Vue.set(
                     this.episodes[this.currentFileEscaped],
                     'season',
-                    season
+                    parseInt(season)
                 );
+            },
+
+            seasonValid() {
+                return this.numberValid(this.episodes[this.currentFileEscaped].season);
             },
 
             showChange(show) {
@@ -212,7 +204,11 @@
             },
 
             valid() {
-                return !this.titleEmpty();
+                return (
+                    !this.titleEmpty()
+                    && this.seasonValid()
+                    && this.episodeNumberValid()
+                );
             },
 
             videoFileChange(file) {

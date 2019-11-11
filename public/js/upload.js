@@ -208,7 +208,10 @@ Vue.component('submit-input', __webpack_require__(465));
 Vue.component('summary-input', __webpack_require__(468));
 Vue.component('title-input', __webpack_require__(471));
 Vue.component('video-file-input', __webpack_require__(474));
-Vue.component('year-input', __webpack_require__(477));
+Vue.component('year-end-input', __webpack_require__(477));
+Vue.component('year-input', __webpack_require__(480));
+Vue.component('year-released-input', __webpack_require__(483));
+Vue.component('year-start-input', __webpack_require__(486));
 
 /*
  * ROOT VUE INSTANCE
@@ -575,6 +578,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['initialState'],
@@ -849,8 +854,10 @@ var render = function() {
                 attrs: {
                   id: "show-form",
                   role: "tabpanel",
+                  collections: _vm.collections,
                   drive: _vm.currentDrive,
-                  driveEventDispatcher: _vm.eventDispatcher
+                  driveEventDispatcher: _vm.eventDispatcher,
+                  genres: _vm.genres
                 }
               })
             ],
@@ -2078,10 +2085,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['collections', 'drive', 'driveEventDispatcher', 'files', 'genres'],
@@ -2122,7 +2125,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.eventDispatcher.$on('summaryChange', this.summaryChange);
         this.eventDispatcher.$on('titleChange', this.titleChange);
         this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
-        this.eventDispatcher.$on('yearChange', this.yearChange);
+        this.eventDispatcher.$on('yearReleasedChange', this.yearReleasedChange);
 
         // Initialize movies array
         for (var i = 0; i < this.files.length; i++) {
@@ -2135,7 +2138,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 poster: null,
                 summary: '',
                 title: this.getTitleFromFile(this.files[i]),
-                yearReleased: this.yearMax
+                yearReleased: new Date().getFullYear()
             };
 
             // Use set function to maintain reactivity
@@ -2284,7 +2287,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         videoFileChange: function videoFileChange(file) {
             this.currentFile = file;
         },
-        yearChange: function yearChange(yearReleased) {
+        yearReleasedChange: function yearReleasedChange(yearReleased) {
             Vue.set(this.movies[this.currentFileEscaped], 'yearReleased', parseInt(yearReleased));
         },
         yearValid: function yearValid() {
@@ -2338,13 +2341,9 @@ var render = function() {
                   )
                 : _vm._e(),
               _vm._v(" "),
-              _c("year-input", {
+              _c("year-released-input", {
                 attrs: {
                   eventDispatcher: _vm.eventDispatcher,
-                  label: "Year Released",
-                  min: _vm.yearMin,
-                  max: _vm.yearMax,
-                  search: true,
                   title: _vm.movies[_vm.currentFileEscaped].title,
                   value: _vm.movies[_vm.currentFileEscaped].yearReleased
                 }
@@ -2428,7 +2427,7 @@ var render = function() {
                 attrs: {
                   allGenres: _vm.genres,
                   eventDispatcher: _vm.eventDispatcher,
-                  genres: _vm.movies[_vm.currentFileEscaped].genres
+                  value: _vm.movies[_vm.currentFileEscaped].genres
                 }
               }),
               _vm._v(" "),
@@ -2465,8 +2464,8 @@ var render = function() {
               _c("multi-collection-input", {
                 attrs: {
                   allCollections: _vm.collections,
-                  collections: _vm.movies[_vm.currentFileEscaped].collections,
-                  eventDispatcher: _vm.eventDispatcher
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.movies[_vm.currentFileEscaped].collections
                 }
               }),
               _vm._v(" "),
@@ -2581,7 +2580,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['allCollections', 'collections', 'eventDispatcher']
+    props: ['allCollections', 'eventDispatcher', 'value']
 });
 
 /***/ }),
@@ -2599,7 +2598,7 @@ var render = function() {
     [
       _c("label", { attrs: { for: "collections" } }, [_vm._v("Collections")]),
       _vm._v(" "),
-      _vm._l(_vm.collections, function(collection, index) {
+      _vm._l(_vm.value, function(collection, index) {
         return _c("collection-input", {
           key: index,
           attrs: {
@@ -2697,7 +2696,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['allGenres', 'eventDispatcher', 'genres']
+    props: ['allGenres', 'eventDispatcher', 'value']
 });
 
 /***/ }),
@@ -2715,7 +2714,7 @@ var render = function() {
     [
       _c("label", { attrs: { for: "genres" } }, [_vm._v("* Genres")]),
       _vm._v(" "),
-      _vm._l(_vm.genres, function(genre, index) {
+      _vm._l(_vm.value, function(genre, index) {
         return _c("genre-input", {
           key: index,
           attrs: {
@@ -3159,18 +3158,91 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['drive', 'driveEventDispatcher'],
+    props: ['collections', 'drive', 'driveEventDispatcher', 'genres'],
 
     data: function data() {
         return {
             eventDispatcher: new Vue({}),
             show: {
+                collections: [''],
+                genres: [''],
+                jumbotron: null,
+                notes: '',
+                poster: null,
                 summary: '',
                 title: '',
-                yearStart: this.yearMax,
-                yearEnd: this.yearMax
+                yearStart: 0,
+                yearEnd: 0
             },
             yearMax: new Date().getFullYear(),
             yearMin: 1900
@@ -3184,15 +3256,145 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
 
-    created: function created() {},
+    created: function created() {
+        this.eventDispatcher.$on('collectionAdd', this.collectionAdd);
+        this.eventDispatcher.$on('collectionChange', this.collectionChange);
+        this.eventDispatcher.$on('collectionRemove', this.collectionRemove);
+        this.eventDispatcher.$on('genreAdd', this.genreAdd);
+        this.eventDispatcher.$on('genreChange', this.genreChange);
+        this.eventDispatcher.$on('genreRemove', this.genreRemove);
+        this.eventDispatcher.$on('jumbotronChange', this.jumbotronChange);
+        this.eventDispatcher.$on('notesChange', this.notesChange);
+        this.eventDispatcher.$on('posterChange', this.posterChange);
+        this.eventDispatcher.$on('submit', this.submit);
+        this.eventDispatcher.$on('summaryChange', this.summaryChange);
+        this.eventDispatcher.$on('titleChange', this.titleChange);
+        this.eventDispatcher.$on('yearEndChange', this.yearEndChange);
+        this.eventDispatcher.$on('yearStartChange', this.yearStartChange);
+
+        this.show.yearEnd = this.yearMax;
+        this.show.yearStart = this.yearMax;
+    },
 
 
     methods: {
+        collectionAdd: function collectionAdd() {
+            this.show.collections.push('');
+        },
+        collectionChange: function collectionChange(data) {
+            Vue.set(this.show.collections, data.index, data.value);
+        },
+        collectionDuplicates: function collectionDuplicates() {
+            var previousCollections = [];
+
+            for (var i = 0; i < this.show.collections.length; i++) {
+                var currentCollection = this.show.collections[i];
+
+                if (previousCollections.indexOf(currentCollection) >= 0) {
+                    return true;
+                }
+
+                previousCollections.push(currentCollection);
+            }
+
+            return false;
+        },
+        collectionRemove: function collectionRemove(index) {
+            var newCollections = [''];
+
+            if (this.show.collections.length > 1) {
+                this.show.collections.splice(index, 1);
+
+                newCollections = this.show.collections;
+            }
+
+            Vue.set(this.show, 'collections', newCollections);
+        },
+        genreAdd: function genreAdd() {
+            this.show.genres.push('');
+        },
+        genreChange: function genreChange(data) {
+            Vue.set(this.show.genres, data.index, data.value);
+        },
+        genreDuplicates: function genreDuplicates() {
+            var previousGenres = [];
+
+            for (var i = 0; i < this.show.genres.length; i++) {
+                var currentGenre = this.show.genres[i];
+
+                if (previousGenres.indexOf(currentGenre) >= 0) {
+                    return true;
+                }
+
+                previousGenres.push(currentGenre);
+            }
+
+            return false;
+        },
+        genreEmpty: function genreEmpty() {
+            for (var i = 0; i < this.show.genres.length; i++) {
+                if (this.show.genres[i] === '') {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+        genreRemove: function genreRemove(index) {
+            var newGenres = [''];
+
+            if (this.show.genres.length > 1) {
+                this.show.genres.splice(index, 1);
+
+                newGenres = this.show.genres;
+            }
+
+            Vue.set(this.show, 'genres', newGenres);
+        },
+        jumbotronChange: function jumbotronChange(fileList) {
+            this.show.jumbotron = fileList;
+        },
+        notesChange: function notesChange(notes) {
+            this.show.notes = notes;
+        },
+        posterChange: function posterChange(filelist) {
+            this.show.poster = filelist;
+        },
+        posterEmpty: function posterEmpty() {
+            return !this.show.poster;
+        },
         startGreaterThanEnd: function startGreaterThanEnd() {
-            return this.yearStart > this.yearEnd;
+            return this.show.yearStart > this.show.yearEnd;
+        },
+        summaryChange: function summaryChange(summary) {
+            this.show.summary = summary;
+        },
+        summaryEmpty: function summaryEmpty() {
+            return this.show.summary === '';
+        },
+        titleChange: function titleChange(title) {
+            this.show.title = title;
+        },
+        titleEmpty: function titleEmpty() {
+            return this.show.title === '';
         },
         valid: function valid() {
-            return !this.startGreaterThanEnd();
+            return !this.startGreaterThanEnd() && !this.titleEmpty() && this.yearEndValid() && this.yearStartValid() && !this.summaryEmpty() && !this.posterEmpty() && !this.genreEmpty() && !this.genreDuplicates() && !this.collectionDuplicates();
+        },
+        yearEndChange: function yearEndChange(yearEnd) {
+            this.show.yearEnd = parseInt(yearEnd);
+        },
+        yearStartChange: function yearStartChange(yearStart) {
+            this.show.yearStart = parseInt(yearStart);
+        },
+        yearEndValid: function yearEndValid() {
+            return this.yearValid(this.show.yearEnd);
+        },
+        yearStartValid: function yearStartValid() {
+            return this.yearValid(this.show.yearStart);
+        },
+        yearValid: function yearValid(year) {
+            return year <= this.yearMax && year >= this.yearMin && !isNaN(year);
         }
     }
 });
@@ -3213,28 +3415,48 @@ var render = function() {
             "form",
             { attrs: { novalidate: "" } },
             [
-              _c("year-input", {
+              _c("title-input", {
                 attrs: {
                   eventDispatcher: _vm.eventDispatcher,
-                  label: "Year Start",
-                  max: _vm.yearMax,
-                  min: _vm.yearMin,
-                  search: true,
+                  value: _vm.show.title
+                }
+              }),
+              _vm._v(" "),
+              _vm.titleEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Title field is required\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("year-start-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
                   title: _vm.show.title,
                   value: _vm.show.yearStart
                 }
               }),
               _vm._v(" "),
-              _c("year-input", {
-                attrs: {
-                  eventDispatcher: _vm.eventDispatcher,
-                  label: "Year End",
-                  max: _vm.yearMax,
-                  min: _vm.yearMin,
-                  search: false,
-                  value: _vm.show.yearEnd
-                }
-              }),
+              !_vm.yearStartValid()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Year Start field is not valid\n            ")
+                    ]
+                  )
+                : _vm._e(),
               _vm._v(" "),
               _vm.startGreaterThanEnd()
                 ? _c(
@@ -3247,6 +3469,147 @@ var render = function() {
                       _c("strong", [_vm._v("Warning: ")]),
                       _vm._v(
                         "The Year Start field should be less than the Year End\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("year-end-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.show.yearEnd
+                }
+              }),
+              _vm._v(" "),
+              !_vm.yearEndValid()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Year End field is not valid\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("summary-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  required: true,
+                  value: _vm.show.summary
+                }
+              }),
+              _vm._v(" "),
+              _vm.summaryEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Summary field is required\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("notes-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.show.notes
+                }
+              }),
+              _vm._v(" "),
+              _c("poster-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  title: _vm.show.title,
+                  value: _vm.show.poster
+                }
+              }),
+              _vm._v(" "),
+              _vm.posterEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Poster Image field is required\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("jumbotron-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.show.jumbotron
+                }
+              }),
+              _vm._v(" "),
+              _c("multi-genre-input", {
+                attrs: {
+                  allGenres: _vm.genres,
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.show.genres
+                }
+              }),
+              _vm._v(" "),
+              _vm.genreEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Genres field is required\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.genreDuplicates()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v(
+                        "There are duplicate values in the Genre fields\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("multi-collection-input", {
+                attrs: {
+                  allCollections: _vm.collections,
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.show.collections
+                }
+              }),
+              _vm._v(" "),
+              _vm.collectionDuplicates()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v(
+                        "There are duplicate values in the Collection fields\n            "
                       )
                     ]
                   )
@@ -3888,6 +4251,105 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
+Component.options.__file = "resources/assets/js/components/admin/upload/YearEndInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-33411a9a", Component.options)
+  } else {
+    hotAPI.reload("data-v-33411a9a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 478:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'value']
+});
+
+/***/ }),
+
+/***/ 479:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("year-input", {
+    attrs: {
+      event: "yearEndChange",
+      eventDispatcher: _vm.eventDispatcher,
+      label: "Year End",
+      search: false,
+      value: _vm.value
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-33411a9a", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 480:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(481)
+/* template */
+var __vue_template__ = __webpack_require__(482)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
 Component.options.__file = "resources/assets/js/components/admin/upload/YearInput.vue"
 
 /* hot reload */
@@ -3911,7 +4373,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 478:
+/***/ 481:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3941,18 +4403,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['eventDispatcher', 'label', 'min', 'max', 'search', 'title', 'value'],
+    props: ['event', 'eventDispatcher', 'label', 'search', 'title', 'value'],
+
+    data: function data() {
+        return {
+            max: new Date().getFullYear(),
+            min: 1900
+        };
+    },
+
 
     methods: {
         yearChange: function yearChange(event) {
-            this.eventDispatcher.$emit('yearChange', event.target.value);
+            this.eventDispatcher.$emit(this.event, event.target.value);
         }
     }
 });
 
 /***/ }),
 
-/***/ 479:
+/***/ 482:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -3994,6 +4464,208 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-88840614", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 483:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(484)
+/* template */
+var __vue_template__ = __webpack_require__(485)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/upload/YearReleasedInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ececf78e", Component.options)
+  } else {
+    hotAPI.reload("data-v-ececf78e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 484:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'title', 'value']
+});
+
+/***/ }),
+
+/***/ 485:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("year-input", {
+    attrs: {
+      event: "yearReleasedChange",
+      eventDispatcher: _vm.eventDispatcher,
+      label: "Year Released",
+      search: true,
+      title: _vm.title,
+      value: _vm.value
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-ececf78e", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 486:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(487)
+/* template */
+var __vue_template__ = __webpack_require__(488)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/upload/YearStartInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7082f40c", Component.options)
+  } else {
+    hotAPI.reload("data-v-7082f40c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 487:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'title', 'value']
+});
+
+/***/ }),
+
+/***/ 488:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("year-input", {
+    attrs: {
+      event: "yearStartChange",
+      eventDispatcher: _vm.eventDispatcher,
+      label: "Year Start",
+      search: true,
+      title: _vm.title,
+      value: _vm.value
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7082f40c", module.exports)
   }
 }
 

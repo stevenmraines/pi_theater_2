@@ -3,7 +3,7 @@
         <label for="collections">Collections</label>
         <collection-input
             id="collections"
-            v-for="(collection, index) in collections"
+            v-for="(collection, index) in value"
             :allCollections="allCollections"
             :eventDispatcher="eventDispatcher"
             :index="index"
@@ -17,8 +17,8 @@
     export default {
         props: [
             'allCollections',
-            'collections',
             'eventDispatcher',
+            'value',
         ],
     }
 </script>

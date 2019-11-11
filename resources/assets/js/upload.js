@@ -20,7 +20,10 @@ Vue.component('submit-input', require('./components/admin/upload/SubmitInput.vue
 Vue.component('summary-input', require('./components/admin/upload/SummaryInput.vue'));
 Vue.component('title-input', require('./components/admin/upload/TitleInput.vue'));
 Vue.component('video-file-input', require('./components/admin/upload/VideoFileInput.vue'));
+Vue.component('year-end-input', require('./components/admin/upload/YearEndInput.vue'));
 Vue.component('year-input', require('./components/admin/upload/YearInput.vue'));
+Vue.component('year-released-input', require('./components/admin/upload/YearReleasedInput.vue'));
+Vue.component('year-start-input', require('./components/admin/upload/YearStartInput.vue'));
 
 /*
  * ROOT VUE INSTANCE

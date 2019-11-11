@@ -3,7 +3,7 @@
         <label for="genres">* Genres</label>
         <genre-input
             id="genres"
-            v-for="(genre, index) in genres"
+            v-for="(genre, index) in value"
             :allGenres="allGenres"
             :eventDispatcher="eventDispatcher"
             :index="index"
@@ -18,7 +18,7 @@
         props: [
             'allGenres',
             'eventDispatcher',
-            'genres',
+            'value',
         ],
     }
 </script>

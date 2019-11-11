@@ -24,18 +24,24 @@
 <script>
     export default {
         props: [
+            'event',
             'eventDispatcher',
             'label',
-            'min',
-            'max',
             'search',
             'title',
             'value',
         ],
 
+        data() {
+            return {
+                max: new Date().getFullYear(),
+                min: 1900,
+            };
+        },
+
         methods: {
             yearChange(event) {
-                this.eventDispatcher.$emit('yearChange', event.target.value);
+                this.eventDispatcher.$emit(this.event, event.target.value);
             },
         },
     }

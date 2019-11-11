@@ -20,15 +20,11 @@
                 </div>
 
                 <!-- Year Released -->
-                <year-input
+                <year-released-input
                     :eventDispatcher="eventDispatcher"
-                    :label="'Year Released'"
-                    :min="yearMin"
-                    :max="yearMax"
-                    :search="true"
                     :title="movies[currentFileEscaped].title"
                     :value="movies[currentFileEscaped].yearReleased"
-                ></year-input>
+                ></year-released-input>
 
                 <!-- TODO figure out how to get empty / required warning -->
                 <div class="alert alert-danger mb-2" role="alert" v-if="!yearValid()">
@@ -73,7 +69,7 @@
                 <multi-genre-input
                     :allGenres="genres"
                     :eventDispatcher="eventDispatcher"
-                    :genres="movies[currentFileEscaped].genres"
+                    :value="movies[currentFileEscaped].genres"
                 ></multi-genre-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="genreEmpty()">
@@ -87,8 +83,8 @@
                 <!-- Collections -->
                 <multi-collection-input
                     :allCollections="collections"
-                    :collections="movies[currentFileEscaped].collections"
                     :eventDispatcher="eventDispatcher"
+                    :value="movies[currentFileEscaped].collections"
                 ></multi-collection-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="collectionDuplicates()">
@@ -151,7 +147,7 @@
             this.eventDispatcher.$on('summaryChange', this.summaryChange);
             this.eventDispatcher.$on('titleChange', this.titleChange);
             this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
-            this.eventDispatcher.$on('yearChange', this.yearChange);
+            this.eventDispatcher.$on('yearReleasedChange', this.yearReleasedChange);
 
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
@@ -164,7 +160,7 @@
                     poster: null,
                     summary: '',
                     title: this.getTitleFromFile(this.files[i]),
-                    yearReleased: this.yearMax,
+                    yearReleased: new Date().getFullYear(),
                 };
 
                 // Use set function to maintain reactivity
@@ -385,7 +381,7 @@
                 this.currentFile = file;
             },
 
-            yearChange(yearReleased) {
+            yearReleasedChange(yearReleased) {
                 Vue.set(
                     this.movies[this.currentFileEscaped],
                     'yearReleased',

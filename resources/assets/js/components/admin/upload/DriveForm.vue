@@ -65,8 +65,10 @@
                     id="show-form"
                     class="card-body collapse"
                     role="tabpanel"
+                    :collections="collections"
                     :drive="currentDrive"
                     :driveEventDispatcher="eventDispatcher"
+                    :genres="genres"
                 ></show-form>
             </div>
         </div>

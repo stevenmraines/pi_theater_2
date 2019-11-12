@@ -171,16 +171,34 @@
         },
 
         methods: {
-            movieSubmit() {
-
+            episodeSubmit(episode) {
+                axios.post('/api/upload/episode', episode)
+                    .then(function(response) {
+                        console.log(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             },
 
-            episodeSubmit() {
-
+            movieSubmit(movie) {
+                axios.post('/api/upload/movie', movie)
+                    .then(function(response) {
+                        console.log(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             },
 
-            showSubmit() {
-
+            showSubmit(show) {
+                axios.post('/api/upload/show', show)
+                    .then(function(response) {
+                        console.log(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             },
 
             sortShows(shows) {

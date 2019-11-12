@@ -9,12 +9,14 @@
                     :value="currentFile"
                 ></video-file-input>
 
+                <!-- Show -->
                 <shows-input
                     :eventDispatcher="eventDispatcher"
                     :shows="shows"
-                    :value="episodes[currentFileEscaped].show"
+                    :value="episodes[currentFileEscaped].media_id"
                 ></shows-input>
 
+                <!-- Season -->
                 <season-input
                     :eventDispatcher="eventDispatcher"
                     :value="episodes[currentFileEscaped].season"
@@ -24,6 +26,7 @@
                     <strong>Error: </strong>The Season field is not valid
                 </div>
 
+                <!-- Episode Number -->
                 <episode-number-input
                     :eventDispatcher="eventDispatcher"
                     :value="episodes[currentFileEscaped].episodeNumber"
@@ -103,7 +106,7 @@
                     episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
                     file: this.files[i],
                     season: this.getSeasonFromFile(this.files[i]),
-                    show: this.getShowFromFile(this.files[i]),
+                    media_id: this.getShowFromFile(this.files[i]),
                     summary: '',
                     title: '',
                 };
@@ -174,13 +177,16 @@
             showChange(show) {
                 Vue.set(
                     this.episodes[this.currentFileEscaped],
-                    'show',
+                    'media_id',
                     show
                 );
             },
 
             submit() {
-                this.driveEventDispatcher.$emit('episodeSubmit');
+                this.driveEventDispatcher.$emit(
+                    'episodeSubmit',
+                    this.episodes[this.currentFileEscaped]
+                );
             },
 
             summaryChange(summary) {

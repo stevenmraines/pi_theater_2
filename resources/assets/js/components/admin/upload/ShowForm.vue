@@ -282,6 +282,13 @@
                 return this.show.yearStart > this.show.yearEnd;
             },
 
+            submit() {
+                this.driveEventDispatcher.$emit(
+                    'showSubmit',
+                    this.show
+                );
+            },
+
             summaryChange(summary) {
                 this.show.summary = summary;
             },

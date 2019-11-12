@@ -15,3 +15,7 @@ Route::post(
 
 Route::post('/watchlist/add/{userId}/{mediaId}', 'WatchlistController@add');
 Route::post('/watchlist/remove/{userId}/{mediaId}', 'WatchlistController@remove');
+
+Route::post('/upload/episode', 'UploadController@episode');
+Route::post('/upload/movie', 'UploadController@movie');
+Route::post('/upload/show', 'UploadController@show');

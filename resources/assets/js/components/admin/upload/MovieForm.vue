@@ -338,7 +338,10 @@
             },
 
             submit() {
-                this.driveEventDispatcher.$emit('movieSubmit');
+                this.driveEventDispatcher.$emit(
+                    'movieSubmit',
+                    this.movies[this.currentFileEscaped]
+                );
             },
 
             summaryChange(summary) {

@@ -667,9 +667,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     methods: {
-        movieSubmit: function movieSubmit() {},
-        episodeSubmit: function episodeSubmit() {},
-        showSubmit: function showSubmit() {},
+        episodeSubmit: function episodeSubmit(episode) {
+            axios.post('/api/upload/episode', episode).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        movieSubmit: function movieSubmit(movie) {
+            axios.post('/api/upload/movie', movie).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        showSubmit: function showSubmit(show) {
+            axios.post('/api/upload/show', show).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
         sortShows: function sortShows(shows) {
             return shows.sort(function (a, b) {
                 return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
@@ -1008,6 +1026,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 // TODO abstract EpisodeForm and MovieForm into generic component
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1047,7 +1068,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
                 file: this.files[i],
                 season: this.getSeasonFromFile(this.files[i]),
-                show: this.getShowFromFile(this.files[i]),
+                media_id: this.getShowFromFile(this.files[i]),
                 summary: '',
                 title: ''
             };
@@ -1096,10 +1117,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.numberValid(this.episodes[this.currentFileEscaped].season);
         },
         showChange: function showChange(show) {
-            Vue.set(this.episodes[this.currentFileEscaped], 'show', show);
+            Vue.set(this.episodes[this.currentFileEscaped], 'media_id', show);
         },
         submit: function submit() {
-            this.driveEventDispatcher.$emit('episodeSubmit');
+            this.driveEventDispatcher.$emit('episodeSubmit', this.episodes[this.currentFileEscaped]);
         },
         summaryChange: function summaryChange(summary) {
             Vue.set(this.episodes[this.currentFileEscaped], 'summary', summary);
@@ -1147,7 +1168,7 @@ var render = function() {
                 attrs: {
                   eventDispatcher: _vm.eventDispatcher,
                   shows: _vm.shows,
-                  value: _vm.episodes[_vm.currentFileEscaped].show
+                  value: _vm.episodes[_vm.currentFileEscaped].media_id
                 }
               }),
               _vm._v(" "),
@@ -2288,7 +2309,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return !this.movies[this.currentFileEscaped].poster;
         },
         submit: function submit() {
-            this.driveEventDispatcher.$emit('movieSubmit');
+            this.driveEventDispatcher.$emit('movieSubmit', this.movies[this.currentFileEscaped]);
         },
         summaryChange: function summaryChange(summary) {
             Vue.set(this.movies[this.currentFileEscaped], 'summary', summary);
@@ -3387,6 +3408,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         startGreaterThanEnd: function startGreaterThanEnd() {
             return this.show.yearStart > this.show.yearEnd;
         },
+        submit: function submit() {
+            this.driveEventDispatcher.$emit('showSubmit', this.show);
+        },
         summaryChange: function summaryChange(summary) {
             this.show.summary = summary;
         },
@@ -3400,7 +3424,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.show.title === '';
         },
         valid: function valid() {
-            return !this.startGreaterThanEnd() && !this.titleEmpty() && this.yearEndValid() && this.yearStartValid() && !this.summaryEmpty() && !this.posterEmpty() && !this.genreEmpty() && !this.genreDuplicates() && !this.collectionDuplicates();
+            return (
+                // !this.startGreaterThanEnd()
+                !this.titleEmpty() && this.yearEndValid() && this.yearStartValid() && !this.summaryEmpty() && !this.posterEmpty() && !this.genreEmpty() && !this.genreDuplicates() && !this.collectionDuplicates()
+            );
         },
         yearEndChange: function yearEndChange(yearEnd) {
             this.show.yearEnd = parseInt(yearEnd);

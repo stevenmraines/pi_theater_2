@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col">
-            <form novalidate>
+            <form id="show-form" method="POST" enctype="multipart/form-data" novalidate>
                 <!-- Title -->
                 <title-input
                     :eventDispatcher="eventDispatcher"

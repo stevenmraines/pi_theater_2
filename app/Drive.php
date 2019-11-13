@@ -65,9 +65,17 @@ class Drive extends Model
 
         $drive = self::find($driveId);
 
+        $pathTokens = [
+            'videos',
+            $drive['name'],
+            $directory
+        ];
+
+        $path = implode(DIRECTORY_SEPARATOR, $pathTokens);
+
         // Get the files on the selected drive
         $items = new \DirectoryIterator(
-            public_path() . '/videos/' . $drive['name'] . '/' . $directory
+            public_path() . DIRECTORY_SEPARATOR . $path
         );
 
         // Iterate over the files

@@ -55,7 +55,7 @@ class UploadController extends Controller
             'episodeNumber' => 'required|integer|min:1',
             'file' => 'required|string',
             'season' => 'required|integer|min:1',
-            'media_id' => 'required|integer|min:1',
+            'media_id' => 'required|exists:media,id',
             'summary' => 'nullable|string|max:4000',
             'title' => 'required|string|max:191',
         ];
@@ -66,10 +66,10 @@ class UploadController extends Controller
         return [
             'collections' => 'array',
             'genres' => 'required|array',
-            'jumbotron' => 'nullable|file',
+            'jumbotron' => 'nullable|image',
             'notes' => 'nullable|string|max:191',
-            'poster' => 'required|file',
-            'summary' => 'nullable|required|string|max:4000',
+            'poster' => 'required|image',
+            'summary' => 'required|string|max:4000',
             'title' => 'required|string|max:191',
         ];
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="row" v-if="drive > 0 && files.length > 0">
         <div class="col">
-            <form novalidate>
+            <form id="episode-form" method="POST" enctype="multipart/form-data" novalidate>
                 <!-- File -->
                 <video-file-input
                     :eventDispatcher="eventDispatcher"

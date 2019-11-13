@@ -22,12 +22,12 @@
         <div v-if="currentDrive > 0">
             <div class="card" role="tablist">
                 <h5 class="card-header mb-0">
-                    <a data-toggle="collapse" href="#movie-form" role="tab">
+                    <a data-toggle="collapse" href="#movie-form-container" role="tab">
                         Add Movies ({{ movies.length }} pending)
                     </a>
                 </h5>
                 <movie-form
-                    id="movie-form"
+                    id="movie-form-container"
                     class="card-body collapse"
                     role="tabpanel"
                     :collections="collections"
@@ -40,12 +40,12 @@
 
             <div class="card" role="tablist">
                 <h5 class="card-header mb-0">
-                    <a data-toggle="collapse" href="#episode-form" role="tab">
+                    <a data-toggle="collapse" href="#episode-form-container" role="tab">
                         Add Episodes ({{ episodes.length }} pending)
                     </a>
                 </h5>
                 <episode-form
-                    id="episode-form"
+                    id="episode-form-container"
                     class="card-body collapse"
                     role="tabpanel"
                     :drive="currentDrive"
@@ -58,12 +58,12 @@
 
         <div class="card" role="tablist">
             <h5 class="card-header mb-0">
-                <a data-toggle="collapse" href="#show-form" role="tab">
+                <a data-toggle="collapse" href="#show-form-container" role="tab">
                     Add Shows
                 </a>
             </h5>
             <show-form
-                id="show-form"
+                id="show-form-container"
                 class="card-body collapse"
                 role="tabpanel"
                 :collections="collections"
@@ -172,7 +172,11 @@
 
         methods: {
             episodeSubmit(episode) {
-                axios.post('/api/upload/episode', episode)
+                episode._token = this.initialState.csrfToken;
+
+                var formData = this.getFormData(episode);
+
+                axios.post('/api/upload/episode', formData)
                     .then(function(response) {
                         console.log(response);
                     })
@@ -181,8 +185,38 @@
                     });
             },
 
+            getFormData(data) {
+                var formData = new FormData();
+
+                for(var prop in data) {
+                    if(data.hasOwnProperty(prop)) {
+                        // If the value is an array, we need to treat it as such
+                        if(Array.isArray(data[prop])) {
+                            for(var i = 0; i < data[prop].length; i++) {
+                                formData.append(prop + '[]', data[prop][i]);
+                            }
+
+                            continue;
+                        }
+
+                        formData.append(prop, data[prop]);
+                    }
+                }
+
+                return formData;
+            },
+
             movieSubmit(movie) {
-                axios.post('/api/upload/movie', movie)
+                movie._token = this.initialState.csrfToken;
+                movie.poster = movie.poster.item(0);
+
+                if(movie.jumbotron) {
+                    movie.jumbotron = movie.jumbotron.item(0);
+                }
+
+                var formData = this.getFormData(movie);
+
+                axios.post('/api/upload/movie', formData)
                     .then(function(response) {
                         console.log(response);
                     })
@@ -192,7 +226,16 @@
             },
 
             showSubmit(show) {
-                axios.post('/api/upload/show', show)
+                show._token = this.initialState.csrfToken;
+                show.poster = show.poster.item(0);
+
+                if(show.jumbotron) {
+                    show.jumbotron = show.jumbotron.item(0);
+                }
+
+                var formData = this.getFormData(show);
+
+                axios.post('/api/upload/show', formData)
                     .then(function(response) {
                         console.log(response);
                     })

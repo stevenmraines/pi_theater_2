@@ -43,6 +43,12 @@ return [
 
     'disks' => [
 
+        'images' => [
+            'driver' => 'local',
+            'root' => public_path() . DIRECTORY_SEPARATOR . 'img',
+            'visibility' => 'public'
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

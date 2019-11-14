@@ -10,12 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
-// TODO break up some of functionality into smaller controllers
+// TODO break up some of this functionality into smaller controllers
 class UploadController extends Controller
 {
     public function episode(Request $request)
     {
-        // Validate request parameters
         $this->validateEpisode($request);
 
         $episodeId = $this->insertIntoEpisodes($request);
@@ -41,6 +40,8 @@ class UploadController extends Controller
 
         $this->insertIntoCollectionMedia($request, $mediaId);
 
+        $this->moveImages($request);
+
         return [
             'success' => true
         ];
@@ -57,6 +58,8 @@ class UploadController extends Controller
         $this->insertIntoGenreMedia($request, $mediaId);
 
         $this->insertIntoCollectionMedia($request, $mediaId);
+
+        $this->moveImages($request);
 
         return [
             'success' => true
@@ -137,7 +140,7 @@ class UploadController extends Controller
 
         $episode->media_id = $request->media_id;
         $episode->season = $request->season;
-        $episode->episode_number = $request->episode_number;
+        $episode->episode_number = $request->episodeNumber;
         $episode->title = $request->title;
         $episode->summary = $request->summary;
 
@@ -200,7 +203,7 @@ class UploadController extends Controller
     protected function getImageFilename(Request $request, string $field = 'poster')
     {
         $formattedTitle = $this->getFormattedTitle($request->title);
-        $imageExtension = $request->{$field}->guessClientExtension();
+        $imageExtension = $request->{$field}->extension();
 
         // Default to jpg
         if (is_null($imageExtension)) {
@@ -212,13 +215,10 @@ class UploadController extends Controller
 
     protected function getFormattedTitle(string $title)
     {
-        // Strip out anything but letters, digits, and whitespace
-        $formattedTitle = preg_replace('/[^a-z\d\s]/g', '', strtolower($title));
+        $patterns = ['/[^a-z\d\s]/', '/\s/'];
+        $replacements = ['', '-'];
 
-        // Replace spaces with hyphens
-        $formattedTitle = preg_replace('/\s/g', '-', $formattedTitle);
-
-        return $formattedTitle;
+        return preg_replace($patterns, $replacements, strtolower($title));
     }
 
     protected function insertIntoDriveMedia(Request $request, int $mediaId)
@@ -307,35 +307,37 @@ class UploadController extends Controller
 
     protected function getGenreIds(Request $request)
     {
-        return $this->getGenreOrCollectionIds($request, 'genres', Genre);
+        return $this->getGenreOrCollectionIds($request, 'genres', Genre::class);
     }
 
     protected function insertIntoCollectionMedia(Request $request, int $mediaId)
     {
         $collectionIds = $this->getCollectionIds($request);
 
-        foreach($collectionIds as $collectionId) {
-            $insert = "
-                INSERT INTO collection_media
-                (
-                    collection_id,
-                    media_id
-                )
-                VALUES (?, ?)
-            ";
+        if(count($collectionIds) > 0) {
+            foreach($collectionIds as $collectionId) {
+                $insert = "
+                    INSERT INTO collection_media
+                    (
+                        collection_id,
+                        media_id
+                    )
+                    VALUES (?, ?)
+                ";
 
-            $values = [
-                $collectionId,
-                $mediaId
-            ];
+                $values = [
+                    $collectionId,
+                    $mediaId
+                ];
 
-            DB::insert($insert, $values);
+                DB::insert($insert, $values);
+            }
         }
     }
 
     protected function getCollectionIds(Request $request)
     {
-        $this->getGenreOrCollectionIds($request, 'collections', Collection);
+        return $this->getGenreOrCollectionIds($request, 'collections', Collection::class);
     }
 
     protected function getGenreOrCollectionIds(Request $request, string $field, $model)
@@ -365,10 +367,25 @@ class UploadController extends Controller
 
     protected function insertGenreOrCollection($model, string $name)
     {
-        $model->name = $name;
+        $instance = new $model;
 
-        $model->save();
+        $instance->name = $name;
 
-        return $model->id;
+        $instance->save();
+
+        return $instance->id;
+    }
+
+    protected function moveImages(Request $request)
+    {
+        $posterFilename = $this->getPosterFilename($request);
+
+        $request->poster->storeAs('posters', $posterFilename, 'images');
+
+        if($request->hasFile('jumbotron')) {
+            $jumbotronFilename = $this->getJumbotronFilename($request);
+
+            $request->jumbotron->storeAs('jumbotron', $jumbotronFilename, 'images');
+        }
     }
 }

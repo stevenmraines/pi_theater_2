@@ -278,15 +278,45 @@
                 return !this.show.poster;
             },
 
+            reset() {
+                this.show.collections = [''];
+                this.show.genres = [''];
+                this.show.jumbotron = null;
+                this.show.notes = '';
+                this.show.poster = null;
+                this.show.summary = '';
+                this.show.title = '';
+                this.show.yearStart = this.yearMax;
+                this.show.yearEnd = this.yearMax;
+            },
+
             startGreaterThanEnd() {
                 return this.show.yearStart > this.show.yearEnd;
             },
 
             submit() {
-                this.driveEventDispatcher.$emit(
-                    'showSubmit',
-                    this.show
-                );
+                this.show.poster = this.show.poster.item(0);
+
+                if(!this.show.jumbotron) {
+                    delete this.show.jumbotron;
+                }
+
+                if(this.show.jumbotron) {
+                    this.show.jumbotron = this.show.jumbotron.item(0);
+                }
+
+                var formData = window.getFormData(this.show);
+
+                var self = this;
+
+                axios.post('/api/upload/show', formData)
+                    .then(function(response) {
+                        console.log(response);
+                        self.reset();
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             },
 
             summaryChange(summary) {

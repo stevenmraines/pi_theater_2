@@ -338,10 +338,30 @@
             },
 
             submit() {
-                this.driveEventDispatcher.$emit(
-                    'movieSubmit',
-                    this.movies[this.currentFileEscaped]
-                );
+                var movie = this.movies[this.currentFileEscaped];
+
+                movie.poster = movie.poster.item(0);
+
+                if(!movie.jumbotron) {
+                    delete movie.jumbotron;
+                }
+
+                if(movie.jumbotron) {
+                    movie.jumbotron = movie.jumbotron.item(0);
+                }
+
+                var formData = window.getFormData(movie);
+
+                var self = this;
+
+                axios.post('/api/upload/movie', formData)
+                    .then(function(response) {
+                        console.log(response);
+                        self.driveEventDispatcher.$emit('movieSubmit', self.currentFile);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             },
 
             summaryChange(summary) {

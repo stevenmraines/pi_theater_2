@@ -661,74 +661,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // Listen for child form events
             this.eventDispatcher.$on('movieSubmit', this.movieSubmit);
             this.eventDispatcher.$on('episodeSubmit', this.episodeSubmit);
-            this.eventDispatcher.$on('showSubmit', this.showSubmit);
         }
     },
 
 
     methods: {
-        episodeSubmit: function episodeSubmit(episode) {
-            episode._token = this.initialState.csrfToken;
-
-            var formData = this.getFormData(episode);
-
-            axios.post('/api/upload/episode', formData).then(function (response) {
-                console.log(response);
-            }).catch(function (error) {
-                console.log(error);
-            });
+        episodeSubmit: function episodeSubmit(file) {
+            var index = this.pending[this.currentDrive].episodes.indexOf(file);
+            this.pending[this.currentDrive].episodes.splice(index, 1);
         },
-        getFormData: function getFormData(data) {
-            var formData = new FormData();
-
-            for (var prop in data) {
-                if (data.hasOwnProperty(prop)) {
-                    // If the value is an array, we need to treat it as such
-                    if (Array.isArray(data[prop])) {
-                        for (var i = 0; i < data[prop].length; i++) {
-                            formData.append(prop + '[]', data[prop][i]);
-                        }
-
-                        continue;
-                    }
-
-                    formData.append(prop, data[prop]);
-                }
-            }
-
-            return formData;
-        },
-        movieSubmit: function movieSubmit(movie) {
-            movie._token = this.initialState.csrfToken;
-            movie.poster = movie.poster.item(0);
-
-            if (movie.jumbotron) {
-                movie.jumbotron = movie.jumbotron.item(0);
-            }
-
-            var formData = this.getFormData(movie);
-
-            axios.post('/api/upload/movie', formData).then(function (response) {
-                console.log(response);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        },
-        showSubmit: function showSubmit(show) {
-            show._token = this.initialState.csrfToken;
-            show.poster = show.poster.item(0);
-
-            if (show.jumbotron) {
-                show.jumbotron = show.jumbotron.item(0);
-            }
-
-            var formData = this.getFormData(show);
-
-            axios.post('/api/upload/show', formData).then(function (response) {
-                console.log(response);
-            }).catch(function (error) {
-                console.log(error);
-            });
+        movieSubmit: function movieSubmit(file) {
+            var index = this.pending[this.currentDrive].movies.indexOf(file);
+            this.pending[this.currentDrive].movies.splice(index, 1);
         },
         sortShows: function sortShows(shows) {
             return shows.sort(function (a, b) {
@@ -1166,7 +1110,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Vue.set(this.episodes[this.currentFileEscaped], 'media_id', show);
         },
         submit: function submit() {
-            this.driveEventDispatcher.$emit('episodeSubmit', this.episodes[this.currentFileEscaped]);
+            var episode = this.episodes[this.currentFileEscaped];
+
+            var formData = window.getFormData(episode);
+
+            var self = this;
+
+            axios.post('/api/upload/episode', formData).then(function (response) {
+                console.log(response);
+                self.driveEventDispatcher.$emit('episodeSubmit', self.currentFile);
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         summaryChange: function summaryChange(summary) {
             Vue.set(this.episodes[this.currentFileEscaped], 'summary', summary);
@@ -2362,7 +2317,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return !this.movies[this.currentFileEscaped].poster;
         },
         submit: function submit() {
-            this.driveEventDispatcher.$emit('movieSubmit', this.movies[this.currentFileEscaped]);
+            var movie = this.movies[this.currentFileEscaped];
+
+            movie.poster = movie.poster.item(0);
+
+            if (!movie.jumbotron) {
+                delete movie.jumbotron;
+            }
+
+            if (movie.jumbotron) {
+                movie.jumbotron = movie.jumbotron.item(0);
+            }
+
+            var formData = window.getFormData(movie);
+
+            var self = this;
+
+            axios.post('/api/upload/movie', formData).then(function (response) {
+                console.log(response);
+                self.driveEventDispatcher.$emit('movieSubmit', self.currentFile);
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         summaryChange: function summaryChange(summary) {
             Vue.set(this.movies[this.currentFileEscaped], 'summary', summary);
@@ -3465,11 +3441,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         posterEmpty: function posterEmpty() {
             return !this.show.poster;
         },
+        reset: function reset() {
+            this.show.collections = [''];
+            this.show.genres = [''];
+            this.show.jumbotron = null;
+            this.show.notes = '';
+            this.show.poster = null;
+            this.show.summary = '';
+            this.show.title = '';
+            this.show.yearStart = this.yearMax;
+            this.show.yearEnd = this.yearMax;
+        },
         startGreaterThanEnd: function startGreaterThanEnd() {
             return this.show.yearStart > this.show.yearEnd;
         },
         submit: function submit() {
-            this.driveEventDispatcher.$emit('showSubmit', this.show);
+            this.show.poster = this.show.poster.item(0);
+
+            if (!this.show.jumbotron) {
+                delete this.show.jumbotron;
+            }
+
+            if (this.show.jumbotron) {
+                this.show.jumbotron = this.show.jumbotron.item(0);
+            }
+
+            var formData = window.getFormData(this.show);
+
+            var self = this;
+
+            axios.post('/api/upload/show', formData).then(function (response) {
+                console.log(response);
+                self.reset();
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
         summaryChange: function summaryChange(summary) {
             this.show.summary = summary;

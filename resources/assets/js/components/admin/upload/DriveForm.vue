@@ -166,82 +166,18 @@
                 // Listen for child form events
                 this.eventDispatcher.$on('movieSubmit', this.movieSubmit);
                 this.eventDispatcher.$on('episodeSubmit', this.episodeSubmit);
-                this.eventDispatcher.$on('showSubmit', this.showSubmit);
             }
         },
 
         methods: {
-            episodeSubmit(episode) {
-                episode._token = this.initialState.csrfToken;
-
-                var formData = this.getFormData(episode);
-
-                axios.post('/api/upload/episode', formData)
-                    .then(function(response) {
-                        console.log(response);
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
+            episodeSubmit(file) {
+                var index = this.pending[this.currentDrive].episodes.indexOf(file);
+                this.pending[this.currentDrive].episodes.splice(index, 1);
             },
 
-            getFormData(data) {
-                var formData = new FormData();
-
-                for(var prop in data) {
-                    if(data.hasOwnProperty(prop)) {
-                        // If the value is an array, we need to treat it as such
-                        if(Array.isArray(data[prop])) {
-                            for(var i = 0; i < data[prop].length; i++) {
-                                formData.append(prop + '[]', data[prop][i]);
-                            }
-
-                            continue;
-                        }
-
-                        formData.append(prop, data[prop]);
-                    }
-                }
-
-                return formData;
-            },
-
-            movieSubmit(movie) {
-                movie._token = this.initialState.csrfToken;
-                movie.poster = movie.poster.item(0);
-
-                if(movie.jumbotron) {
-                    movie.jumbotron = movie.jumbotron.item(0);
-                }
-
-                var formData = this.getFormData(movie);
-
-                axios.post('/api/upload/movie', formData)
-                    .then(function(response) {
-                        console.log(response);
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
-            },
-
-            showSubmit(show) {
-                show._token = this.initialState.csrfToken;
-                show.poster = show.poster.item(0);
-
-                if(show.jumbotron) {
-                    show.jumbotron = show.jumbotron.item(0);
-                }
-
-                var formData = this.getFormData(show);
-
-                axios.post('/api/upload/show', formData)
-                    .then(function(response) {
-                        console.log(response);
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
+            movieSubmit(file) {
+                var index = this.pending[this.currentDrive].movies.indexOf(file);
+                this.pending[this.currentDrive].movies.splice(index, 1);
             },
 
             sortShows(shows) {

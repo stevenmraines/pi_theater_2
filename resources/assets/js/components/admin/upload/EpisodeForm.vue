@@ -183,10 +183,20 @@
             },
 
             submit() {
-                this.driveEventDispatcher.$emit(
-                    'episodeSubmit',
-                    this.episodes[this.currentFileEscaped]
-                );
+                var episode = this.episodes[this.currentFileEscaped];
+
+                var formData = window.getFormData(episode);
+
+                var self = this;
+
+                axios.post('/api/upload/episode', formData)
+                    .then(function(response) {
+                        console.log(response);
+                        self.driveEventDispatcher.$emit('episodeSubmit', self.currentFile);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             },
 
             summaryChange(summary) {

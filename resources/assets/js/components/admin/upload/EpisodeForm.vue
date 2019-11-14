@@ -103,6 +103,7 @@
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
                 var objectDefaults = {
+                    drive_id: this.drive,
                     episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
                     file: this.files[i],
                     season: this.getSeasonFromFile(this.files[i]),

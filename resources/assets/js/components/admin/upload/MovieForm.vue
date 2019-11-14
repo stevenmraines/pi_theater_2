@@ -153,6 +153,7 @@
             for(var i = 0; i < this.files.length; i++) {
                 var objectDefaults = {
                     collections: [''],
+                    drive_id: this.drive,
                     file: this.files[i],
                     genres: [''],
                     jumbotron: null,

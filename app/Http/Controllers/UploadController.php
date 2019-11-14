@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Collection;
+use App\Episode;
+use App\Genre;
+use App\Media;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
+// TODO break up some of functionality into smaller controllers
 class UploadController extends Controller
 {
     public function episode(Request $request)
     {
+        // Validate request parameters
         $this->validateEpisode($request);
+
+        $episodeId = $this->insertIntoEpisodes($request);
+
+        $this->insertIntoDriveEpisode($request, $episodeId);
 
         return [
             'success' => true
@@ -20,6 +31,16 @@ class UploadController extends Controller
     {
         $this->validateMovie($request);
 
+        $mediaId = $this->insertIntoMedia($request);
+
+        $this->insertIntoDriveMedia($request, $mediaId);
+
+        $this->insertIntoMovieYear($request, $mediaId);
+
+        $this->insertIntoGenreMedia($request, $mediaId);
+
+        $this->insertIntoCollectionMedia($request, $mediaId);
+
         return [
             'success' => true
         ];
@@ -28,6 +49,14 @@ class UploadController extends Controller
     public function show(Request $request)
     {
         $this->validateShow($request);
+
+        $mediaId = $this->insertIntoMedia($request, 'show');
+
+        $this->insertIntoShowYear($request, $mediaId);
+
+        $this->insertIntoGenreMedia($request, $mediaId);
+
+        $this->insertIntoCollectionMedia($request, $mediaId);
 
         return [
             'success' => true
@@ -52,6 +81,7 @@ class UploadController extends Controller
     protected function getEpisodeValidationRules()
     {
         return [
+            'drive_id' => 'required|exists:drives,id',
             'episodeNumber' => 'required|integer|min:1',
             'file' => 'required|string',
             'season' => 'required|integer|min:1',
@@ -77,6 +107,7 @@ class UploadController extends Controller
     protected function getMovieValidationRules()
     {
         $movieValidationRules = [
+            'drive_id' => 'required|exists:drives,id',
             'file' => 'required|string',
             'yearReleased' => 'required|date_format:Y|after_or_equal:1900|before_or_equal:' . date('Y'),
         ];
@@ -98,5 +129,246 @@ class UploadController extends Controller
             $this->getMediaValidationRules(),
             $showValidationRules
         );
+    }
+
+    protected function insertIntoEpisodes(Request $request)
+    {
+        $episode = new Episode;
+
+        $episode->media_id = $request->media_id;
+        $episode->season = $request->season;
+        $episode->episode_number = $request->episode_number;
+        $episode->title = $request->title;
+        $episode->summary = $request->summary;
+
+        $episode->save();
+
+        return $episode->id;
+    }
+
+    protected function insertIntoDriveEpisode(Request $request, int $episodeId)
+    {
+        $insert = "
+            INSERT INTO drive_episode
+            (
+                drive_id,
+                episode_id,
+                filename
+            )
+            VALUES (?, ?, ?)
+        ";
+
+        $values = [
+            $request->drive_id,
+            $episodeId,
+            $request->file
+        ];
+
+        return DB::insert($insert, $values);
+    }
+
+    protected function insertIntoMedia(Request $request, string $mediaType = 'movie')
+    {
+        $media = new Media;
+
+        $media->media_type = $mediaType;
+        $media->title = $request->title;
+        $media->summary = $request->summary;
+        $media->notes = $request->notes;
+        $media->poster = $this->getPosterFilename($request);
+        $media->jumbotron = $this->getJumbotronFilename($request);
+
+        $media->save();
+
+        return $media->id;
+    }
+
+    protected function getPosterFilename(Request $request)
+    {
+        return $this->getImageFilename($request);
+    }
+
+    protected function getJumbotronFilename(Request $request)
+    {
+        if($request->hasFile('jumbotron')) {
+            return $this->getImageFilename($request, 'jumbotron');
+        }
+
+        return null;
+    }
+
+    protected function getImageFilename(Request $request, string $field = 'poster')
+    {
+        $formattedTitle = $this->getFormattedTitle($request->title);
+        $imageExtension = $request->{$field}->guessClientExtension();
+
+        // Default to jpg
+        if (is_null($imageExtension)) {
+            $imageExtension = 'jpg';
+        }
+
+        return $formattedTitle . '.' . $imageExtension;
+    }
+
+    protected function getFormattedTitle(string $title)
+    {
+        // Strip out anything but letters, digits, and whitespace
+        $formattedTitle = preg_replace('/[^a-z\d\s]/g', '', strtolower($title));
+
+        // Replace spaces with hyphens
+        $formattedTitle = preg_replace('/\s/g', '-', $formattedTitle);
+
+        return $formattedTitle;
+    }
+
+    protected function insertIntoDriveMedia(Request $request, int $mediaId)
+    {
+        $insert = "
+            INSERT INTO drive_media
+            (
+                media_id,
+                drive_id,
+                filename
+            )
+            VALUES (?, ?, ?)
+        ";
+
+        $values = [
+            $mediaId,
+            $request->drive_id,
+            $request->file
+        ];
+
+        return DB::insert($insert, $values);
+    }
+
+    protected function insertIntoMovieYear(Request $request, int $mediaId)
+    {
+        $insert = "
+            INSERT INTO movie_year
+            (
+                media_id,
+                year_released
+            )
+            VALUES (?, ?)
+        ";
+
+        $values = [
+            $mediaId,
+            $request->yearReleased
+        ];
+
+        return DB::insert($insert, $values);
+    }
+
+    protected function insertIntoShowYear(Request $request, int $mediaId)
+    {
+        $insert = "
+            INSERT INTO show_year
+            (
+                media_id,
+                year_start,
+                year_end
+            )
+            VALUES (?, ?, ?)
+        ";
+
+        $values = [
+            $mediaId,
+            $request->yearStart,
+            $request->yearEnd
+        ];
+
+        return DB::insert($insert, $values);
+    }
+
+    protected function insertIntoGenreMedia(Request $request, int $mediaId)
+    {
+        $genreIds = $this->getGenreIds($request);
+
+        foreach($genreIds as $genreId) {
+            $insert = "
+                INSERT INTO genre_media
+                (
+                    genre_id,
+                    media_id
+                )
+                VALUES (?, ?)
+            ";
+
+            $values = [
+                $genreId,
+                $mediaId
+            ];
+
+            DB::insert($insert, $values);
+        }
+    }
+
+    protected function getGenreIds(Request $request)
+    {
+        return $this->getGenreOrCollectionIds($request, 'genres', Genre);
+    }
+
+    protected function insertIntoCollectionMedia(Request $request, int $mediaId)
+    {
+        $collectionIds = $this->getCollectionIds($request);
+
+        foreach($collectionIds as $collectionId) {
+            $insert = "
+                INSERT INTO collection_media
+                (
+                    collection_id,
+                    media_id
+                )
+                VALUES (?, ?)
+            ";
+
+            $values = [
+                $collectionId,
+                $mediaId
+            ];
+
+            DB::insert($insert, $values);
+        }
+    }
+
+    protected function getCollectionIds(Request $request)
+    {
+        $this->getGenreOrCollectionIds($request, 'collections', Collection);
+    }
+
+    protected function getGenreOrCollectionIds(Request $request, string $field, $model)
+    {
+        $ids = [];
+
+        foreach($request->{$field} as $name) {
+            $record =
+                $model
+                    ::where('name', '=', $name)
+                    ->get()
+                    ->first();
+
+            if(!is_null($record)) {
+                $id = $record->id;
+            }
+
+            if(is_null($record)) {
+                $id = $this->insertGenreOrCollection($model, $name);
+            }
+
+            $ids[] = $id;
+        }
+
+        return array_unique($ids);
+    }
+
+    protected function insertGenreOrCollection($model, string $name)
+    {
+        $model->name = $name;
+
+        $model->save();
+
+        return $model->id;
     }
 }

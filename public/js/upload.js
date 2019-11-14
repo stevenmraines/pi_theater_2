@@ -1055,6 +1055,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // Initialize movies array
         for (var i = 0; i < this.files.length; i++) {
             var objectDefaults = {
+                drive_id: this.drive,
                 episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
                 file: this.files[i],
                 season: this.getSeasonFromFile(this.files[i]),
@@ -2181,6 +2182,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         for (var i = 0; i < this.files.length; i++) {
             var objectDefaults = {
                 collections: [''],
+                drive_id: this.drive,
                 file: this.files[i],
                 genres: [''],
                 jumbotron: null,

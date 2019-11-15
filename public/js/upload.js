@@ -3503,7 +3503,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.show.yearEnd = this.yearMax;
         },
         startGreaterThanEnd: function startGreaterThanEnd() {
-            return this.show.yearStart > this.show.yearEnd;
+            return this.show.yearStart > this.show.yearEnd && this.show.yearEnd > 0;
         },
         submit: function submit() {
             this.show.poster = this.show.poster.item(0);
@@ -3549,13 +3549,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.show.yearStart = parseInt(yearStart);
         },
         yearEndValid: function yearEndValid() {
-            return this.yearValid(this.show.yearEnd);
+            return this.show.yearEnd <= this.yearMax && (this.show.yearEnd >= this.yearMin || this.show.yearEnd == 0) && !isNaN(this.show.yearEnd);
         },
         yearStartValid: function yearStartValid() {
-            return this.yearValid(this.show.yearStart);
-        },
-        yearValid: function yearValid(year) {
-            return year <= this.yearMax && year >= this.yearMin && !isNaN(year);
+            return this.show.yearStart <= this.yearMax && this.show.yearStart >= this.yearMin && !isNaN(this.show.yearStart);
         }
     }
 });
@@ -4432,9 +4429,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['eventDispatcher', 'value']
+    props: ['eventDispatcher', 'value'],
+
+    data: function data() {
+        return {
+            max: new Date().getFullYear(),
+            min: 0
+        };
+    }
 });
 
 /***/ }),
@@ -4451,6 +4457,8 @@ var render = function() {
       event: "yearEndChange",
       eventDispatcher: _vm.eventDispatcher,
       label: "Year End",
+      max: _vm.max,
+      min: _vm.min,
       search: false,
       value: _vm.value
     }
@@ -4545,17 +4553,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-// TODO Need to pass min / max as props so that year end can take 0 for shows that haven't ended
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['event', 'eventDispatcher', 'label', 'search', 'title', 'value'],
-
-    data: function data() {
-        return {
-            max: new Date().getFullYear(),
-            min: 1900
-        };
-    },
-
+    props: ['event', 'eventDispatcher', 'label', 'max', 'min', 'search', 'title', 'value'],
 
     methods: {
         yearChange: function yearChange(event) {
@@ -4677,9 +4676,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['eventDispatcher', 'title', 'value']
+    props: ['eventDispatcher', 'title', 'value'],
+
+    data: function data() {
+        return {
+            max: new Date().getFullYear(),
+            min: 1900
+        };
+    }
 });
 
 /***/ }),
@@ -4696,6 +4704,8 @@ var render = function() {
       event: "yearReleasedChange",
       eventDispatcher: _vm.eventDispatcher,
       label: "Year Released",
+      max: _vm.max,
+      min: _vm.min,
       search: true,
       title: _vm.title,
       value: _vm.value
@@ -4778,9 +4788,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['eventDispatcher', 'title', 'value']
+    props: ['eventDispatcher', 'title', 'value'],
+
+    data: function data() {
+        return {
+            max: new Date().getFullYear(),
+            min: 1900
+        };
+    }
 });
 
 /***/ }),
@@ -4797,6 +4816,8 @@ var render = function() {
       event: "yearStartChange",
       eventDispatcher: _vm.eventDispatcher,
       label: "Year Start",
+      max: _vm.max,
+      min: _vm.min,
       search: true,
       title: _vm.title,
       value: _vm.value

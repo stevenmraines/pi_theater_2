@@ -3,6 +3,8 @@
         :event="'yearEndChange'"
         :eventDispatcher="eventDispatcher"
         :label="'Year End'"
+        :max="max"
+        :min="min"
         :search="false"
         :value="value"
     ></year-input>
@@ -14,5 +16,12 @@
             'eventDispatcher',
             'value',
         ],
+
+        data() {
+            return {
+                max: new Date().getFullYear(),
+                min: 0,
+            };
+        },
     }
 </script>

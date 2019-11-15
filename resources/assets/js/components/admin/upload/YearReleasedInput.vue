@@ -3,6 +3,8 @@
         :event="'yearReleasedChange'"
         :eventDispatcher="eventDispatcher"
         :label="'Year Released'"
+        :max="max"
+        :min="min"
         :search="true"
         :title="title"
         :value="value"
@@ -16,5 +18,12 @@
             'title',
             'value',
         ],
+
+        data() {
+            return {
+                max: new Date().getFullYear(),
+                min: 1900,
+            };
+        },
     }
 </script>

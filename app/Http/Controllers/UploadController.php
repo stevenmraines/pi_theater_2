@@ -123,8 +123,9 @@ class UploadController extends Controller
 
     protected function getShowValidationRules()
     {
+        // TODO figure out how to extend existing after_or_equal date rule to allow zero
         $showValidationRules = [
-            'yearEnd' => 'required|date_format:Y|gtef:yearStart|after_or_equal:1900|before_or_equal:' . date('Y'),
+            'yearEnd' => 'required|date_format:Y|gtef:yearStart|before_or_equal:' . date('Y'),
             'yearStart' => 'required|date_format:Y|after_or_equal:1900|before_or_equal:' . date('Y'),
         ];
 

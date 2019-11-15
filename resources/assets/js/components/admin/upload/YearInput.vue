@@ -22,23 +22,17 @@
 </template>
 
 <script>
-    // TODO Need to pass min / max as props so that year end can take 0 for shows that haven't ended
     export default {
         props: [
             'event',
             'eventDispatcher',
             'label',
+            'max',
+            'min',
             'search',
             'title',
             'value',
         ],
-
-        data() {
-            return {
-                max: new Date().getFullYear(),
-                min: 1900,
-            };
-        },
 
         methods: {
             yearChange(event) {

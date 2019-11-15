@@ -307,7 +307,7 @@
             },
 
             startGreaterThanEnd() {
-                return this.show.yearStart > this.show.yearEnd;
+                return this.show.yearStart > this.show.yearEnd && this.show.yearEnd > 0;
             },
 
             submit() {
@@ -375,18 +375,18 @@
             },
 
             yearEndValid() {
-                return this.yearValid(this.show.yearEnd);
+                return (
+                    this.show.yearEnd <= this.yearMax
+                    && (this.show.yearEnd >= this.yearMin || this.show.yearEnd == 0)
+                    && !isNaN(this.show.yearEnd)
+                );
             },
 
             yearStartValid() {
-                return this.yearValid(this.show.yearStart);
-            },
-
-            yearValid(year) {
                 return (
-                    year <= this.yearMax
-                    && year >= this.yearMin
-                    && !isNaN(year)
+                    this.show.yearStart <= this.yearMax
+                    && this.show.yearStart >= this.yearMin
+                    && !isNaN(this.show.yearStart)
                 );
             },
         },

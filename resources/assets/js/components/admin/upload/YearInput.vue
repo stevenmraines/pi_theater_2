@@ -22,6 +22,7 @@
 </template>
 
 <script>
+    // TODO Need to pass min / max as props so that year end can take 0 for shows that haven't ended
     export default {
         props: [
             'event',

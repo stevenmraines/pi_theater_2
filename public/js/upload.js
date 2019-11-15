@@ -2136,6 +2136,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['collections', 'drive', 'driveEventDispatcher', 'files', 'genres'],
@@ -2217,6 +2221,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
 
                 previousCollections.push(currentCollection);
+            }
+
+            return false;
+        },
+        collectionEmpty: function collectionEmpty() {
+            var collections = this.movies[this.currentFileEscaped].collections;
+
+            if (collections.length > 1) {
+                for (var i = 0; i < collections.length; i++) {
+                    if (collections[i] === '') {
+                        return true;
+                    }
+                }
             }
 
             return false;
@@ -2355,7 +2372,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.movies[this.currentFileEscaped].title === '';
         },
         valid: function valid() {
-            return !this.titleEmpty() && this.yearValid() && !this.summaryEmpty() && !this.posterEmpty() && !this.genreEmpty() && !this.genreDuplicates() && !this.collectionDuplicates();
+            return !this.titleEmpty() && this.yearValid() && !this.summaryEmpty() && !this.posterEmpty() && !this.genreEmpty() && !this.genreDuplicates() && !this.collectionDuplicates() && !this.collectionEmpty();
         },
         videoFileChange: function videoFileChange(file) {
             this.currentFile = file;
@@ -2548,6 +2565,22 @@ var render = function() {
                   value: _vm.movies[_vm.currentFileEscaped].collections
                 }
               }),
+              _vm._v(" "),
+              _vm.collectionEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v(
+                        "There are empty values in the Collection fields\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
               _vm._v(" "),
               _vm.collectionDuplicates()
                 ? _c(
@@ -3306,6 +3339,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['collections', 'drive', 'driveEventDispatcher', 'genres'],
@@ -3375,6 +3412,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
 
                 previousCollections.push(currentCollection);
+            }
+
+            return false;
+        },
+        collectionEmpty: function collectionEmpty() {
+            if (this.show.collections.length > 1) {
+                for (var i = 0; i < this.show.collections.length; i++) {
+                    if (this.show.collections[i] === '') {
+                        return true;
+                    }
+                }
             }
 
             return false;
@@ -3492,7 +3540,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.show.title === '';
         },
         valid: function valid() {
-            return !this.startGreaterThanEnd() && !this.titleEmpty() && this.yearEndValid() && this.yearStartValid() && !this.summaryEmpty() && !this.posterEmpty() && !this.genreEmpty() && !this.genreDuplicates() && !this.collectionDuplicates();
+            return !this.startGreaterThanEnd() && !this.titleEmpty() && this.yearEndValid() && this.yearStartValid() && !this.summaryEmpty() && !this.posterEmpty() && !this.genreEmpty() && !this.genreDuplicates() && !this.collectionDuplicates() && !this.collectionEmpty();
         },
         yearEndChange: function yearEndChange(yearEnd) {
             this.show.yearEnd = parseInt(yearEnd);
@@ -3718,6 +3766,22 @@ var render = function() {
             }
           }),
           _vm._v(" "),
+          _vm.collectionEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v(
+                    "There are empty values in the Collection fields\n            "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _vm.collectionDuplicates()
             ? _c(
                 "div",
@@ -3883,17 +3947,21 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(493)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(466)
 /* template */
-var __vue_template__ = __webpack_require__(467)
+var __vue_template__ = __webpack_require__(495)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-28ff791b"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -3944,54 +4012,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['disabled', 'eventDispatcher']
 });
-
-/***/ }),
-
-/***/ 467:
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "form-group d-flex justify-content-around mt-3 mb-0" },
-    [
-      _c(
-        "button",
-        {
-          staticClass: "btn",
-          class: {
-            "btn-secondary": _vm.disabled,
-            "btn-success": !_vm.disabled
-          },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              $event.stopPropagation()
-              _vm.eventDispatcher.$emit("submit")
-            }
-          }
-        },
-        [_vm._v("\n        Submit\n    ")]
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-28ff791b", module.exports)
-  }
-}
 
 /***/ }),
 
@@ -4520,6 +4545,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+// TODO Need to pass min / max as props so that year end can take 0 for shows that haven't ended
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['event', 'eventDispatcher', 'label', 'search', 'title', 'value'],
 
@@ -4784,6 +4810,90 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-d60aeba8", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 493:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(494);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(90)("00acbb09", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-28ff791b\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitInput.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-28ff791b\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitInput.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 494:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(63)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.btn-disabled[data-v-28ff791b] {\n    cursor: not-allowed;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 495:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "form-group d-flex justify-content-around mt-3 mb-0" },
+    [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success",
+          class: { "btn-disabled": _vm.disabled },
+          attrs: { disabled: _vm.disabled },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              $event.stopPropagation()
+              _vm.eventDispatcher.$emit("submit")
+            }
+          }
+        },
+        [_vm._v("\n        Submit\n    ")]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-28ff791b", module.exports)
   }
 }
 

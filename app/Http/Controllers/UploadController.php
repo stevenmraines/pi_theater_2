@@ -312,6 +312,13 @@ class UploadController extends Controller
 
     protected function insertIntoCollectionMedia(Request $request, int $mediaId)
     {
+        if(
+            count($request->collections) === 1
+            && ($request->collections[0] === '' || is_null($request->collections[0]))
+        ) {
+            return;
+        }
+
         $collectionIds = $this->getCollectionIds($request);
 
         if(count($collectionIds) > 0) {

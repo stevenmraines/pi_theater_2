@@ -91,6 +91,10 @@
                     :value="show.collections"
                 ></multi-collection-input>
 
+                <div class="alert alert-danger mb-2" role="alert" v-if="collectionEmpty()">
+                    <strong>Error: </strong>There are empty values in the Collection fields
+                </div>
+
                 <div class="alert alert-danger mb-2" role="alert" v-if="collectionDuplicates()">
                     <strong>Error: </strong>There are duplicate values in the Collection fields
                 </div>
@@ -183,6 +187,18 @@
                     }
 
                     previousCollections.push(currentCollection);
+                }
+
+                return false;
+            },
+
+            collectionEmpty() {
+                if(this.show.collections.length > 1) {
+                    for(var i = 0; i < this.show.collections.length; i++) {
+                        if(this.show.collections[i] === '') {
+                            return true;
+                        }
+                    }
                 }
 
                 return false;
@@ -346,6 +362,7 @@
                     && !this.genreEmpty()
                     && !this.genreDuplicates()
                     && !this.collectionDuplicates()
+                    && !this.collectionEmpty()
                 );
             },
 

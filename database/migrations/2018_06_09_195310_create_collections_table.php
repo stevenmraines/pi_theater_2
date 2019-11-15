@@ -16,8 +16,8 @@ class CreateCollectionsTable extends Migration
         Schema::create('collections', function (Blueprint $table) {
             $table->increments('id');
 			$table->string('name');
-			$table->string('menu_image');
-			$table->string('jumbotron_image')->nullable();
+			$table->string('menu_image')->nullable()->default(NULL);
+			$table->string('jumbotron_image')->nullable()->default(NULL);
             $table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

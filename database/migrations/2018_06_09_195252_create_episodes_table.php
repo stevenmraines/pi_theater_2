@@ -19,7 +19,7 @@ class CreateEpisodesTable extends Migration
 			$table->unsignedInteger('season');
 			$table->unsignedInteger('episode_number');
 			$table->string('title');
-			$table->string('summary', 4000);
+			$table->string('summary', 4000)->nullable()->default(NULL);
             $table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');

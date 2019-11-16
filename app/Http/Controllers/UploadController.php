@@ -83,6 +83,7 @@ class UploadController extends Controller
 
     protected function getEpisodeValidationRules()
     {
+        // TODO Run SQL to convert empty strings to NULL on episodes table summary field and update code to match
         return [
             'drive_id' => 'required|exists:drives,id',
             'episodeNumber' => 'required|integer|min:1',

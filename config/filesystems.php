@@ -45,7 +45,7 @@ return [
 
         'images' => [
             'driver' => 'local',
-            'root' => public_path() . DIRECTORY_SEPARATOR . 'img',
+            'root' => public_path('img'),
             'visibility' => 'public'
         ],
 

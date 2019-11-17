@@ -391,10 +391,27 @@ class UploadController extends Controller
 
         $request->poster->storeAs('posters', $posterFilename, 'images');
 
+        $this->setPermissions(
+            public_path('img') . DIRECTORY_SEPARATOR . 'posters'
+            . DIRECTORY_SEPARATOR . $posterFilename
+        );
+
         if($request->hasFile('jumbotron')) {
             $jumbotronFilename = $this->getJumbotronFilename($request);
 
             $request->jumbotron->storeAs('jumbotron', $jumbotronFilename, 'images');
+
+            $this->setPermissions(
+                public_path('img') . DIRECTORY_SEPARATOR . 'jumbotron'
+                . DIRECTORY_SEPARATOR . $jumbotronFilename
+            );
         }
+    }
+
+    protected function setPermissions(string $path)
+    {
+        chmod($path, 0664);
+        chown($path, 'pi');
+        chgrp($path, 'www-data');
     }
 }

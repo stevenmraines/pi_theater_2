@@ -1,13 +1,36 @@
-/node_modules
-/public/
-/storage/*.key
+# Composer
 /vendor
+
+# Environment
+.env
+.env.backup
+.env.swp
+
+# Misc
 /.idea
 /.vscode
 /.vagrant
+.phpunit.result.cache
 Homestead.json
 Homestead.yaml
-npm-debug.log
 yarn-error.log
-.env
 **/Thumbs.db
+
+# Netbeans
+nbproject/*
+.nbproject
+
+# Node / NPM
+/node_modules
+npm-debug.log
+
+# Public
+/public/css
+/public/hot
+/public/js
+/public/storage
+/public/videos
+
+# Storage
+/storage/*.key
+

@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
+set_time_limit(0);
+
 // TODO break up some of this functionality into smaller controllers
 class UploadController extends Controller
 {
@@ -205,10 +207,13 @@ class UploadController extends Controller
     protected function getImageFilename(Request $request, string $field = 'poster')
     {
         $formattedTitle = $this->getFormattedTitle($request->title);
-        $imageExtension = $request->{$field}->extension();
+        $imageExtension = strtolower(pathinfo($request->poster, PATHINFO_EXTENSION));
+
+        // TODO figure out how to do this without screwing up Algolia indexing
+        // $imageExtension = $request->{$field}->extension();
 
         // Default to jpg
-        if (is_null($imageExtension)) {
+        if(empty($imageExtension)) {
             $imageExtension = 'jpg';
         }
 
@@ -411,7 +416,8 @@ class UploadController extends Controller
     protected function setPermissions(string $path)
     {
         chmod($path, 0664);
-        chown($path, 'pi');
+        // TODO figure out what to do about chown not being permitted
+//        chown($path, 'pi');
         chgrp($path, 'www-data');
     }
 }

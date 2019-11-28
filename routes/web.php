@@ -18,12 +18,14 @@ Route::get('/{home?}', function() {
         App\Media
             ::where('media_type', '=', 'movie')
             ->orderBy('created_at', 'desc')
+            ->limit(20)
             ->get();
 
     $recentShows =
         App\Media
             ::where('media_type', '=', 'show')
             ->orderBy('created_at', 'desc')
+            ->limit(20)
             ->get();
 
     $initialState = [

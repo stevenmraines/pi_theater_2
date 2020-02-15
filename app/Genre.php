@@ -10,7 +10,10 @@ class Genre extends Model
     use Searchable;
 
     public function media() {
-		return $this->belongsToMany('App\Media');
+		return
+            $this
+                ->belongsToMany('App\Media')
+                ->orderBy('media.title', 'asc');
 	}
 
     public function toSearchableArray() {

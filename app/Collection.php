@@ -11,7 +11,10 @@ class Collection extends Model
     use Searchable;
 
     public function media() {
-        return $this->belongsToMany('App\Media');
+        return
+            $this
+                ->belongsToMany('App\Media')
+                ->orderBy('media.title', 'asc');
     }
 
     public static function recent($limit) {

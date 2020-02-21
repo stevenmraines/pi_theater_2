@@ -285,6 +285,10 @@ body {
 	opacity: 1;
 }
 
+.poster-overlay > span {
+	white-space: normal;
+}
+
 .shift-left {
 	transform: translate3d(-10px, 0, 0);
 }

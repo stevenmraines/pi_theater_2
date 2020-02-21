@@ -42,6 +42,9 @@ class User extends Authenticatable
     }
 
     public function watchlist() {
-        return $this->belongsToMany('App\Media', 'user_watchlist', 'user_id', 'media_id');
+        return
+            $this
+                ->belongsToMany('App\Media', 'user_watchlist', 'user_id', 'media_id')
+                ->orderBy('user_watchlist.created_at', 'desc');
     }
 }

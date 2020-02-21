@@ -43,12 +43,11 @@ body {
 #search-menu:hover > img, #search-menu:focus > img {
     opacity: 1;
 }
-/*
-#collections-menu-container > a > .dropdown-item:hover,
-#collections-menu-container > a > .dropdown-item:focus {
-    background-color: transparent;
+
+#collections-menu-container {
+    max-height: 90vh;
 }
-*/
+
 #user-options-menu > img {
 	opacity: 0.5;
 	width: 40px;
@@ -572,11 +571,4 @@ input[type=range]:focus::-ms-fill-upper {
     order: 1;
     margin-left: auto;
   }
-}
-
-@media only screen and (max-height: 899px) {
-	#collections-menu-container {
-		max-height: 350px;
-		overflow-y: auto;
-	}
 }

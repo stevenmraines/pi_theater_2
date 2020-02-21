@@ -23,7 +23,7 @@ class Media extends Model
     }
 
     public function genres() {
-        return $this->belongsToMany('App\Genre');
+        return $this->belongsToMany('App\Genre')->orderBy('name');
     }
 
     public static function recentEpisodes() {

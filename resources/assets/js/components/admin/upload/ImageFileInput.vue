@@ -7,7 +7,12 @@
                 v-if="search"
                 :href="'https://www.google.com/search?q=' + title + '+poster&tbm=isch'"
                 target="_blank"
-            > (search)</a>
+            > (Google)</a>
+            <a
+                v-if="search"
+                :href="'https://www.impawards.com/search.php?search_data=' + title"
+                target="_blank"
+            > (IMP Awards)</a>
         </label>
 
         <div
@@ -43,6 +48,7 @@
 
 <script>
     // TODO fix bug where escaping from file selection without picking anything still sets a FileList to value
+    // TODO Separate into MovieImageFileInput and ShowImageFileInput to add 'movie' or 'show' to search queries?
     export default {
         props: [
             'event',

@@ -16,9 +16,9 @@ class AuthViewController extends Controller
 
     public function upload() {
         $initialState = [
-            'collections' => \App\Collection::all(),
+            'collections' => \App\Collection::all()->sortBy('name')->values(),
             'drives' => \App\Drive::all(),
-            'genres' => \App\Genre::all(),
+            'genres' => \App\Genre::all()->sortBy('name')->values(),
             'pending' => \App\Drive::pending(),
             'shows' => \App\Media::where('media_type', '=', 'show')->with('episodes')->get()
         ];

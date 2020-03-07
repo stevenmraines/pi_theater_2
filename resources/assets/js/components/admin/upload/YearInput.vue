@@ -6,7 +6,7 @@
                 v-if="search"
                 :href="'https://www.google.com/search?q=' + title + '+year+released'"
                 target="_blank"
-            >(search)</a>
+            >(Google)</a>
         </label>
         <input
             type="number"
@@ -23,6 +23,7 @@
 
 <script>
     export default {
+        // TODO Might need to make separate MovieYearInput and ShowYearInput to add 'movie+year+released' to search query
         props: [
             'event',
             'eventDispatcher',

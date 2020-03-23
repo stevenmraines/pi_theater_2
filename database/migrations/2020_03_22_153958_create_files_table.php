@@ -31,8 +31,6 @@ class CreateFilesTable extends Migration
      */
     public function down()
     {
-        Schema::table('files', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('files');
     }
 }

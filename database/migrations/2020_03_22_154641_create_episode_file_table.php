@@ -31,8 +31,6 @@ class CreateEpisodeFileTable extends Migration
      */
     public function down()
     {
-        Schema::table('episode_file', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('episode_file');
     }
 }

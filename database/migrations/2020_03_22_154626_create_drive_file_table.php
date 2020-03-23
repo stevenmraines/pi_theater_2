@@ -31,8 +31,6 @@ class CreateDriveFileTable extends Migration
      */
     public function down()
     {
-        Schema::table('drive_file', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('drive_file');
     }
 }

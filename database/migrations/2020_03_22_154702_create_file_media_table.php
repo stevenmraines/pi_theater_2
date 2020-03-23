@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFileMovieTable extends Migration
+class CreateFileMediaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFileMovieTable extends Migration
      */
     public function up()
     {
-        Schema::table('file_movie', function (Blueprint $table) {
+        Schema::table('file_media', function (Blueprint $table) {
             $table->unsignedInteger('media_id');
             $table->unsignedInteger('file_id');
             $table->timestamp('created_at')->useCurrent();
@@ -31,8 +31,6 @@ class CreateFileMovieTable extends Migration
      */
     public function down()
     {
-        Schema::table('file_movie', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('file_media');
     }
 }

@@ -78,7 +78,13 @@ class PopulateFiles extends Command
                 return $movie;
             }
 
-            $videoAttributes = $this->getVideoAttributes($video);
+            try {
+                $videoAttributes = $this->getVideoAttributes($video);
+            }catch(\Exception $e) {
+                echo "COULD NOT GET VIDEO ATTRIBUTES\n";
+                $failedMovies[] = $movie->toArray();
+                return $movie;
+            }
 
             $width = $videoAttributes['width'];
             $height = $videoAttributes['height'];
@@ -184,7 +190,13 @@ class PopulateFiles extends Command
                 return $episode;
             }
 
-            $videoAttributes = $this->getVideoAttributes($video);
+            try {
+                $videoAttributes = $this->getVideoAttributes($video);
+            }catch(\Exception $e) {
+                echo "COULD NOT GET VIDEO ATTRIBUTES\n";
+                $failedEpisodes[] = $episode->toArray();
+                return $episode;
+            }
 
             $width = $videoAttributes['width'];
             $height = $videoAttributes['height'];
@@ -274,7 +286,7 @@ class PopulateFiles extends Command
 
         $regex_sizes = "/Video: ([^,]*), ([^,]*), ([0-9]{1,4})x([0-9]{1,4})/"; // or : $regex_sizes = "/Video: ([^\r\n]*), ([^,]*), ([0-9]{1,4})x([0-9]{1,4})/"; (code from @1owk3y)
 
-        if (preg_match($regex_sizes, $output, $regs)) {
+        if(preg_match($regex_sizes, $output, $regs)) {
             $codec = $regs [1] ? $regs [1] : null;
             $width = $regs [3] ? $regs [3] : null;
             $height = $regs [4] ? $regs [4] : null;
@@ -282,21 +294,22 @@ class PopulateFiles extends Command
 
         $regex_duration = "/Duration: ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2}).([0-9]{1,2})/";
 
-        if (preg_match($regex_duration, $output, $regs)) {
+        if(preg_match($regex_duration, $output, $regs)) {
             $hours = $regs [1] ? $regs [1] : null;
             $mins = $regs [2] ? $regs [2] : null;
             $secs = $regs [3] ? $regs [3] : null;
             $ms = $regs [4] ? $regs [4] : null;
         }
 
-        return array('codec' => $codec,
+        return [
+            'codec' => $codec,
             'width' => $width,
             'height' => $height,
             'hours' => $hours,
             'mins' => $mins,
             'secs' => $secs,
             'ms' => $ms
-        );
+        ];
     }
 
     private function humanFileSize($bytes, $decimals = 2) {

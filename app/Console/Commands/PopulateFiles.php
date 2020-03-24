@@ -132,7 +132,7 @@ class PopulateFiles extends Command
                     media_id,
                     file_id
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?)
             ";
 
             $values = [
@@ -149,7 +149,7 @@ class PopulateFiles extends Command
                     drive_id,
                     file_id
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?)
             ";
 
             $values = [
@@ -250,7 +250,7 @@ class PopulateFiles extends Command
                     episode_id,
                     file_id
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?)
             ";
 
             $values = [
@@ -267,7 +267,7 @@ class PopulateFiles extends Command
                     drive_id,
                     file_id
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?)
             ";
 
             $values = [

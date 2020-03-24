@@ -52,8 +52,14 @@ class PopulateFiles extends Command
 
         // Assign video attributes to $media
         $media->transform(function($movie) use(&$failedMovies) {
-            $video = '/var/www/pi_theater_2/public/videos/hdd1/movies/'
-                . $movie->drive->first()->pivot->filename;
+            try {
+                $video = '/var/www/pi_theater_2/public/videos/hdd1/movies/'
+                    . $movie->drive->first()->pivot->filename;
+            }catch(\Exception $e) {
+                echo "COULD NOT GET FILENAME PROPERTY\n";
+                $failedMovies[] = $movie->toArray();
+                return $movie;
+            }
 
             echo "On file: $video - ";
 
@@ -164,8 +170,14 @@ class PopulateFiles extends Command
 
         // Assign video attributes to $episodes
         $episodes->transform(function($episode) use(&$failedEpisodes) {
-            $video = '/var/www/pi_theater_2/public/videos/hdd1/shows/'
-                . $episode->drive->first()->pivot->filename;
+            try {
+                $video = '/var/www/pi_theater_2/public/videos/hdd1/shows/'
+                    . $episode->drive->first()->pivot->filename;
+            }catch(\Exception $e) {
+                echo "COULD NOT GET FILENAME PROPERTY\n";
+                $failedEpisodes[] = $episode->toArray();
+                return $episode;
+            }
 
             echo "On file: $video - ";
 
@@ -284,7 +296,12 @@ class PopulateFiles extends Command
         $command = $ffmpeg . ' -i ' . $video . ' -vstats 2>&1';
         $output = shell_exec($command);
 
-        $regex_sizes = "/Video: ([^,]*), ([^,]*), ([0-9]{1,4})x([0-9]{1,4})/"; // or : $regex_sizes = "/Video: ([^\r\n]*), ([^,]*), ([0-9]{1,4})x([0-9]{1,4})/"; (code from @1owk3y)
+        $regex_sizes = "/Video: ([^,]*), ([^,]*), ([0-9]{1,4})x([0-9]{1,4})/";
+
+        // In case first one doesn't match
+        if(!preg_match($regex_sizes, $output, $regs)) {
+            $regex_sizes = "/Video: ([^\r\n]*), ([^,]*), ([0-9]{1,4})x([0-9]{1,4})/";
+        }
 
         if(preg_match($regex_sizes, $output, $regs)) {
             $codec = $regs [1] ? $regs [1] : null;

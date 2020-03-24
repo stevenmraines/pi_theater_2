@@ -280,15 +280,11 @@ class PopulateFiles extends Command
 
         echo "\nFailed movies:\n";
 
-        foreach($failedMovies as $movie) {
-            echo "({$movie['id']}) {$movie['title']} - {$movie['drive'][0]['pivot']['filename']}\n";
-        }
+        var_dump($failedMovies);
 
         echo "\nFailed episodes:\n";
 
-        foreach($failedEpisodes as $episode) {
-            echo "({$episode['id']}) {$episode['title']} - {$episode['drive'][0]['pivot']['filename']}\n";
-        }
+        var_dump($failedEpisodes);
     }
 
     private function getVideoAttributes($video) {

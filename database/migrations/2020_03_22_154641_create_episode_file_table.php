@@ -13,7 +13,7 @@ class CreateEpisodeFileTable extends Migration
      */
     public function up()
     {
-        Schema::table('episode_file', function (Blueprint $table) {
+        Schema::create('episode_file', function (Blueprint $table) {
             $table->unsignedInteger('episode_id');
             $table->unsignedInteger('file_id');
             $table->timestamp('created_at')->useCurrent();

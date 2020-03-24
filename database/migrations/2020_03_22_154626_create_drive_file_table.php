@@ -13,7 +13,7 @@ class CreateDriveFileTable extends Migration
      */
     public function up()
     {
-        Schema::table('drive_file', function (Blueprint $table) {
+        Schema::create('drive_file', function (Blueprint $table) {
             $table->unsignedInteger('drive_id');
             $table->unsignedInteger('file_id');
             $table->timestamp('created_at')->useCurrent();

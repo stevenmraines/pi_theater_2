@@ -13,7 +13,7 @@ class CreateFileMediaTable extends Migration
      */
     public function up()
     {
-        Schema::table('file_media', function (Blueprint $table) {
+        Schema::create('file_media', function (Blueprint $table) {
             $table->unsignedInteger('media_id');
             $table->unsignedInteger('file_id');
             $table->timestamp('created_at')->useCurrent();

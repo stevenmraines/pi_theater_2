@@ -15,7 +15,7 @@ class Media extends Model
     }
 
     public function drive() {
-        return $this->belongsToMany('App\Drive')->withPivot('filename');
+        return $this->belongsToMany('App\Drive')->withPivot(['filename', 'width', 'height', 'duration']);
     }
 
     public function episodes() {

@@ -17,6 +17,9 @@ class CreateDriveEpisodeTable extends Migration
             $table->unsignedInteger('episode_id');
             $table->unsignedInteger('drive_id');
             $table->string('filename');
+            $table->unsignedInteger('width')->default(0);
+            $table->unsignedInteger('height')->default(0);
+            $table->unsignedInteger('duration')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('drive_id')->references('id')->on('drives')->onDelete('cascade');

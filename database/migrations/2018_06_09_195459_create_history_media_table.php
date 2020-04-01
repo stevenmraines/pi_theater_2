@@ -13,7 +13,7 @@ class CreateHistoryMovieTable extends Migration
      */
     public function up()
     {
-        Schema::create('history_movie', function (Blueprint $table) {
+        Schema::create('history_media', function (Blueprint $table) {
 			$table->unsignedInteger('user_id');
 			$table->unsignedInteger('media_id');
 			$table->unsignedInteger('progress')->default(0);
@@ -32,6 +32,6 @@ class CreateHistoryMovieTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('history_movie');
+        Schema::dropIfExists('history_media');
     }
 }

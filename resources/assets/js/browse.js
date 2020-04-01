@@ -197,19 +197,6 @@ const app = new Vue({
 			};
 		},
 
-		finishHistory: function(mediaId) {
-			var self = this;
-
-			axios.post('/api/history/finish' + this.user.id + '/' + mediaId)
-			.then(function(response) {
-				self.user = response.data;
-				self.watchlist.user = response.data;
-			})
-			.catch(function(error) {
-				console.log(error);
-			});
-		},
-
 		fluidModalRecentEpisodes: function() {
 			this.fluidModal.title = 'New Episodes';
 			this.fluidModal.contents = this.recentEpisodes;
@@ -334,6 +321,7 @@ const app = new Vue({
 		setVideo: function(data) {
 			var self = this;
 			var id = data.id;
+			var progress = data.progress;
 
 			this.video.media_id = id;
 			this.video.episode_id = 0;
@@ -352,15 +340,7 @@ const app = new Vue({
 				  	if(response.data.media_type === 'movie') {
 				  		self.video.drive = response.data.drive[0].name;
 				  		self.video.filename = response.data.drive[0].pivot.filename;
-
-						// Try to find movie in user's history and get current progress
-						if(self.user) {
-							for(var i = 0; i < self.user.history_movie.length; i++) {
-								if(self.user.history_movie[i].id == id) {
-									self.video.progress = self.user.history_movie[i].pivot.progress;
-								}
-							}
-						}
+						self.video.progress = progress > 0 ? progress : 0;
 				  	}
 
 				  	if(response.data.media_type === 'show' && episode_id) {

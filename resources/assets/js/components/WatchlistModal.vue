@@ -25,12 +25,12 @@
                         class="my-3"
                         v-if="user"
                         v-for="media in user.watchlist"
-                        v-bind:key="media.id"
-                        v-bind:id="media.id"
-                        v-bind:title="media.title"
-                        v-bind:poster="paths.posters + '/' + media.poster"
-                        v-bind:mediaType="media.mediaType"
                         v-bind:event-dispatcher="{}"
+                        v-bind:id="media.id"
+                        v-bind:key="media.id"
+                        v-bind:media_type="media.media_type"
+                        v-bind:poster="paths.posters + '/' + media.poster"
+                        v-bind:title="media.title"
                     ></poster-container>
                 </div>
             </div>

@@ -21,11 +21,12 @@
                     <poster-container
                         class="my-3"
                         v-for="content in contents"
-                        v-bind:key="content.id"
-                        v-bind:id="content.id"
-                        v-bind:title="content.title"
-                        v-bind:poster="paths.posters + '/' + content.poster"
                         v-bind:event-dispatcher="{}"
+                        v-bind:id="content.id"
+                        v-bind:key="content.id"
+                        v-bind:media_type="content.media_type"
+                        v-bind:poster="paths.posters + '/' + content.poster"
+                        v-bind:title="content.title"
                     ></poster-container>
                 </div>
             </div>

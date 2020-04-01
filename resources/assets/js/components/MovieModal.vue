@@ -15,11 +15,12 @@
 				</div>
 				<div class="modal-body">
 					<div class="d-flex flex-column flex-lg-row p-2 pb-4">
-						<img
-							id="movie-modal-poster"
-							class="modal-poster mx-auto"
-							v-bind:src="paths.posters + '/' + poster"
-						/>
+						<span class="modal-poster-container mx-auto">
+							<div v-if="user && progress > 0" class="progress">
+								<div class="progress" v-bind:style="{ width: progressPercentage + '%' }"></div>
+							</div>
+							<img v-bind:src="paths.posters + '/' + poster" />
+						</span>
 						<span id="movie-modal-info" class="card mt-4 mt-lg-0 ml-lg-4">
 							<div class="card-body">
 								<div id="movie-modal-summary" class="mb-2">{{ summary }}</div>
@@ -35,29 +36,36 @@
 							</div>
 						</span>
 					</div>
-					<div class="modal-footer d-flex justify-content-between flex-column-reverse flex-sm-row">
-						<div v-if="user">
+					<div class="modal-footer">
+						<div style="width: 100%;">
 							<button
-								class="btn btn-success btn-watchlist"
-								v-if="!inWatchlist"
+								class="btn btn-success d-block d-lg-inline-block float-lg-left mb-3 mb-lg-0"
+								v-if="user && !inWatchlist"
 								v-on:click="addToWatchlist"
 							>
 								+ WATCHLIST
 							</button>
 							<button
-								class="btn btn-warning btn-watchlist"
-								v-if="inWatchlist"
+								class="btn btn-warning d-block d-lg-inline-block float-lg-left mb-3 mb-lg-0"
+								v-if="user && inWatchlist"
 								v-on:click="removeFromWatchlist"
 							>
 								&minus; WATCHLIST
 							</button>
+							<button
+								class="btn btn-primary d-block d-lg-inline-block float-lg-right mb-3 mb-lg-0 ml-lg-3"
+								v-on:click="watch(progress)"
+								v-if="user && history"
+							>
+								CONTINUE
+							</button>
+							<button
+								class="btn btn-primary d-block d-md-inline-block float-lg-right"
+								v-on:click="watch"
+							>
+								{{ ( user && history ? 'PLAY FROM BEGINNING' : 'WATCH NOW' ) }}
+							</button>
 						</div>
-						<button
-							class="btn btn-primary ml-sm-auto ml-0 mb-4 mb-sm-0 btn-watchlist"
-							v-on:click="watch"
-						>
-							WATCH NOW
-						</button>
 					</div>
 				</div>
 			</div>
@@ -80,6 +88,31 @@
 		],
 
 		computed: {
+			// TODO DRY up some of these methods as they're repeated in PosterContainer and ShowModal
+			duration: function() {
+				if(this.history && this.history.drive[0].pivot.duration > 0) {
+					return this.history.drive[0].pivot.duration;
+				}
+
+				return 0;
+			},
+
+			history: function() {
+				/*
+				 * History_media will contain progress for movies and
+				 * progress for the most recently watched episode of any shows.
+				 */
+				if(this.user.history_media && this.user.history_media.length > 0) {
+					for(var i = 0; i < this.user.history_media.length; i++) {
+						if(this.user.history_media[i].id == this.id) {
+							return this.user.history_media[i];
+						}
+					}
+				}
+
+				return null;
+			},
+
 			inWatchlist: function() {
 				for(var i = 0; i < this.user.watchlist.length; i++) {
 					if(this.id == this.user.watchlist[i].id) {
@@ -88,7 +121,23 @@
 				}
 
 				return false;
-			}
+			},
+
+			progress: function() {
+				if(this.history && this.history.pivot.progress > 0) {
+					return this.history.pivot.progress;
+				}
+
+				return 0;
+			},
+
+			progressPercentage: function() {
+				if(this.progress > 0 && this.duration > 0) {
+					return ( this.progress / this.duration ) * 100;
+				}
+
+				return 0;
+			},
 		},
 
 		created() {
@@ -114,8 +163,8 @@
 				Event.trigger('removeFromWatchlist', this.id);
 			},
 
-			watch() {
-				Event.trigger('setVideo', { 'id' : this.id });
+			watch(progress) {
+				Event.trigger('setVideo', { id : this.id, progress : progress });
 			},
 		},
 	}

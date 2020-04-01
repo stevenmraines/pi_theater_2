@@ -1,8 +1,9 @@
 <poster-row
-	v-if="user && user.history && user.history.length > 0"
-	v-bind:title="'Continue Watching'"
-	v-bind:contents="user.history"
+	v-if="user && user.history_media.length > 0"
+	v-bind:contents="user.history_media"
 	v-bind:paths="paths"
+	v-bind:title="'Continue Watching'"
+	v-bind:user="user"
 ></poster-row>
 
 <poster-row

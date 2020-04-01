@@ -20,11 +20,12 @@
 
                 <div class="modal-body">
                     <div class="d-flex flex-column flex-lg-row align-items-center p-2 pb-4">
-                        <img
-                            id="show-modal-poster"
-                            class="modal-poster mx-auto"
-                            v-bind:src="paths.posters + '/' + poster"
-                        />
+						<span class="modal-poster-container mx-auto">
+							<div v-if="user && progress > 0" class="progress">
+								<div class="progress" v-bind:style="{ width: progressPercentage + '%' }"></div>
+							</div>
+							<img v-bind:src="paths.posters + '/' + poster" />
+						</span>
 
                         <span id="show-modal-info" class="card mt-4 mt-lg-0 ml-lg-4">
                             <div class="card-header">
@@ -56,7 +57,11 @@
                             </div>
 
                             <div id="show-modal-episodes" class="card-body py-1 scrollbar">
-                                <div v-for="(episode, index) in currentSeasonEpisodes">
+                                <div
+                                    v-for="(episode, index) in currentSeasonEpisodes"
+                                    v-bind:class="{ 'pb-3': user && getEpisodeHistory(episode) }"
+                                    style="position: relative;"
+                                >
                                     <hr class="fluid-modal-hr my-1" v-if="index > 0" />
 
                                     <div
@@ -64,8 +69,8 @@
                                         v-bind:class="episodeListStyles(index)"
                                     >
                                         <span class="pr-2">
-                                        {{ episode.episode_number < 10 ? 0 : '' }}{{ episode.episode_number }}
-                                        - {{ episode.title }}
+                                            {{ episode.episode_number < 10 ? 0 : '' }}{{ episode.episode_number }}
+                                            - {{ episode.title }}
                                         </span>
 
                                         <button
@@ -74,6 +79,13 @@
                                         >
                                             WATCH NOW
                                         </button>
+                                    </div>
+
+                                    <div v-if="user && getEpisodeHistory(episode)" class="progress progress-sm">
+                                        <div
+                                            class="progress"
+                                            v-bind:style="{ width: getEpisodeProgressPercentage(episode) + '%' }"
+                                        ></div>
                                     </div>
                                 </div>
                             </div>
@@ -92,16 +104,22 @@
 
                     <div v-if="user">
                         <div class="modal-footer">
-                            <button
-                                class="btn btn-success mx-auto ml-sm-0 mr-sm-auto btn-watchlist"
-                                v-if="!inWatchlist"
-                                v-on:click="addToWatchlist"
-                            >+ WATCHLIST</button>
-                            <button
-                                class="btn btn-warning mx-auto ml-sm-0 mr-sm-auto btn-watchlist"
-                                v-if="inWatchlist"
-                                v-on:click="removeFromWatchlist"
-                            >&minus; WATCHLIST</button>
+                            <div style="width: 100%;">
+                                <button
+                                    class="btn btn-success d-block d-md-inline-block float-lg-left"
+                                    v-if="user && !inWatchlist"
+                                    v-on:click="addToWatchlist"
+                                >
+                                    + WATCHLIST
+                                </button>
+                                <button
+                                    class="btn btn-warning d-block d-md-inline-block float-lg-left"
+                                    v-if="user && inWatchlist"
+                                    v-on:click="removeFromWatchlist"
+                                >
+                                    &minus; WATCHLIST
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,19 +135,54 @@
         data() {
             return {
                 currentSeason: 1,
-                id: 0,
-                title: '',
-                summary: '',
-                notes: null,
-                release: [],
-                poster: 'missing-poster.jpg',
                 episodes: [],
                 genres: [],
+                id: 0,
+                notes: null,
+                poster: 'missing-poster.jpg',
+                release: [],
+                summary: '',
+                title: '',
                 user: {},
             };
         },
 
         computed: {
+            currentSeasonEpisodes: function() {
+                var self = this;
+                return this.episodes.filter(function(episode) {
+                    return episode.season == self.currentSeason;
+                });
+            },
+
+            duration: function() {
+                if(this.showHistory && this.showHistory.length > 0) {
+                    var indexOfMax = this.getIndexOfMostRecentlyWatched(this.showHistory);
+
+                    if(indexOfMax >= 0) {
+                        return this.showHistory[indexOfMax].drive[0].pivot.duration;
+                    }
+                }
+
+                return 0;
+            },
+
+            history: function() {
+                /*
+                 * History_media will contain progress for movies and
+                 * progress for the most recently watched episode of any shows.
+                 */
+                if(this.user && this.user.history_media.length > 0) {
+                    for(var i = 0; i < this.user.history_media.length; i++) {
+                        if(this.user.history_media[i].id == this.id) {
+                            return this.user.history_media[i];
+                        }
+                    }
+                }
+
+                return null;
+            },
+
             inWatchlist: function() {
                 if(this.user && this.user.watchlist) {
                     for(var i = 0; i < this.user.watchlist.length; i++) {
@@ -142,11 +195,28 @@
                 return false;
             },
 
-            currentSeasonEpisodes: function() {
-                var self = this;
-                return this.episodes.filter(function(episode) {
-                    return episode.season == self.currentSeason;
-                });
+            minSeason: function() {
+                return this.seasons.length > 0 ? this.seasons[0] : 0;
+            },
+
+            progress: function() {
+                if(this.showHistory && this.showHistory.length > 0) {
+                    var indexOfMax = this.getIndexOfMostRecentlyWatched(this.showHistory);
+
+                    if(indexOfMax >= 0) {
+                        return this.showHistory[indexOfMax].pivot.progress;
+                    }
+                }
+
+                return 0;
+            },
+
+            progressPercentage: function() {
+                if(this.progress > 0 && this.duration > 0) {
+                    return ( this.progress / this.duration ) * 100;
+                }
+
+                return 0;
             },
 
             seasons: function() {
@@ -165,8 +235,19 @@
                 return seasons;
             },
 
-            minSeason: function() {
-                return this.seasons[0];
+            showHistory: function() {
+                var history = [];
+
+                if(this.user && this.user.episode_history && this.user.episode_history.length > 0) {
+                    for(var i = 0; i < this.user.episode_history.length; i++) {
+                        if(this.user.episode_history[i].media_id == this.id
+                                && history.indexOf(this.user.episode_history[i]) < 0) {
+                            history.push(this.user.episode_history[i]);
+                        }
+                    }
+                }
+
+                return history.length > 0 ? history : null;
             },
         },
 
@@ -178,10 +259,48 @@
 		},
 
       	methods: {
-      		display() {
+            display() {
                 this.changeSeason(this.minSeason);
       			$('#show-modal').modal('show');
       		},
+
+            getEpisodeHistory(episode) {
+                if(this.user && this.showHistory) {
+                    for(var i = 0; i < this.showHistory.length; i++) {
+                        if(this.showHistory[i].id === episode.id) {
+                            return this.showHistory[i];
+                        }
+                    }
+                }
+
+                return null;
+            },
+
+            getEpisodeProgressPercentage(episode) {
+                var history = this.getEpisodeHistory(episode);
+
+                if(history) {
+                    return ( history.pivot.progress / history.drive[0].pivot.duration ) * 100;
+                }
+
+                return 0;
+            },
+
+            getIndexOfMostRecentlyWatched(episodes) {
+                var max = new Date('1970-01-01 00:00:00');
+                var indexOfMax = -1;
+
+                for(var i = 0; i < episodes.length; i++) {
+                    var current = new Date(episodes[i].updated_at);
+
+                    if(current > max) {
+                        max = current;
+                        indexOfMax = i;
+                    }
+                }
+
+                return indexOfMax;
+            },
 
             hide() {
                 $('#show-modal').modal('hide');

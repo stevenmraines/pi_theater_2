@@ -4,7 +4,7 @@
         <div class="fluid-modal-content">
             <div class="fluid-modal-header mb-2">
                 <span class="fluid-modal-title">
-                    Genre: {{ genre.name }}
+                    {{ genre.name }}
                 </span>
                 <button
                     class="fluid-modal-close close"
@@ -21,11 +21,12 @@
                     <poster-container
                         class="my-3"
                         v-for="media in genre.media"
-                        v-bind:key="media.id"
-                        v-bind:id="media.id"
-                        v-bind:title="media.title"
-                        v-bind:poster="paths.posters + '/' + media.poster"
                         v-bind:event-dispatcher="{}"
+                        v-bind:id="media.id"
+                        v-bind:key="media.id"
+                        v-bind:media_type="media.media_type"
+                        v-bind:poster="paths.posters + '/' + media.poster"
+                        v-bind:title="media.title"
                     ></poster-container>
                 </div>
             </div>

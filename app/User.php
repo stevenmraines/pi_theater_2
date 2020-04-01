@@ -31,14 +31,20 @@ class User extends Authenticatable
         return
             $this
                 ->belongsToMany('App\Episode', 'episode_history', 'user_id', 'episode_id')
-                ->withPivot('progress');
+                ->with('drive')
+                ->withPivot('progress')
+                ->withPivot('updated_at')
+                ->orderBy('episode_history.updated_at', 'DESC');
     }
 
-    public function history_movie() {
+    public function history_media() {
         return
             $this
-                ->belongsToMany('App\Media', 'history_movie', 'user_id', 'media_id')
-                ->withPivot('progress');
+                ->belongsToMany('App\Media', 'history_media', 'user_id', 'media_id')
+                ->with('drive')
+                ->withPivot('progress')
+                ->withPivot('updated_at')
+                ->orderBy('history_media.updated_at', 'DESC');
     }
 
     public function watchlist() {

@@ -241,6 +241,23 @@ body {
 	transform: scale(1.09);
 }
 
+.progress {
+	position: absolute;
+	bottom: 0;
+	height: 0.5rem;
+	width: 100%;
+	background-color: #8c0000;
+}
+
+.progress > div {
+	height: 100%;
+	background-color: red;
+}
+
+.progress-sm {
+	height: 0.25rem;
+}
+
 .play {
 	font-family: Arial;
 	border: 6px solid white;
@@ -336,10 +353,11 @@ body {
 /*
  *  Movie/Show modals
  */
-.modal-poster {
-  width: 230px;
-  height: 345px;
-	box-shadow: 0 0 30px black;
+.modal-poster-container {
+	width: 230px;
+	height: 345px;
+	position: relative;
+	box-shadow: 0 0 20px black;
 }
 
 #movie-modal-info {
@@ -357,7 +375,7 @@ body {
 #show-modal-episodes {
 	max-height: 250px;
 	overflow: auto;
-  border: 7px solid #282828;
+	border: 7px solid #282828;
 }
 
 /*
@@ -548,27 +566,26 @@ input[type=range]:focus::-ms-fill-upper {
 /*
  * Media queries
  */
-
-@media only screen and (max-width: 576px) {
-	.btn-watchlist {
-		min-width: 75%;
-		padding: 0.65rem 1rem;
+@media(max-width: 992px) {
+	#movie-modal .modal-footer button,
+	#show-modal .modal-footer button {
+		width: 100%;
 	}
 }
 
-@media only screen and (max-width: 769px) {
+@media only screen and (max-width: 768px) {
 	.fluid-modal-header {
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-  }
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+  	}
 
-  .fluid-modal-title {
-    order: 2;
-  }
+	.fluid-modal-title {
+		order: 2;
+	}
 
-  .fluid-modal-header > button {
-    order: 1;
-    margin-left: auto;
-  }
+	.fluid-modal-header > button {
+		order: 1;
+		margin-left: auto;
+	}
 }

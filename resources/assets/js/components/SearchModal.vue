@@ -24,19 +24,20 @@
             <div>
                 <div class="fluid-modal-inner-poster-container mx-0" v-if="query !== ''">
                     <ais-index
+                        index-name="media"
                         v-bind:app-id="keys.appId"
                         v-bind:api-key="keys.apiKey"
-                        index-name="media"
                         v-bind:query="query"
                     >
                         <ais-results ref="results">
                             <template slot-scope="{ result }">
                                 <poster-container
-                                    v-bind:key="result.objectID"
-                                    v-bind:id="result.id"
-                                    v-bind:title="result.title"
-                                    v-bind:poster="paths.posters + '/' + result.poster"
                                     v-bind:event-dispatcher="{}"
+                                    v-bind:id="result.id"
+                                    v-bind:key="result.objectID"
+                                    v-bind:media_type="result.media_type"
+                                    v-bind:poster="paths.posters + '/' + result.poster"
+                                    v-bind:title="result.title"
                                 ></poster-container>
                             </template>
                         </ais-results>

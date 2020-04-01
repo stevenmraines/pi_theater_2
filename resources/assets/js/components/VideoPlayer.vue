@@ -127,6 +127,7 @@
                         self.duration = Math.round(video.duration);
 
                         if(self.progress > 0) {
+                            // TODO setting current time not working at all in Chrome and works only for the first time in Firefox
                             video.currentTime = self.progress;
                         }
 
@@ -193,10 +194,7 @@
                 this.filename = video.filename;
                 this.media_id = video.media_id;
                 this.media_type = video.mediaType;
-
-                if(video.progress > 0) {
-                    this.progress = video.progress;
-                }
+                this.progress = video.progress;
             },
 
             show: function(data) {
@@ -204,7 +202,6 @@
                     return;
                 }
 
-                this.progress = 0;
                 this.showVideoPlayer = true;
                 this.loaded = false;
                 this.userLoggedIn = data.userLoggedIn;
@@ -250,7 +247,7 @@
                             progress: self.progress
                         });
                     }
-                }, 3000);
+                }, 15000);
             },
 
             toggleFullscreen: function() {

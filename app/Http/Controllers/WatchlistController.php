@@ -18,7 +18,7 @@ class WatchlistController extends Controller
                 ::find($userId)
                 ->load('watchlist')
                 ->load('episode_history')
-                ->load('history_movie');
+                ->load('history_media');
     }
 
     public function remove($userId, $mediaId) {
@@ -31,6 +31,6 @@ class WatchlistController extends Controller
                 ::find($userId)
                 ->load('watchlist')
                 ->load('episode_history')
-                ->load('history_movie');
+                ->load('history_media');
     }
 }

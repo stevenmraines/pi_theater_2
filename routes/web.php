@@ -9,7 +9,7 @@ Route::get('/{home?}', function() {
 
     if(!is_null($user)) {
         $user
-            ->load('history_movie')
+            ->load('history_media')
             ->load('episode_history')
             ->load('watchlist');
     }

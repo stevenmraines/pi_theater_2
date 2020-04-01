@@ -12,11 +12,13 @@
                 <poster-container
                     ref="posterContainers"
                     v-for="content in contents"
-                    v-bind:key="content.objectID"
-                    v-bind:id="content.id"
-                    v-bind:title="content.title"
-                    v-bind:poster="paths.posters + '/' + content.poster"
-                    v-bind:event-dispatcher="eventDispatcher"
+					v-bind:event-dispatcher="eventDispatcher"
+					v-bind:id="content.id"
+					v-bind:key="content.objectID"
+					v-bind:media_type="content.media_type"
+					v-bind:poster="paths.posters + '/' + content.poster"
+					v-bind:title="content.title"
+					v-bind:user="user"
                 ></poster-container>
 			</div>
 		</div>
@@ -25,7 +27,12 @@
 
 <script>
 	export default {
-		props: ['title', 'contents', 'paths'],
+		props: [
+			'contents',
+			'paths',
+			'title',
+			'user',
+		],
 
 		data() {
 			return {

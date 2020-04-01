@@ -16,8 +16,8 @@
 				<div class="modal-body">
 					<div class="d-flex flex-column flex-lg-row p-2 pb-4">
 						<span class="modal-poster-container mx-auto">
-							<div v-if="user && progress > 0" class="progress">
-								<div class="progress" v-bind:style="{ width: progressPercentage + '%' }"></div>
+							<div v-if="user && progress > 0" class="viewing-progress">
+								<div class="viewing-progress" v-bind:style="{ width: progressPercentage + '%' }"></div>
 							</div>
 							<img v-bind:src="paths.posters + '/' + poster" />
 						</span>

@@ -21,8 +21,8 @@
                 <div class="modal-body">
                     <div class="d-flex flex-column flex-lg-row align-items-center p-2 pb-4">
 						<span class="modal-poster-container mx-auto">
-							<div v-if="user && progress > 0" class="progress">
-								<div class="progress" v-bind:style="{ width: progressPercentage + '%' }"></div>
+							<div v-if="user && progress > 0" class="viewing-progress">
+								<div class="viewing-progress" v-bind:style="{ width: progressPercentage + '%' }"></div>
 							</div>
 							<img v-bind:src="paths.posters + '/' + poster" />
 						</span>
@@ -81,9 +81,9 @@
                                         </button>
                                     </div>
 
-                                    <div v-if="user && getEpisodeHistory(episode)" class="progress progress-sm">
+                                    <div v-if="user && getEpisodeHistory(episode)" class="viewing-progress viewing-progress-sm">
                                         <div
-                                            class="progress"
+                                            class="viewing-progress"
                                             v-bind:style="{ width: getEpisodeProgressPercentage(episode) + '%' }"
                                         ></div>
                                     </div>

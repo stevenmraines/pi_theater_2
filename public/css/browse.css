@@ -241,7 +241,7 @@ body {
 	transform: scale(1.09);
 }
 
-.progress {
+.viewing-progress {
 	position: absolute;
 	bottom: 0;
 	height: 0.5rem;
@@ -249,12 +249,12 @@ body {
 	background-color: #8c0000;
 }
 
-.progress > div {
+.viewing-progress > div {
 	height: 100%;
 	background-color: red;
 }
 
-.progress-sm {
+.viewing-progress-sm {
 	height: 0.25rem;
 }
 

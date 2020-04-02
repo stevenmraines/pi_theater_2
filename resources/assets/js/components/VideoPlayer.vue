@@ -122,6 +122,11 @@
                 var interval = setInterval(function() {
                     var video = self.$refs.video;
 
+                    // If user closes the video before it loads, exit this function
+                    if(typeof video === 'undefined') {
+                        clearInterval(interval);
+                    }
+
                     if(video.readyState > 0) {
                         self.loaded = true;
                         self.duration = Math.round(video.duration);

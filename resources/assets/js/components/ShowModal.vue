@@ -75,9 +75,17 @@
 
                                         <button
                                             class="btn btn-primary"
-                                            v-on:click="watch(episode.id)"
+                                            v-on:click="watch(episode.id, true)"
                                         >
-                                            WATCH NOW
+                                            {{ getEpisodeHistory(episode) ? 'RESTART' : 'WATCH' }}
+                                        </button>
+
+                                        <button
+                                            class="btn btn-primary"
+                                            v-if="getEpisodeHistory(episode)"
+                                            v-on:click="watch(episode.id, false)"
+                                        >
+                                            CONTINUE
                                         </button>
                                     </div>
 
@@ -106,18 +114,27 @@
                         <div class="modal-footer">
                             <div style="width: 100%;">
                                 <button
-                                    class="btn btn-success d-block d-md-inline-block float-lg-left"
+                                    class="btn btn-success d-block d-lg-inline-block float-lg-left"
                                     v-if="user && !inWatchlist"
                                     v-on:click="addToWatchlist"
                                 >
                                     + WATCHLIST
                                 </button>
                                 <button
-                                    class="btn btn-warning d-block d-md-inline-block float-lg-left"
+                                    class="btn btn-warning d-block d-lg-inline-block float-lg-left"
                                     v-if="user && inWatchlist"
                                     v-on:click="removeFromWatchlist"
                                 >
                                     &minus; WATCHLIST
+                                </button>
+                                <button
+                                    class="btn btn-primary d-block d-lg-inline-block float-lg-right"
+                                    v-if="mostRecentEpisode"
+                                    v-on:click="watch(mostRecentEpisode.id, false)"
+                                >
+                                    CONTINUE
+                                    S{{ formattedNumber(mostRecentEpisode.season) }}
+                                    E{{ formattedNumber(mostRecentEpisode.episode_number) }}
                                 </button>
                             </div>
                         </div>
@@ -156,12 +173,8 @@
             },
 
             duration: function() {
-                if(this.showHistory && this.showHistory.length > 0) {
-                    var indexOfMax = this.getIndexOfMostRecentlyWatched(this.showHistory);
-
-                    if(indexOfMax >= 0) {
-                        return this.showHistory[indexOfMax].drive[0].pivot.duration;
-                    }
+                if(this.mostRecentEpisode) {
+                    return this.mostRecentEpisode.drive[0].pivot.duration;
                 }
 
                 return 0;
@@ -199,13 +212,21 @@
                 return this.seasons.length > 0 ? this.seasons[0] : 0;
             },
 
-            progress: function() {
-                if(this.showHistory && this.showHistory.length > 0) {
+            mostRecentEpisode: function() {
+                if(this.user && this.showHistory && this.showHistory.length > 0) {
                     var indexOfMax = this.getIndexOfMostRecentlyWatched(this.showHistory);
 
                     if(indexOfMax >= 0) {
-                        return this.showHistory[indexOfMax].pivot.progress;
+                        return this.showHistory[indexOfMax];
                     }
+                }
+
+                return null;
+            },
+
+            progress: function() {
+                if(this.mostRecentEpisode) {
+                    return this.mostRecentEpisode.pivot.progress;
                 }
 
                 return 0;
@@ -260,12 +281,17 @@
 
       	methods: {
             display() {
-                this.changeSeason(this.minSeason);
-      			$('#show-modal').modal('show');
+                var season = this.mostRecentEpisode ? this.mostRecentEpisode.season : this.minSeason;
+                this.changeSeason(season);
+                $('#show-modal').modal('show');
       		},
 
+            formattedNumber(number) {
+                return number >= 10 ? number : '0' + number;
+            },
+
             getEpisodeHistory(episode) {
-                if(this.user && this.showHistory) {
+                if(this.showHistory && this.showHistory.length > 0) {
                     for(var i = 0; i < this.showHistory.length; i++) {
                         if(this.showHistory[i].id === episode.id) {
                             return this.showHistory[i];
@@ -337,10 +363,22 @@
                 this.episodes = data.episodes;
             },
 
-            watch(episode_id) {
+            watch(episode_id, restart) {
+                var progress = 0;
+
+                if(!restart && this.showHistory) {
+                    for(var i = 0; i < this.showHistory.length; i++) {
+                        if(this.showHistory[i].id == episode_id) {
+                            progress = this.showHistory[i].pivot.progress;
+                            break;
+                        }
+                    }
+                }
+
                 Event.trigger('setVideo', {
-                    'id' : this.id,
-                    'episode_id' : episode_id
+                    episode_id : episode_id,
+                    id : this.id,
+                    progress: progress,
                 });
             },
         },

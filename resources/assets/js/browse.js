@@ -121,6 +121,7 @@ const app = new Vue({
 			release: [],
 		},
 
+		// TODO need to save progress in browser even if the user isn't logged in
 		user: window.__INITIAL_STATE__.user,
 
 		video: {

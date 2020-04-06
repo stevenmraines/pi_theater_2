@@ -4,7 +4,7 @@
 		v-on:mouseover="hover"
 		v-on:mouseleave="unhover"
 	>
-		<div v-if="user && progress > 0" class="viewing-progress">
+		<div v-if="user && progress >= 0 && duration > 0" class="viewing-progress">
 			<div class="viewing-progress" v-bind:style="{ width: progressPercentage + '%' }"></div>
 		</div>
 		<img v-bind:src="poster" class="img-fluid" />

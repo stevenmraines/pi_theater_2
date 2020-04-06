@@ -63,7 +63,7 @@
 								class="btn btn-primary d-block d-md-inline-block float-lg-right"
 								v-on:click="watch(0)"
 							>
-								{{ ( user && history ? 'PLAY FROM BEGINNING' : 'WATCH NOW' ) }}
+								{{ ( user && history ? 'PLAY FROM BEGINNING' : 'WATCH' ) }}
 							</button>
 						</div>
 					</div>

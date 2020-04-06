@@ -58,9 +58,10 @@
 
                             <div id="show-modal-episodes" class="card-body py-1 scrollbar">
                                 <div
-                                    v-for="(episode, index) in currentSeasonEpisodes"
-                                    v-bind:class="{ 'pb-3': user && getEpisodeHistory(episode) }"
                                     style="position: relative;"
+                                    v-bind:class="{ 'pb-3': user && getEpisodeHistory(episode) }"
+                                    v-bind:ref="getRef(episode)"
+                                    v-for="(episode, index) in currentSeasonEpisodes"
                                 >
                                     <hr class="fluid-modal-hr my-1" v-if="index > 0" />
 
@@ -120,6 +121,7 @@
                                 >
                                     + WATCHLIST
                                 </button>
+
                                 <button
                                     class="btn btn-warning d-block d-lg-inline-block float-lg-left"
                                     v-if="user && inWatchlist"
@@ -127,14 +129,25 @@
                                 >
                                     &minus; WATCHLIST
                                 </button>
+
                                 <button
                                     class="btn btn-primary d-block d-lg-inline-block float-lg-right"
-                                    v-if="mostRecentEpisode"
+                                    v-if="mostRecentEpisode && !mostRecentIsComplete"
                                     v-on:click="watch(mostRecentEpisode.id, false)"
                                 >
                                     CONTINUE
                                     S{{ formattedNumber(mostRecentEpisode.season) }}
                                     E{{ formattedNumber(mostRecentEpisode.episode_number) }}
+                                </button>
+
+                                <button
+                                    class="btn btn-primary d-block d-lg-inline-block float-lg-right"
+                                    v-if="mostRecentIsComplete && nextEpisode"
+                                    v-on:click="watch(nextEpisode.id, true)"
+                                >
+                                    WATCH
+                                    S{{ formattedNumber(nextEpisode.season) }}
+                                    E{{ formattedNumber(nextEpisode.episode_number) }}
                                 </button>
                             </div>
                         </div>
@@ -224,6 +237,40 @@
                 return null;
             },
 
+            mostRecentIsComplete: function() {
+                return (
+                    this.mostRecentEpisode
+                    && this.mostRecentEpisode.drive[0].pivot.duration > 0
+                    && this.mostRecentEpisode.pivot.progress / this.mostRecentEpisode.drive[0].pivot.duration >= 0.95
+                );
+            },
+
+            nextEpisode: function() {
+                if(this.mostRecentEpisode) {
+                    // Try to get next episode of current season
+                    let nextEpisode = this.mostRecentEpisode.episode_number + 1;
+
+                    for(let i = 0; i < this.episodes.length; i++) {
+                        if(this.episodes[i].season == this.mostRecentEpisode.season
+                                && this.episodes[i].episode_number == nextEpisode) {
+                            return this.episodes[i];
+                        }
+                    }
+
+                    // Try to start next season
+                    nextEpisode = 1;
+                    let nextSeason = this.mostRecentEpisode.season + 1;
+
+                    for(let i = 0; i < this.episodes.length; i++) {
+                        if(this.episodes[i].season == nextSeason && this.episodes[i].episode_number == 1) {
+                            return this.episodes[i];
+                        }
+                    }
+                }
+
+                return null;
+            },
+
             progress: function() {
                 if(this.mostRecentEpisode) {
                     return this.mostRecentEpisode.pivot.progress;
@@ -281,8 +328,14 @@
 
       	methods: {
             display() {
-                var season = this.mostRecentEpisode ? this.mostRecentEpisode.season : this.minSeason;
-                this.changeSeason(season);
+                this.changeSeason(this.mostRecentEpisode ? this.mostRecentEpisode.season : this.minSeason);
+
+                if(this.mostRecentEpisode) {
+                    // $('#show-modal-episodes').scrollTop(
+                    //     $(this.$refs[this.getRef(this.mostRecentEpisode)][0]).offset().top
+                    // );
+                }
+
                 $('#show-modal').modal('show');
       		},
 
@@ -326,6 +379,16 @@
                 }
 
                 return indexOfMax;
+            },
+
+            getRef(episode) {
+                if(episode.season && episode.episode_number) {
+                    return 'episode_s'
+                        + this.formattedNumber(episode.season) + '-e'
+                        + this.formattedNumber(episode.episode_number);
+                }
+
+                return '';
             },
 
             hide() {

@@ -39,31 +39,52 @@
 					<div class="modal-footer">
 						<div style="width: 100%;">
 							<button
-								class="btn btn-success d-block d-lg-inline-block float-lg-left mb-3 mb-lg-0"
+								class="btn btn-success d-block d-lg-inline-block float-lg-left mb-3 mb-lg-0 align-items-center"
+								data-placement="top"
+								data-toggle="tooltip"
+								title="Add to Watchlist"
 								v-if="user && !inWatchlist"
 								v-on:click="addToWatchlist"
 							>
-								+ WATCHLIST
+								<i class="mdi mdi-plus-circle-outline"></i> WATCHLIST
 							</button>
+
 							<button
-								class="btn btn-warning d-block d-lg-inline-block float-lg-left mb-3 mb-lg-0"
+								class="btn btn-warning d-block d-lg-inline-block float-lg-left mb-3 mb-lg-0 align-items-center"
+								data-placement="top"
+								data-toggle="tooltip"
+								title="Remove from Watchlist"
 								v-if="user && inWatchlist"
 								v-on:click="removeFromWatchlist"
 							>
-								&minus; WATCHLIST
+								<i class="mdi mdi-minus-circle-outline"></i> WATCHLIST
 							</button>
+
 							<button
-								class="btn btn-primary d-block d-lg-inline-block float-lg-right mb-3 mb-lg-0 ml-lg-3"
-								v-on:click="watch(progress)"
+								class="btn btn-primary d-block d-lg-inline-block float-lg-right mb-3 mb-lg-0 ml-lg-3 align-items-center"
+								data-placement="top"
+								data-toggle="tooltip"
+								title="Continue"
 								v-if="user && history"
+								v-on:click="watch(progress)"
 							>
-								CONTINUE
+								<i class="mdi mdi-arrow-right-drop-circle-outline"></i> CONTINUE
 							</button>
+
 							<button
-								class="btn btn-primary d-block d-md-inline-block float-lg-right"
+								class="btn btn-primary d-block d-md-inline-block float-lg-right align-items-center"
+								data-placement="top"
+								data-toggle="tooltip"
+								v-bind:title="user && history ? 'Restart' : 'Play'"
 								v-on:click="watch(0)"
 							>
-								{{ ( user && history ? 'PLAY FROM BEGINNING' : 'WATCH' ) }}
+								<i
+									class="mdi"
+									v-bind:class="{
+										'mdi-sync' : user && history,
+										'mdi-arrow-right-drop-circle-outline' : !user || !history
+									}"
+								></i> {{ user && history ? 'RESTART' : 'PLAY' }}
 							</button>
 						</div>
 					</div>

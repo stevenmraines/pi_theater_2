@@ -74,20 +74,34 @@
                                             - {{ episode.title }}
                                         </span>
 
-                                        <button
-                                            class="btn btn-primary"
-                                            v-on:click="watch(episode.id, true)"
-                                        >
-                                            {{ getEpisodeHistory(episode) ? 'RESTART' : 'WATCH' }}
-                                        </button>
+                                        <span>
+                                            <button
+                                                class="btn btn-primary"
+                                                data-placement="top"
+                                                data-toggle="tooltip"
+                                                v-bind:title="!getEpisodeHistory(episode) ? 'Play' : 'Restart'"
+                                                v-on:click="watch(episode.id, true)"
+                                            >
+                                                <i
+                                                    class="mdi"
+                                                    v-bind:class="{
+                                                        'mdi-sync' : getEpisodeHistory(episode),
+                                                        'mdi-arrow-right-drop-circle-outline' : !getEpisodeHistory(episode)
+                                                    }"
+                                                ></i>
+                                            </button>
 
-                                        <button
-                                            class="btn btn-primary"
-                                            v-if="getEpisodeHistory(episode)"
-                                            v-on:click="watch(episode.id, false)"
-                                        >
-                                            CONTINUE
-                                        </button>
+                                            <button
+                                                class="btn btn-primary"
+                                                data-placement="top"
+                                                data-toggle="tooltip"
+                                                title="Continue"
+                                                v-if="getEpisodeHistory(episode)"
+                                                v-on:click="watch(episode.id, false)"
+                                            >
+                                                <i class="mdi mdi-arrow-right-drop-circle-outline"></i>
+                                            </button>
+                                        </span>
                                     </div>
 
                                     <div v-if="user && getEpisodeHistory(episode)" class="viewing-progress viewing-progress-sm">
@@ -115,37 +129,49 @@
                         <div class="modal-footer">
                             <div style="width: 100%;">
                                 <button
-                                    class="btn btn-success d-block d-lg-inline-block float-lg-left"
+                                    class="btn btn-success d-block d-lg-inline-block float-lg-left align-items-center"
+                                    data-placement="top"
+                                    data-toggle="tooltip"
+                                    title="Add to Watchlist"
                                     v-if="user && !inWatchlist"
                                     v-on:click="addToWatchlist"
                                 >
-                                    + WATCHLIST
+                                    <i class="mdi mdi-plus-circle-outline"></i> WATCHLIST
                                 </button>
 
                                 <button
-                                    class="btn btn-warning d-block d-lg-inline-block float-lg-left"
+                                    class="btn btn-warning d-block d-lg-inline-block float-lg-left align-items-center"
+                                    data-placement="top"
+                                    data-toggle="tooltip"
+                                    title="Remove from Watchlist"
                                     v-if="user && inWatchlist"
                                     v-on:click="removeFromWatchlist"
                                 >
-                                    &minus; WATCHLIST
+                                    <i class="mdi mdi-minus-circle-outline"></i> WATCHLIST
                                 </button>
 
                                 <button
-                                    class="btn btn-primary d-block d-lg-inline-block float-lg-right"
+                                    class="btn btn-primary d-block d-lg-inline-block float-lg-right align-items-center"
+                                    data-placement="top"
+                                    data-toggle="tooltip"
+                                    title="Continue Episode"
                                     v-if="mostRecentEpisode && !mostRecentIsComplete"
                                     v-on:click="watch(mostRecentEpisode.id, false)"
                                 >
-                                    CONTINUE
+                                    <i class="mdi mdi-arrow-right-drop-circle-outline"></i> CONTINUE
                                     S{{ formattedNumber(mostRecentEpisode.season) }}
                                     E{{ formattedNumber(mostRecentEpisode.episode_number) }}
                                 </button>
 
                                 <button
-                                    class="btn btn-primary d-block d-lg-inline-block float-lg-right"
+                                    class="btn btn-primary d-block d-lg-inline-block float-lg-right align-items-center"
+                                    data-placement="top"
+                                    data-toggle="tooltip"
+                                    title="Play Next Episode"
                                     v-if="mostRecentIsComplete && nextEpisode"
                                     v-on:click="watch(nextEpisode.id, true)"
                                 >
-                                    WATCH
+                                    <i class="mdi mdi-arrow-right-drop-circle-outline"></i> PLAY
                                     S{{ formattedNumber(nextEpisode.season) }}
                                     E{{ formattedNumber(nextEpisode.episode_number) }}
                                 </button>

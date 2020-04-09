@@ -26,6 +26,7 @@ npm-debug.log
 
 # Public
 /public/css
+/public/fonts
 /public/hot
 /public/js
 /public/storage

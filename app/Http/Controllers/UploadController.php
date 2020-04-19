@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Collection;
+use App\Drive;
 use App\Episode;
 use App\Genre;
 use App\Media;
@@ -156,9 +157,12 @@ class UploadController extends Controller
 
     protected function insertIntoDriveEpisode(Request $request, int $episodeId)
     {
+        $drive = Drive::find($request->drive_id)->name;
+
         list($width, $height, $duration) = $this->getAttributeDefaults(
             Utilities\Video::getAttributes(
-                storage_path('app/public') . '/videos/shows/' . $request->file
+                // TODO use some Laravel helper function to get path
+                "/var/www/pi_theater_2/public/videos/$drive/shows/" . $request->file
             )
         );
 
@@ -243,9 +247,12 @@ class UploadController extends Controller
 
     protected function insertIntoDriveMedia(Request $request, int $mediaId)
     {
+        $drive = Drive::find($request->drive_id)->name;
+
         list($width, $height, $duration) = $this->getAttributeDefaults(
             Utilities\Video::getAttributes(
-                storage_path('app/public') . '/videos/movies/' . $request->file
+                // TODO use some Laravel helper function to get path
+                "/var/www/pi_theater_2/public/videos/$drive/movies/" . $request->file
             )
         );
 

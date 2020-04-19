@@ -37,10 +37,13 @@ class Video
             $mins = $regs[2] ? $regs[2] : null;
             $secs = $regs[3] ? $regs[3] : null;
             $ms = $regs[4] ? $regs[4] : null;
+            $duration = !is_null($hours) && !is_null($mins) && !is_null($secs) ?
+                ( $secs + ( $mins * 60 ) + ( $hours * 3600 ) ) : null;
         }
 
         return [
             'codec' => $codec,
+            'duration' => $duration,
             'height' => $height,
             'hours' => $hours,
             'mins' => $mins,

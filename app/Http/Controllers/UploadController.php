@@ -6,6 +6,7 @@ use App\Collection;
 use App\Episode;
 use App\Genre;
 use App\Media;
+use App\Utilities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -155,20 +156,32 @@ class UploadController extends Controller
 
     protected function insertIntoDriveEpisode(Request $request, int $episodeId)
     {
+        list($width, $height, $duration) = $this->getAttributeDefaults(
+            Utilities\Video::getAttributes(
+                storage_path('app/public') . '/videos/shows/' . $request->file
+            )
+        );
+
         $insert = "
             INSERT INTO drive_episode
             (
                 drive_id,
                 episode_id,
-                filename
+                filename,
+                width,
+                height,
+                duration
             )
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?)
         ";
 
         $values = [
             $request->drive_id,
             $episodeId,
-            $request->file
+            $request->file,
+            $width,
+            $height,
+            $duration
         ];
 
         return DB::insert($insert, $values);
@@ -230,20 +243,32 @@ class UploadController extends Controller
 
     protected function insertIntoDriveMedia(Request $request, int $mediaId)
     {
+        list($width, $height, $duration) = $this->getAttributeDefaults(
+            Utilities\Video::getAttributes(
+                storage_path('app/public') . '/videos/movies/' . $request->file
+            )
+        );
+
         $insert = "
             INSERT INTO drive_media
             (
                 media_id,
                 drive_id,
-                filename
+                filename,
+                width,
+                height,
+                duration
             )
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?)
         ";
 
         $values = [
             $mediaId,
             $request->drive_id,
-            $request->file
+            $request->file,
+            $width,
+            $height,
+            $duration
         ];
 
         return DB::insert($insert, $values);
@@ -419,5 +444,14 @@ class UploadController extends Controller
         // TODO figure out what to do about chown not being permitted
 //        chown($path, 'pi');
         chgrp($path, 'www-data');
+    }
+
+    protected function getAttributeDefaults($attributes)
+    {
+        return [
+            isset($attributes['width']) && !is_null($attributes['width']) ? $attributes['width'] : 0,
+            isset($attributes['height']) && !is_null($attributes['height']) ? $attributes['height'] : 0,
+            isset($attributes['duration']) && !is_null($attributes['duration']) ? $attributes['duration'] : 0
+        ];
     }
 }

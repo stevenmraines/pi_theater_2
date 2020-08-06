@@ -1,6 +1,10 @@
 <template>
     <div class="form-group">
         <label for="title">* Title</label>
+        <a
+            :href="'https://www.imdb.com/find?q=' + value"
+            target="_blank"
+        >(IMDb Search)</a>
         <input
             id="title"
             class="form-control"

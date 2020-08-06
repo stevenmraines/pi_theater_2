@@ -5,7 +5,6 @@
         :label="'Year Released'"
         :max="max"
         :min="min"
-        :search="true"
         :title="title"
         :value="value"
     ></year-input>

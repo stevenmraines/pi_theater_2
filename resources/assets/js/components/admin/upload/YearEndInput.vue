@@ -5,7 +5,6 @@
         :label="'Year End'"
         :max="max"
         :min="min"
-        :search="false"
         :value="value"
     ></year-input>
 </template>

@@ -19,7 +19,7 @@ class AuthViewController extends Controller
             'collections' => \App\Collection::all()->sortBy('name')->values(),
             'drives' => \App\Drive::all(),
             'genres' => \App\Genre::all()->sortBy('name')->values(),
-            'imdbKey' => env('IMDB_API_KEY'),
+            'imdbKey' => config('app.imdb_api_key'),
             'pending' => \App\Drive::pending(),
             'shows' => \App\Media::where('media_type', '=', 'show')->with('episodes')->get()
         ];

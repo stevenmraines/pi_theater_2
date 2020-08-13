@@ -54,9 +54,9 @@ class Drive extends Model
         }, $filenames);
 
         // Search IMDb API for info and append it to each movie
-        $key = env('IMDB_API_KEY', '');
+        $key = config('app.imdb_api_key');
 
-        throw_if(empty($key), RuntimeException::class, 'IMDb API key value missing in .env file.');
+        throw_if(empty($key), \RuntimeException::class, 'IMDb API key value missing in .env file.');
 
         $url = 'https://imdb8.p.rapidapi.com/title/auto-complete?q=';
 

@@ -6,13 +6,20 @@
                 <video-file-input
                     :eventDispatcher="eventDispatcher"
                     :files="files"
-                    :value="currentFile"
+                    :value="currentFile.filename"
                 ></video-file-input>
+
+                <!-- IMDb Search Results -->
+                <imdb-search-input
+                    :eventDispatcher="eventDispatcher"
+                    :file="currentMovie"
+                    :value="null"
+                ></imdb-search-input>
 
                 <!-- Title -->
                 <title-input
                     :eventDispatcher="eventDispatcher"
-                    :value="movies[currentFileEscaped].title"
+                    :value="currentMovie.title"
                 ></title-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="titleEmpty()">
@@ -22,8 +29,8 @@
                 <!-- Year Released -->
                 <year-released-input
                     :eventDispatcher="eventDispatcher"
-                    :title="movies[currentFileEscaped].title"
-                    :value="movies[currentFileEscaped].yearReleased"
+                    :title="currentMovie.title"
+                    :value="currentMovie.yearReleased"
                 ></year-released-input>
 
                 <!-- TODO figure out how to get empty / required warning -->
@@ -35,7 +42,7 @@
                 <summary-input
                     :eventDispatcher="eventDispatcher"
                     :required="true"
-                    :value="movies[currentFileEscaped].summary"
+                    :value="currentMovie.summary"
                 ></summary-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="summaryEmpty()">
@@ -45,14 +52,49 @@
                 <!-- Notes -->
                 <notes-input
                     :eventDispatcher="eventDispatcher"
-                    :value="movies[currentFileEscaped].notes"
+                    :value="currentMovie.notes"
                 ></notes-input>
 
                 <!-- Poster -->
-                <poster-input
+                <div class="form-check">
+                    <input
+                        class="form-check-input"
+                        name="poster-radio"
+                        type="radio"
+                        id="poster-url-radio"
+                        value="url"
+                        v-model="posterType"
+                    >
+                    <label class="form-check-label" for="poster-url-radio">
+                        Link to File
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input
+                        class="form-check-input"
+                        name="poster-radio"
+                        type="radio"
+                        id="poster-file-radio"
+                        value="file"
+                        v-model="posterType"
+                    >
+                    <label class="form-check-label" for="poster-file-radio">
+                        Upload File
+                    </label>
+                </div>
+
+                <poster-url-input
+                    v-if="posterType == 'url'"
                     :eventDispatcher="eventDispatcher"
-                    :title="movies[currentFileEscaped].title"
-                    :value="movies[currentFileEscaped].poster"
+                    :value="currentMovie.posterUrl"
+                ></poster-url-input>
+
+                <poster-input
+                    v-if="posterType == 'file'"
+                    :eventDispatcher="eventDispatcher"
+                    :title="currentMovie.title"
+                    :value="currentMovie.poster"
                 ></poster-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="posterEmpty()">
@@ -62,14 +104,14 @@
                 <!-- Jumbotron -->
                 <jumbotron-input
                     :eventDispatcher="eventDispatcher"
-                    :value="movies[currentFileEscaped].jumbotron"
+                    :value="currentMovie.jumbotron"
                 ></jumbotron-input>
 
                 <!-- Genres -->
                 <multi-genre-input
                     :allGenres="genres"
                     :eventDispatcher="eventDispatcher"
-                    :value="movies[currentFileEscaped].genres"
+                    :value="currentMovie.genres"
                 ></multi-genre-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="genreEmpty()">
@@ -84,7 +126,7 @@
                 <multi-collection-input
                     :allCollections="collections"
                     :eventDispatcher="eventDispatcher"
-                    :value="movies[currentFileEscaped].collections"
+                    :value="currentMovie.collections"
                 ></multi-collection-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="collectionEmpty()">
@@ -113,22 +155,30 @@
             'driveEventDispatcher',
             'files',
             'genres',
+            'imdbKey'
         ],
 
         data() {
             return {
+                apiTimeout: null,
                 currentFile: this.files[0],
                 eventDispatcher: new Vue({}),
-                movies: {},
+                movies: [],
+                posterType: 'url',
                 yearMax: new Date().getFullYear(),
                 yearMin: 1900,
             };
         },
 
         computed: {
-            // TODO find a better way to index the files in the movie object
-            currentFileEscaped() {
-                return this.escapeFile(this.currentFile);
+            currentMovie() {
+                var index = _.findIndex(this.movies, { 'file': this.currentFile.filename });
+                
+                if(index < 0) {
+                    return {};
+                }
+                
+                return this.movies[index];
             },
 
             submitDisabled() {
@@ -144,9 +194,11 @@
             this.eventDispatcher.$on('genreAdd', this.genreAdd);
             this.eventDispatcher.$on('genreChange', this.genreChange);
             this.eventDispatcher.$on('genreRemove', this.genreRemove);
+            this.eventDispatcher.$on('imdbSearchChange', this.imdbSearchChange);
             this.eventDispatcher.$on('jumbotronChange', this.jumbotronChange);
             this.eventDispatcher.$on('notesChange', this.notesChange);
             this.eventDispatcher.$on('posterChange', this.posterChange);
+            this.eventDispatcher.$on('posterUrlChange', this.posterUrlChange);
             this.eventDispatcher.$on('submit', this.submit);
             this.eventDispatcher.$on('summaryChange', this.summaryChange);
             this.eventDispatcher.$on('titleChange', this.titleChange);
@@ -155,46 +207,37 @@
 
             // Initialize movies array
             for(var i = 0; i < this.files.length; i++) {
-                var objectDefaults = {
+                this.movies.push({
                     collections: [''],
                     drive_id: this.drive,
-                    file: this.files[i],
+                    file: this.files[i].filename,
                     genres: [''],
+                    imdb: this.files[i].imdb,
                     jumbotron: null,
                     notes: '',
                     poster: null,
+                    posterUrl: '',
                     summary: '',
-                    title: this.getTitleFromFile(this.files[i]),
+                    title: this.files[i].title,
                     yearReleased: new Date().getFullYear(),
-                };
-
-                // Use set function to maintain reactivity
-                Vue.set(
-                    this.movies,
-                    this.escapeFile(this.files[i]),
-                    objectDefaults
-                );
+                });
             }
         },
 
         methods: {
             collectionAdd() {
-                this.movies[this.currentFileEscaped].collections.push('');
+                this.currentMovie.collections.push('');
             },
 
             collectionChange(data) {
-                Vue.set(
-                    this.movies[this.currentFileEscaped].collections,
-                    data.index,
-                    data.value
-                );
+                this.currentMovie.collections[data.index] = data.value;
             },
 
             collectionDuplicates() {
                 var previousCollections = [];
 
-                for(var i = 0; i < this.movies[this.currentFileEscaped].collections.length; i++) {
-                    var currentCollection = this.movies[this.currentFileEscaped].collections[i];
+                for(var i = 0; i < this.currentMovie.collections.length; i++) {
+                    var currentCollection = this.currentMovie.collections[i];
 
                     if(previousCollections.indexOf(currentCollection) >= 0) {
                         return true;
@@ -207,7 +250,7 @@
             },
 
             collectionEmpty() {
-                var collections = this.movies[this.currentFileEscaped].collections;
+                var collections = this.currentMovie.collections;
 
                 if(collections.length > 1) {
                     for(var i = 0; i < collections.length; i++) {
@@ -223,23 +266,12 @@
             collectionRemove(index) {
                 var newCollections = [''];
 
-                if(this.movies[this.currentFileEscaped].collections.length > 1) {
-                    this.movies[this.currentFileEscaped]
-                        .collections
-                        .splice(index, 1);
-
-                    newCollections = this.movies[this.currentFileEscaped].collections;
+                if(this.currentMovie.collections.length > 1) {
+                    this.currentMovie.collections.splice(index, 1);
+                    newCollections = this.currentMovie.collections;
                 }
 
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'collections',
-                    newCollections
-                );
-            },
-
-            escapeFile(file) {
-                return file.replace('.', '');
+                this.currentMovie.collections = newCollections;
             },
 
             fileListToArray(fileList) {
@@ -255,22 +287,18 @@
             },
 
             genreAdd() {
-                this.movies[this.currentFileEscaped].genres.push('');
+                this.currentMovie.genres.push('');
             },
 
             genreChange(data) {
-                Vue.set(
-                    this.movies[this.currentFileEscaped].genres,
-                    data.index,
-                    data.value
-                );
+                this.currentMovie.genres[data.index] = data.value;
             },
 
             genreDuplicates() {
                 var previousGenres = [];
 
-                for(var i = 0; i < this.movies[this.currentFileEscaped].genres.length; i++) {
-                    var currentGenre = this.movies[this.currentFileEscaped].genres[i];
+                for(var i = 0; i < this.currentMovie.genres.length; i++) {
+                    var currentGenre = this.currentMovie.genres[i];
 
                     if(previousGenres.indexOf(currentGenre) >= 0) {
                         return true;
@@ -283,8 +311,8 @@
             },
 
             genreEmpty() {
-                for(var i = 0; i < this.movies[this.currentFileEscaped].genres.length; i++) {
-                    if(this.movies[this.currentFileEscaped].genres[i] === '') {
+                for(var i = 0; i < this.currentMovie.genres.length; i++) {
+                    if(this.currentMovie.genres[i] === '') {
                         return true;
                     }
                 }
@@ -295,71 +323,102 @@
             genreRemove(index) {
                 var newGenres = [''];
 
-                if(this.movies[this.currentFileEscaped].genres.length > 1) {
-                    this.movies[this.currentFileEscaped]
-                        .genres
-                        .splice(index, 1);
-
-                    newGenres = this.movies[this.currentFileEscaped].genres;
+                if(this.currentMovie.genres.length > 1) {
+                    this.currentMovie.genres.splice(index, 1);
+                    newGenres = this.currentMovie.genres;
                 }
 
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'genres',
-                    newGenres
-                );
+                this.currentMovie.genres = newGenres;
             },
 
-            getTitleFromFile(file) {
-                var filename = file.substr(0, file.length - 4);
+            imdbSearchChange(imdbId) {
+                var index = _.findIndex(this.currentMovie.imdb.d, { id: imdbId });
 
-                var tokens = filename.split('-');
+                if(index >= 0) {
+                    var imdb = this.currentMovie.imdb.d[index];
+                    this.currentMovie.title = imdb.l;
+                    this.currentMovie.yearReleased = imdb.y;
 
-                var exceptions = ['a', 'an', 'for', 'in', 'of', 'on', 'the'];
-
-                for(var i = 0; i < tokens.length; i++) {
-                    if(exceptions.indexOf(tokens[i].toLowerCase()) === -1) {
-                        tokens[i] = tokens[i].substr(0, 1).toUpperCase() + tokens[i].substr(1);
+                    if(imdb.i) {
+                        this.currentMovie.posterUrl = imdb.i.imageUrl;
                     }
-                }
 
-                return tokens.join(' ');
+                    // Call to API to get more details
+                    var url = 'https://imdb8.p.rapidapi.com/title/get-overview-details';
+                    var options = {
+                        headers: {
+                            'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                            'X-RapidAPI-Key': this.imdbKey
+                        },
+                        params: {
+                            'tconst': imdbId
+                        }
+                    };
+
+                    var self = this;
+
+                    axios.get(url, options)
+                        .then(function(response) {
+                            // Set the genres
+                            var genres = [''];
+
+                            if(response.data.genres) {
+                                genres = response.data.genres;
+                            }
+
+                            self.currentMovie.genres = genres;
+
+                            // Set the summary
+                            var summary = '';
+
+                            if(response.data.plotOutline) {
+                                summary = response.data.plotOutline.text;
+                            }
+
+                            if(!summary && response.data.plotSummary) {
+                                summary = response.data.plotSummary.text;
+                            }
+
+                            self.currentMovie.summary = summary;
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
+                }
             },
 
             jumbotronChange(fileList) {
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'jumbotron',
-                    // this.fileListToArray(fileList)
-                    fileList
-                );
+                this.currentMovie.jumbotron = filelist;
             },
 
             notesChange(notes) {
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'notes',
-                    notes
-                );
+                this.currentMovie.notes = notes;
             },
 
             posterChange(fileList) {
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'poster',
-                    // this.fileListToArray(fileList)
-                    fileList
-                );
+                this.currentMovie.poster = fileList;
             },
 
             posterEmpty() {
-                return !this.movies[this.currentFileEscaped].poster;
+                return (this.posterType == 'file' && !this.currentMovie.poster)
+                    || (this.posterType == 'url' && !this.currentMovie.posterUrl);
+            },
+
+            posterUrlChange(url) {
+                this.currentMovie.posterUrl = url;
             },
 
             submit() {
-                var movie = this.movies[this.currentFileEscaped];
+                var movie = this.currentMovie;
 
-                movie.poster = movie.poster.item(0);
+                if(movie.poster) {
+                    movie.poster = movie.poster.item(0);
+                    delete movie.posterUrl;
+                }
+
+                if(movie.posterUrl) {
+                    delete movie.poster;
+                }
 
                 if(!movie.jumbotron) {
                     delete movie.jumbotron;
@@ -384,27 +443,47 @@
             },
 
             summaryChange(summary) {
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'summary',
-                    summary
-                );
+                this.currentMovie.summary = summary;
             },
 
             summaryEmpty() {
-                return this.movies[this.currentFileEscaped].summary === '';
+                return this.currentMovie.summary === '';
             },
 
             titleChange(title) {
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'title',
-                    title
-                );
+                this.currentMovie.title = title;
+
+                // Update IMDb API search results
+                if(title !== '') {
+                    var self = this;
+
+                    // Don't overload API with requests
+                    clearTimeout(this.apiTimeout);
+                    this.apiTimeout = setTimeout(function() {
+                        var url = 'https://imdb8.p.rapidapi.com/title/auto-complete';
+                        var options = {
+                            headers: {
+                                'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                                'X-RapidAPI-Key': self.imdbKey
+                            },
+                            params: {
+                                'q': title
+                            }
+                        };
+
+                        axios.get(url, options)
+                            .then(function(response) {
+                                self.currentMovie.imdb = response.data;
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                    }, 1000);
+                }
             },
 
             titleEmpty() {
-                return this.movies[this.currentFileEscaped].title === '';
+                return this.currentMovie.title === '';
             },
 
             valid() {
@@ -425,18 +504,14 @@
             },
 
             yearReleasedChange(yearReleased) {
-                Vue.set(
-                    this.movies[this.currentFileEscaped],
-                    'yearReleased',
-                    parseInt(yearReleased)
-                );
+                this.currentMovie.yearReleased = parseInt(yearReleased);
             },
 
             yearValid() {
                 return (
-                    this.movies[this.currentFileEscaped].yearReleased <= this.yearMax
-                    && this.movies[this.currentFileEscaped].yearReleased >= this.yearMin
-                    && !isNaN(this.movies[this.currentFileEscaped].yearReleased)
+                    this.currentMovie.yearReleased <= this.yearMax
+                    && this.currentMovie.yearReleased >= this.yearMin
+                    && !isNaN(this.currentMovie.yearReleased)
                 );
             },
         },

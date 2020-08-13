@@ -43,7 +43,39 @@ class Drive extends Model
                 ->pluck('filename')
                 ->toArray();
 
-        return self::getNewVideos($driveId, 'movies', $existingMovies);
+        $filenames = self::getNewVideos($driveId, 'movies', $existingMovies);
+
+        // Get newMovies as an array of arrays instead of array of string filenames
+        $newMovies = array_map(function($filename) {
+            return [
+                'filename' => $filename,
+                'title' => self::getTitleFromFilename($filename)
+            ];
+        }, $filenames);
+
+        // Search IMDb API for info and append it to each movie
+        $key = env('IMDB_API_KEY', '');
+
+        throw_if(empty($key), RuntimeException::class, 'IMDb API key value missing in .env file.');
+
+        $url = 'https://imdb8.p.rapidapi.com/title/auto-complete?q=';
+
+        $guzzleClient = new \GuzzleHttp\Client();
+
+        for($i = 0; $i < count($newMovies); $i++) {
+            $response = $guzzleClient->request('GET', $url . $newMovies[$i]['title'], [
+                'headers' => [
+                    'X-RapidAPI-Host' => 'imdb8.p.rapidapi.com',
+                    'X-RapidAPI-Key' => $key
+                ]
+            ]);
+
+            if($response->getStatusCode() == 200) {
+                $newMovies[$i]['imdb'] = json_decode((string) $response->getBody());
+            }
+        }
+
+        return $newMovies;
     }
 
     private static function getEpisodesFromDrive($driveId) {
@@ -57,7 +89,14 @@ class Drive extends Model
                 ->pluck('filename')
                 ->toArray();
 
+        // TODO add IMDb API support
+
         return self::getNewVideos($driveId, 'shows', $existingEpisodes);
+    }
+
+    private static function getTitleFromFilename($filename) {
+        $filenameParts = explode('.', $filename);
+        return ucwords(str_replace('-', ' ', $filenameParts[0]));
     }
 
     private static function getNewVideos($driveId, $directory, $filesToExclude) {

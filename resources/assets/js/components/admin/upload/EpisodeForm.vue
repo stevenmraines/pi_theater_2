@@ -3,11 +3,11 @@
         <div class="col">
             <form id="episode-form" method="POST" enctype="multipart/form-data" novalidate>
                 <!-- File -->
-                <video-file-input
+                <episode-file-input
                     :eventDispatcher="eventDispatcher"
                     :files="files"
                     :value="currentFile"
-                ></video-file-input>
+                ></episode-file-input>
 
                 <!-- Show -->
                 <shows-input

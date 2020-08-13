@@ -44,7 +44,9 @@ class UploadController extends Controller
 
         $this->insertIntoCollectionMedia($request, $mediaId);
 
-        $this->moveImages($request);
+        if(empty($request->posterUrl)) {
+            $this->moveImages($request);
+        }
 
         return [
             'success' => true
@@ -106,7 +108,9 @@ class UploadController extends Controller
             'genres' => 'required|array',
             'jumbotron' => 'nullable|image',
             'notes' => 'nullable|string|max:191',
-            'poster' => 'required|image',
+            // TODO can leave this here once IMDb API is supported on both movies and shows
+            // 'poster' => 'required_without:posterUrl|image',
+            // 'posterUrl' => 'required_without:poster|url',
             'summary' => 'required|string|max:4000',
             'title' => 'required|string|max:191',
         ];
@@ -117,6 +121,8 @@ class UploadController extends Controller
         $movieValidationRules = [
             'drive_id' => 'required|exists:drives,id',
             'file' => 'required|string',
+            'poster' => 'required_without:posterUrl|image',
+            'posterUrl' => 'required_without:poster|url',
             'yearReleased' => 'required|date_format:Y|after_or_equal:1900|before_or_equal:' . date('Y'),
         ];
 
@@ -130,6 +136,7 @@ class UploadController extends Controller
     {
         // TODO figure out how to extend existing after_or_equal date rule to allow zero
         $showValidationRules = [
+            'poster' => 'required|image',
             'yearEnd' => 'required|date_format:Y|gtef:yearStart|before_or_equal:' . date('Y'),
             'yearStart' => 'required|date_format:Y|after_or_equal:1900|before_or_equal:' . date('Y'),
         ];
@@ -195,12 +202,23 @@ class UploadController extends Controller
     {
         $media = new Media;
 
+        $filename = $this->getPosterFilename($request);
+
         $media->media_type = $mediaType;
         $media->title = $request->title;
         $media->summary = $request->summary;
         $media->notes = $request->notes;
-        $media->poster = $this->getPosterFilename($request);
+        $media->poster = $filename;
         $media->jumbotron = $this->getJumbotronFilename($request);
+
+        // Handle movie posterUrl
+        if($mediaType == 'movie' && !empty($request->posterUrl)) {
+            $filepath = public_path('img') . DIRECTORY_SEPARATOR . 'posters'
+                . DIRECTORY_SEPARATOR . $filename;
+            file_put_contents($filepath, file_get_contents($request->posterUrl));
+            $this->setPermissions($filepath);
+            exec("convert $filepath -resize 230x345\! $filepath");
+        }
 
         $media->save();
 

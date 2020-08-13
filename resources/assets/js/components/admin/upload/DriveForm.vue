@@ -35,6 +35,7 @@
                     :driveEventDispatcher="eventDispatcher"
                     :files="movies"
                     :genres="genres"
+                    :imdbKey="initialState.imdbKey"
                 ></movie-form>
             </div>
 
@@ -175,9 +176,11 @@
                 this.pending[this.currentDrive].episodes.splice(index, 1);
             },
 
-            movieSubmit(file) {
-                var index = this.pending[this.currentDrive].movies.indexOf(file);
-                this.pending[this.currentDrive].movies.splice(index, 1);
+            movieSubmit(movie) {
+                var index = _.findIndex(this.pending[this.currentDrive].movies, { filename: movie.filename });
+                if(index >= 0) {
+                    this.pending[this.currentDrive].movies.splice(index, 1);
+                }
             },
 
             sortShows(shows) {

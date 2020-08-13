@@ -9,10 +9,10 @@
         >
             <option
                 v-for="f in files"
-                :key="f.filename"
-                :value="f.filename"
+                :key="f"
+                :value="f"
             >
-                {{ f.filename }}
+                {{ f }}
             </option>
         </select>
     </div>
@@ -20,6 +20,7 @@
 
 <script>
     // TODO figure out how to do bootstrap labels without ID
+    // TODO can probably get rid of this component and just have videofileinput once I add IMDb API support on episodes
     export default {
         props: [
             'eventDispatcher',

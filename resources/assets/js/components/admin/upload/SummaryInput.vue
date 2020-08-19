@@ -1,10 +1,10 @@
 <template>
     <div class="form-group">
-        <label for="summary">
+        <label :for="id">
             <span v-if="required">* </span>Summary
         </label>
         <textarea
-            id="summary"
+            :id="id"
             class="form-control"
             rows="4"
             :value="value"
@@ -22,6 +22,16 @@
             'required',
             'value',
         ],
+
+        data() {
+            return {
+                id: null
+            }
+        },
+
+        mounted() {
+            this.id = this._uid;
+        },
 
         methods: {
             summaryChange(event) {

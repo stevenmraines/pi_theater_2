@@ -35,7 +35,6 @@
                     :driveEventDispatcher="eventDispatcher"
                     :files="movies"
                     :genres="genres"
-                    :imdbKey="initialState.imdbKey"
                 ></movie-form>
             </div>
 
@@ -78,17 +77,13 @@
 
 <script>
     export default {
-        props: [
-            'initialState',
-        ],
-
         data() {
             return {
                 currentDrive: 0,
-                drives: this.initialState.drives,
+                drives: window.__INITIAL_STATE__.drives,
                 eventDispatcher: new Vue({}),
-                pending: this.initialState.pending,
-                shows: this.sortShows(this.initialState.shows),
+                pending: window.__INITIAL_STATE__.pending,
+                shows: this.sortShows(window.__INITIAL_STATE__.shows),
             };
         },
 
@@ -96,9 +91,9 @@
             collections: function() {
                 var collections = [];
 
-                for(var i = 0; i < this.initialState.collections.length; i++) {
+                for(var i = 0; i < window.__INITIAL_STATE__.collections.length; i++) {
                     collections.push(
-                        this.initialState.collections[i].name
+                        window.__INITIAL_STATE__.collections[i].name
                     );
                 }
 
@@ -117,9 +112,9 @@
             genres: function() {
                 var genres = [];
 
-                for(var i = 0; i < this.initialState.genres.length; i++) {
+                for(var i = 0; i < window.__INITIAL_STATE__.genres.length; i++) {
                     genres.push(
-                        this.initialState.genres[i].name
+                        window.__INITIAL_STATE__.genres[i].name
                     );
                 }
 

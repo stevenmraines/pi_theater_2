@@ -12,9 +12,10 @@
 
                 <div class="dropdown-menu">
                     <a
+                        :key="index"
                         href="javascript:void(0);"
                         class="dropdown-item"
-                        v-for="g in allGenres"
+                        v-for="(g, index) in allGenres"
                         @click="genreSet(g)"
                     >
                         {{ g }}

@@ -44,9 +44,7 @@ class UploadController extends Controller
 
         $this->insertIntoCollectionMedia($request, $mediaId);
 
-        if(empty($request->posterUrl)) {
-            $this->moveImages($request);
-        }
+        $this->moveImages($request);
 
         return [
             'success' => true
@@ -108,9 +106,8 @@ class UploadController extends Controller
             'genres' => 'required|array',
             'jumbotron' => 'nullable|image',
             'notes' => 'nullable|string|max:191',
-            // TODO can leave this here once IMDb API is supported on both movies and shows
-            // 'poster' => 'required_without:posterUrl|image',
-            // 'posterUrl' => 'required_without:poster|url',
+            'poster' => 'required_without:posterUrl|image',
+            'posterUrl' => 'required_without:poster|url',
             'summary' => 'required|string|max:4000',
             'title' => 'required|string|max:191',
         ];
@@ -121,8 +118,6 @@ class UploadController extends Controller
         $movieValidationRules = [
             'drive_id' => 'required|exists:drives,id',
             'file' => 'required|string',
-            'poster' => 'required_without:posterUrl|image',
-            'posterUrl' => 'required_without:poster|url',
             'yearReleased' => 'required|date_format:Y|after_or_equal:1900|before_or_equal:' . date('Y'),
         ];
 
@@ -136,7 +131,6 @@ class UploadController extends Controller
     {
         // TODO figure out how to extend existing after_or_equal date rule to allow zero
         $showValidationRules = [
-            'poster' => 'required|image',
             'yearEnd' => 'required|date_format:Y|gtef:yearStart|before_or_equal:' . date('Y'),
             'yearStart' => 'required|date_format:Y|after_or_equal:1900|before_or_equal:' . date('Y'),
         ];
@@ -168,8 +162,7 @@ class UploadController extends Controller
 
         list($width, $height, $duration) = $this->getAttributeDefaults(
             Utilities\Video::getAttributes(
-                // TODO use some Laravel helper function to get path
-                "/var/www/pi_theater_2/public/videos/$drive/shows/" . $request->file
+                public_path("videos/$drive/shows/{$request->file}")
             )
         );
 
@@ -202,23 +195,12 @@ class UploadController extends Controller
     {
         $media = new Media;
 
-        $filename = $this->getPosterFilename($request);
-
         $media->media_type = $mediaType;
         $media->title = $request->title;
         $media->summary = $request->summary;
         $media->notes = $request->notes;
-        $media->poster = $filename;
+        $media->poster = $this->getPosterFilename($request);
         $media->jumbotron = $this->getJumbotronFilename($request);
-
-        // Handle movie posterUrl
-        if($mediaType == 'movie' && !empty($request->posterUrl)) {
-            $filepath = public_path('img') . DIRECTORY_SEPARATOR . 'posters'
-                . DIRECTORY_SEPARATOR . $filename;
-            file_put_contents($filepath, file_get_contents($request->posterUrl));
-            $this->setPermissions($filepath);
-            exec("convert $filepath -resize 230x345\! $filepath");
-        }
 
         $media->save();
 
@@ -269,8 +251,7 @@ class UploadController extends Controller
 
         list($width, $height, $duration) = $this->getAttributeDefaults(
             Utilities\Video::getAttributes(
-                // TODO use some Laravel helper function to get path
-                "/var/www/pi_theater_2/public/videos/$drive/movies/" . $request->file
+                public_path("videos/$drive/movies/{$request->file}")
             )
         );
 
@@ -442,15 +423,30 @@ class UploadController extends Controller
 
     protected function moveImages(Request $request)
     {
+        /*
+         *  Handle poster image.
+         */
         $posterFilename = $this->getPosterFilename($request);
+        $posterFilepath = public_path('img') . DIRECTORY_SEPARATOR . 'posters'
+            . DIRECTORY_SEPARATOR . $posterFilename;
 
-        $request->poster->storeAs('posters', $posterFilename, 'images');
+        // If posterUrl is present then the image needs to be downloaded from the URL
+        if(!empty($request->posterUrl)) {
+            file_put_contents($posterFilepath, file_get_contents($request->posterUrl));
+            // Resize the image with ImageMagick
+            exec("convert $posterFilepath -resize 230x345\! $posterFilepath");
+        }
 
-        $this->setPermissions(
-            public_path('img') . DIRECTORY_SEPARATOR . 'posters'
-            . DIRECTORY_SEPARATOR . $posterFilename
-        );
+        // If no posterUrl, then the uploaded image needs to be stored
+        if(empty($request->posterUrl)) {
+            $request->poster->storeAs('posters', $posterFilename, 'images');
+        }
 
+        $this->setPermissions($posterFilepath);
+
+        /*
+         *  Handle jumbotron image, if any.
+         */
         if($request->hasFile('jumbotron')) {
             $jumbotronFilename = $this->getJumbotronFilename($request);
 

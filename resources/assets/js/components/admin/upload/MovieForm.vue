@@ -12,8 +12,8 @@
                 <!-- IMDb Search Results -->
                 <imdb-search-input
                     :eventDispatcher="eventDispatcher"
-                    :file="currentMovie"
-                    :value="null"
+                    :results="currentMovie.imdb"
+                    :value="currentImdbSearchResult"
                 ></imdb-search-input>
 
                 <!-- Title -->
@@ -56,45 +56,11 @@
                 ></notes-input>
 
                 <!-- Poster -->
-                <div class="form-check">
-                    <input
-                        class="form-check-input"
-                        name="poster-radio"
-                        type="radio"
-                        id="poster-url-radio"
-                        value="url"
-                        v-model="posterType"
-                    >
-                    <label class="form-check-label" for="poster-url-radio">
-                        Link to File
-                    </label>
-                </div>
-
-                <div class="form-check">
-                    <input
-                        class="form-check-input"
-                        name="poster-radio"
-                        type="radio"
-                        id="poster-file-radio"
-                        value="file"
-                        v-model="posterType"
-                    >
-                    <label class="form-check-label" for="poster-file-radio">
-                        Upload File
-                    </label>
-                </div>
-
-                <poster-url-input
-                    v-if="posterType == 'url'"
-                    :eventDispatcher="eventDispatcher"
-                    :value="currentMovie.posterUrl"
-                ></poster-url-input>
-
                 <poster-input
-                    v-if="posterType == 'file'"
                     :eventDispatcher="eventDispatcher"
+                    :file="currentMovie.poster"
                     :title="currentMovie.title"
-                    :value="currentMovie.poster"
+                    :url="currentMovie.posterUrl"
                 ></poster-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="posterEmpty()">
@@ -104,7 +70,8 @@
                 <!-- Jumbotron -->
                 <jumbotron-input
                     :eventDispatcher="eventDispatcher"
-                    :value="currentMovie.jumbotron"
+                    :file="currentMovie.jumbotron"
+                    :url="currentMovie.jumbotronUrl"
                 ></jumbotron-input>
 
                 <!-- Genres -->
@@ -154,17 +121,16 @@
             'drive',
             'driveEventDispatcher',
             'files',
-            'genres',
-            'imdbKey'
+            'genres'
         ],
 
         data() {
             return {
                 apiTimeout: null,
                 currentFile: this.files[0],
+                currentImdbSearchResult: null,
                 eventDispatcher: new Vue({}),
                 movies: [],
-                posterType: 'url',
                 yearMax: new Date().getFullYear(),
                 yearMin: 1900,
             };
@@ -230,7 +196,11 @@
             },
 
             collectionChange(data) {
-                this.currentMovie.collections[data.index] = data.value;
+                Vue.set(
+                    this.currentMovie.collections,
+                    data.index,
+                    data.value
+                );
             },
 
             collectionDuplicates() {
@@ -271,7 +241,11 @@
                     newCollections = this.currentMovie.collections;
                 }
 
-                this.currentMovie.collections = newCollections;
+                Vue.set(
+                    this.currentMovie,
+                    'collections',
+                    newCollections
+                );
             },
 
             fileListToArray(fileList) {
@@ -332,9 +306,11 @@
             },
 
             imdbSearchChange(imdbId) {
+                this.currentImdbSearchResult = imdbId;
                 var index = _.findIndex(this.currentMovie.imdb.d, { id: imdbId });
 
                 if(index >= 0) {
+                    this.currentMovie.poster = null;
                     var imdb = this.currentMovie.imdb.d[index];
                     this.currentMovie.title = imdb.l;
                     this.currentMovie.yearReleased = imdb.y;
@@ -348,7 +324,7 @@
                     var options = {
                         headers: {
                             'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
-                            'X-RapidAPI-Key': this.imdbKey
+                            'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
                         },
                         params: {
                             'tconst': imdbId
@@ -388,7 +364,7 @@
             },
 
             jumbotronChange(fileList) {
-                this.currentMovie.jumbotron = filelist;
+                this.currentMovie.jumbotron = fileList;
             },
 
             notesChange(notes) {
@@ -400,8 +376,7 @@
             },
 
             posterEmpty() {
-                return (this.posterType == 'file' && !this.currentMovie.poster)
-                    || (this.posterType == 'url' && !this.currentMovie.posterUrl);
+                return !this.currentMovie.poster && !this.currentMovie.posterUrl;
             },
 
             posterUrlChange(url) {
@@ -411,13 +386,14 @@
             submit() {
                 var movie = this.currentMovie;
 
+                // If both inputs are filled with data, default to posterUrl
+                if(movie.posterUrl) {
+                    delete movie.poster;
+                }
+
                 if(movie.poster) {
                     movie.poster = movie.poster.item(0);
                     delete movie.posterUrl;
-                }
-
-                if(movie.posterUrl) {
-                    delete movie.poster;
                 }
 
                 if(!movie.jumbotron) {
@@ -434,7 +410,6 @@
 
                 axios.post('/api/upload/movie', formData)
                     .then(function(response) {
-                        console.log(response);
                         self.driveEventDispatcher.$emit('movieSubmit', self.currentFile);
                     })
                     .catch(function(error) {
@@ -455,16 +430,17 @@
 
                 // Update IMDb API search results
                 if(title !== '') {
-                    var self = this;
-
                     // Don't overload API with requests
                     clearTimeout(this.apiTimeout);
+
+                    var self = this;
+
                     this.apiTimeout = setTimeout(function() {
                         var url = 'https://imdb8.p.rapidapi.com/title/auto-complete';
                         var options = {
                             headers: {
                                 'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
-                                'X-RapidAPI-Key': self.imdbKey
+                                'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
                             },
                             params: {
                                 'q': title
@@ -474,6 +450,7 @@
                         axios.get(url, options)
                             .then(function(response) {
                                 self.currentMovie.imdb = response.data;
+                                self.currentImdbSearchResult = null;
                             })
                             .catch(function(error) {
                                 console.log(error);

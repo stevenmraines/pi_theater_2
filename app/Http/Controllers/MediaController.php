@@ -38,10 +38,11 @@ class MediaController extends Controller
     {
         return
             Media::find($id)
-                ->load('genres')
+                ->load('drive')
                 ->load('episodes')
-                ->load('release')
-                ->load('drive');
+                ->load('genres')
+                ->load('movie_year')
+                ->load('show_year');
     }
 
     /**

@@ -12,9 +12,10 @@
 
                 <div class="dropdown-menu">
                     <a
+                        :key="index"
                         href="javascript:void(0);"
                         class="dropdown-item"
-                        v-for="c in allCollections"
+                        v-for="(c, index) in allCollections"
                         @click="collectionSet(c)"
                     >
                         {{ c }}

@@ -98,7 +98,7 @@ const app = new Vue({
 			notes: null,
 			poster: 'missing-poster.jpg',
 			genres: [],
-			release: [],
+			movie_year: [],
 		},
 
         paths: window.__INITIAL_STATE__.paths,
@@ -118,7 +118,7 @@ const app = new Vue({
             episodes: [],
             genres: [],
 			seasons: [],
-			release: [],
+			show_year: [],
 		},
 
 		// TODO need to save progress in browser even if the user isn't logged in
@@ -269,7 +269,7 @@ const app = new Vue({
 					self.movieModal.summary = response.data.summary;
 					self.movieModal.notes = response.data.notes;
 					self.movieModal.poster = response.data.poster;
-					self.movieModal.release = response.data.release;
+					self.movieModal.movie_year = response.data.movie_year;
 					self.movieModal.genres = response.data.genres;
 				}
 
@@ -282,7 +282,7 @@ const app = new Vue({
 					self.showModal.episodes = response.data.episodes;
 					self.showModal.genres = response.data.genres;
 					self.showModal.seasons = response.data.seasons;
-					self.showModal.release = response.data.release;
+					self.showModal.show_year = response.data.show_year;
 				}
 
 				// Display the modal

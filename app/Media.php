@@ -26,6 +26,10 @@ class Media extends Model
         return $this->belongsToMany('App\Genre')->orderBy('name');
     }
 
+    public function movie_year() {
+        return $this->hasOne('App\MovieYear');
+    }
+
     public static function recentEpisodes() {
         $query = "
             SELECT
@@ -58,14 +62,8 @@ class Media extends Model
                 ->get();
     }
 
-    public function release() {
-        if($this->media_type === 'movie') {
-            return $this->hasOne('App\MovieYear');
-        }
-
-        if($this->media_type === 'show') {
-            return $this->hasOne('App\ShowYear');
-        }
+    public function show_year() {
+        return $this->hasOne('App\ShowYear');
     }
 
     public static function spotlight() {

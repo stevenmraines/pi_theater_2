@@ -2,6 +2,13 @@
     <div class="row">
         <div class="col">
             <form id="show-form" method="POST" enctype="multipart/form-data" novalidate>
+                <!-- IMDb Search Results -->
+                <imdb-search-input
+                    :eventDispatcher="eventDispatcher"
+                    :results="show.imdb"
+                    :value="currentImdbSearchResult"
+                ></imdb-search-input>
+
                 <!-- Title -->
                 <title-input
                     :eventDispatcher="eventDispatcher"
@@ -55,8 +62,9 @@
                 <!-- Poster Image -->
                 <poster-input
                     :eventDispatcher="eventDispatcher"
+                    :file="show.poster"
                     :title="show.title"
-                    :value="show.poster"
+                    :url="show.posterUrl"
                 ></poster-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="posterEmpty()">
@@ -66,7 +74,7 @@
                 <!-- Jumbotron Image -->
                 <jumbotron-input
                     :eventDispatcher="eventDispatcher"
-                    :value="show.jumbotron"
+                    :file="show.jumbotron"
                 ></jumbotron-input>
 
                 <!-- Genres -->
@@ -120,13 +128,19 @@
 
         data() {
             return {
+                apiTimeout: null,
+                currentImdbSearchResult: null,
                 eventDispatcher: new Vue({}),
                 show: {
                     collections: [''],
                     genres: [''],
+                    imdb: {
+                        d: []
+                    },
                     jumbotron: null,
                     notes: '',
                     poster: null,
+                    posterUrl: '',
                     summary: '',
                     title: '',
                     yearStart: 0,
@@ -150,9 +164,11 @@
             this.eventDispatcher.$on('genreAdd', this.genreAdd);
             this.eventDispatcher.$on('genreChange', this.genreChange);
             this.eventDispatcher.$on('genreRemove', this.genreRemove);
+            this.eventDispatcher.$on('imdbSearchChange', this.imdbSearchChange);
             this.eventDispatcher.$on('jumbotronChange', this.jumbotronChange);
             this.eventDispatcher.$on('notesChange', this.notesChange);
             this.eventDispatcher.$on('posterChange', this.posterChange);
+            this.eventDispatcher.$on('posterUrlChange', this.posterUrlChange);
             this.eventDispatcher.$on('submit', this.submit);
             this.eventDispatcher.$on('summaryChange', this.summaryChange);
             this.eventDispatcher.$on('titleChange', this.titleChange);
@@ -278,6 +294,68 @@
                 );
             },
 
+            imdbSearchChange(imdbId) {
+                this.currentImdbSearchResult = imdbId;
+                var index = _.findIndex(this.show.imdb.d, { id: imdbId });
+
+                if(index >= 0) {
+                    this.show.poster = null;
+                    var imdb = this.show.imdb.d[index];
+                    this.show.title = imdb.l;
+                    this.show.yearStart = imdb.y;
+                    
+                    if(imdb.yr) {
+                        this.show.yearEnd = parseInt(imdb.yr.split('-')[1]);
+                    }
+
+                    if(imdb.i) {
+                        this.show.posterUrl = imdb.i.imageUrl;
+                    }
+
+                    // Call to API to get more details
+                    var url = 'https://imdb8.p.rapidapi.com/title/get-overview-details';
+                    var options = {
+                        headers: {
+                            'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                            'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
+                        },
+                        params: {
+                            'tconst': imdbId
+                        }
+                    };
+
+                    var self = this;
+
+                    axios.get(url, options)
+                        .then(function(response) {
+                            // Set the genres
+                            var genres = [''];
+
+                            if(response.data.genres) {
+                                genres = response.data.genres;
+                            }
+
+                            self.show.genres = genres;
+
+                            // Set the summary
+                            var summary = '';
+
+                            if(response.data.plotOutline) {
+                                summary = response.data.plotOutline.text;
+                            }
+
+                            if(!summary && response.data.plotSummary) {
+                                summary = response.data.plotSummary.text;
+                            }
+
+                            self.show.summary = summary;
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
+                }
+            },
+
             jumbotronChange(fileList) {
                 this.show.jumbotron = fileList;
             },
@@ -291,15 +369,23 @@
             },
 
             posterEmpty() {
-                return !this.show.poster;
+                return !this.show.poster && !this.show.posterUrl;
+            },
+
+            posterUrlChange(url) {
+                this.show.posterUrl = url;
             },
 
             reset() {
                 this.show.collections = [''];
                 this.show.genres = [''];
+                this.show.imdb = {
+                    d: []
+                };
                 this.show.jumbotron = null;
                 this.show.notes = '';
                 this.show.poster = null;
+                this.show.posterUrl = '';
                 this.show.summary = '';
                 this.show.title = '';
                 this.show.yearStart = this.yearMax;
@@ -311,23 +397,32 @@
             },
 
             submit() {
-                this.show.poster = this.show.poster.item(0);
+                var show = this.show;
 
-                if(!this.show.jumbotron) {
-                    delete this.show.jumbotron;
+                // If both inputs are filled with data, default to posterUrl
+                if(show.posterUrl) {
+                    delete show.poster;
                 }
 
-                if(this.show.jumbotron) {
-                    this.show.jumbotron = this.show.jumbotron.item(0);
+                if(show.poster) {
+                    show.poster = show.poster.item(0);
+                    delete show.posterUrl;
                 }
 
-                var formData = window.getFormData(this.show);
+                if(!show.jumbotron) {
+                    delete show.jumbotron;
+                }
+
+                if(show.jumbotron) {
+                    show.jumbotron = show.jumbotron.item(0);
+                }
+
+                var formData = window.getFormData(show);
 
                 var self = this;
 
                 axios.post('/api/upload/show', formData)
                     .then(function(response) {
-                        console.log(response);
                         self.reset();
                     })
                     .catch(function(error) {
@@ -345,6 +440,36 @@
 
             titleChange(title) {
                 this.show.title = title;
+
+                // Update IMDb API search results
+                if(title !== '') {
+                    // Don't overload API with requests
+                    clearTimeout(this.apiTimeout);
+
+                    var self = this;
+
+                    this.apiTimeout = setTimeout(function() {
+                        var url = 'https://imdb8.p.rapidapi.com/title/auto-complete';
+                        var options = {
+                            headers: {
+                                'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                                'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
+                            },
+                            params: {
+                                'q': title
+                            }
+                        };
+
+                        axios.get(url, options)
+                            .then(function(response) {
+                                self.show.imdb = response.data;
+                                self.currentImdbSearchResult = null;
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                    }, 1000);
+                }
             },
 
             titleEmpty() {

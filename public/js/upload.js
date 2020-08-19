@@ -1,1 +1,6231 @@
-!function(e){var t={};function n(r){if(t[r])return t[r].exports;var i=t[r]={i:r,l:!1,exports:{}};return e[r].call(i.exports,i,i.exports,n),i.l=!0,i.exports}n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{configurable:!1,enumerable:!0,get:r})},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/",n(n.s=415)}({0:function(e,t){e.exports=function(e,t,n,r,i,s){var a,o=e=e||{},l=typeof e.default;"object"!==l&&"function"!==l||(a=e,o=e.default);var c,u="function"==typeof o?o.options:o;if(t&&(u.render=t.render,u.staticRenderFns=t.staticRenderFns,u._compiled=!0),n&&(u.functional=!0),i&&(u._scopeId=i),s?(c=function(e){(e=e||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(e=__VUE_SSR_CONTEXT__),r&&r.call(this,e),e&&e._registeredComponents&&e._registeredComponents.add(s)},u._ssrRegister=c):r&&(c=r),c){var h=u.functional,p=h?u.render:u.beforeCreate;h?(u._injectStyles=c,u.render=function(e,t){return c.call(t),p(e,t)}):u.beforeCreate=p?[].concat(p,c):[c]}return{esModule:a,exports:o,options:u}}},415:function(e,t,n){e.exports=n(416)},416:function(e,t,n){Vue.component("collection-input",n(417)),Vue.component("drive-form",n(420)),Vue.component("episode-file-input",n(423)),Vue.component("episode-form",n(426)),Vue.component("episode-number-input",n(429)),Vue.component("genre-input",n(432)),Vue.component("image-file-input",n(435)),Vue.component("imdb-search-input",n(440)),Vue.component("jumbotron-input",n(443)),Vue.component("movie-form",n(446)),Vue.component("multi-collection-input",n(449)),Vue.component("multi-genre-input",n(452)),Vue.component("notes-input",n(455)),Vue.component("poster-input",n(458)),Vue.component("poster-url-input",n(461)),Vue.component("season-input",n(464)),Vue.component("show-form",n(467)),Vue.component("shows-input",n(470)),Vue.component("submit-input",n(473)),Vue.component("summary-input",n(478)),Vue.component("title-input",n(481)),Vue.component("video-file-input",n(484)),Vue.component("year-end-input",n(487)),Vue.component("year-input",n(490)),Vue.component("year-released-input",n(493)),Vue.component("year-start-input",n(496));new Vue({el:"#app",data:{initialState:window.__INITIAL_STATE__}})},417:function(e,t,n){var r=n(0)(n(418),n(419),!1,null,null,null);e.exports=r.exports},418:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["allCollections","eventDispatcher","index","value"],methods:{collectionChange:function(e){this.change(e.target.value)},collectionSet:function(e){this.change(e)},change:function(e){this.eventDispatcher.$emit("collectionChange",{index:this.index,value:e})}}}},419:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"input-group mb-3"},[n("div",{staticClass:"input-group-prepend"},[n("div",{staticClass:"dropdown"},[n("button",{staticClass:"btn btn-primary dropdown-toggle",attrs:{type:"button","data-toggle":"dropdown"}},[e._v("\n                Options\n            ")]),e._v(" "),n("div",{staticClass:"dropdown-menu"},e._l(e.allCollections,function(t){return n("a",{staticClass:"dropdown-item",attrs:{href:"javascript:void(0);"},on:{click:function(n){e.collectionSet(t)}}},[e._v("\n                    "+e._s(t)+"\n                ")])}))])]),e._v(" "),n("input",{staticClass:"form-control",domProps:{value:e.value},on:{change:e.collectionChange,input:e.collectionChange}}),e._v(" "),n("div",{staticClass:"input-group-append"},[n("button",{staticClass:"btn btn-primary",attrs:{type:"button"},on:{click:function(t){e.eventDispatcher.$emit("collectionAdd")}}},[e._v("\n            +\n        ")]),e._v(" "),n("button",{staticClass:"btn btn-danger",attrs:{type:"button"},on:{click:function(t){e.eventDispatcher.$emit("collectionRemove",e.index)}}},[e._v("\n            x\n        ")])])])},staticRenderFns:[]}},420:function(e,t,n){var r=n(0)(n(421),n(422),!1,null,null,null);e.exports=r.exports},421:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["initialState"],data:function(){return{currentDrive:0,drives:this.initialState.drives,eventDispatcher:new Vue({}),pending:this.initialState.pending,shows:this.sortShows(this.initialState.shows)}},computed:{collections:function(){for(var e=[],t=0;t<this.initialState.collections.length;t++)e.push(this.initialState.collections[t].name);return e},episodes:function(){return this.currentDrive<=0||void 0===this.pending[this.currentDrive]?[]:this.pending[this.currentDrive].episodes},genres:function(){for(var e=[],t=0;t<this.initialState.genres.length;t++)e.push(this.initialState.genres[t].name);return e},movies:function(){return this.currentDrive<=0||void 0===this.pending[this.currentDrive]?[]:this.pending[this.currentDrive].movies},newUploadsMessage:function(){if(this.currentDrive<=0||void 0===this.pending[this.currentDrive])return"";var e=0;return this.pending[this.currentDrive].movies.length>0&&(e+=this.pending[this.currentDrive].movies.length),this.pending[this.currentDrive].episodes.length>0&&(e+=this.pending[this.currentDrive].episodes.length),(e>0?e:"No")+" New Upload"+(1===e?"":"s")}},created:function(){this.drives.length>0&&(this.currentDrive=this.drives[0].id,this.eventDispatcher.$on("movieSubmit",this.movieSubmit),this.eventDispatcher.$on("episodeSubmit",this.episodeSubmit))},methods:{episodeSubmit:function(e){var t=this.pending[this.currentDrive].episodes.indexOf(e);this.pending[this.currentDrive].episodes.splice(t,1)},movieSubmit:function(e){var t=_.findIndex(this.pending[this.currentDrive].movies,{filename:e.filename});t>=0&&this.pending[this.currentDrive].movies.splice(t,1)},sortShows:function(e){return e.sort(function(e,t){return e.title.toLowerCase().localeCompare(t.title.toLowerCase())})}}}},422:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",[n("div",{staticClass:"row"},[n("div",{staticClass:"col"},[n("form",{staticClass:"form-inline",attrs:{novalidate:""}},[n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"drive"}},[e._v("Hard drive")]),e._v(" "),n("select",{directives:[{name:"model",rawName:"v-model",value:e.currentDrive,expression:"currentDrive"}],staticClass:"form-control ml-3",attrs:{id:"drive"},on:{change:function(t){var n=Array.prototype.filter.call(t.target.options,function(e){return e.selected}).map(function(e){return"_value"in e?e._value:e.value});e.currentDrive=t.target.multiple?n:n[0]}}},[n("option",{key:0,attrs:{selected:""},domProps:{value:0}},[e._v("Please Select...")]),e._v(" "),e._l(e.drives,function(t){return n("option",{key:t.id,domProps:{value:t.id}},[e._v("\n                            "+e._s(t.name)+"\n                        ")])})],2),e._v(" "),e.currentDrive>0?n("h3",{staticClass:"d-inline mb-0 ml-3"},[e._v("\n                        "+e._s(e.newUploadsMessage)+"\n                    ")]):e._e()])]),n("hr")])]),e._v(" "),e.currentDrive>0?n("div",[n("div",{staticClass:"card",attrs:{role:"tablist"}},[n("h5",{staticClass:"card-header mb-0"},[n("a",{attrs:{"data-toggle":"collapse",href:"#movie-form-container",role:"tab"}},[e._v("\n                    Add Movies ("+e._s(e.movies.length)+" pending)\n                ")])]),e._v(" "),n("movie-form",{staticClass:"card-body collapse",attrs:{id:"movie-form-container",role:"tabpanel",collections:e.collections,drive:e.currentDrive,driveEventDispatcher:e.eventDispatcher,files:e.movies,genres:e.genres,imdbKey:e.initialState.imdbKey}})],1),e._v(" "),n("div",{staticClass:"card",attrs:{role:"tablist"}},[n("h5",{staticClass:"card-header mb-0"},[n("a",{attrs:{"data-toggle":"collapse",href:"#episode-form-container",role:"tab"}},[e._v("\n                    Add Episodes ("+e._s(e.episodes.length)+" pending)\n                ")])]),e._v(" "),n("episode-form",{staticClass:"card-body collapse",attrs:{id:"episode-form-container",role:"tabpanel",drive:e.currentDrive,driveEventDispatcher:e.eventDispatcher,files:e.episodes,shows:e.shows}})],1)]):e._e(),e._v(" "),n("div",{staticClass:"card",attrs:{role:"tablist"}},[e._m(0),e._v(" "),n("show-form",{staticClass:"card-body collapse",attrs:{id:"show-form-container",role:"tabpanel",collections:e.collections,drive:e.currentDrive,driveEventDispatcher:e.eventDispatcher,genres:e.genres}})],1)])},staticRenderFns:[function(){var e=this.$createElement,t=this._self._c||e;return t("h5",{staticClass:"card-header mb-0"},[t("a",{attrs:{"data-toggle":"collapse",href:"#show-form-container",role:"tab"}},[this._v("\n                Add Shows\n            ")])])}]}},423:function(e,t,n){var r=n(0)(n(424),n(425),!1,null,null,null);e.exports=r.exports},424:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","files","value"]}},425:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"file"}},[e._v("File")]),e._v(" "),n("select",{staticClass:"form-control",attrs:{id:"file"},domProps:{value:e.value},on:{change:function(t){e.eventDispatcher.$emit("videoFileChange",t.target.value)}}},e._l(e.files,function(t){return n("option",{key:t,domProps:{value:t}},[e._v("\n            "+e._s(t)+"\n        ")])}))])},staticRenderFns:[]}},426:function(e,t,n){var r=n(0)(n(427),n(428),!1,null,null,null);e.exports=r.exports},427:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["drive","driveEventDispatcher","files","shows"],data:function(){return{currentFile:this.files[0],eventDispatcher:new Vue({}),episodes:{}}},computed:{currentFileEscaped:function(){return this.escapeFile(this.currentFile)},submitDisabled:function(){return!this.valid()}},created:function(){this.eventDispatcher.$on("episodeNumberChange",this.episodeNumberChange),this.eventDispatcher.$on("seasonChange",this.seasonChange),this.eventDispatcher.$on("showChange",this.showChange),this.eventDispatcher.$on("submit",this.submit),this.eventDispatcher.$on("summaryChange",this.summaryChange),this.eventDispatcher.$on("titleChange",this.titleChange),this.eventDispatcher.$on("videoFileChange",this.videoFileChange);for(var e=0;e<this.files.length;e++){var t={drive_id:this.drive,episodeNumber:this.getEpisodeNumberFromFile(this.files[e]),file:this.files[e],season:this.getSeasonFromFile(this.files[e]),media_id:this.getShowFromFile(this.files[e]),summary:"",title:""};Vue.set(this.episodes,this.escapeFile(this.files[e]),t)}},methods:{episodeNumberChange:function(e){Vue.set(this.episodes[this.currentFileEscaped],"episodeNumber",parseInt(e))},episodeNumberValid:function(){return this.numberValid(this.episodes[this.currentFileEscaped].episodeNumber)},escapeFile:function(e){return e.replace(".","")},getEpisodeNumberFromFile:function(e){return parseInt(e.replace(/.+_s\d{2}-e([0-9]{2}).+/,"$1"))},getSeasonFromFile:function(e){return parseInt(e.replace(/.+_s(\d{2})-e.+/,"$1"))},getShowFromFile:function(e){for(var t=e.replace(/(.+)_(.+)/,"$1").replace(/-/g," "),n=0;n<this.shows.length;n++)if(0===t.toLowerCase().localeCompare(this.shows[n].title.toLowerCase()))return this.shows[n].id;return this.shows[0].id},numberValid:function(e){return e>0&&!isNaN(e)},seasonChange:function(e){Vue.set(this.episodes[this.currentFileEscaped],"season",parseInt(e))},seasonValid:function(){return this.numberValid(this.episodes[this.currentFileEscaped].season)},showChange:function(e){Vue.set(this.episodes[this.currentFileEscaped],"media_id",e)},submit:function(){var e=this.episodes[this.currentFileEscaped],t=window.getFormData(e),n=this;axios.post("/api/upload/episode",t).then(function(e){console.log(e),n.driveEventDispatcher.$emit("episodeSubmit",n.currentFile)}).catch(function(e){console.log(e)})},summaryChange:function(e){Vue.set(this.episodes[this.currentFileEscaped],"summary",e)},titleChange:function(e){Vue.set(this.episodes[this.currentFileEscaped],"title",e)},titleEmpty:function(){return""===this.episodes[this.currentFileEscaped].title},valid:function(){return!this.titleEmpty()&&this.seasonValid()&&this.episodeNumberValid()},videoFileChange:function(e){this.currentFile=e}}}},428:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return e.drive>0&&e.files.length>0?n("div",{staticClass:"row"},[n("div",{staticClass:"col"},[n("form",{attrs:{id:"episode-form",method:"POST",enctype:"multipart/form-data",novalidate:""}},[n("episode-file-input",{attrs:{eventDispatcher:e.eventDispatcher,files:e.files,value:e.currentFile}}),e._v(" "),n("shows-input",{attrs:{eventDispatcher:e.eventDispatcher,shows:e.shows,value:e.episodes[e.currentFileEscaped].media_id}}),e._v(" "),n("season-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.episodes[e.currentFileEscaped].season}}),e._v(" "),e.seasonValid()?e._e():n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Season field is not valid\n            ")]),e._v(" "),n("episode-number-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.episodes[e.currentFileEscaped].episodeNumber}}),e._v(" "),e.episodeNumberValid()?e._e():n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Episode Number field is not valid\n            ")]),e._v(" "),n("title-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.episodes[e.currentFileEscaped].title}}),e._v(" "),e.titleEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Title field is required\n            ")]):e._e(),e._v(" "),n("summary-input",{attrs:{eventDispatcher:e.eventDispatcher,required:!1}}),e._v(" "),n("submit-input",{attrs:{eventDispatcher:e.eventDispatcher,disabled:e.submitDisabled}})],1)])]):e._e()},staticRenderFns:[]}},429:function(e,t,n){var r=n(0)(n(430),n(431),!1,null,null,null);e.exports=r.exports},43:function(e,t){e.exports=function(e){var t=[];return t.toString=function(){return this.map(function(t){var n=function(e,t){var n=e[1]||"",r=e[3];if(!r)return n;if(t&&"function"==typeof btoa){var i=(a=r,"/*# sourceMappingURL=data:application/json;charset=utf-8;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(a))))+" */"),s=r.sources.map(function(e){return"/*# sourceURL="+r.sourceRoot+e+" */"});return[n].concat(s).concat([i]).join("\n")}var a;return[n].join("\n")}(t,e);return t[2]?"@media "+t[2]+"{"+n+"}":n}).join("")},t.i=function(e,n){"string"==typeof e&&(e=[[null,e,""]]);for(var r={},i=0;i<this.length;i++){var s=this[i][0];"number"==typeof s&&(r[s]=!0)}for(i=0;i<e.length;i++){var a=e[i];"number"==typeof a[0]&&r[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),t.push(a))}},t}},430:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","value"],methods:{episodeNumberChange:function(e){this.eventDispatcher.$emit("episodeNumberChange",e.target.value)}}}},431:function(e,t){e.exports={render:function(){var e=this.$createElement,t=this._self._c||e;return t("div",{staticClass:"form-group"},[t("label",{attrs:{for:"episode-number"}},[this._v("* Episode Number")]),this._v(" "),t("input",{staticClass:"form-control",attrs:{type:"number",id:"episode-number",min:"1"},domProps:{value:this.value},on:{change:this.episodeNumberChange,input:this.episodeNumberChange}})])},staticRenderFns:[]}},432:function(e,t,n){var r=n(0)(n(433),n(434),!1,null,null,null);e.exports=r.exports},433:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["allGenres","eventDispatcher","index","value"],methods:{genreChange:function(e){this.change(e.target.value)},genreSet:function(e){this.change(e)},change:function(e){this.eventDispatcher.$emit("genreChange",{index:this.index,value:e})}}}},434:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"input-group mb-3"},[n("div",{staticClass:"input-group-prepend"},[n("div",{staticClass:"dropdown"},[n("button",{staticClass:"btn btn-primary dropdown-toggle",attrs:{type:"button","data-toggle":"dropdown"}},[e._v("\n                Options\n            ")]),e._v(" "),n("div",{staticClass:"dropdown-menu"},e._l(e.allGenres,function(t){return n("a",{staticClass:"dropdown-item",attrs:{href:"javascript:void(0);"},on:{click:function(n){e.genreSet(t)}}},[e._v("\n                    "+e._s(t)+"\n                ")])}))])]),e._v(" "),n("input",{staticClass:"form-control",domProps:{value:e.value},on:{change:e.genreChange,input:e.genreChange}}),e._v(" "),n("div",{staticClass:"input-group-append"},[n("button",{staticClass:"btn btn-primary",attrs:{type:"button"},on:{click:function(t){e.eventDispatcher.$emit("genreAdd")}}},[e._v("\n            +\n        ")]),e._v(" "),n("button",{staticClass:"btn btn-danger",attrs:{type:"button"},on:{click:function(t){e.eventDispatcher.$emit("genreRemove",e.index)}}},[e._v("\n            x\n        ")])])])},staticRenderFns:[]}},435:function(e,t,n){var r=n(0)(n(438),n(439),!1,function(e){n(436)},"data-v-7e8ae5a6",null);e.exports=r.exports},436:function(e,t,n){var r=n(437);"string"==typeof r&&(r=[[e.i,r,""]]),r.locals&&(e.exports=r.locals);n(62)("1fb5e04d",r,!0,{})},437:function(e,t,n){(e.exports=n(43)(!1)).push([e.i,"input[type=file][data-v-7e8ae5a6]{display:none}.file-drop[data-v-7e8ae5a6]{outline-style:dashed;background-color:rgba(200,220,255,.7);text-align:center;cursor:pointer}.drag[data-v-7e8ae5a6]{outline-color:blue;background-color:rgba(170,190,235,.7)}",""])},438:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["event","eventDispatcher","label","required","search","title","value"],data:function(){return{isDrag:!1}},computed:{message:function(){return this.value&&0!==this.value.length?1===this.value.length?"Selected File: "+this.value.item(0).name:void 0:"Select a File"}},methods:{fileChange:function(e){this.isDrag=!1;var t=e.dataTransfer||e.target;this.eventDispatcher.$emit(this.event,t.files)},triggerFileClick:function(){this.$refs.fileInput.click()}}}},439:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"file-upload"}},[e.required?n("span",[e._v("* ")]):e._e(),e._v("\n        "+e._s(e.label)+"\n        "),e.search?n("a",{attrs:{href:"https://www.google.com/search?q="+e.title+"+poster&tbm=isch",target:"_blank"}},[e._v(" (Google)")]):e._e(),e._v(" "),e.search?n("a",{attrs:{href:"https://www.impawards.com/search.php?search_data="+e.title,target:"_blank"}},[e._v(" (IMP Awards)")]):e._e()]),e._v(" "),n("div",{staticClass:"file-drop p-5",class:{drag:e.isDrag},attrs:{id:"file-upload"},on:{dragenter:function(t){t.preventDefault(),t.stopPropagation(),e.isDrag=!0},dragover:function(t){t.preventDefault(),t.stopPropagation(),e.isDrag=!0},dragleave:function(t){t.preventDefault(),t.stopPropagation(),e.isDrag=!1},drop:function(t){return t.preventDefault(),t.stopPropagation(),e.fileChange(t)},click:e.triggerFileClick}},[n("button",{staticClass:"btn btn-primary",attrs:{type:"button"}},[e._v("\n            Upload\n        ")])]),e._v(" "),n("span",[e._v("\n        "+e._s(e.message)+"\n    ")]),e._v(" "),n("input",{ref:"fileInput",attrs:{type:"file",accept:"image/*"},on:{change:e.fileChange}})])},staticRenderFns:[]}},440:function(e,t,n){var r=n(0)(n(441),n(442),!1,null,null,null);e.exports=r.exports},441:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","file","value"]}},442:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"imdb"}},[e._v("IMDb Search")]),e._v(" "),n("select",{staticClass:"form-control",attrs:{id:"imdb"},domProps:{value:e.value},on:{change:function(t){e.eventDispatcher.$emit("imdbSearchChange",t.target.value)}}},e._l(e.file.imdb.d,function(t){return n("option",{key:t.id,domProps:{value:t.id}},[e._v("\n            "+e._s(t.l)+" ("+e._s(t.y)+")\n        ")])}))])},staticRenderFns:[]}},443:function(e,t,n){var r=n(0)(n(444),n(445),!1,null,null,null);e.exports=r.exports},444:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","value"]}},445:function(e,t){e.exports={render:function(){var e=this.$createElement;return(this._self._c||e)("image-file-input",{attrs:{event:"jumbotronChange",eventDispatcher:this.eventDispatcher,label:"Jumbotron Image",required:!1,search:!1,value:this.value}})},staticRenderFns:[]}},446:function(e,t,n){var r=n(0)(n(447),n(448),!1,null,null,null);e.exports=r.exports},447:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["collections","drive","driveEventDispatcher","files","genres","imdbKey"],data:function(){return{apiTimeout:null,currentFile:this.files[0],eventDispatcher:new Vue({}),movies:[],posterType:"url",yearMax:(new Date).getFullYear(),yearMin:1900}},computed:{currentMovie:function(){var e=_.findIndex(this.movies,{file:this.currentFile.filename});return e<0?{}:this.movies[e]},submitDisabled:function(){return!this.valid()}},created:function(){this.eventDispatcher.$on("collectionAdd",this.collectionAdd),this.eventDispatcher.$on("collectionChange",this.collectionChange),this.eventDispatcher.$on("collectionRemove",this.collectionRemove),this.eventDispatcher.$on("genreAdd",this.genreAdd),this.eventDispatcher.$on("genreChange",this.genreChange),this.eventDispatcher.$on("genreRemove",this.genreRemove),this.eventDispatcher.$on("imdbSearchChange",this.imdbSearchChange),this.eventDispatcher.$on("jumbotronChange",this.jumbotronChange),this.eventDispatcher.$on("notesChange",this.notesChange),this.eventDispatcher.$on("posterChange",this.posterChange),this.eventDispatcher.$on("posterUrlChange",this.posterUrlChange),this.eventDispatcher.$on("submit",this.submit),this.eventDispatcher.$on("summaryChange",this.summaryChange),this.eventDispatcher.$on("titleChange",this.titleChange),this.eventDispatcher.$on("videoFileChange",this.videoFileChange),this.eventDispatcher.$on("yearReleasedChange",this.yearReleasedChange);for(var e=0;e<this.files.length;e++)this.movies.push({collections:[""],drive_id:this.drive,file:this.files[e].filename,genres:[""],imdb:this.files[e].imdb,jumbotron:null,notes:"",poster:null,posterUrl:"",summary:"",title:this.files[e].title,yearReleased:(new Date).getFullYear()})},methods:{collectionAdd:function(){this.currentMovie.collections.push("")},collectionChange:function(e){this.currentMovie.collections[e.index]=e.value},collectionDuplicates:function(){for(var e=[],t=0;t<this.currentMovie.collections.length;t++){var n=this.currentMovie.collections[t];if(e.indexOf(n)>=0)return!0;e.push(n)}return!1},collectionEmpty:function(){var e=this.currentMovie.collections;if(e.length>1)for(var t=0;t<e.length;t++)if(""===e[t])return!0;return!1},collectionRemove:function(e){var t=[""];this.currentMovie.collections.length>1&&(this.currentMovie.collections.splice(e,1),t=this.currentMovie.collections),this.currentMovie.collections=t},fileListToArray:function(e){for(var t=[],n=0;n<e.length;n++)void 0!==e.item(n)&&t.push(e.item(n));return t},genreAdd:function(){this.currentMovie.genres.push("")},genreChange:function(e){this.currentMovie.genres[e.index]=e.value},genreDuplicates:function(){for(var e=[],t=0;t<this.currentMovie.genres.length;t++){var n=this.currentMovie.genres[t];if(e.indexOf(n)>=0)return!0;e.push(n)}return!1},genreEmpty:function(){for(var e=0;e<this.currentMovie.genres.length;e++)if(""===this.currentMovie.genres[e])return!0;return!1},genreRemove:function(e){var t=[""];this.currentMovie.genres.length>1&&(this.currentMovie.genres.splice(e,1),t=this.currentMovie.genres),this.currentMovie.genres=t},imdbSearchChange:function(e){var t=_.findIndex(this.currentMovie.imdb.d,{id:e});if(t>=0){var n=this.currentMovie.imdb.d[t];this.currentMovie.title=n.l,this.currentMovie.yearReleased=n.y,n.i&&(this.currentMovie.posterUrl=n.i.imageUrl);var r={headers:{"X-RapidAPI-Host":"imdb8.p.rapidapi.com","X-RapidAPI-Key":this.imdbKey},params:{tconst:e}},i=this;axios.get("https://imdb8.p.rapidapi.com/title/get-overview-details",r).then(function(e){var t=[""];e.data.genres&&(t=e.data.genres),i.currentMovie.genres=t;var n="";e.data.plotOutline&&(n=e.data.plotOutline.text),!n&&e.data.plotSummary&&(n=e.data.plotSummary.text),i.currentMovie.summary=n}).catch(function(e){console.log(e)})}},jumbotronChange:function(e){this.currentMovie.jumbotron=filelist},notesChange:function(e){this.currentMovie.notes=e},posterChange:function(e){this.currentMovie.poster=e},posterEmpty:function(){return"file"==this.posterType&&!this.currentMovie.poster||"url"==this.posterType&&!this.currentMovie.posterUrl},posterUrlChange:function(e){this.currentMovie.posterUrl=e},submit:function(){var e=this.currentMovie;e.poster&&(e.poster=e.poster.item(0),delete e.posterUrl),e.posterUrl&&delete e.poster,e.jumbotron||delete e.jumbotron,e.jumbotron&&(e.jumbotron=e.jumbotron.item(0));var t=window.getFormData(e),n=this;axios.post("/api/upload/movie",t).then(function(e){console.log(e),n.driveEventDispatcher.$emit("movieSubmit",n.currentFile)}).catch(function(e){console.log(e)})},summaryChange:function(e){this.currentMovie.summary=e},summaryEmpty:function(){return""===this.currentMovie.summary},titleChange:function(e){if(this.currentMovie.title=e,""!==e){var t=this;clearTimeout(this.apiTimeout),this.apiTimeout=setTimeout(function(){var n={headers:{"X-RapidAPI-Host":"imdb8.p.rapidapi.com","X-RapidAPI-Key":t.imdbKey},params:{q:e}};axios.get("https://imdb8.p.rapidapi.com/title/auto-complete",n).then(function(e){t.currentMovie.imdb=e.data}).catch(function(e){console.log(e)})},1e3)}},titleEmpty:function(){return""===this.currentMovie.title},valid:function(){return!this.titleEmpty()&&this.yearValid()&&!this.summaryEmpty()&&!this.posterEmpty()&&!this.genreEmpty()&&!this.genreDuplicates()&&!this.collectionDuplicates()&&!this.collectionEmpty()},videoFileChange:function(e){this.currentFile=e},yearReleasedChange:function(e){this.currentMovie.yearReleased=parseInt(e)},yearValid:function(){return this.currentMovie.yearReleased<=this.yearMax&&this.currentMovie.yearReleased>=this.yearMin&&!isNaN(this.currentMovie.yearReleased)}}}},448:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return e.drive>0&&e.files.length>0?n("div",{staticClass:"row"},[n("div",{staticClass:"col"},[n("form",{attrs:{id:"movie-form",method:"POST",enctype:"multipart/form-data",novalidate:""}},[n("video-file-input",{attrs:{eventDispatcher:e.eventDispatcher,files:e.files,value:e.currentFile.filename}}),e._v(" "),n("imdb-search-input",{attrs:{eventDispatcher:e.eventDispatcher,file:e.currentMovie,value:null}}),e._v(" "),n("title-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.currentMovie.title}}),e._v(" "),e.titleEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Title field is required\n            ")]):e._e(),e._v(" "),n("year-released-input",{attrs:{eventDispatcher:e.eventDispatcher,title:e.currentMovie.title,value:e.currentMovie.yearReleased}}),e._v(" "),e.yearValid()?e._e():n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Year Released field is not valid\n            ")]),e._v(" "),n("summary-input",{attrs:{eventDispatcher:e.eventDispatcher,required:!0,value:e.currentMovie.summary}}),e._v(" "),e.summaryEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Summary field is required\n            ")]):e._e(),e._v(" "),n("notes-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.currentMovie.notes}}),e._v(" "),n("div",{staticClass:"form-check"},[n("input",{directives:[{name:"model",rawName:"v-model",value:e.posterType,expression:"posterType"}],staticClass:"form-check-input",attrs:{name:"poster-radio",type:"radio",id:"poster-url-radio",value:"url"},domProps:{checked:e._q(e.posterType,"url")},on:{change:function(t){e.posterType="url"}}}),e._v(" "),n("label",{staticClass:"form-check-label",attrs:{for:"poster-url-radio"}},[e._v("\n                    Link to File\n                ")])]),e._v(" "),n("div",{staticClass:"form-check"},[n("input",{directives:[{name:"model",rawName:"v-model",value:e.posterType,expression:"posterType"}],staticClass:"form-check-input",attrs:{name:"poster-radio",type:"radio",id:"poster-file-radio",value:"file"},domProps:{checked:e._q(e.posterType,"file")},on:{change:function(t){e.posterType="file"}}}),e._v(" "),n("label",{staticClass:"form-check-label",attrs:{for:"poster-file-radio"}},[e._v("\n                    Upload File\n                ")])]),e._v(" "),"url"==e.posterType?n("poster-url-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.currentMovie.posterUrl}}):e._e(),e._v(" "),"file"==e.posterType?n("poster-input",{attrs:{eventDispatcher:e.eventDispatcher,title:e.currentMovie.title,value:e.currentMovie.poster}}):e._e(),e._v(" "),e.posterEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Poster Image field is required\n            ")]):e._e(),e._v(" "),n("jumbotron-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.currentMovie.jumbotron}}),e._v(" "),n("multi-genre-input",{attrs:{allGenres:e.genres,eventDispatcher:e.eventDispatcher,value:e.currentMovie.genres}}),e._v(" "),e.genreEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Genres field is required\n            ")]):e._e(),e._v(" "),e.genreDuplicates()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("There are duplicate values in the Genre fields\n            ")]):e._e(),e._v(" "),n("multi-collection-input",{attrs:{allCollections:e.collections,eventDispatcher:e.eventDispatcher,value:e.currentMovie.collections}}),e._v(" "),e.collectionEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("There are empty values in the Collection fields\n            ")]):e._e(),e._v(" "),e.collectionDuplicates()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("There are duplicate values in the Collection fields\n            ")]):e._e(),e._v(" "),n("submit-input",{attrs:{eventDispatcher:e.eventDispatcher,disabled:e.submitDisabled}})],1)])]):e._e()},staticRenderFns:[]}},449:function(e,t,n){var r=n(0)(n(450),n(451),!1,null,null,null);e.exports=r.exports},450:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["allCollections","eventDispatcher","value"]}},451:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"collections"}},[e._v("Collections")]),e._v(" "),e._l(e.value,function(t,r){return n("collection-input",{key:r,attrs:{id:"collections",allCollections:e.allCollections,eventDispatcher:e.eventDispatcher,index:r,value:t}})})],2)},staticRenderFns:[]}},452:function(e,t,n){var r=n(0)(n(453),n(454),!1,null,null,null);e.exports=r.exports},453:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["allGenres","eventDispatcher","value"]}},454:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"genres"}},[e._v("* Genres")]),e._v(" "),e._l(e.value,function(t,r){return n("genre-input",{key:r,attrs:{id:"genres",allGenres:e.allGenres,eventDispatcher:e.eventDispatcher,index:r,value:t}})})],2)},staticRenderFns:[]}},455:function(e,t,n){var r=n(0)(n(456),n(457),!1,null,null,null);e.exports=r.exports},456:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","value"],methods:{notesChange:function(e){this.eventDispatcher.$emit("notesChange",e.target.value)}}}},457:function(e,t){e.exports={render:function(){var e=this.$createElement,t=this._self._c||e;return t("div",{staticClass:"form-group"},[t("label",{attrs:{for:"notes"}},[this._v("Notes")]),this._v(" "),t("input",{staticClass:"form-control font-italic",attrs:{id:"notes"},domProps:{value:this.value},on:{change:this.notesChange,input:this.notesChange}})])},staticRenderFns:[]}},458:function(e,t,n){var r=n(0)(n(459),n(460),!1,null,null,null);e.exports=r.exports},459:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","title","value"]}},460:function(e,t){e.exports={render:function(){var e=this.$createElement;return(this._self._c||e)("image-file-input",{attrs:{event:"posterChange",eventDispatcher:this.eventDispatcher,label:"Poster Image",required:!0,search:!0,title:this.title,value:this.value}})},staticRenderFns:[]}},461:function(e,t,n){var r=n(0)(n(462),n(463),!1,null,null,null);e.exports=r.exports},462:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","value"],computed:{validUrl:function(){return/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(this.value)}},methods:{urlChange:function(e){this.eventDispatcher.$emit("posterUrlChange",e.target.value)}}}},463:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"url"}},[e._v("* Poster Image")]),e._v(" "),e.validUrl?n("a",{attrs:{href:"javascript:void(0);","data-toggle":"modal","data-target":"#preview-modal"}},[e._v("\n        (Preview)\n    ")]):e._e(),e._v(" "),n("input",{staticClass:"form-control",attrs:{id:"url",placeholder:"https://www.example.com/images/picture.jpg"},domProps:{value:e.value},on:{change:e.urlChange,input:e.urlChange}}),e._v(" "),n("div",{staticClass:"modal",attrs:{id:"preview-modal",tabindex:"-1",role:"dialog"}},[n("div",{staticClass:"modal-dialog",attrs:{role:"document"}},[n("div",{staticClass:"modal-content"},[e._m(0),e._v(" "),n("div",{staticClass:"modal-body"},[n("img",{staticStyle:{width:"100%",height:"auto"},attrs:{src:e.value}})])])])])])},staticRenderFns:[function(){var e=this.$createElement,t=this._self._c||e;return t("div",{staticClass:"modal-header"},[t("h5",{staticClass:"modal-title"},[this._v("Preview")]),this._v(" "),t("button",{staticClass:"close",attrs:{type:"button","data-dismiss":"modal"}},[t("span",[this._v("×")])])])}]}},464:function(e,t,n){var r=n(0)(n(465),n(466),!1,null,null,null);e.exports=r.exports},465:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","value"],methods:{seasonChange:function(e){this.eventDispatcher.$emit("seasonChange",e.target.value)}}}},466:function(e,t){e.exports={render:function(){var e=this.$createElement,t=this._self._c||e;return t("div",{staticClass:"form-group"},[t("label",{attrs:{for:"season"}},[this._v("* Season")]),this._v(" "),t("input",{staticClass:"form-control",attrs:{type:"number",id:"season",min:"1"},domProps:{value:this.value},on:{change:this.seasonChange,input:this.seasonChange}})])},staticRenderFns:[]}},467:function(e,t,n){var r=n(0)(n(468),n(469),!1,null,null,null);e.exports=r.exports},468:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["collections","drive","driveEventDispatcher","genres"],data:function(){return{eventDispatcher:new Vue({}),show:{collections:[""],genres:[""],jumbotron:null,notes:"",poster:null,summary:"",title:"",yearStart:0,yearEnd:0},yearMax:(new Date).getFullYear(),yearMin:1900}},computed:{submitDisabled:function(){return!this.valid()}},created:function(){this.eventDispatcher.$on("collectionAdd",this.collectionAdd),this.eventDispatcher.$on("collectionChange",this.collectionChange),this.eventDispatcher.$on("collectionRemove",this.collectionRemove),this.eventDispatcher.$on("genreAdd",this.genreAdd),this.eventDispatcher.$on("genreChange",this.genreChange),this.eventDispatcher.$on("genreRemove",this.genreRemove),this.eventDispatcher.$on("jumbotronChange",this.jumbotronChange),this.eventDispatcher.$on("notesChange",this.notesChange),this.eventDispatcher.$on("posterChange",this.posterChange),this.eventDispatcher.$on("submit",this.submit),this.eventDispatcher.$on("summaryChange",this.summaryChange),this.eventDispatcher.$on("titleChange",this.titleChange),this.eventDispatcher.$on("yearEndChange",this.yearEndChange),this.eventDispatcher.$on("yearStartChange",this.yearStartChange),this.show.yearEnd=this.yearMax,this.show.yearStart=this.yearMax},methods:{collectionAdd:function(){this.show.collections.push("")},collectionChange:function(e){Vue.set(this.show.collections,e.index,e.value)},collectionDuplicates:function(){for(var e=[],t=0;t<this.show.collections.length;t++){var n=this.show.collections[t];if(e.indexOf(n)>=0)return!0;e.push(n)}return!1},collectionEmpty:function(){if(this.show.collections.length>1)for(var e=0;e<this.show.collections.length;e++)if(""===this.show.collections[e])return!0;return!1},collectionRemove:function(e){var t=[""];this.show.collections.length>1&&(this.show.collections.splice(e,1),t=this.show.collections),Vue.set(this.show,"collections",t)},genreAdd:function(){this.show.genres.push("")},genreChange:function(e){Vue.set(this.show.genres,e.index,e.value)},genreDuplicates:function(){for(var e=[],t=0;t<this.show.genres.length;t++){var n=this.show.genres[t];if(e.indexOf(n)>=0)return!0;e.push(n)}return!1},genreEmpty:function(){for(var e=0;e<this.show.genres.length;e++)if(""===this.show.genres[e])return!0;return!1},genreRemove:function(e){var t=[""];this.show.genres.length>1&&(this.show.genres.splice(e,1),t=this.show.genres),Vue.set(this.show,"genres",t)},jumbotronChange:function(e){this.show.jumbotron=e},notesChange:function(e){this.show.notes=e},posterChange:function(e){this.show.poster=e},posterEmpty:function(){return!this.show.poster},reset:function(){this.show.collections=[""],this.show.genres=[""],this.show.jumbotron=null,this.show.notes="",this.show.poster=null,this.show.summary="",this.show.title="",this.show.yearStart=this.yearMax,this.show.yearEnd=this.yearMax},startGreaterThanEnd:function(){return this.show.yearStart>this.show.yearEnd&&this.show.yearEnd>0},submit:function(){this.show.poster=this.show.poster.item(0),this.show.jumbotron||delete this.show.jumbotron,this.show.jumbotron&&(this.show.jumbotron=this.show.jumbotron.item(0));var e=window.getFormData(this.show),t=this;axios.post("/api/upload/show",e).then(function(e){console.log(e),t.reset()}).catch(function(e){console.log(e)})},summaryChange:function(e){this.show.summary=e},summaryEmpty:function(){return""===this.show.summary},titleChange:function(e){this.show.title=e},titleEmpty:function(){return""===this.show.title},valid:function(){return!this.startGreaterThanEnd()&&!this.titleEmpty()&&this.yearEndValid()&&this.yearStartValid()&&!this.summaryEmpty()&&!this.posterEmpty()&&!this.genreEmpty()&&!this.genreDuplicates()&&!this.collectionDuplicates()&&!this.collectionEmpty()},yearEndChange:function(e){this.show.yearEnd=parseInt(e)},yearStartChange:function(e){this.show.yearStart=parseInt(e)},yearEndValid:function(){return this.show.yearEnd<=this.yearMax&&(this.show.yearEnd>=this.yearMin||0==this.show.yearEnd)&&!isNaN(this.show.yearEnd)},yearStartValid:function(){return this.show.yearStart<=this.yearMax&&this.show.yearStart>=this.yearMin&&!isNaN(this.show.yearStart)}}}},469:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"row"},[n("div",{staticClass:"col"},[n("form",{attrs:{id:"show-form",method:"POST",enctype:"multipart/form-data",novalidate:""}},[n("title-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.show.title}}),e._v(" "),e.titleEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Title field is required\n            ")]):e._e(),e._v(" "),n("year-start-input",{attrs:{eventDispatcher:e.eventDispatcher,title:e.show.title,value:e.show.yearStart}}),e._v(" "),e.yearStartValid()?e._e():n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Year Start field is not valid\n            ")]),e._v(" "),e.startGreaterThanEnd()?n("div",{staticClass:"alert alert-warning mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Warning: ")]),e._v("The Year Start field should be less than the Year End\n            ")]):e._e(),e._v(" "),n("year-end-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.show.yearEnd}}),e._v(" "),e.yearEndValid()?e._e():n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Year End field is not valid\n            ")]),e._v(" "),n("summary-input",{attrs:{eventDispatcher:e.eventDispatcher,required:!0,value:e.show.summary}}),e._v(" "),e.summaryEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Summary field is required\n            ")]):e._e(),e._v(" "),n("notes-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.show.notes}}),e._v(" "),n("poster-input",{attrs:{eventDispatcher:e.eventDispatcher,title:e.show.title,value:e.show.poster}}),e._v(" "),e.posterEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Poster Image field is required\n            ")]):e._e(),e._v(" "),n("jumbotron-input",{attrs:{eventDispatcher:e.eventDispatcher,value:e.show.jumbotron}}),e._v(" "),n("multi-genre-input",{attrs:{allGenres:e.genres,eventDispatcher:e.eventDispatcher,value:e.show.genres}}),e._v(" "),e.genreEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("The Genres field is required\n            ")]):e._e(),e._v(" "),e.genreDuplicates()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("There are duplicate values in the Genre fields\n            ")]):e._e(),e._v(" "),n("multi-collection-input",{attrs:{allCollections:e.collections,eventDispatcher:e.eventDispatcher,value:e.show.collections}}),e._v(" "),e.collectionEmpty()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("There are empty values in the Collection fields\n            ")]):e._e(),e._v(" "),e.collectionDuplicates()?n("div",{staticClass:"alert alert-danger mb-2",attrs:{role:"alert"}},[n("strong",[e._v("Error: ")]),e._v("There are duplicate values in the Collection fields\n            ")]):e._e(),e._v(" "),n("submit-input",{attrs:{eventDispatcher:e.eventDispatcher,disabled:e.submitDisabled}})],1)])])},staticRenderFns:[]}},470:function(e,t,n){var r=n(0)(n(471),n(472),!1,null,null,null);e.exports=r.exports},471:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","shows","value"]}},472:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"show"}},[e._v("* Show")]),e._v(" "),n("select",{staticClass:"form-control",attrs:{id:"show"},domProps:{value:e.value},on:{change:function(t){e.eventDispatcher.$emit("showChange",t.target.value)}}},e._l(e.shows,function(t){return n("option",{domProps:{value:t.id}},[e._v("\n            "+e._s(t.title)+"\n        ")])}))])},staticRenderFns:[]}},473:function(e,t,n){var r=n(0)(n(476),n(477),!1,function(e){n(474)},"data-v-1096ecf0",null);e.exports=r.exports},474:function(e,t,n){var r=n(475);"string"==typeof r&&(r=[[e.i,r,""]]),r.locals&&(e.exports=r.locals);n(62)("5da8a4f3",r,!0,{})},475:function(e,t,n){(e.exports=n(43)(!1)).push([e.i,".btn-disabled[data-v-1096ecf0]{cursor:not-allowed}",""])},476:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["disabled","eventDispatcher"]}},477:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group d-flex justify-content-around mt-3 mb-0"},[n("button",{staticClass:"btn btn-success",class:{"btn-disabled":e.disabled},attrs:{disabled:e.disabled},on:{click:function(t){t.preventDefault(),t.stopPropagation(),e.eventDispatcher.$emit("submit")}}},[e._v("\n        Submit\n    ")])])},staticRenderFns:[]}},478:function(e,t,n){var r=n(0)(n(479),n(480),!1,null,null,null);e.exports=r.exports},479:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","required","value"],methods:{summaryChange:function(e){this.eventDispatcher.$emit("summaryChange",e.target.value)}}}},480:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"summary"}},[e.required?n("span",[e._v("* ")]):e._e(),e._v("Summary\n    ")]),e._v(" "),n("textarea",{staticClass:"form-control",attrs:{id:"summary",rows:"4"},domProps:{value:e.value},on:{change:e.summaryChange,input:e.summaryChange}})])},staticRenderFns:[]}},481:function(e,t,n){var r=n(0)(n(482),n(483),!1,null,null,null);e.exports=r.exports},482:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","value"],methods:{titleChange:function(e){this.eventDispatcher.$emit("titleChange",e.target.value)}}}},483:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"title"}},[e._v("* Title")]),e._v(" "),n("a",{attrs:{href:"https://www.imdb.com/find?q="+e.value,target:"_blank"}},[e._v("(IMDb Search)")]),e._v(" "),n("input",{staticClass:"form-control",attrs:{id:"title"},domProps:{value:e.value},on:{change:e.titleChange,input:e.titleChange}})])},staticRenderFns:[]}},484:function(e,t,n){var r=n(0)(n(485),n(486),!1,null,null,null);e.exports=r.exports},485:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","files","value"]}},486:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"file"}},[e._v("File")]),e._v(" "),n("select",{staticClass:"form-control",attrs:{id:"file"},domProps:{value:e.value},on:{change:function(t){e.eventDispatcher.$emit("videoFileChange",t.target.value)}}},e._l(e.files,function(t){return n("option",{key:t.filename,domProps:{value:t.filename}},[e._v("\n            "+e._s(t.filename)+"\n        ")])}))])},staticRenderFns:[]}},487:function(e,t,n){var r=n(0)(n(488),n(489),!1,null,null,null);e.exports=r.exports},488:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","value"],data:function(){return{max:(new Date).getFullYear(),min:0}}}},489:function(e,t){e.exports={render:function(){var e=this.$createElement;return(this._self._c||e)("year-input",{attrs:{event:"yearEndChange",eventDispatcher:this.eventDispatcher,label:"Year End",max:this.max,min:this.min,value:this.value}})},staticRenderFns:[]}},490:function(e,t,n){var r=n(0)(n(491),n(492),!1,null,null,null);e.exports=r.exports},491:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["event","eventDispatcher","label","max","min","title","value"],methods:{yearChange:function(e){this.eventDispatcher.$emit(this.event,e.target.value)}}}},492:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"form-group"},[n("label",{attrs:{for:"year"}},[e._v("\n        * "+e._s(e.label)+"\n    ")]),e._v(" "),n("input",{staticClass:"form-control",attrs:{type:"number",id:"year",min:e.min,max:e.max},domProps:{value:e.value},on:{change:e.yearChange,input:e.yearChange}})])},staticRenderFns:[]}},493:function(e,t,n){var r=n(0)(n(494),n(495),!1,null,null,null);e.exports=r.exports},494:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","title","value"],data:function(){return{max:(new Date).getFullYear(),min:1900}}}},495:function(e,t){e.exports={render:function(){var e=this.$createElement;return(this._self._c||e)("year-input",{attrs:{event:"yearReleasedChange",eventDispatcher:this.eventDispatcher,label:"Year Released",max:this.max,min:this.min,title:this.title,value:this.value}})},staticRenderFns:[]}},496:function(e,t,n){var r=n(0)(n(497),n(498),!1,null,null,null);e.exports=r.exports},497:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={props:["eventDispatcher","title","value"],data:function(){return{max:(new Date).getFullYear(),min:1900}}}},498:function(e,t){e.exports={render:function(){var e=this.$createElement;return(this._self._c||e)("year-input",{attrs:{event:"yearStartChange",eventDispatcher:this.eventDispatcher,label:"Year Start",max:this.max,min:this.min,title:this.title,value:this.value}})},staticRenderFns:[]}},62:function(e,t,n){var r="undefined"!=typeof document;if("undefined"!=typeof DEBUG&&DEBUG&&!r)throw new Error("vue-style-loader cannot be used in a non-browser environment. Use { target: 'node' } in your Webpack config to indicate a server-rendering environment.");var i=n(91),s={},a=r&&(document.head||document.getElementsByTagName("head")[0]),o=null,l=0,c=!1,u=function(){},h=null,p="data-vue-ssr-id",d="undefined"!=typeof navigator&&/msie [6-9]\b/.test(navigator.userAgent.toLowerCase());function v(e){for(var t=0;t<e.length;t++){var n=e[t],r=s[n.id];if(r){r.refs++;for(var i=0;i<r.parts.length;i++)r.parts[i](n.parts[i]);for(;i<n.parts.length;i++)r.parts.push(m(n.parts[i]));r.parts.length>n.parts.length&&(r.parts.length=n.parts.length)}else{var a=[];for(i=0;i<n.parts.length;i++)a.push(m(n.parts[i]));s[n.id]={id:n.id,refs:1,parts:a}}}}function f(){var e=document.createElement("style");return e.type="text/css",a.appendChild(e),e}function m(e){var t,n,r=document.querySelector("style["+p+'~="'+e.id+'"]');if(r){if(c)return u;r.parentNode.removeChild(r)}if(d){var i=l++;r=o||(o=f()),t=b.bind(null,r,i,!1),n=b.bind(null,r,i,!0)}else r=f(),t=function(e,t){var n=t.css,r=t.media,i=t.sourceMap;r&&e.setAttribute("media",r);h.ssrId&&e.setAttribute(p,t.id);i&&(n+="\n/*# sourceURL="+i.sources[0]+" */",n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(i))))+" */");if(e.styleSheet)e.styleSheet.cssText=n;else{for(;e.firstChild;)e.removeChild(e.firstChild);e.appendChild(document.createTextNode(n))}}.bind(null,r),n=function(){r.parentNode.removeChild(r)};return t(e),function(r){if(r){if(r.css===e.css&&r.media===e.media&&r.sourceMap===e.sourceMap)return;t(e=r)}else n()}}e.exports=function(e,t,n,r){c=n,h=r||{};var a=i(e,t);return v(a),function(t){for(var n=[],r=0;r<a.length;r++){var o=a[r];(l=s[o.id]).refs--,n.push(l)}t?v(a=i(e,t)):a=[];for(r=0;r<n.length;r++){var l;if(0===(l=n[r]).refs){for(var c=0;c<l.parts.length;c++)l.parts[c]();delete s[l.id]}}}};var g,_=(g=[],function(e,t){return g[e]=t,g.filter(Boolean).join("\n")});function b(e,t,n,r){var i=n?"":r.css;if(e.styleSheet)e.styleSheet.cssText=_(t,i);else{var s=document.createTextNode(i),a=e.childNodes;a[t]&&e.removeChild(a[t]),a.length?e.insertBefore(s,a[t]):e.appendChild(s)}}},91:function(e,t){e.exports=function(e,t){for(var n=[],r={},i=0;i<t.length;i++){var s=t[i],a=s[0],o={id:e+":"+i,css:s[1],media:s[2],sourceMap:s[3]};r[a]?r[a].parts.push(o):n.push(r[a]={id:a,parts:[o]})}return n}}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 416);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 0:
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+
+/***/ 416:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(417);
+
+
+/***/ }),
+
+/***/ 417:
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * SETUP COMPONENTS
+ */
+Vue.component('collection-input', __webpack_require__(418));
+Vue.component('drive-form', __webpack_require__(421));
+Vue.component('episode-file-input', __webpack_require__(424));
+Vue.component('episode-form', __webpack_require__(427));
+Vue.component('episode-number-input', __webpack_require__(430));
+Vue.component('genre-input', __webpack_require__(433));
+Vue.component('image-file-input', __webpack_require__(436));
+Vue.component('image-url-input', __webpack_require__(441));
+Vue.component('imdb-search-input', __webpack_require__(444));
+Vue.component('jumbotron-input', __webpack_require__(447));
+Vue.component('movie-form', __webpack_require__(450));
+Vue.component('multi-collection-input', __webpack_require__(453));
+Vue.component('multi-genre-input', __webpack_require__(456));
+Vue.component('multi-image-input', __webpack_require__(459));
+Vue.component('notes-input', __webpack_require__(462));
+Vue.component('poster-input', __webpack_require__(465));
+Vue.component('season-input', __webpack_require__(468));
+Vue.component('show-form', __webpack_require__(471));
+Vue.component('shows-input', __webpack_require__(474));
+Vue.component('submit-input', __webpack_require__(477));
+Vue.component('summary-input', __webpack_require__(482));
+Vue.component('title-input', __webpack_require__(485));
+Vue.component('video-file-input', __webpack_require__(488));
+Vue.component('year-end-input', __webpack_require__(491));
+Vue.component('year-input', __webpack_require__(494));
+Vue.component('year-released-input', __webpack_require__(497));
+Vue.component('year-start-input', __webpack_require__(500));
+
+/*
+ * ROOT VUE INSTANCE
+ */
+var app = new Vue({
+    el: '#app',
+
+    data: {
+        initialState: window.__INITIAL_STATE__
+    }
+});
+
+/***/ }),
+
+/***/ 418:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(419)
+/* template */
+var __vue_template__ = __webpack_require__(420)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\CollectionInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1ee320d5", Component.options)
+  } else {
+    hotAPI.reload("data-v-1ee320d5", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 419:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// TODO abstract this and GenreInput to another more generic component that handles both
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['allCollections', 'eventDispatcher', 'index', 'value'],
+
+    methods: {
+        collectionChange: function collectionChange(event) {
+            this.change(event.target.value);
+        },
+
+        collectionSet: function collectionSet(collection) {
+            this.change(collection);
+        },
+
+        change: function change(value) {
+            this.eventDispatcher.$emit('collectionChange', {
+                index: this.index,
+                value: value
+            });
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 420:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "input-group mb-3" }, [
+    _c("div", { staticClass: "input-group-prepend" }, [
+      _c("div", { staticClass: "dropdown" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary dropdown-toggle",
+            attrs: { type: "button", "data-toggle": "dropdown" }
+          },
+          [_vm._v("\n                Options\n            ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "dropdown-menu" },
+          _vm._l(_vm.allCollections, function(c, index) {
+            return _c(
+              "a",
+              {
+                key: index,
+                staticClass: "dropdown-item",
+                attrs: { href: "javascript:void(0);" },
+                on: {
+                  click: function($event) {
+                    _vm.collectionSet(c)
+                  }
+                }
+              },
+              [
+                _vm._v(
+                  "\n                    " + _vm._s(c) + "\n                "
+                )
+              ]
+            )
+          })
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("input", {
+      staticClass: "form-control",
+      domProps: { value: _vm.value },
+      on: { change: _vm.collectionChange, input: _vm.collectionChange }
+    }),
+    _vm._v(" "),
+    _c("div", { staticClass: "input-group-append" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              _vm.eventDispatcher.$emit("collectionAdd")
+            }
+          }
+        },
+        [_vm._v("\n            +\n        ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              _vm.eventDispatcher.$emit("collectionRemove", _vm.index)
+            }
+          }
+        },
+        [_vm._v("\n            x\n        ")]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1ee320d5", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 421:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(422)
+/* template */
+var __vue_template__ = __webpack_require__(423)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\DriveForm.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-78bffb92", Component.options)
+  } else {
+    hotAPI.reload("data-v-78bffb92", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 422:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            currentDrive: 0,
+            drives: window.__INITIAL_STATE__.drives,
+            eventDispatcher: new Vue({}),
+            pending: window.__INITIAL_STATE__.pending,
+            shows: this.sortShows(window.__INITIAL_STATE__.shows)
+        };
+    },
+
+
+    computed: {
+        collections: function collections() {
+            var collections = [];
+
+            for (var i = 0; i < window.__INITIAL_STATE__.collections.length; i++) {
+                collections.push(window.__INITIAL_STATE__.collections[i].name);
+            }
+
+            return collections;
+        },
+
+        episodes: function episodes() {
+            if (this.currentDrive <= 0 || typeof this.pending[this.currentDrive] === 'undefined') {
+                return [];
+            }
+
+            return this.pending[this.currentDrive].episodes;
+        },
+
+        genres: function genres() {
+            var genres = [];
+
+            for (var i = 0; i < window.__INITIAL_STATE__.genres.length; i++) {
+                genres.push(window.__INITIAL_STATE__.genres[i].name);
+            }
+
+            return genres;
+        },
+
+        movies: function movies() {
+            if (this.currentDrive <= 0 || typeof this.pending[this.currentDrive] === 'undefined') {
+                return [];
+            }
+
+            return this.pending[this.currentDrive].movies;
+        },
+
+        newUploadsMessage: function newUploadsMessage() {
+            if (this.currentDrive <= 0 || typeof this.pending[this.currentDrive] === 'undefined') {
+                return '';
+            }
+
+            var newVideos = 0;
+
+            if (this.pending[this.currentDrive].movies.length > 0) {
+                newVideos += this.pending[this.currentDrive].movies.length;
+            }
+
+            if (this.pending[this.currentDrive].episodes.length > 0) {
+                newVideos += this.pending[this.currentDrive].episodes.length;
+            }
+
+            var message = (newVideos > 0 ? newVideos : 'No') + ' New Upload' + (newVideos === 1 ? '' : 's');
+
+            return message;
+        }
+    },
+
+    created: function created() {
+        if (this.drives.length > 0) {
+            // Set the currentDrive
+            this.currentDrive = this.drives[0].id;
+
+            // Listen for child form events
+            this.eventDispatcher.$on('movieSubmit', this.movieSubmit);
+            this.eventDispatcher.$on('episodeSubmit', this.episodeSubmit);
+        }
+    },
+
+
+    methods: {
+        episodeSubmit: function episodeSubmit(file) {
+            var index = this.pending[this.currentDrive].episodes.indexOf(file);
+            this.pending[this.currentDrive].episodes.splice(index, 1);
+        },
+        movieSubmit: function movieSubmit(movie) {
+            var index = _.findIndex(this.pending[this.currentDrive].movies, { filename: movie.filename });
+            if (index >= 0) {
+                this.pending[this.currentDrive].movies.splice(index, 1);
+            }
+        },
+        sortShows: function sortShows(shows) {
+            return shows.sort(function (a, b) {
+                return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+            });
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 423:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [
+        _c("form", { staticClass: "form-inline", attrs: { novalidate: "" } }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "drive" } }, [_vm._v("Hard drive")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.currentDrive,
+                    expression: "currentDrive"
+                  }
+                ],
+                staticClass: "form-control ml-3",
+                attrs: { id: "drive" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.currentDrive = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c(
+                  "option",
+                  { key: 0, attrs: { selected: "" }, domProps: { value: 0 } },
+                  [_vm._v("Please Select...")]
+                ),
+                _vm._v(" "),
+                _vm._l(_vm.drives, function(drive) {
+                  return _c(
+                    "option",
+                    { key: drive.id, domProps: { value: drive.id } },
+                    [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(drive.name) +
+                          "\n                        "
+                      )
+                    ]
+                  )
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _vm.currentDrive > 0
+              ? _c("h3", { staticClass: "d-inline mb-0 ml-3" }, [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.newUploadsMessage) +
+                      "\n                    "
+                  )
+                ])
+              : _vm._e()
+          ])
+        ]),
+        _c("hr")
+      ])
+    ]),
+    _vm._v(" "),
+    _vm.currentDrive > 0
+      ? _c("div", [
+          _c(
+            "div",
+            { staticClass: "card", attrs: { role: "tablist" } },
+            [
+              _c("h5", { staticClass: "card-header mb-0" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: {
+                      "data-toggle": "collapse",
+                      href: "#movie-form-container",
+                      role: "tab"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Add Movies (" +
+                        _vm._s(_vm.movies.length) +
+                        " pending)\n                "
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("movie-form", {
+                staticClass: "card-body collapse",
+                attrs: {
+                  id: "movie-form-container",
+                  role: "tabpanel",
+                  collections: _vm.collections,
+                  drive: _vm.currentDrive,
+                  driveEventDispatcher: _vm.eventDispatcher,
+                  files: _vm.movies,
+                  genres: _vm.genres
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card", attrs: { role: "tablist" } },
+            [
+              _c("h5", { staticClass: "card-header mb-0" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: {
+                      "data-toggle": "collapse",
+                      href: "#episode-form-container",
+                      role: "tab"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Add Episodes (" +
+                        _vm._s(_vm.episodes.length) +
+                        " pending)\n                "
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("episode-form", {
+                staticClass: "card-body collapse",
+                attrs: {
+                  id: "episode-form-container",
+                  role: "tabpanel",
+                  drive: _vm.currentDrive,
+                  driveEventDispatcher: _vm.eventDispatcher,
+                  files: _vm.episodes,
+                  shows: _vm.shows
+                }
+              })
+            ],
+            1
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "card", attrs: { role: "tablist" } },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("show-form", {
+          staticClass: "card-body collapse",
+          attrs: {
+            id: "show-form-container",
+            role: "tabpanel",
+            collections: _vm.collections,
+            drive: _vm.currentDrive,
+            driveEventDispatcher: _vm.eventDispatcher,
+            genres: _vm.genres
+          }
+        })
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h5", { staticClass: "card-header mb-0" }, [
+      _c(
+        "a",
+        {
+          attrs: {
+            "data-toggle": "collapse",
+            href: "#show-form-container",
+            role: "tab"
+          }
+        },
+        [_vm._v("\n                Add Shows\n            ")]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-78bffb92", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 424:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(425)
+/* template */
+var __vue_template__ = __webpack_require__(426)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\EpisodeFileInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-9b3c1a8c", Component.options)
+  } else {
+    hotAPI.reload("data-v-9b3c1a8c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 425:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// TODO figure out how to do bootstrap labels without ID
+// TODO can probably get rid of this component and just have videofileinput once I add IMDb API support on episodes
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'files', 'value']
+});
+
+/***/ }),
+
+/***/ 426:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: "file" } }, [_vm._v("File")]),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        staticClass: "form-control",
+        attrs: { id: "file" },
+        domProps: { value: _vm.value },
+        on: {
+          change: function($event) {
+            _vm.eventDispatcher.$emit("videoFileChange", $event.target.value)
+          }
+        }
+      },
+      _vm._l(_vm.files, function(f) {
+        return _c("option", { key: f, domProps: { value: f } }, [
+          _vm._v("\n            " + _vm._s(f) + "\n        ")
+        ])
+      })
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-9b3c1a8c", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 427:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(428)
+/* template */
+var __vue_template__ = __webpack_require__(429)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\EpisodeForm.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f7d6c530", Component.options)
+  } else {
+    hotAPI.reload("data-v-f7d6c530", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 428:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// TODO abstract EpisodeForm and MovieForm into generic component
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['drive', 'driveEventDispatcher', 'files', 'shows'],
+
+    data: function data() {
+        return {
+            currentFile: this.files[0],
+            eventDispatcher: new Vue({}),
+            episodes: {}
+        };
+    },
+
+
+    computed: {
+        currentFileEscaped: function currentFileEscaped() {
+            return this.escapeFile(this.currentFile);
+        },
+        submitDisabled: function submitDisabled() {
+            return !this.valid();
+        }
+    },
+
+    created: function created() {
+        // Register events
+        this.eventDispatcher.$on('episodeNumberChange', this.episodeNumberChange);
+        this.eventDispatcher.$on('seasonChange', this.seasonChange);
+        this.eventDispatcher.$on('showChange', this.showChange);
+        this.eventDispatcher.$on('submit', this.submit);
+        this.eventDispatcher.$on('summaryChange', this.summaryChange);
+        this.eventDispatcher.$on('titleChange', this.titleChange);
+        this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
+
+        // Initialize movies array
+        for (var i = 0; i < this.files.length; i++) {
+            var objectDefaults = {
+                drive_id: this.drive,
+                episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
+                file: this.files[i],
+                season: this.getSeasonFromFile(this.files[i]),
+                media_id: this.getShowFromFile(this.files[i]),
+                summary: '',
+                title: ''
+            };
+
+            // Use set function to maintain reactivity
+            Vue.set(this.episodes, this.escapeFile(this.files[i]), objectDefaults);
+        }
+    },
+
+
+    methods: {
+        episodeNumberChange: function episodeNumberChange(episodeNumber) {
+            Vue.set(this.episodes[this.currentFileEscaped], 'episodeNumber', parseInt(episodeNumber));
+        },
+        episodeNumberValid: function episodeNumberValid() {
+            return this.numberValid(this.episodes[this.currentFileEscaped].episodeNumber);
+        },
+        escapeFile: function escapeFile(file) {
+            return file.replace('.', '');
+        },
+        getEpisodeNumberFromFile: function getEpisodeNumberFromFile(file) {
+            return parseInt(file.replace(/.+_s\d{2}-e([0-9]{2}).+/, '$1'));
+        },
+        getSeasonFromFile: function getSeasonFromFile(file) {
+            return parseInt(file.replace(/.+_s(\d{2})-e.+/, '$1'));
+        },
+        getShowFromFile: function getShowFromFile(file) {
+            var fileShow = file.replace(/(.+)_(.+)/, '$1').replace(/-/g, ' ');
+
+            for (var i = 0; i < this.shows.length; i++) {
+                // TODO strip out things like - : ' from show title
+                if (fileShow.toLowerCase().localeCompare(this.shows[i].title.toLowerCase()) === 0) {
+                    return this.shows[i].id;
+                }
+            }
+
+            return this.shows[0].id;
+        },
+        numberValid: function numberValid(number) {
+            return number > 0 && !isNaN(number);
+        },
+        seasonChange: function seasonChange(season) {
+            Vue.set(this.episodes[this.currentFileEscaped], 'season', parseInt(season));
+        },
+        seasonValid: function seasonValid() {
+            return this.numberValid(this.episodes[this.currentFileEscaped].season);
+        },
+        showChange: function showChange(show) {
+            Vue.set(this.episodes[this.currentFileEscaped], 'media_id', show);
+        },
+        submit: function submit() {
+            var episode = this.episodes[this.currentFileEscaped];
+
+            var formData = window.getFormData(episode);
+
+            var self = this;
+
+            axios.post('/api/upload/episode', formData).then(function (response) {
+                console.log(response);
+                self.driveEventDispatcher.$emit('episodeSubmit', self.currentFile);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        summaryChange: function summaryChange(summary) {
+            Vue.set(this.episodes[this.currentFileEscaped], 'summary', summary);
+        },
+        titleChange: function titleChange(title) {
+            Vue.set(this.episodes[this.currentFileEscaped], 'title', title);
+        },
+        titleEmpty: function titleEmpty() {
+            return this.episodes[this.currentFileEscaped].title === '';
+        },
+        valid: function valid() {
+            return !this.titleEmpty() && this.seasonValid() && this.episodeNumberValid();
+        },
+        videoFileChange: function videoFileChange(file) {
+            this.currentFile = file;
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 429:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.drive > 0 && _vm.files.length > 0
+    ? _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "form",
+            {
+              attrs: {
+                id: "episode-form",
+                method: "POST",
+                enctype: "multipart/form-data",
+                novalidate: ""
+              }
+            },
+            [
+              _c("episode-file-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  files: _vm.files,
+                  value: _vm.currentFile
+                }
+              }),
+              _vm._v(" "),
+              _c("shows-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  shows: _vm.shows,
+                  value: _vm.episodes[_vm.currentFileEscaped].media_id
+                }
+              }),
+              _vm._v(" "),
+              _c("season-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.episodes[_vm.currentFileEscaped].season
+                }
+              }),
+              _vm._v(" "),
+              !_vm.seasonValid()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Season field is not valid\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("episode-number-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.episodes[_vm.currentFileEscaped].episodeNumber
+                }
+              }),
+              _vm._v(" "),
+              !_vm.episodeNumberValid()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v(
+                        "The Episode Number field is not valid\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("title-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.episodes[_vm.currentFileEscaped].title
+                }
+              }),
+              _vm._v(" "),
+              _vm.titleEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Title field is required\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("summary-input", {
+                attrs: { eventDispatcher: _vm.eventDispatcher, required: false }
+              }),
+              _vm._v(" "),
+              _c("submit-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  disabled: _vm.submitDisabled
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ])
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-f7d6c530", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 43:
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+
+/***/ 430:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(431)
+/* template */
+var __vue_template__ = __webpack_require__(432)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\EpisodeNumberInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3046368d", Component.options)
+  } else {
+    hotAPI.reload("data-v-3046368d", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 431:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'value'],
+
+    methods: {
+        episodeNumberChange: function episodeNumberChange(event) {
+            this.eventDispatcher.$emit('episodeNumberChange', event.target.value);
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 432:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: "episode-number" } }, [
+      _vm._v("* Episode Number")
+    ]),
+    _vm._v(" "),
+    _c("input", {
+      staticClass: "form-control",
+      attrs: { type: "number", id: "episode-number", min: "1" },
+      domProps: { value: _vm.value },
+      on: { change: _vm.episodeNumberChange, input: _vm.episodeNumberChange }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3046368d", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 433:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(434)
+/* template */
+var __vue_template__ = __webpack_require__(435)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\GenreInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-08b7e40e", Component.options)
+  } else {
+    hotAPI.reload("data-v-08b7e40e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 434:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['allGenres', 'eventDispatcher', 'index', 'value'],
+
+    methods: {
+        genreChange: function genreChange(event) {
+            this.change(event.target.value);
+        },
+
+        genreSet: function genreSet(genre) {
+            this.change(genre);
+        },
+
+        change: function change(value) {
+            this.eventDispatcher.$emit('genreChange', {
+                index: this.index,
+                value: value
+            });
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 435:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "input-group mb-3" }, [
+    _c("div", { staticClass: "input-group-prepend" }, [
+      _c("div", { staticClass: "dropdown" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary dropdown-toggle",
+            attrs: { type: "button", "data-toggle": "dropdown" }
+          },
+          [_vm._v("\n                Options\n            ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "dropdown-menu" },
+          _vm._l(_vm.allGenres, function(g, index) {
+            return _c(
+              "a",
+              {
+                key: index,
+                staticClass: "dropdown-item",
+                attrs: { href: "javascript:void(0);" },
+                on: {
+                  click: function($event) {
+                    _vm.genreSet(g)
+                  }
+                }
+              },
+              [
+                _vm._v(
+                  "\n                    " + _vm._s(g) + "\n                "
+                )
+              ]
+            )
+          })
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("input", {
+      staticClass: "form-control",
+      domProps: { value: _vm.value },
+      on: { change: _vm.genreChange, input: _vm.genreChange }
+    }),
+    _vm._v(" "),
+    _c("div", { staticClass: "input-group-append" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              _vm.eventDispatcher.$emit("genreAdd")
+            }
+          }
+        },
+        [_vm._v("\n            +\n        ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              _vm.eventDispatcher.$emit("genreRemove", _vm.index)
+            }
+          }
+        },
+        [_vm._v("\n            x\n        ")]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-08b7e40e", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 436:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(437)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(439)
+/* template */
+var __vue_template__ = __webpack_require__(440)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-6aae231a"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\ImageFileInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6aae231a", Component.options)
+  } else {
+    hotAPI.reload("data-v-6aae231a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 437:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(438);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(62)("56c27c5c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6aae231a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImageFileInput.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6aae231a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImageFileInput.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 438:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(43)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ninput[type=\"file\"][data-v-6aae231a] {\n    display: none;\n}\n.file-drop[data-v-6aae231a] {\n    outline-style: dashed;\n    background-color: rgba(200,220,255,0.7);\n    text-align: center;\n    cursor: pointer;\n}\n.drag[data-v-6aae231a] {\n    outline-color: blue;\n    background-color: rgba(170,190,235,0.7);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 439:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// TODO fix bug where escaping from file selection without picking anything still sets a FileList to value
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'value'],
+
+    data: function data() {
+        return {
+            isDrag: false
+        };
+    },
+
+
+    computed: {
+        message: function message() {
+            if (!this.value || this.value.length === 0) {
+                return 'Select a File';
+            }
+
+            if (this.value.length === 1) {
+                return 'Selected File: ' + this.value.item(0).name;
+            }
+        }
+    },
+
+    methods: {
+        fileChange: function fileChange(event) {
+            this.isDrag = false;
+            var dataTransfer = event.dataTransfer || event.target;
+            this.eventDispatcher.$emit('imageFileChange', dataTransfer.files);
+        },
+        triggerFileClick: function triggerFileClick() {
+            this.$refs.fileInput.click();
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 440:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c(
+      "div",
+      {
+        staticClass: "file-drop p-5",
+        class: { drag: _vm.isDrag },
+        on: {
+          dragenter: function($event) {
+            $event.preventDefault()
+            $event.stopPropagation()
+            _vm.isDrag = true
+          },
+          dragover: function($event) {
+            $event.preventDefault()
+            $event.stopPropagation()
+            _vm.isDrag = true
+          },
+          dragleave: function($event) {
+            $event.preventDefault()
+            $event.stopPropagation()
+            _vm.isDrag = false
+          },
+          drop: function($event) {
+            $event.preventDefault()
+            $event.stopPropagation()
+            return _vm.fileChange($event)
+          },
+          click: _vm.triggerFileClick
+        }
+      },
+      [
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", attrs: { type: "button" } },
+          [_vm._v("\n            Upload\n        ")]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c("span", [_vm._v("\n        " + _vm._s(_vm.message) + "\n    ")]),
+    _vm._v(" "),
+    _c("input", {
+      ref: "fileInput",
+      attrs: { type: "file", accept: "image/*" },
+      on: { change: _vm.fileChange }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6aae231a", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 441:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(442)
+/* template */
+var __vue_template__ = __webpack_require__(443)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\ImageUrlInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e3fb4b42", Component.options)
+  } else {
+    hotAPI.reload("data-v-e3fb4b42", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 442:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'value'],
+
+    data: function data() {
+        return {
+            id: null,
+            image: null,
+            imageLoaded: false
+        };
+    },
+    mounted: function mounted() {
+        this.id = this._uid;
+        /*
+            Reapply src here so that the preview button is correctly enabled or
+            disabled when switching between image URL or file for poster input.
+        */
+        this.image.src = this.value;
+    },
+    created: function created() {
+        this.image = new Image();
+        this.image.onload = this.onload;
+        this.image.onerror = this.onerror;
+    },
+
+
+    watch: {
+        /*
+            Watch for changes in value prop so that imageLoaded will
+            be updated when value is set in MovieForm or ShowForm.
+        */
+        value: function value(newValue) {
+            this.image.src = newValue;
+        }
+    },
+
+    methods: {
+        onerror: function onerror() {
+            this.imageLoaded = false;
+        },
+        onload: function onload() {
+            this.imageLoaded = true;
+        },
+        urlChange: function urlChange(event) {
+            this.image.src = event.target.value;
+            this.eventDispatcher.$emit('imageUrlChange', event.target.value);
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 443:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("div", { staticClass: "input-group" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary input-group-prepend",
+          attrs: {
+            "data-toggle": "modal",
+            "data-target": "#" + _vm.id,
+            disabled: !_vm.imageLoaded,
+            type: "button"
+          }
+        },
+        [_vm._v("\n            Preview\n        ")]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { placeholder: "https://www.example.com/images/picture.jpg" },
+        domProps: { value: _vm.value },
+        on: { change: _vm.urlChange, input: _vm.urlChange }
+      })
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal",
+        attrs: { id: _vm.id, tabindex: "-1", role: "dialog" }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("img", {
+                  staticStyle: { width: "100%", height: "auto" },
+                  attrs: { src: _vm.value }
+                })
+              ])
+            ])
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Preview")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_c("span", [_vm._v("×")])]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e3fb4b42", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 444:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(445)
+/* template */
+var __vue_template__ = __webpack_require__(446)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\IMDbSearchInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-8ab31fee", Component.options)
+  } else {
+    hotAPI.reload("data-v-8ab31fee", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 445:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'results', 'value'],
+
+    data: function data() {
+        return {
+            id: null
+        };
+    },
+    mounted: function mounted() {
+        this.id = this._uid;
+    }
+});
+
+/***/ }),
+
+/***/ 446:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: _vm.id } }, [_vm._v("IMDb Search")]),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        staticClass: "form-control",
+        attrs: { id: _vm.id },
+        domProps: { value: _vm.value },
+        on: {
+          change: function($event) {
+            _vm.eventDispatcher.$emit("imdbSearchChange", $event.target.value)
+          }
+        }
+      },
+      _vm._l(_vm.results.d, function(result) {
+        return _c(
+          "option",
+          { key: result.id, domProps: { value: result.id } },
+          [
+            _vm._v(
+              "\n            " +
+                _vm._s(result.l) +
+                " (" +
+                _vm._s(result.yr ? result.yr : result.y) +
+                ")\n        "
+            )
+          ]
+        )
+      })
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-8ab31fee", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 447:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(448)
+/* template */
+var __vue_template__ = __webpack_require__(449)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\JumbotronInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-625992f6", Component.options)
+  } else {
+    hotAPI.reload("data-v-625992f6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 448:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'file'],
+
+    data: function data() {
+        return {
+            id: null,
+            localEventDispatcher: new Vue({})
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        this.localEventDispatcher.$on('imageFileChange', function (event) {
+            return _this.eventDispatcher.$emit('jumbotronChange', event);
+        });
+    },
+    mounted: function mounted() {
+        this.id = this._uid;
+    }
+});
+
+/***/ }),
+
+/***/ 449:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: _vm.id } }, [
+      _vm._v("\n        Jumbotron Image\n    ")
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { attrs: { id: _vm.id } },
+      [
+        _c("image-file-input", {
+          attrs: { eventDispatcher: _vm.localEventDispatcher, value: _vm.file }
+        })
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-625992f6", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 450:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(451)
+/* template */
+var __vue_template__ = __webpack_require__(452)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\MovieForm.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3708a1dd", Component.options)
+  } else {
+    hotAPI.reload("data-v-3708a1dd", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 451:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['collections', 'drive', 'driveEventDispatcher', 'files', 'genres'],
+
+    data: function data() {
+        return {
+            apiTimeout: null,
+            currentFile: this.files[0],
+            currentImdbSearchResult: null,
+            eventDispatcher: new Vue({}),
+            movies: [],
+            yearMax: new Date().getFullYear(),
+            yearMin: 1900
+        };
+    },
+
+
+    computed: {
+        currentMovie: function currentMovie() {
+            var index = _.findIndex(this.movies, { 'file': this.currentFile.filename });
+
+            if (index < 0) {
+                return {};
+            }
+
+            return this.movies[index];
+        },
+        submitDisabled: function submitDisabled() {
+            return !this.valid();
+        }
+    },
+
+    created: function created() {
+        // Register events
+        this.eventDispatcher.$on('collectionAdd', this.collectionAdd);
+        this.eventDispatcher.$on('collectionChange', this.collectionChange);
+        this.eventDispatcher.$on('collectionRemove', this.collectionRemove);
+        this.eventDispatcher.$on('genreAdd', this.genreAdd);
+        this.eventDispatcher.$on('genreChange', this.genreChange);
+        this.eventDispatcher.$on('genreRemove', this.genreRemove);
+        this.eventDispatcher.$on('imdbSearchChange', this.imdbSearchChange);
+        this.eventDispatcher.$on('jumbotronChange', this.jumbotronChange);
+        this.eventDispatcher.$on('notesChange', this.notesChange);
+        this.eventDispatcher.$on('posterChange', this.posterChange);
+        this.eventDispatcher.$on('posterUrlChange', this.posterUrlChange);
+        this.eventDispatcher.$on('submit', this.submit);
+        this.eventDispatcher.$on('summaryChange', this.summaryChange);
+        this.eventDispatcher.$on('titleChange', this.titleChange);
+        this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
+        this.eventDispatcher.$on('yearReleasedChange', this.yearReleasedChange);
+
+        // Initialize movies array
+        for (var i = 0; i < this.files.length; i++) {
+            this.movies.push({
+                collections: [''],
+                drive_id: this.drive,
+                file: this.files[i].filename,
+                genres: [''],
+                imdb: this.files[i].imdb,
+                jumbotron: null,
+                notes: '',
+                poster: null,
+                posterUrl: '',
+                summary: '',
+                title: this.files[i].title,
+                yearReleased: new Date().getFullYear()
+            });
+        }
+    },
+
+
+    methods: {
+        collectionAdd: function collectionAdd() {
+            this.currentMovie.collections.push('');
+        },
+        collectionChange: function collectionChange(data) {
+            Vue.set(this.currentMovie.collections, data.index, data.value);
+        },
+        collectionDuplicates: function collectionDuplicates() {
+            var previousCollections = [];
+
+            for (var i = 0; i < this.currentMovie.collections.length; i++) {
+                var currentCollection = this.currentMovie.collections[i];
+
+                if (previousCollections.indexOf(currentCollection) >= 0) {
+                    return true;
+                }
+
+                previousCollections.push(currentCollection);
+            }
+
+            return false;
+        },
+        collectionEmpty: function collectionEmpty() {
+            var collections = this.currentMovie.collections;
+
+            if (collections.length > 1) {
+                for (var i = 0; i < collections.length; i++) {
+                    if (collections[i] === '') {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        },
+        collectionRemove: function collectionRemove(index) {
+            var newCollections = [''];
+
+            if (this.currentMovie.collections.length > 1) {
+                this.currentMovie.collections.splice(index, 1);
+                newCollections = this.currentMovie.collections;
+            }
+
+            Vue.set(this.currentMovie, 'collections', newCollections);
+        },
+        fileListToArray: function fileListToArray(fileList) {
+            var files = [];
+
+            for (var i = 0; i < fileList.length; i++) {
+                if (typeof fileList.item(i) !== 'undefined') {
+                    files.push(fileList.item(i));
+                }
+            }
+
+            return files;
+        },
+        genreAdd: function genreAdd() {
+            this.currentMovie.genres.push('');
+        },
+        genreChange: function genreChange(data) {
+            this.currentMovie.genres[data.index] = data.value;
+        },
+        genreDuplicates: function genreDuplicates() {
+            var previousGenres = [];
+
+            for (var i = 0; i < this.currentMovie.genres.length; i++) {
+                var currentGenre = this.currentMovie.genres[i];
+
+                if (previousGenres.indexOf(currentGenre) >= 0) {
+                    return true;
+                }
+
+                previousGenres.push(currentGenre);
+            }
+
+            return false;
+        },
+        genreEmpty: function genreEmpty() {
+            for (var i = 0; i < this.currentMovie.genres.length; i++) {
+                if (this.currentMovie.genres[i] === '') {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+        genreRemove: function genreRemove(index) {
+            var newGenres = [''];
+
+            if (this.currentMovie.genres.length > 1) {
+                this.currentMovie.genres.splice(index, 1);
+                newGenres = this.currentMovie.genres;
+            }
+
+            this.currentMovie.genres = newGenres;
+        },
+        imdbSearchChange: function imdbSearchChange(imdbId) {
+            this.currentImdbSearchResult = imdbId;
+            var index = _.findIndex(this.currentMovie.imdb.d, { id: imdbId });
+
+            if (index >= 0) {
+                this.currentMovie.poster = null;
+                var imdb = this.currentMovie.imdb.d[index];
+                this.currentMovie.title = imdb.l;
+                this.currentMovie.yearReleased = imdb.y;
+
+                if (imdb.i) {
+                    this.currentMovie.posterUrl = imdb.i.imageUrl;
+                }
+
+                // Call to API to get more details
+                var url = 'https://imdb8.p.rapidapi.com/title/get-overview-details';
+                var options = {
+                    headers: {
+                        'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                        'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
+                    },
+                    params: {
+                        'tconst': imdbId
+                    }
+                };
+
+                var self = this;
+
+                axios.get(url, options).then(function (response) {
+                    // Set the genres
+                    var genres = [''];
+
+                    if (response.data.genres) {
+                        genres = response.data.genres;
+                    }
+
+                    self.currentMovie.genres = genres;
+
+                    // Set the summary
+                    var summary = '';
+
+                    if (response.data.plotOutline) {
+                        summary = response.data.plotOutline.text;
+                    }
+
+                    if (!summary && response.data.plotSummary) {
+                        summary = response.data.plotSummary.text;
+                    }
+
+                    self.currentMovie.summary = summary;
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },
+        jumbotronChange: function jumbotronChange(fileList) {
+            this.currentMovie.jumbotron = fileList;
+        },
+        notesChange: function notesChange(notes) {
+            this.currentMovie.notes = notes;
+        },
+        posterChange: function posterChange(fileList) {
+            this.currentMovie.poster = fileList;
+        },
+        posterEmpty: function posterEmpty() {
+            return !this.currentMovie.poster && !this.currentMovie.posterUrl;
+        },
+        posterUrlChange: function posterUrlChange(url) {
+            this.currentMovie.posterUrl = url;
+        },
+        submit: function submit() {
+            var movie = this.currentMovie;
+
+            // If both inputs are filled with data, default to posterUrl
+            if (movie.posterUrl) {
+                delete movie.poster;
+            }
+
+            if (movie.poster) {
+                movie.poster = movie.poster.item(0);
+                delete movie.posterUrl;
+            }
+
+            if (!movie.jumbotron) {
+                delete movie.jumbotron;
+            }
+
+            if (movie.jumbotron) {
+                movie.jumbotron = movie.jumbotron.item(0);
+            }
+
+            var formData = window.getFormData(movie);
+
+            var self = this;
+
+            axios.post('/api/upload/movie', formData).then(function (response) {
+                self.driveEventDispatcher.$emit('movieSubmit', self.currentFile);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        summaryChange: function summaryChange(summary) {
+            this.currentMovie.summary = summary;
+        },
+        summaryEmpty: function summaryEmpty() {
+            return this.currentMovie.summary === '';
+        },
+        titleChange: function titleChange(title) {
+            this.currentMovie.title = title;
+
+            // Update IMDb API search results
+            if (title !== '') {
+                // Don't overload API with requests
+                clearTimeout(this.apiTimeout);
+
+                var self = this;
+
+                this.apiTimeout = setTimeout(function () {
+                    var url = 'https://imdb8.p.rapidapi.com/title/auto-complete';
+                    var options = {
+                        headers: {
+                            'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                            'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
+                        },
+                        params: {
+                            'q': title
+                        }
+                    };
+
+                    axios.get(url, options).then(function (response) {
+                        self.currentMovie.imdb = response.data;
+                        self.currentImdbSearchResult = null;
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }, 1000);
+            }
+        },
+        titleEmpty: function titleEmpty() {
+            return this.currentMovie.title === '';
+        },
+        valid: function valid() {
+            return !this.titleEmpty() && this.yearValid() && !this.summaryEmpty() && !this.posterEmpty() && !this.genreEmpty() && !this.genreDuplicates() && !this.collectionDuplicates() && !this.collectionEmpty();
+        },
+        videoFileChange: function videoFileChange(file) {
+            this.currentFile = file;
+        },
+        yearReleasedChange: function yearReleasedChange(yearReleased) {
+            this.currentMovie.yearReleased = parseInt(yearReleased);
+        },
+        yearValid: function yearValid() {
+            return this.currentMovie.yearReleased <= this.yearMax && this.currentMovie.yearReleased >= this.yearMin && !isNaN(this.currentMovie.yearReleased);
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 452:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.drive > 0 && _vm.files.length > 0
+    ? _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "form",
+            {
+              attrs: {
+                id: "movie-form",
+                method: "POST",
+                enctype: "multipart/form-data",
+                novalidate: ""
+              }
+            },
+            [
+              _c("video-file-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  files: _vm.files,
+                  value: _vm.currentFile.filename
+                }
+              }),
+              _vm._v(" "),
+              _c("imdb-search-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  results: _vm.currentMovie.imdb,
+                  value: _vm.currentImdbSearchResult
+                }
+              }),
+              _vm._v(" "),
+              _c("title-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.currentMovie.title
+                }
+              }),
+              _vm._v(" "),
+              _vm.titleEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Title field is required\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("year-released-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  title: _vm.currentMovie.title,
+                  value: _vm.currentMovie.yearReleased
+                }
+              }),
+              _vm._v(" "),
+              !_vm.yearValid()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v(
+                        "The Year Released field is not valid\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("summary-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  required: true,
+                  value: _vm.currentMovie.summary
+                }
+              }),
+              _vm._v(" "),
+              _vm.summaryEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Summary field is required\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("notes-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.currentMovie.notes
+                }
+              }),
+              _vm._v(" "),
+              _c("poster-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  file: _vm.currentMovie.poster,
+                  title: _vm.currentMovie.title,
+                  url: _vm.currentMovie.posterUrl
+                }
+              }),
+              _vm._v(" "),
+              _vm.posterEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Poster Image field is required\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("jumbotron-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  file: _vm.currentMovie.jumbotron,
+                  url: _vm.currentMovie.jumbotronUrl
+                }
+              }),
+              _vm._v(" "),
+              _c("multi-genre-input", {
+                attrs: {
+                  allGenres: _vm.genres,
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.currentMovie.genres
+                }
+              }),
+              _vm._v(" "),
+              _vm.genreEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v("The Genres field is required\n            ")
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.genreDuplicates()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v(
+                        "There are duplicate values in the Genre fields\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("multi-collection-input", {
+                attrs: {
+                  allCollections: _vm.collections,
+                  eventDispatcher: _vm.eventDispatcher,
+                  value: _vm.currentMovie.collections
+                }
+              }),
+              _vm._v(" "),
+              _vm.collectionEmpty()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v(
+                        "There are empty values in the Collection fields\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.collectionDuplicates()
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger mb-2",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Error: ")]),
+                      _vm._v(
+                        "There are duplicate values in the Collection fields\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("submit-input", {
+                attrs: {
+                  eventDispatcher: _vm.eventDispatcher,
+                  disabled: _vm.submitDisabled
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ])
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3708a1dd", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 453:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(454)
+/* template */
+var __vue_template__ = __webpack_require__(455)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\MultiCollectionInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f2c986cc", Component.options)
+  } else {
+    hotAPI.reload("data-v-f2c986cc", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 454:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['allCollections', 'eventDispatcher', 'value']
+});
+
+/***/ }),
+
+/***/ 455:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "form-group" },
+    [
+      _c("label", { attrs: { for: "collections" } }, [_vm._v("Collections")]),
+      _vm._v(" "),
+      _vm._l(_vm.value, function(collection, index) {
+        return _c("collection-input", {
+          key: index,
+          attrs: {
+            id: "collections",
+            allCollections: _vm.allCollections,
+            eventDispatcher: _vm.eventDispatcher,
+            index: index,
+            value: collection
+          }
+        })
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-f2c986cc", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 456:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(457)
+/* template */
+var __vue_template__ = __webpack_require__(458)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\MultiGenreInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-50d67dae", Component.options)
+  } else {
+    hotAPI.reload("data-v-50d67dae", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 457:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['allGenres', 'eventDispatcher', 'value']
+});
+
+/***/ }),
+
+/***/ 458:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "form-group" },
+    [
+      _c("label", { attrs: { for: "genres" } }, [_vm._v("* Genres")]),
+      _vm._v(" "),
+      _vm._l(_vm.value, function(genre, index) {
+        return _c("genre-input", {
+          key: index,
+          attrs: {
+            id: "genres",
+            allGenres: _vm.allGenres,
+            eventDispatcher: _vm.eventDispatcher,
+            index: index,
+            value: genre
+          }
+        })
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-50d67dae", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 459:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(460)
+/* template */
+var __vue_template__ = __webpack_require__(461)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\MultiImageInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-458f7451", Component.options)
+  } else {
+    hotAPI.reload("data-v-458f7451", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 460:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'file', 'url'],
+
+    computed: {
+        fileClasses: function fileClasses() {
+            return {
+                'btn-primary': this.inputType === 'file',
+                'btn-outline-primary': this.inputType !== 'file'
+            };
+        },
+        urlClasses: function urlClasses() {
+            return {
+                'btn-primary': this.inputType === 'url',
+                'btn-outline-primary': this.inputType !== 'url'
+            };
+        }
+    },
+
+    data: function data() {
+        return {
+            inputType: 'url'
+        };
+    }
+});
+
+/***/ }),
+
+/***/ 461:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "d-flex justify-content-center mb-3" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn",
+            class: _vm.urlClasses,
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                _vm.inputType = "url"
+              }
+            }
+          },
+          [_vm._v("Image URL")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn",
+            class: _vm.fileClasses,
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                _vm.inputType = "file"
+              }
+            }
+          },
+          [_vm._v("Image File")]
+        )
+      ]),
+      _vm._v(" "),
+      _vm.inputType == "file"
+        ? _c("image-file-input", {
+            attrs: { eventDispatcher: _vm.eventDispatcher, value: _vm.file }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.inputType == "url"
+        ? _c("image-url-input", {
+            attrs: { eventDispatcher: _vm.eventDispatcher, value: _vm.url }
+          })
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-458f7451", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 462:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(463)
+/* template */
+var __vue_template__ = __webpack_require__(464)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\NotesInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-fd10b6e0", Component.options)
+  } else {
+    hotAPI.reload("data-v-fd10b6e0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 463:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// TODO figure out how to do labels without IDs
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'value'],
+
+    methods: {
+        notesChange: function notesChange(event) {
+            this.eventDispatcher.$emit('notesChange', event.target.value);
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 464:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: "notes" } }, [_vm._v("Notes")]),
+    _vm._v(" "),
+    _c("input", {
+      staticClass: "form-control font-italic",
+      attrs: { id: "notes" },
+      domProps: { value: _vm.value },
+      on: { change: _vm.notesChange, input: _vm.notesChange }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-fd10b6e0", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 465:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(466)
+/* template */
+var __vue_template__ = __webpack_require__(467)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\PosterInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-beb870f4", Component.options)
+  } else {
+    hotAPI.reload("data-v-beb870f4", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 466:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'file', 'title', 'url'],
+
+    data: function data() {
+        return {
+            id: null,
+            localEventDispatcher: new Vue({})
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        this.localEventDispatcher.$on('imageFileChange', function (event) {
+            return _this.eventDispatcher.$emit('posterChange', event);
+        });
+        this.localEventDispatcher.$on('imageUrlChange', function (event) {
+            return _this.eventDispatcher.$emit('posterUrlChange', event);
+        });
+    },
+    mounted: function mounted() {
+        this.id = this._uid;
+    }
+});
+
+/***/ }),
+
+/***/ 467:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: _vm.id } }, [
+      _vm._v("\n        * Poster Image\n        "),
+      _c(
+        "a",
+        {
+          attrs: {
+            href:
+              "https://www.google.com/search?q=" +
+              _vm.title +
+              "+poster&tbm=isch",
+            target: "_blank"
+          }
+        },
+        [_vm._v(" (Google)")]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          attrs: {
+            href:
+              "https://www.impawards.com/search.php?search_data=" + _vm.title,
+            target: "_blank"
+          }
+        },
+        [_vm._v(" (IMP Awards)")]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { attrs: { id: _vm.id } },
+      [
+        _c("multi-image-input", {
+          attrs: {
+            eventDispatcher: _vm.localEventDispatcher,
+            file: _vm.file,
+            url: _vm.url
+          }
+        })
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-beb870f4", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 468:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(469)
+/* template */
+var __vue_template__ = __webpack_require__(470)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\SeasonInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0e6d42b0", Component.options)
+  } else {
+    hotAPI.reload("data-v-0e6d42b0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 469:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'value'],
+
+    methods: {
+        seasonChange: function seasonChange(event) {
+            this.eventDispatcher.$emit('seasonChange', event.target.value);
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 470:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: "season" } }, [_vm._v("* Season")]),
+    _vm._v(" "),
+    _c("input", {
+      staticClass: "form-control",
+      attrs: { type: "number", id: "season", min: "1" },
+      domProps: { value: _vm.value },
+      on: { change: _vm.seasonChange, input: _vm.seasonChange }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0e6d42b0", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 471:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(472)
+/* template */
+var __vue_template__ = __webpack_require__(473)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\ShowForm.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3fc457b0", Component.options)
+  } else {
+    hotAPI.reload("data-v-3fc457b0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 472:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['collections', 'drive', 'driveEventDispatcher', 'genres'],
+
+    data: function data() {
+        return {
+            apiTimeout: null,
+            currentImdbSearchResult: null,
+            eventDispatcher: new Vue({}),
+            show: {
+                collections: [''],
+                genres: [''],
+                imdb: {
+                    d: []
+                },
+                jumbotron: null,
+                notes: '',
+                poster: null,
+                posterUrl: '',
+                summary: '',
+                title: '',
+                yearStart: 0,
+                yearEnd: 0
+            },
+            yearMax: new Date().getFullYear(),
+            yearMin: 1900
+        };
+    },
+
+
+    computed: {
+        submitDisabled: function submitDisabled() {
+            return !this.valid();
+        }
+    },
+
+    created: function created() {
+        this.eventDispatcher.$on('collectionAdd', this.collectionAdd);
+        this.eventDispatcher.$on('collectionChange', this.collectionChange);
+        this.eventDispatcher.$on('collectionRemove', this.collectionRemove);
+        this.eventDispatcher.$on('genreAdd', this.genreAdd);
+        this.eventDispatcher.$on('genreChange', this.genreChange);
+        this.eventDispatcher.$on('genreRemove', this.genreRemove);
+        this.eventDispatcher.$on('imdbSearchChange', this.imdbSearchChange);
+        this.eventDispatcher.$on('jumbotronChange', this.jumbotronChange);
+        this.eventDispatcher.$on('notesChange', this.notesChange);
+        this.eventDispatcher.$on('posterChange', this.posterChange);
+        this.eventDispatcher.$on('posterUrlChange', this.posterUrlChange);
+        this.eventDispatcher.$on('submit', this.submit);
+        this.eventDispatcher.$on('summaryChange', this.summaryChange);
+        this.eventDispatcher.$on('titleChange', this.titleChange);
+        this.eventDispatcher.$on('yearEndChange', this.yearEndChange);
+        this.eventDispatcher.$on('yearStartChange', this.yearStartChange);
+
+        this.show.yearEnd = this.yearMax;
+        this.show.yearStart = this.yearMax;
+    },
+
+
+    methods: {
+        collectionAdd: function collectionAdd() {
+            this.show.collections.push('');
+        },
+        collectionChange: function collectionChange(data) {
+            Vue.set(this.show.collections, data.index, data.value);
+        },
+        collectionDuplicates: function collectionDuplicates() {
+            var previousCollections = [];
+
+            for (var i = 0; i < this.show.collections.length; i++) {
+                var currentCollection = this.show.collections[i];
+
+                if (previousCollections.indexOf(currentCollection) >= 0) {
+                    return true;
+                }
+
+                previousCollections.push(currentCollection);
+            }
+
+            return false;
+        },
+        collectionEmpty: function collectionEmpty() {
+            if (this.show.collections.length > 1) {
+                for (var i = 0; i < this.show.collections.length; i++) {
+                    if (this.show.collections[i] === '') {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        },
+        collectionRemove: function collectionRemove(index) {
+            var newCollections = [''];
+
+            if (this.show.collections.length > 1) {
+                this.show.collections.splice(index, 1);
+
+                newCollections = this.show.collections;
+            }
+
+            Vue.set(this.show, 'collections', newCollections);
+        },
+        genreAdd: function genreAdd() {
+            this.show.genres.push('');
+        },
+        genreChange: function genreChange(data) {
+            Vue.set(this.show.genres, data.index, data.value);
+        },
+        genreDuplicates: function genreDuplicates() {
+            var previousGenres = [];
+
+            for (var i = 0; i < this.show.genres.length; i++) {
+                var currentGenre = this.show.genres[i];
+
+                if (previousGenres.indexOf(currentGenre) >= 0) {
+                    return true;
+                }
+
+                previousGenres.push(currentGenre);
+            }
+
+            return false;
+        },
+        genreEmpty: function genreEmpty() {
+            for (var i = 0; i < this.show.genres.length; i++) {
+                if (this.show.genres[i] === '') {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+        genreRemove: function genreRemove(index) {
+            var newGenres = [''];
+
+            if (this.show.genres.length > 1) {
+                this.show.genres.splice(index, 1);
+
+                newGenres = this.show.genres;
+            }
+
+            Vue.set(this.show, 'genres', newGenres);
+        },
+        imdbSearchChange: function imdbSearchChange(imdbId) {
+            this.currentImdbSearchResult = imdbId;
+            var index = _.findIndex(this.show.imdb.d, { id: imdbId });
+
+            if (index >= 0) {
+                this.show.poster = null;
+                var imdb = this.show.imdb.d[index];
+                this.show.title = imdb.l;
+                this.show.yearStart = imdb.y;
+
+                if (imdb.yr) {
+                    this.show.yearEnd = parseInt(imdb.yr.split('-')[1]);
+                }
+
+                if (imdb.i) {
+                    this.show.posterUrl = imdb.i.imageUrl;
+                }
+
+                // Call to API to get more details
+                var url = 'https://imdb8.p.rapidapi.com/title/get-overview-details';
+                var options = {
+                    headers: {
+                        'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                        'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
+                    },
+                    params: {
+                        'tconst': imdbId
+                    }
+                };
+
+                var self = this;
+
+                axios.get(url, options).then(function (response) {
+                    // Set the genres
+                    var genres = [''];
+
+                    if (response.data.genres) {
+                        genres = response.data.genres;
+                    }
+
+                    self.show.genres = genres;
+
+                    // Set the summary
+                    var summary = '';
+
+                    if (response.data.plotOutline) {
+                        summary = response.data.plotOutline.text;
+                    }
+
+                    if (!summary && response.data.plotSummary) {
+                        summary = response.data.plotSummary.text;
+                    }
+
+                    self.show.summary = summary;
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },
+        jumbotronChange: function jumbotronChange(fileList) {
+            this.show.jumbotron = fileList;
+        },
+        notesChange: function notesChange(notes) {
+            this.show.notes = notes;
+        },
+        posterChange: function posterChange(filelist) {
+            this.show.poster = filelist;
+        },
+        posterEmpty: function posterEmpty() {
+            return !this.show.poster && !this.show.posterUrl;
+        },
+        posterUrlChange: function posterUrlChange(url) {
+            this.show.posterUrl = url;
+        },
+        reset: function reset() {
+            this.show.collections = [''];
+            this.show.genres = [''];
+            this.show.imdb = {
+                d: []
+            };
+            this.show.jumbotron = null;
+            this.show.notes = '';
+            this.show.poster = null;
+            this.show.posterUrl = '';
+            this.show.summary = '';
+            this.show.title = '';
+            this.show.yearStart = this.yearMax;
+            this.show.yearEnd = this.yearMax;
+        },
+        startGreaterThanEnd: function startGreaterThanEnd() {
+            return this.show.yearStart > this.show.yearEnd && this.show.yearEnd > 0;
+        },
+        submit: function submit() {
+            var show = this.show;
+
+            // If both inputs are filled with data, default to posterUrl
+            if (show.posterUrl) {
+                delete show.poster;
+            }
+
+            if (show.poster) {
+                show.poster = show.poster.item(0);
+                delete show.posterUrl;
+            }
+
+            if (!show.jumbotron) {
+                delete show.jumbotron;
+            }
+
+            if (show.jumbotron) {
+                show.jumbotron = show.jumbotron.item(0);
+            }
+
+            var formData = window.getFormData(show);
+
+            var self = this;
+
+            axios.post('/api/upload/show', formData).then(function (response) {
+                self.reset();
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        summaryChange: function summaryChange(summary) {
+            this.show.summary = summary;
+        },
+        summaryEmpty: function summaryEmpty() {
+            return this.show.summary === '';
+        },
+        titleChange: function titleChange(title) {
+            this.show.title = title;
+
+            // Update IMDb API search results
+            if (title !== '') {
+                // Don't overload API with requests
+                clearTimeout(this.apiTimeout);
+
+                var self = this;
+
+                this.apiTimeout = setTimeout(function () {
+                    var url = 'https://imdb8.p.rapidapi.com/title/auto-complete';
+                    var options = {
+                        headers: {
+                            'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                            'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
+                        },
+                        params: {
+                            'q': title
+                        }
+                    };
+
+                    axios.get(url, options).then(function (response) {
+                        self.show.imdb = response.data;
+                        self.currentImdbSearchResult = null;
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }, 1000);
+            }
+        },
+        titleEmpty: function titleEmpty() {
+            return this.show.title === '';
+        },
+        valid: function valid() {
+            return !this.startGreaterThanEnd() && !this.titleEmpty() && this.yearEndValid() && this.yearStartValid() && !this.summaryEmpty() && !this.posterEmpty() && !this.genreEmpty() && !this.genreDuplicates() && !this.collectionDuplicates() && !this.collectionEmpty();
+        },
+        yearEndChange: function yearEndChange(yearEnd) {
+            this.show.yearEnd = parseInt(yearEnd);
+        },
+        yearStartChange: function yearStartChange(yearStart) {
+            this.show.yearStart = parseInt(yearStart);
+        },
+        yearEndValid: function yearEndValid() {
+            return this.show.yearEnd <= this.yearMax && (this.show.yearEnd >= this.yearMin || this.show.yearEnd == 0) && !isNaN(this.show.yearEnd);
+        },
+        yearStartValid: function yearStartValid() {
+            return this.show.yearStart <= this.yearMax && this.show.yearStart >= this.yearMin && !isNaN(this.show.yearStart);
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 473:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col" }, [
+      _c(
+        "form",
+        {
+          attrs: {
+            id: "show-form",
+            method: "POST",
+            enctype: "multipart/form-data",
+            novalidate: ""
+          }
+        },
+        [
+          _c("imdb-search-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              results: _vm.show.imdb,
+              value: _vm.currentImdbSearchResult
+            }
+          }),
+          _vm._v(" "),
+          _c("title-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.title
+            }
+          }),
+          _vm._v(" "),
+          _vm.titleEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Title field is required\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("year-start-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              title: _vm.show.title,
+              value: _vm.show.yearStart
+            }
+          }),
+          _vm._v(" "),
+          !_vm.yearStartValid()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Year Start field is not valid\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.startGreaterThanEnd()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-warning mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Warning: ")]),
+                  _vm._v(
+                    "The Year Start field should be less than the Year End\n            "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("year-end-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.yearEnd
+            }
+          }),
+          _vm._v(" "),
+          !_vm.yearEndValid()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Year End field is not valid\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("summary-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              required: true,
+              value: _vm.show.summary
+            }
+          }),
+          _vm._v(" "),
+          _vm.summaryEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Summary field is required\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("notes-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.notes
+            }
+          }),
+          _vm._v(" "),
+          _c("poster-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              file: _vm.show.poster,
+              title: _vm.show.title,
+              url: _vm.show.posterUrl
+            }
+          }),
+          _vm._v(" "),
+          _vm.posterEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Poster Image field is required\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("jumbotron-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              file: _vm.show.jumbotron
+            }
+          }),
+          _vm._v(" "),
+          _c("multi-genre-input", {
+            attrs: {
+              allGenres: _vm.genres,
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.genres
+            }
+          }),
+          _vm._v(" "),
+          _vm.genreEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v("The Genres field is required\n            ")
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.genreDuplicates()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v(
+                    "There are duplicate values in the Genre fields\n            "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("multi-collection-input", {
+            attrs: {
+              allCollections: _vm.collections,
+              eventDispatcher: _vm.eventDispatcher,
+              value: _vm.show.collections
+            }
+          }),
+          _vm._v(" "),
+          _vm.collectionEmpty()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v(
+                    "There are empty values in the Collection fields\n            "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.collectionDuplicates()
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger mb-2",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error: ")]),
+                  _vm._v(
+                    "There are duplicate values in the Collection fields\n            "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("submit-input", {
+            attrs: {
+              eventDispatcher: _vm.eventDispatcher,
+              disabled: _vm.submitDisabled
+            }
+          })
+        ],
+        1
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3fc457b0", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 474:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(475)
+/* template */
+var __vue_template__ = __webpack_require__(476)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\ShowsInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-9258844a", Component.options)
+  } else {
+    hotAPI.reload("data-v-9258844a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 475:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'shows', 'value']
+});
+
+/***/ }),
+
+/***/ 476:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: "show" } }, [_vm._v("* Show")]),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        staticClass: "form-control",
+        attrs: { id: "show" },
+        domProps: { value: _vm.value },
+        on: {
+          change: function($event) {
+            _vm.eventDispatcher.$emit("showChange", $event.target.value)
+          }
+        }
+      },
+      _vm._l(_vm.shows, function(s) {
+        return _c("option", { domProps: { value: s.id } }, [
+          _vm._v("\n            " + _vm._s(s.title) + "\n        ")
+        ])
+      })
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-9258844a", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 477:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(478)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(480)
+/* template */
+var __vue_template__ = __webpack_require__(481)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-28ff791b"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\SubmitInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-28ff791b", Component.options)
+  } else {
+    hotAPI.reload("data-v-28ff791b", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 478:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(479);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(62)("00acbb09", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-28ff791b\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitInput.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-28ff791b\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SubmitInput.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 479:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(43)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.btn-disabled[data-v-28ff791b] {\n    cursor: not-allowed;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 480:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['disabled', 'eventDispatcher']
+});
+
+/***/ }),
+
+/***/ 481:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "form-group d-flex justify-content-around mt-3 mb-0" },
+    [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success",
+          class: { "btn-disabled": _vm.disabled },
+          attrs: { disabled: _vm.disabled },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              $event.stopPropagation()
+              _vm.eventDispatcher.$emit("submit")
+            }
+          }
+        },
+        [_vm._v("\n        Submit\n    ")]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-28ff791b", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 482:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(483)
+/* template */
+var __vue_template__ = __webpack_require__(484)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\SummaryInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5da204ea", Component.options)
+  } else {
+    hotAPI.reload("data-v-5da204ea", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 483:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// TODO figure out how to do labels without IDs
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'required', 'value'],
+
+    data: function data() {
+        return {
+            id: null
+        };
+    },
+    mounted: function mounted() {
+        this.id = this._uid;
+    },
+
+
+    methods: {
+        summaryChange: function summaryChange(event) {
+            this.eventDispatcher.$emit('summaryChange', event.target.value);
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 484:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: _vm.id } }, [
+      _vm.required ? _c("span", [_vm._v("* ")]) : _vm._e(),
+      _vm._v("Summary\n    ")
+    ]),
+    _vm._v(" "),
+    _c("textarea", {
+      staticClass: "form-control",
+      attrs: { id: _vm.id, rows: "4" },
+      domProps: { value: _vm.value },
+      on: { change: _vm.summaryChange, input: _vm.summaryChange }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5da204ea", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 485:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(486)
+/* template */
+var __vue_template__ = __webpack_require__(487)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\TitleInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-28562a4e", Component.options)
+  } else {
+    hotAPI.reload("data-v-28562a4e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 486:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// TODO add optional search for episode title
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'value'],
+
+    methods: {
+        titleChange: function titleChange(event) {
+            this.eventDispatcher.$emit('titleChange', event.target.value);
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 487:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: "title" } }, [_vm._v("* Title")]),
+    _vm._v(" "),
+    _c(
+      "a",
+      {
+        attrs: {
+          href: "https://www.imdb.com/find?q=" + _vm.value,
+          target: "_blank"
+        }
+      },
+      [_vm._v("(IMDb Search)")]
+    ),
+    _vm._v(" "),
+    _c("input", {
+      staticClass: "form-control",
+      attrs: { id: "title" },
+      domProps: { value: _vm.value },
+      on: { change: _vm.titleChange, input: _vm.titleChange }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-28562a4e", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 488:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(489)
+/* template */
+var __vue_template__ = __webpack_require__(490)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\VideoFileInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-31d0680c", Component.options)
+  } else {
+    hotAPI.reload("data-v-31d0680c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 489:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+// TODO figure out how to do bootstrap labels without ID
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'files', 'value']
+});
+
+/***/ }),
+
+/***/ 490:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: "file" } }, [_vm._v("File")]),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        staticClass: "form-control",
+        attrs: { id: "file" },
+        domProps: { value: _vm.value },
+        on: {
+          change: function($event) {
+            _vm.eventDispatcher.$emit("videoFileChange", $event.target.value)
+          }
+        }
+      },
+      _vm._l(_vm.files, function(f) {
+        return _c(
+          "option",
+          { key: f.filename, domProps: { value: f.filename } },
+          [_vm._v("\n            " + _vm._s(f.filename) + "\n        ")]
+        )
+      })
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-31d0680c", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 491:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(492)
+/* template */
+var __vue_template__ = __webpack_require__(493)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\YearEndInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5a0610d3", Component.options)
+  } else {
+    hotAPI.reload("data-v-5a0610d3", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 492:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'value'],
+
+    data: function data() {
+        return {
+            max: new Date().getFullYear(),
+            min: 0
+        };
+    }
+});
+
+/***/ }),
+
+/***/ 493:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("year-input", {
+    attrs: {
+      event: "yearEndChange",
+      eventDispatcher: _vm.eventDispatcher,
+      label: "Year End",
+      max: _vm.max,
+      min: _vm.min,
+      value: _vm.value
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5a0610d3", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 494:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(495)
+/* template */
+var __vue_template__ = __webpack_require__(496)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\YearInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-93adda54", Component.options)
+  } else {
+    hotAPI.reload("data-v-93adda54", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 495:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['event', 'eventDispatcher', 'label', 'max', 'min', 'title', 'value'],
+
+    methods: {
+        yearChange: function yearChange(event) {
+            this.eventDispatcher.$emit(this.event, event.target.value);
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 496:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c("label", { attrs: { for: "year" } }, [
+      _vm._v("\n        * " + _vm._s(_vm.label) + "\n    ")
+    ]),
+    _vm._v(" "),
+    _c("input", {
+      staticClass: "form-control",
+      attrs: { type: "number", id: "year", min: _vm.min, max: _vm.max },
+      domProps: { value: _vm.value },
+      on: { change: _vm.yearChange, input: _vm.yearChange }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-93adda54", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 497:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(498)
+/* template */
+var __vue_template__ = __webpack_require__(499)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\YearReleasedInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-41f0ba19", Component.options)
+  } else {
+    hotAPI.reload("data-v-41f0ba19", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 498:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'title', 'value'],
+
+    data: function data() {
+        return {
+            max: new Date().getFullYear(),
+            min: 1900
+        };
+    }
+});
+
+/***/ }),
+
+/***/ 499:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("year-input", {
+    attrs: {
+      event: "yearReleasedChange",
+      eventDispatcher: _vm.eventDispatcher,
+      label: "Year Released",
+      max: _vm.max,
+      min: _vm.min,
+      title: _vm.title,
+      value: _vm.value
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-41f0ba19", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 500:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(501)
+/* template */
+var __vue_template__ = __webpack_require__(502)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\admin\\upload\\YearStartInput.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d60aeba8", Component.options)
+  } else {
+    hotAPI.reload("data-v-d60aeba8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 501:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['eventDispatcher', 'title', 'value'],
+
+    data: function data() {
+        return {
+            max: new Date().getFullYear(),
+            min: 1900
+        };
+    }
+});
+
+/***/ }),
+
+/***/ 502:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("year-input", {
+    attrs: {
+      event: "yearStartChange",
+      eventDispatcher: _vm.eventDispatcher,
+      label: "Year Start",
+      max: _vm.max,
+      min: _vm.min,
+      title: _vm.title,
+      value: _vm.value
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-d60aeba8", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 62:
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(91)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+
+/***/ 91:
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ })
+
+/******/ });

@@ -17,6 +17,16 @@ class Video
         $command = $ffmpeg . ' -i ' . $fullPath . ' -vstats 2>&1';
         $output = shell_exec($command);
 
+        // Initialize the return variables
+        $codec = null;
+        $duration = 0;
+        $height = 0;
+        $hours = 0;
+        $mins = 0;
+        $ms = 0;
+        $secs = 0;
+        $width = 0;
+
         $sizesRegex = "/Video: ([^,]*), ([^,]*), ([0-9]{1,4})x([0-9]{1,4})/";
 
         // In case first one doesn't match

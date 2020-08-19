@@ -10,17 +10,18 @@
 		<?php abort(403, 'You do not have admin access') ?>
 
 	@else
-
+        
         <div id="app" class="container mt-3">
-			<drive-form
-				:initial-state.camel="initialState"
-			></drive-form>
+            <a href="{{ route('browse') }}">
+                <img src="{{ asset('/img/brand.png') }}" />
+            </a>
+			<drive-form></drive-form>
     	</div>
 
         <script>
+            // Register some vars and functions globally so movie, episode, and show forms can all use them
             window.__INITIAL_STATE__ = <?= $initialState ?>;
 
-            // Register this function globally so movie, episode, and show forms can all use it
             window.getFormData = function(data) {
                 var formData = new FormData();
 

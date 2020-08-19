@@ -1,22 +1,6 @@
 <template>
     <div class="form-group">
-        <label for="file-upload">
-            <span v-if="required">* </span>
-            {{ label }}
-            <a
-                v-if="search"
-                :href="'https://www.google.com/search?q=' + title + '+poster&tbm=isch'"
-                target="_blank"
-            > (Google)</a>
-            <a
-                v-if="search"
-                :href="'https://www.impawards.com/search.php?search_data=' + title"
-                target="_blank"
-            > (IMP Awards)</a>
-        </label>
-
         <div
-            id="file-upload"
             class="file-drop p-5"
             :class="{ drag : isDrag }"
             @dragenter.prevent.stop="isDrag = true"
@@ -48,15 +32,9 @@
 
 <script>
     // TODO fix bug where escaping from file selection without picking anything still sets a FileList to value
-    // TODO Separate into MovieImageFileInput and ShowImageFileInput to add 'movie' or 'show' to search queries?
     export default {
         props: [
-            'event',
             'eventDispatcher',
-            'label',
-            'required',
-            'search',
-            'title',
             'value',
         ],
 
@@ -82,7 +60,7 @@
             fileChange(event) {
                 this.isDrag = false;
                 var dataTransfer = event.dataTransfer || event.target;
-                this.eventDispatcher.$emit(this.event, dataTransfer.files);
+                this.eventDispatcher.$emit('imageFileChange', dataTransfer.files);
             },
 
             triggerFileClick() {

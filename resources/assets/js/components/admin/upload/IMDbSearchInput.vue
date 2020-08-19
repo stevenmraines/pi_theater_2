@@ -1,18 +1,18 @@
 <template>
     <div class="form-group">
-        <label for="imdb">IMDb Search</label>
+        <label :for="id">IMDb Search</label>
         <select
-            id="imdb"
+            :id="id"
             class="form-control"
             :value="value"
             @change="eventDispatcher.$emit('imdbSearchChange', $event.target.value)"
         >
             <option
-                v-for="result in file.imdb.d"
+                v-for="result in results.d"
                 :key="result.id"
                 :value="result.id"
             >
-                {{ result.l }} ({{ result.y }})
+                {{ result.l }} ({{ result.yr ? result.yr : result.y }})
             </option>
         </select>
     </div>
@@ -22,8 +22,18 @@
     export default {
         props: [
             'eventDispatcher',
-            'file',
+            'results',
             'value',
         ],
+
+        data() {
+            return {
+                id: null
+            }
+        },
+
+        mounted() {
+            this.id = this._uid;
+        }
     }
 </script>

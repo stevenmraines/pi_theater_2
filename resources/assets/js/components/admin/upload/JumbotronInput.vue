@@ -1,19 +1,37 @@
 <template>
-    <image-file-input
-        :event="'jumbotronChange'"
-        :eventDispatcher="eventDispatcher"
-        :label="'Jumbotron Image'"
-        :required="false"
-        :search="false"
-        :value="value"
-    ></image-file-input>
+    <div class="form-group">
+        <label :for="id">
+            Jumbotron Image
+        </label>
+        <div :id="id">
+            <image-file-input
+                :eventDispatcher="localEventDispatcher"
+                :value="file"
+            ></image-file-input>
+        </div>
+    </div>
 </template>
 
 <script>
     export default {
         props: [
             'eventDispatcher',
-            'value',
+            'file'
         ],
+
+        data() {
+            return {
+                id: null,
+                localEventDispatcher: new Vue({})
+            }
+        },
+
+        created() {
+            this.localEventDispatcher.$on('imageFileChange', (event) => this.eventDispatcher.$emit('jumbotronChange', event));
+        },
+
+        mounted() {
+            this.id = this._uid;
+        }
     }
 </script>

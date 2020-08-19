@@ -8,9 +8,10 @@
     v-bind:poster="movieModal.poster"
     v-bind:genres="movieModal.genres"
     v-bind:user="user"
+    :movie_year="movieModal.movie_year"
 ></movie-modal>
 
-<!-- TODO should show-modal work like movie-modal by binding all the data? -->
+<!-- TODO bind showModal data like is done with movieModal -->
 <show-modal v-bind:paths="paths"></show-modal>
 
 <collection-modal

@@ -7,9 +7,9 @@
                         {{ title }}
                         <small
                             class="ml-2 text-muted text-nowrap d-inline-block"
-                            v-if="release.year_start"
+                            v-if="show_year.year_start"
                         >
-                            ({{ release.year_start }} - {{ (release.year_end) ? release.year_end : 'Present' }})
+                            ({{ show_year.year_start }} - {{ (show_year.year_end) ? show_year.year_end : 'Present' }})
                         </small>
                     </h5>
 
@@ -44,8 +44,9 @@
                                         <div class="dropdown-menu seasons-dropdown" x-placement="right-start">
                                             <button
                                                 class="dropdown-item"
-                                                v-for="season in seasons"
+                                                v-for="(season, index) in seasons"
                                                 v-on:click="changeSeason(season)"
+                                                :key="index"
                                             >Season {{ season }}</button>
                                         </div>
                                     </div>
@@ -62,6 +63,7 @@
                                     v-bind:class="{ 'pb-3': user && getEpisodeHistory(episode) }"
                                     v-bind:ref="getRef(episode)"
                                     v-for="(episode, index) in currentSeasonEpisodes"
+                                    :key="index"
                                 >
                                     <hr class="fluid-modal-hr my-1" v-if="index > 0" />
 
@@ -117,7 +119,7 @@
                                 <span class="font-weight-bold">Genres:</span>
 
                                 <ul id="show-modal-genres" class="d-inline-block list-inline mb-2">
-                                    <li class="list-inline-item" v-for="(genre, i) in genres">
+                                    <li class="list-inline-item" v-for="(genre, i) in genres" :key="i">
                                         {{ genre.name }}{{ i !== genres.length - 1 ? ',' : '' }}
                                     </li>
                                 </ul>
@@ -196,7 +198,7 @@
                 id: 0,
                 notes: null,
                 poster: 'missing-poster.jpg',
-                release: [],
+                show_year: [],
                 summary: '',
                 title: '',
                 user: {},
@@ -446,7 +448,7 @@
                 this.poster = data.poster;
                 this.summary = data.summary;
                 this.notes = data.notes;
-                this.release = data.release;
+                this.show_year = data.show_year;
                 this.genres = data.genres;
                 this.user = data.user;
                 this.episodes = data.episodes;

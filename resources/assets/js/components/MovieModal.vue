@@ -5,8 +5,8 @@
 				<div class="modal-header">
 					<h5 id="movie-modal-title" class="modal-title">
 						{{ title }}
-						<small class="ml-2 text-muted" v-if="release.year_released">
-							({{ release.year_released }})
+						<small class="ml-2 text-muted" v-if="movie_year.year_released">
+							({{ movie_year.year_released }})
 						</small>
 					</h5>
 					<button type="button" class="close" data-dismiss="modal">
@@ -29,7 +29,7 @@
 								</div>
 								<span class="font-weight-bold">Genres:</span>
 								<ul id="movie-modal-genres" class="d-inline-block list-inline mb-2">
-									<li class="list-inline-item" v-for="(genre, i) in genres">
+									<li class="list-inline-item" v-for="(genre, i) in genres" :key="i">
 										{{ genre.name }}{{ i !== genres.length - 1 ? ',' : '' }}
 									</li>
 								</ul>
@@ -101,7 +101,7 @@
 			'title',
 			'summary',
 			'notes',
-			'release',
+			'movie_year',
 			'paths',
 			'poster',
 			'genres',

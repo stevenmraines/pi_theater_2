@@ -6,7 +6,7 @@
                 <video-file-input
                     :eventDispatcher="eventDispatcher"
                     :files="files"
-                    :value="currentFile.filename"
+                    :value="currentFilename"
                 ></video-file-input>
 
                 <!-- IMDb Search Results -->
@@ -19,6 +19,7 @@
                 <!-- Title -->
                 <title-input
                     :eventDispatcher="eventDispatcher"
+                    :search="true"
                     :value="currentMovie.title"
                 ></title-input>
 
@@ -127,7 +128,7 @@
         data() {
             return {
                 apiTimeout: null,
-                currentFile: this.files[0],
+                currentFilename: this.files[0] ? this.files[0].filename : '',
                 currentImdbSearchResult: null,
                 eventDispatcher: new Vue({}),
                 movies: [],
@@ -138,7 +139,7 @@
 
         computed: {
             currentMovie() {
-                var index = _.findIndex(this.movies, { 'file': this.currentFile.filename });
+                var index = _.findIndex(this.movies, { 'file': this.currentFilename });
                 
                 if(index < 0) {
                     return {};
@@ -150,6 +151,15 @@
             submitDisabled() {
                 return !this.valid();
             },
+        },
+
+        watch: {
+            files() {
+                // Hack to fix issue of fields not updating when DriveForm deletes the submitted movie
+                if(this.files[0]) {
+                    this.videoFileChange(this.files[0].filename);
+                }
+            }
         },
 
         created() {
@@ -265,7 +275,11 @@
             },
 
             genreChange(data) {
-                this.currentMovie.genres[data.index] = data.value;
+                Vue.set(
+                    this.currentMovie.genres,
+                    data.index,
+                    data.value
+                );
             },
 
             genreDuplicates() {
@@ -410,7 +424,7 @@
 
                 axios.post('/api/upload/movie', formData)
                     .then(function(response) {
-                        self.driveEventDispatcher.$emit('movieSubmit', self.currentFile);
+                        self.driveEventDispatcher.$emit('movieSubmit', self.currentFilename);
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -476,8 +490,8 @@
                 );
             },
 
-            videoFileChange(file) {
-                this.currentFile = file;
+            videoFileChange(filename) {
+                this.currentFilename = filename;
             },
 
             yearReleasedChange(yearReleased) {

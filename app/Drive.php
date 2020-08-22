@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class Drive extends Model
 {
+    const MOVIE_DIRECTORY = 'movies';
+    const EPISODE_DIRECTORY = 'shows';
+    const MOVIE_FILE_TYPE = 'movie';
+    const EPISODE_FILE_TYPE = 'episode';
+
     public function media() {
         return $this->belongsToMany('App\Media')->withPivot('filename');
     }
@@ -43,39 +48,11 @@ class Drive extends Model
                 ->pluck('filename')
                 ->toArray();
 
-        $filenames = self::getNewVideos($driveId, 'movies', $existingMovies);
-
-        // Get newMovies as an array of arrays instead of array of string filenames
-        $newMovies = array_map(function($filename) {
-            return [
-                'filename' => $filename,
-                'title' => self::getTitleFromFilename($filename)
-            ];
-        }, $filenames);
-
-        // Search IMDb API for info and append it to each movie
-        $key = config('app.imdb_api_key');
-
-        throw_if(empty($key), \RuntimeException::class, 'IMDb API key value missing in .env file.');
-
-        $url = 'https://imdb8.p.rapidapi.com/title/auto-complete?q=';
-
-        $guzzleClient = new \GuzzleHttp\Client();
-
-        for($i = 0; $i < count($newMovies); $i++) {
-            $response = $guzzleClient->request('GET', $url . $newMovies[$i]['title'], [
-                'headers' => [
-                    'X-RapidAPI-Host' => 'imdb8.p.rapidapi.com',
-                    'X-RapidAPI-Key' => $key
-                ]
-            ]);
-
-            if($response->getStatusCode() == 200) {
-                $newMovies[$i]['imdb'] = json_decode((string) $response->getBody());
-            }
-        }
-
-        return $newMovies;
+        return self::getFileInfoArray(
+            self::getNewVideos($driveId, self::MOVIE_DIRECTORY, $existingMovies),
+            'getMovieTitleFromFilename',
+            self::MOVIE_FILE_TYPE
+        );
     }
 
     private static function getEpisodesFromDrive($driveId) {
@@ -89,16 +66,83 @@ class Drive extends Model
                 ->pluck('filename')
                 ->toArray();
 
-        // TODO add IMDb API support
-
-        return self::getNewVideos($driveId, 'shows', $existingEpisodes);
+        return self::getFileInfoArray(
+            self::getNewVideos($driveId, self::EPISODE_DIRECTORY, $existingEpisodes),
+            'getShowTitleFromFilename',
+            self::EPISODE_FILE_TYPE
+        );
     }
 
-    private static function getTitleFromFilename($filename) {
+    private static function getShowTitleFromFilename($filename) {
+        $filenameParts = explode('.', $filename);
+        $filenameParts = explode('_', $filenameParts[0]);
+        return ucwords(str_replace('-', ' ', $filenameParts[0]));
+    }
+
+    private static function getMovieTitleFromFilename($filename) {
         $filenameParts = explode('.', $filename);
         return ucwords(str_replace('-', ' ', $filenameParts[0]));
     }
 
+    /**
+     * Loops through some array of new movie or episode files,
+     * tries to guess the title of the movie or show from the filename,
+     * searches using the IMDb API if it's an array of movie files,
+     * and then appends that info to each file.
+     * 
+     * @param array $files The array of new movie or episode files.
+     * @param string $getTitleCallback The name of the callback used to guess the title from the filename.
+     * @param string $fileType A string constant representing the type of file as a movie or episode of a TV show.
+     */
+    private static function getFileInfoArray($files, $getTitleCallback, $fileType) {
+        return array_map(function($filename) use($getTitleCallback, $fileType) {
+            // Guess title from filename using the callback that was passed
+            $title = call_user_func("self::$getTitleCallback", $filename);
+
+            $fileInfoArray = [
+                'filename' => $filename,
+                'title' => $title
+            ];
+
+            // If it's a movie, call the IMDb API and append the results
+            if(strcasecmp($fileType, self::MOVIE_FILE_TYPE) === 0) {
+                $key = config('app.imdb_api_key');
+
+                throw_if(empty($key), \RuntimeException::class, 'IMDb API key not found.');
+    
+                $guzzleClient = new \GuzzleHttp\Client();
+    
+                $response = $guzzleClient->get(
+                    'https://imdb8.p.rapidapi.com/title/auto-complete',
+                    [
+                        'headers' => [
+                            'X-RapidAPI-Host' => 'imdb8.p.rapidapi.com',
+                            'X-RapidAPI-Key' => $key
+                        ],
+                        'query' => [
+                            'q' => $title
+                        ]
+                    ]
+                );
+    
+                if($response->getStatusCode() == 200) {
+                    $fileInfoArray['imdb'] = json_decode((string) $response->getBody(), true);
+                }
+            }
+
+            return $fileInfoArray;
+        }, $files);
+    }
+
+    /**
+     * Takes a drive ID, a string specifying the directory to search,
+     * and a list of files already accounted for in the database,
+     * and returns an array of newly added files.
+     * 
+     * @param int $driveId The ID of the drive to search.
+     * @param string $directory The name of the movie or episode directory on the drive.
+     * @param array $filesToExclude An array of strings representing files already accounted for in the database.
+     */
     private static function getNewVideos($driveId, $directory, $filesToExclude) {
         $files = [];
 

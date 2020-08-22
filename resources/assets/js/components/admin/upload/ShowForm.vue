@@ -12,6 +12,7 @@
                 <!-- Title -->
                 <title-input
                     :eventDispatcher="eventDispatcher"
+                    :search="true"
                     :value="show.title"
                 ></title-input>
 
@@ -303,9 +304,13 @@
                     var imdb = this.show.imdb.d[index];
                     this.show.title = imdb.l;
                     this.show.yearStart = imdb.y;
+                    this.show.yearEnd = 0;  // Default to 0 for "present" AKA ongoing
                     
                     if(imdb.yr) {
-                        this.show.yearEnd = parseInt(imdb.yr.split('-')[1]);
+                        var yearEnd = parseInt(imdb.yr.split('-')[1]);
+                        if(!isNaN(yearEnd)) {
+                            this.show.yearEnd = yearEnd;
+                        }
                     }
 
                     if(imdb.i) {
@@ -326,7 +331,8 @@
 
                     var self = this;
 
-                    axios.get(url, options)
+                    axios
+                        .get(url, options)
                         .then(function(response) {
                             // Set the genres
                             var genres = [''];

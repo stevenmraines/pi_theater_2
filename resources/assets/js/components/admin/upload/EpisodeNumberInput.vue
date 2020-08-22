@@ -1,6 +1,6 @@
 <template>
     <div class="form-group">
-        <label for="episode-number">* Episode Number</label>
+        <label for="episode-number">* Episode</label>
         <input
             type="number"
             id="episode-number"

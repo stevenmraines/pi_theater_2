@@ -3,23 +3,30 @@
         <div class="col">
             <form id="episode-form" method="POST" enctype="multipart/form-data" novalidate>
                 <!-- File -->
-                <episode-file-input
+                <video-file-input
                     :eventDispatcher="eventDispatcher"
                     :files="files"
-                    :value="currentFile"
-                ></episode-file-input>
+                    :value="currentFilename"
+                ></video-file-input>
 
                 <!-- Show -->
                 <shows-input
                     :eventDispatcher="eventDispatcher"
                     :shows="shows"
-                    :value="episodes[currentFileEscaped].media_id"
+                    :value="currentShowId"
                 ></shows-input>
+
+                <!-- IMDb Search Results -->
+                <imdb-search-input
+                    :eventDispatcher="eventDispatcher"
+                    :results="currentShow.imdb"
+                    :value="currentImdbSearchResult"
+                ></imdb-search-input>
 
                 <!-- Season -->
                 <season-input
                     :eventDispatcher="eventDispatcher"
-                    :value="episodes[currentFileEscaped].season"
+                    :value="currentEpisode.season"
                 ></season-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="!seasonValid()">
@@ -29,7 +36,7 @@
                 <!-- Episode Number -->
                 <episode-number-input
                     :eventDispatcher="eventDispatcher"
-                    :value="episodes[currentFileEscaped].episodeNumber"
+                    :value="currentEpisode.episodeNumber"
                 ></episode-number-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="!episodeNumberValid()">
@@ -39,7 +46,8 @@
                 <!-- Title -->
                 <title-input
                     :eventDispatcher="eventDispatcher"
-                    :value="episodes[currentFileEscaped].title"
+                    :search="false"
+                    :value="currentEpisode.title"
                 ></title-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="titleEmpty()">
@@ -63,7 +71,6 @@
 </template>
 
 <script>
-    // TODO abstract EpisodeForm and MovieForm into generic component
     export default {
         props: [
             'drive',
@@ -74,15 +81,43 @@
 
         data() {
             return {
-                currentFile: this.files[0],
-                eventDispatcher: new Vue({}),
-                episodes: {},
+                currentFilename: this.files[0] ? this.files[0].filename : '',
+                currentImdbSearchResult: null,
+                currentShowId: this.shows[0].id,
+                episodes: [],
+                eventDispatcher: new Vue({})
             };
         },
 
         computed: {
-            currentFileEscaped() {
-                return this.escapeFile(this.currentFile);
+            currentEpisode() {
+                var index = _.findIndex(this.episodes, { 'file': this.currentFilename });
+
+                if(index < 0) {
+                    return {};
+                }
+
+                return this.episodes[index];
+            },
+
+            currentFile() {
+                var index = _.findIndex(this.files, { 'filename': this.currentFilename });
+
+                if(index < 0) {
+                    return {};
+                }
+
+                return this.files[index];
+            },
+
+            currentShow() {
+                var index = _.findIndex(this.shows, { 'id': this.currentShowId });
+
+                if(index < 0) {
+                    return {};
+                }
+
+                return this.shows[index];
             },
 
             submitDisabled() {
@@ -90,9 +125,19 @@
             },
         },
 
+        watch: {
+            files() {
+                // Hack to fix issue of fields not updating when DriveForm deletes the submitted episode
+                if(this.files[0]) {
+                    this.videoFileChange(this.files[0].filename);
+                }
+            }
+        },
+
         created() {
             // Register events
             this.eventDispatcher.$on('episodeNumberChange', this.episodeNumberChange);
+            this.eventDispatcher.$on('imdbSearchChange', this.imdbSearchChange);
             this.eventDispatcher.$on('seasonChange', this.seasonChange);
             this.eventDispatcher.$on('showChange', this.showChange);
             this.eventDispatcher.$on('submit', this.submit);
@@ -100,63 +145,122 @@
             this.eventDispatcher.$on('titleChange', this.titleChange);
             this.eventDispatcher.$on('videoFileChange', this.videoFileChange);
 
-            // Initialize movies array
+            // Initialize episodes array
             for(var i = 0; i < this.files.length; i++) {
-                var objectDefaults = {
+                this.episodes.push({
                     drive_id: this.drive,
-                    episodeNumber: this.getEpisodeNumberFromFile(this.files[i]),
-                    file: this.files[i],
-                    season: this.getSeasonFromFile(this.files[i]),
-                    media_id: this.getShowFromFile(this.files[i]),
+                    episodeNumber: this.getEpisodeNumberFromFile(this.files[i].filename),
+                    file: this.files[i].filename,
+                    season: this.getSeasonFromFile(this.files[i].filename),
                     summary: '',
                     title: '',
-                };
-
-                // Use set function to maintain reactivity
-                Vue.set(
-                    this.episodes,
-                    this.escapeFile(this.files[i]),
-                    objectDefaults
-                );
+                });
             }
+
+            /*
+                Try to set currentShowId by getting show title from the current file,
+                then get IMDb API data for that show.
+            */
+            this.videoFileChangeUpdateImdb();
         },
 
         methods: {
             episodeNumberChange(episodeNumber) {
-                Vue.set(
-                    this.episodes[this.currentFileEscaped],
-                    'episodeNumber',
-                    parseInt(episodeNumber)
-                );
+                this.currentEpisode.episodeNumber = parseInt(episodeNumber);
+                this.getTitleFromSeasonAndEpisode();
             },
 
             episodeNumberValid() {
-                return this.numberValid(this.episodes[this.currentFileEscaped].episodeNumber);
+                return this.numberValid(this.currentEpisode.episodeNumber);
             },
 
-            escapeFile(file) {
-                return file.replace('.', '');
+            getEpisodeNumberFromFile(filename) {
+                return parseInt(filename.replace(/.+_s\d{2}-e([0-9]{2}).+/, '$1'));
             },
 
-            getEpisodeNumberFromFile(file) {
-                return parseInt(file.replace(/.+_s\d{2}-e([0-9]{2}).+/, '$1'));
+            getSeasonFromFile(filename) {
+                return parseInt(filename.replace(/.+_s(\d{2})-e.+/, '$1'));
             },
 
-            getSeasonFromFile(file) {
-                return parseInt(file.replace(/.+_s(\d{2})-e.+/, '$1'));
-            },
+            getTitleFromSeasonAndEpisode() {
+                // Get index of current season
+                var sIndex = _.findIndex(this.currentShow.imdbSeasons, {
+                    'season': this.currentEpisode.season,
+                });
 
-            getShowFromFile(file) {
-                var fileShow = file.replace(/(.+)_(.+)/, '$1').replace(/-/g, ' ');
+                if(sIndex >= 0) {
+                    // Get index of current episode
+                    var eIndex = _.findIndex(this.currentShow.imdbSeasons[sIndex].episodes, {
+                        'episode': this.currentEpisode.episodeNumber
+                    });
 
-                for(var i = 0; i < this.shows.length; i++) {
-                    // TODO strip out things like - : ' from show title
-                    if(fileShow.toLowerCase().localeCompare(this.shows[i].title.toLowerCase()) === 0) {
-                        return this.shows[i].id;
+                    if(eIndex >= 0) {
+                        this.currentEpisode.title = this.currentShow.imdbSeasons[sIndex].episodes[eIndex].title;
+                        return;
                     }
                 }
 
-                return this.shows[0].id;
+                // Reset if nothing can be found
+                this.currentEpisode.title = '';
+            },
+
+            imdbSearchChange(imdbId) {
+                this.currentImdbSearchResult = imdbId;
+                this.imdbSearchSeasons(imdbId);
+            },
+
+            imdbSearchCurrentShow() {
+                var url = 'https://imdb8.p.rapidapi.com/title/auto-complete';
+                var options = {
+                    headers: {
+                        'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                        'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
+                    },
+                    params: {
+                        'q': this.currentShow.title
+                    }
+                };
+
+                var self = this;
+
+                axios
+                    .get(url, options)
+                    .then(function(response) {
+                        self.currentShow.imdb = response.data;
+
+                        // Get data on seasons and episodes for currentShow
+                        self.imdbSearchSeasons(self.currentShow.imdb.d[0].id);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+            },
+
+            imdbSearchSeasons(imdbId) {
+                var url = 'https://imdb8.p.rapidapi.com/title/get-seasons';
+                var options = {
+                    headers: {
+                        'X-RapidAPI-Host': 'imdb8.p.rapidapi.com',
+                        'X-RapidAPI-Key': window.__INITIAL_STATE__.imdbKey
+                    },
+                    params: {
+                        'tconst': imdbId
+                    }
+                };
+
+                var self = this;
+
+                axios
+                    .get(url, options)
+                    .then(function(response) {
+                        self.currentShow.imdbSeasons = response.data;
+
+                        // Set title based on currentFilename
+                        self.getTitleFromSeasonAndEpisode();
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             },
 
             numberValid(number) {
@@ -164,36 +268,29 @@
             },
 
             seasonChange(season) {
-                Vue.set(
-                    this.episodes[this.currentFileEscaped],
-                    'season',
-                    parseInt(season)
-                );
+                this.currentEpisode.season = parseInt(season);
+                this.getTitleFromSeasonAndEpisode();
             },
 
             seasonValid() {
-                return this.numberValid(this.episodes[this.currentFileEscaped].season);
+                return this.numberValid(this.currentEpisode.season);
             },
 
-            showChange(show) {
-                Vue.set(
-                    this.episodes[this.currentFileEscaped],
-                    'media_id',
-                    show
-                );
+            showChange(showId) {
+                this.currentShowId = parseInt(showId);
+                this.imdbSearchCurrentShow();
             },
 
             submit() {
-                var episode = this.episodes[this.currentFileEscaped];
-
-                var formData = window.getFormData(episode);
-
                 var self = this;
 
-                axios.post('/api/upload/episode', formData)
+                var episode = this.currentEpisode;
+                episode.media_id = this.currentShowId;
+
+                axios
+                    .post('/api/upload/episode', window.getFormData(episode))
                     .then(function(response) {
-                        console.log(response);
-                        self.driveEventDispatcher.$emit('episodeSubmit', self.currentFile);
+                        self.driveEventDispatcher.$emit('episodeSubmit', self.currentFilename);
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -201,23 +298,15 @@
             },
 
             summaryChange(summary) {
-                Vue.set(
-                    this.episodes[this.currentFileEscaped],
-                    'summary',
-                    summary
-                );
+                this.currentEpisode.summary = summary;
             },
 
             titleChange(title) {
-                Vue.set(
-                    this.episodes[this.currentFileEscaped],
-                    'title',
-                    title
-                );
+                this.currentEpisode.title = title;
             },
 
             titleEmpty() {
-                return this.episodes[this.currentFileEscaped].title === '';
+                return !this.currentEpisode.title;
             },
 
             valid() {
@@ -228,8 +317,21 @@
                 );
             },
 
-            videoFileChange(file) {
-                this.currentFile = file;
+            videoFileChange(filename) {
+                this.currentFilename = filename;
+                this.videoFileChangeUpdateImdb();
+            },
+
+            videoFileChangeUpdateImdb() {
+                // Find correct show based on the filename
+                var index = _.findIndex(this.shows, { 'titleLowercase': this.currentFile.title.toLowerCase() });
+
+                if(index >= 0) {
+                    this.currentShowId = this.shows[index].id;
+                }
+
+                // Update the IMDb search data
+                this.imdbSearchCurrentShow();
             },
         },
     }

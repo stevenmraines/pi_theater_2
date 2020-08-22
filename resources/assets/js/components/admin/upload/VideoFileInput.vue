@@ -1,30 +1,39 @@
 <template>
     <div class="form-group">
-        <label for="file">File</label>
+        <label :for="id">File</label>
         <select
-            id="file"
+            :id="id"
             class="form-control"
             :value="value"
             @change="eventDispatcher.$emit('videoFileChange', $event.target.value)"
         >
             <option
-                v-for="f in files"
-                :key="f.filename"
-                :value="f.filename"
+                v-for="file in files"
+                :key="file.filename"
+                :value="file.filename"
             >
-                {{ f.filename }}
+                {{ file.filename }}
             </option>
         </select>
     </div>
 </template>
 
 <script>
-    // TODO figure out how to do bootstrap labels without ID
-    export default {
-        props: [
-            'eventDispatcher',
-            'files',
-            'value',
-        ],
+export default {
+    props: [
+        'eventDispatcher',
+        'files',
+        'value',
+    ],
+
+    data() {
+        return {
+            id: null
+        }
+    },
+
+    mounted() {
+        this.id = this._uid;
     }
+}
 </script>

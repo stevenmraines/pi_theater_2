@@ -12,7 +12,7 @@
 	@else
         
         <div id="app" class="container mt-3">
-            <a href="{{ route('browse') }}">
+            <a href="{{ route('browse') }}" target="_blank">
                 <img src="{{ asset('/img/brand.png') }}" />
             </a>
 			<drive-form></drive-form>

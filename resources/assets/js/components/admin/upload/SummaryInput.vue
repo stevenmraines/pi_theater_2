@@ -15,7 +15,6 @@
 </template>
 
 <script>
-    // TODO figure out how to do labels without IDs
     export default {
         props: [
             'eventDispatcher',

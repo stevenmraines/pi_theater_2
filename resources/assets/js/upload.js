@@ -3,7 +3,6 @@
  */
 Vue.component('collection-input', require('./components/admin/upload/CollectionInput.vue'));
 Vue.component('drive-form', require('./components/admin/upload/DriveForm.vue'));
-Vue.component('episode-file-input', require('./components/admin/upload/EpisodeFileInput.vue'));
 Vue.component('episode-form', require('./components/admin/upload/EpisodeForm.vue'));
 Vue.component('episode-number-input', require('./components/admin/upload/EpisodeNumberInput.vue'));
 Vue.component('genre-input', require('./components/admin/upload/GenreInput.vue'));

@@ -163,16 +163,31 @@
                 this.eventDispatcher.$on('movieSubmit', this.movieSubmit);
                 this.eventDispatcher.$on('episodeSubmit', this.episodeSubmit);
             }
+
+            // Initialize imdb, imdbSeasons, and titleLowercase elements on shows for EpisodeForm
+            for(var i = 0; i < this.shows.length; i++) {
+                Vue.set(this.shows[i], 'imdb', {});
+                Vue.set(this.shows[i], 'imdbSeasons', []);
+                Vue.set(this.shows[i], 'titleLowercase', this.shows[i].title.toLowerCase());
+            }
         },
 
         methods: {
-            episodeSubmit(file) {
-                var index = this.pending[this.currentDrive].episodes.indexOf(file);
-                this.pending[this.currentDrive].episodes.splice(index, 1);
+            episodeSubmit(filename) {
+                var index = _.findIndex(this.pending[this.currentDrive].episodes, {
+                    'filename': filename
+                });
+
+                if(index >= 0) {
+                    this.pending[this.currentDrive].episodes.splice(index, 1);
+                }
             },
 
-            movieSubmit(movie) {
-                var index = _.findIndex(this.pending[this.currentDrive].movies, { filename: movie.filename });
+            movieSubmit(filename) {
+                var index = _.findIndex(this.pending[this.currentDrive].movies, {
+                    'filename': filename
+                });
+                
                 if(index >= 0) {
                     this.pending[this.currentDrive].movies.splice(index, 1);
                 }

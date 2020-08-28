@@ -52,7 +52,7 @@ class MakeAllMediaIndexing extends Command
 
         if(file_exists($this->argument('file'))
                 && !$this->confirm('File already exists, do you wish to continue?')) {
-            die('Cancelling command');
+            die("Cancelling command\n");
         }
 
         $media = \App\Media::all();

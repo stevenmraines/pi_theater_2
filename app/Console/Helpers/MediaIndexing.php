@@ -21,14 +21,14 @@ class MediaIndexing
         $handle = fopen($file, 'w');
         
         if(!$handle) {
-            die('Could not open file');
+            die("Could not open file\n");
         }
 
         echo "Writing to file\n";
 
         fwrite($handle, $media->toJson());
 
-        echo 'Closing file';
+        echo "Closing file\n";
 
         fclose($handle);
     }

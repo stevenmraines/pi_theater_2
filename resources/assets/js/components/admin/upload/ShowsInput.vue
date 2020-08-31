@@ -3,7 +3,7 @@
         <label :for="id">
             * Show
             <a :href="'https://www.imdb.com/find?q=' + currentShowTitle" target="_blank">
-                IMDb Search
+                (IMDb Search)
             </a>
         </label>
         <select

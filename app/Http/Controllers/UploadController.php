@@ -25,6 +25,8 @@ class UploadController extends Controller
 
         $this->insertIntoDriveEpisode($request, $episodeId);
 
+        $this->restartDlna();
+
         return [
             'success' => true
         ];
@@ -45,6 +47,8 @@ class UploadController extends Controller
         $this->insertIntoCollectionMedia($request, $mediaId);
 
         $this->moveImages($request);
+
+        $this->restartDlna();
 
         return [
             'success' => true
@@ -465,6 +469,11 @@ class UploadController extends Controller
         // TODO figure out what to do about chown not being permitted
 //        chown($path, 'pi');
         chgrp($path, 'www-data');
+    }
+
+    protected function restartDlna()
+    {
+        exec("sudo service minidlna restart");
     }
 
     protected function getAttributeDefaults($attributes)

@@ -6,16 +6,33 @@ class Video
 {
 
     /**
+     * This method acts as a wrapper for the protected method getFormatted.
+     * The code for that method was found online and is pretty buggy,
+     * so I'm just wrapping it in a try / catch and returning an empty array if there's an exception.
+     *
+     * @param string $fullPath The directory and filename of the video file.
+     * @return array The video file attributes.
+     */
+    public static function getAttributes($fullPath)
+    {
+        try {
+            $attributes = self::getFormatted($fullPath);
+        }catch(\Exception $e) {
+            $attributes = [];
+        }
+
+        return $attributes;
+    }
+
+    /**
      * Takes a video file and returns an array of information like duration and dimensions.
      *
      * @param string $fullPath The directory and filename of the video file.
      * @return array The video file attributes.
      */
-    private static function _getAttributes($fullPath)
+    protected static function getFormatted($fullPath)
     {
-        $ffmpeg = 'ffmpeg';  // The path to ffmpeg on the server
-        $command = $ffmpeg . ' -i ' . $fullPath . ' -vstats 2>&1';
-        $output = shell_exec($command);
+        $output = self::vstats($fullPath);
 
         // Initialize the return variables
         $codec = null;
@@ -64,22 +81,16 @@ class Video
     }
 
     /**
-     * This method acts as a wrapper for the private method _getAttributes.
-     * The code for that method was found online and is pretty buggy,
-     * so I'm just wrapping it in a try / catch and returning an empty array if there's an exception.
-     *
+     * Gets the video metadata using ffmpeg.
+     * 
      * @param string $fullPath The directory and filename of the video file.
-     * @return array The video file attributes.
+     * @return array The video file metadata string.
      */
-    public static function getAttributes($fullPath)
+    public static function vstats($fullPath)
     {
-        try {
-            $attributes = self::_getAttributes($fullPath);
-        }catch(\Exception $e) {
-            $attributes = [];
-        }
-
-        return $attributes;
+        $ffmpeg = 'ffmpeg';  // The path to ffmpeg on the server
+        $command = $ffmpeg . ' -i ' . $fullPath . ' -vstats 2>&1';
+        return shell_exec($command);
     }
 
 }

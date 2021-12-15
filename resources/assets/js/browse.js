@@ -141,6 +141,7 @@ const app = new Vue({
 	created: function() {
 		Event.listen('addToWatchlist', this.addToWatchlist);
 		Event.listen('getMedia', this.getMedia);
+		Event.listen('posterPlay', this.posterPlay);
 		Event.listen('removeFromWatchlist', this.removeFromWatchlist);
 		Event.listen('setVideo', this.setVideo);
 		Event.listen('updateHistory', this.updateHistory);
@@ -196,6 +197,22 @@ const app = new Vue({
 			return function(episode) {
 				return episode.id == episode_id;
 			};
+		},
+
+		findEpisodeProgress: function(id, season, episode) {
+
+		},
+
+		findMovieProgress: function(id) {
+			if(this.user.history_media && this.user.history_media.length > 0) {
+				for(var i = 0; i < this.user.history_media.length; i++) {
+					if(this.user.history_media[i].id == id) {
+						return this.user.history_media[i].pivot.progress;
+					}
+				}
+			}
+
+			return 0;
 		},
 
 		fluidModalRecentEpisodes: function() {
@@ -292,6 +309,26 @@ const app = new Vue({
 					Event.trigger('setShow', response.data);
 				}
 				Event.trigger(event, response.data);
+			}).catch(function(error) {
+				console.log(error);
+			});
+		},
+
+		posterPlay: function(mediaId) {
+			var self = this;
+
+			axios.get('/api/media/' + mediaId).then(function(response) {
+				var progress = 0;
+
+				if(response.data.media_type == 'movie') {
+					progress = self.findMovieProgress(mediaId);
+				}
+
+				if(response.data.media_type == 'show') {
+
+				}
+
+				self.setVideo({ id : mediaId, progress : progress });
 			}).catch(function(error) {
 				console.log(error);
 			});

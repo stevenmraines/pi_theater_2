@@ -38,7 +38,7 @@
                 min="0"
                 v-bind:max="duration"
                 v-bind:step="step"
-                v-model:value="progress"
+                v-model="progress"
             />
         </div>
     </div>

@@ -193,14 +193,33 @@ const app = new Vue({
 			this.genreColumns = genreColumns;
 		},
 
-		findEpisode: function(episode_id) {
+		findEpisodeById: function(episode_id) {
 			return function(episode) {
 				return episode.id == episode_id;
 			};
 		},
 
-		findEpisodeProgress: function(id, season, episode) {
+		findEpisodeInHistory: function(episodeId) {
+			if(this.user) {
+				for(var i = 0; i < this.user.episode_history.length; i++) {
+					if(this.user.episode_history[i].id == episodeId) {
+						return this.user.episode_history[i];
+					}
+				}
+			}
 
+			return null;
+		},
+
+		findEpisodeProgress: function(episodeId) {
+			var progress = 0;
+			var episodeHistory = this.findEpisodeInHistory(episodeId);
+
+			if(episodeHistory.pivot.progress) {
+				progress = episodeHistory.pivot.progress;
+			}
+
+			return progress;
 		},
 
 		findMovieProgress: function(id) {
@@ -249,6 +268,57 @@ const app = new Vue({
 			this.fluidModal.title = 'New Shows';
 			this.fluidModal.contents = this.recentShows;
 			Event.trigger('showFluidModal');
+		},
+
+		findPosterPlayEpisode: function(mediaId) {
+			var minEpisode = null;
+			var recentlyWatchedEpisode = this.findRecentlyWatchedEpisode(mediaId);
+			
+			if(recentlyWatchedEpisode.id) {
+				var progress = this.findEpisodeProgress(recentlyWatchedEpisode.id);
+
+				// If it's basically complete, increment ep number and check for that
+				// If that doesn't exist, increment season and check for that
+				// If THAT doesn't exist, fail through this and continue on to get min season and ep number
+			}
+			
+
+			var self = this;
+
+			axios.get('/api/media/' + mediaId).then(function(response) {
+				var minSeason = response.data.episodes[0].season;
+				var minEpisodeNumber = response.data.episodes[0].episode_number;
+
+				for(var i = 0; i < response.data.episodes.length; i++) {
+					if(response.data.episodes[i].season < minSeason) {
+						minSeason = response.data.episodes[i].season;
+					}
+				}
+
+				for(var i = 0; i < response.data.episodes.length; i++) {
+					if(response.data.episodes[i].season == minSeason && response.data.episodes[i].episode_number < minEpisodeNumber) {
+						minEpisodeNumber = response.data.episodes[i].episode_number;
+					}
+				}
+
+				for(var i = 0; i < response.data.episodes.length; i++) {
+					if(response.data.episodes[i].season == minSeason && response.data.episodes[i].episode_number == minEpisodeNumber) {
+						minEpisode = response.data.episodes[i];
+					}
+				}
+			}).catch(function(error) {
+				console.log(error);
+			});
+
+			return minEpisode;
+		},
+
+		findRecentlyWatchedEpisode: function(mediaId) {
+			if(this.user.episode_history) {
+			
+			}
+
+			return null;
 		},
 
 		getCollection: function(id) {
@@ -316,19 +386,21 @@ const app = new Vue({
 
 		posterPlay: function(mediaId) {
 			var self = this;
+			var data = {
+				id: mediaId,
+				progress: 0
+			};
 
 			axios.get('/api/media/' + mediaId).then(function(response) {
-				var progress = 0;
-
 				if(response.data.media_type == 'movie') {
-					progress = self.findMovieProgress(mediaId);
+					data.progress = self.findMovieProgress(mediaId);
 				}
 
 				if(response.data.media_type == 'show') {
-
+					data.episode_id = self.findPosterPlayEpisode(mediaId).id;
 				}
 
-				self.setVideo({ id : mediaId, progress : progress });
+				self.setVideo(data);
 			}).catch(function(error) {
 				console.log(error);
 			});
@@ -386,19 +458,16 @@ const app = new Vue({
 							response
 								.data
 								.episodes
-								.filter(self.findEpisode(episode_id));
+								.filter(self.findEpisodeById(episode_id));
 
 						var episode = filtered_episodes[0];
 				  		self.video.drive = episode.drive[0].name;
 				  		self.video.filename = episode.drive[0].pivot.filename;
 
-						// Try to find the episode in user's history and get current progress
-						if(self.user) {
-							for(var i = 0; i < self.user.episode_history.length; i++) {
-								if(self.user.episode_history[i].id == episode_id) {
-									self.video.progress = self.user.episode_history[i].pivot.progress;
-								}
-							}
+						var episodeHistory = self.findEpisodeInHistory(episode_id);
+
+						if(episodeHistory.pivot.progress) {
+							self.video.progress = episodeHistory.pivot.progress;
 						}
 				  	}
 

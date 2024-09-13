@@ -20,9 +20,10 @@ yarn-error.log
 nbproject/*
 .nbproject
 
-# Node / NPM
+# Node / NPM / NVM
 /node_modules
 npm-debug.log
+.nvmrc
 
 # Public
 /public/css

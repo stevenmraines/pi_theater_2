@@ -23,7 +23,7 @@ class DumpDatabase extends Command
         }
         $outputFile = $dumpPath . '/dump.sql';
 
-        $cmd = "mysqldump -h {$host} -u {$username} -p\"{$password}\" --no-create-info {$database} > {$outputFile}";
+        $cmd = "mysqldump -h {$host} -u {$username} -p\"{$password}\" --no-create-info --ignore-table={$database}.migrations {$database} > {$outputFile}";
 
         $this->info("Dumping database to {$outputFile}");
         exec($cmd, $output, $exitCode);

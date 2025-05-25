@@ -35,4 +35,6 @@ npm-debug.log
 
 # Storage
 /storage/*.key
+/storage/dumps/dump.sql
+/storage/dumps/update_dev_database.sql
 

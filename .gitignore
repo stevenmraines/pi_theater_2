@@ -35,4 +35,5 @@ npm-debug.log
 
 # Storage
 /storage/*.key
+/storage/dumps/dump.sql
 

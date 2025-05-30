@@ -40,4 +40,7 @@
     v-bind:paths="paths"
 ></watchlist-modal>
 
-<video-player v-bind:paths="paths"></video-player>
+<video-player
+    v-bind:environment="environment"
+    v-bind:paths="paths"
+></video-player>

@@ -33,6 +33,7 @@ Route::get('/{home?}', function() {
             'appId' => config('app.algolia_app_id'),
             'apiKey' => config('app.algolia_api_key')
         ],
+        'environment' => env('APP_ENV', 'production'),
         'genres' => App\Genre::orderBy('name')->get(),
         'collections' => App\Collection::all(),
         'recentEpisodes' => App\Media::recentEpisodes(),

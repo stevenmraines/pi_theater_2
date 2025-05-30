@@ -15,6 +15,11 @@ class SyncProductionDatabase extends Command
 
     public function handle()
     {
+        if (env('APP_ENV', 'production') === 'production') {
+            $this->error("Attempting to run db:sync-from-prod in production! This command should only be run locally.");
+            return 1;
+        }
+
         $host = $this->option('host') ?? '192.168.1.204';
         $user = $this->option('user') ?? 'pi';
         $remotePath = '/var/www/pi_theater_2/storage/dumps/dump.sql';
@@ -35,7 +40,10 @@ class SyncProductionDatabase extends Command
             return 1;
         }
 
-        // Step 2: Import into local DB
+        // Step 2: Run migrate:fresh to wipe the DB
+        $this->call('migrate:fresh');
+
+        // Step 3: Import into local DB
         $database = Config::get('database.connections.mysql.database');
         $username = Config::get('database.connections.mysql.username');
         $password = Config::get('database.connections.mysql.password');

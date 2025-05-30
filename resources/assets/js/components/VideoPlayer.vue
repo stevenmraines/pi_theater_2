@@ -46,7 +46,7 @@
 
 <script>
     export default {
-        props: ['paths'],
+        props: ['environment', 'paths'],
 
         data() {
             return {
@@ -71,6 +71,14 @@
 
         computed: {
             src: function() {
+                /*
+                 * For local env, we don't have an attached drive with a bunch of videos,
+                 * so we'll serve one particular short video we have committed for testing.
+                 */
+                if (this.environment !== 'production') {
+                    return '/testing/videos/jingle-cats.mp4';
+                }
+                
                 if(this.filename !== '') {
                     return (
                         this.paths.videos +
@@ -84,6 +92,10 @@
             },
 
             videoType: function() {
+                if (this.environment !== 'production') {
+                    return 'video/mp4';
+                }
+                
                 var ext = this.filename.split('.')[1];
                 var type = '';
 

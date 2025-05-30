@@ -75,6 +75,8 @@ const app = new Vue({
 
 	data: {
 		algoliaKeys: window.__INITIAL_STATE__.algoliaKeys,
+        
+        environment: window.__INITIAL_STATE__.environment,
 
 		collection: {},
 		collections: window.__INITIAL_STATE__.collections,

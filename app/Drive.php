@@ -157,9 +157,15 @@ class Drive extends Model
         $path = implode(DIRECTORY_SEPARATOR, $pathTokens);
 
         // Get the files on the selected drive
-        $items = new \DirectoryIterator(
-            public_path() . DIRECTORY_SEPARATOR . $path
-        );
+        if (env('APP_ENV', 'production') === 'production') {
+            $items = new \DirectoryIterator(
+                public_path() . DIRECTORY_SEPARATOR . $path
+            );
+        } else {
+            $items = new \DirectoryIterator(
+                public_path() . DIRECTORY_SEPARATOR . 'testing' . DIRECTORY_SEPARATOR  . $path
+            );
+        }
 
         // Iterate over the files
         foreach($items as $item) {

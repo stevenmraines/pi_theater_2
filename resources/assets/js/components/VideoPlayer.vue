@@ -76,7 +76,7 @@
                  * so we'll serve one particular short video we have committed for testing.
                  */
                 if (this.environment !== 'production') {
-                    return '/testing/videos/jingle-cats.mp4';
+                    return '/testing/videos/hdd1/movies/jingle-cats.mp4';
                 }
                 
                 if(this.filename !== '') {

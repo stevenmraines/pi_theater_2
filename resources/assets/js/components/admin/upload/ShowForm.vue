@@ -405,9 +405,9 @@
             submit() {
                 var show = this.show;
 
-                // If both inputs are filled with data, default to poster
-                if(show.poster) {
-                    delete show.posterUrl;
+                // If both inputs are filled with data, default to posterUrl
+                if(show.posterUrl) {
+                    delete show.poster;
                 }
 
                 if(show.poster) {

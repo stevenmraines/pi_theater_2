@@ -465,6 +465,10 @@ class UploadController extends Controller
 
     protected function setPermissions(string $path)
     {
+        if (env('APP_ENV', 'production') !== 'production') {
+            return;
+        }
+        
         chmod($path, 0664);
         // TODO figure out what to do about chown not being permitted
 //        chown($path, 'pi');
@@ -473,6 +477,10 @@ class UploadController extends Controller
 
     protected function restartDlna()
     {
+        if (env('APP_ENV', 'production') !== 'production') {
+            return;
+        }
+        
         exec("sudo service minidlna restart");
     }
 

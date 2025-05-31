@@ -400,9 +400,9 @@
             submit() {
                 var movie = this.currentMovie;
 
-                // If both inputs are filled with data, default to poster
-                if(movie.poster) {
-                    delete movie.posterUrl;
+                // If both inputs are filled with data, default to posterUrl
+                if(movie.posterUrl) {
+                    delete movie.poster;
                 }
 
                 if(movie.poster) {

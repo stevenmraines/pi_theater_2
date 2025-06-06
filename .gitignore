@@ -26,12 +26,29 @@ npm-debug.log
 .nvmrc
 
 # Public
+/public/mix-manifest.json
 /public/css
 /public/fonts
 /public/hot
 /public/js
 /public/storage
 /public/videos
+
+# Ignore everything in /public/testing except for the jingle-cats.mp4 file which is used for local development
+# To start we must ignore everything in public/testing
+/public/testing/*
+
+# But not the videos folder path (each subsequent ! rule un-ignores parts of the directory tree)
+!/public/testing/videos/
+/public/testing/videos/*
+
+# Again, allow hdd1 and movies
+!/public/testing/videos/hdd1/
+/public/testing/videos/hdd1/*
+!/public/testing/videos/hdd1/movies/
+/public/testing/videos/hdd1/movies/*
+!/public/testing/videos/hdd1/movies/jingle-cats.mp4
+
 
 # Storage
 /storage/*.key

@@ -237,8 +237,16 @@ class UploadController extends Controller
         if(empty($imageExtension)) {
             $imageExtension = 'jpg';
         }
-
-        return $formattedTitle . '.' . $imageExtension;
+        
+        $filename = $formattedTitle . '.' . $imageExtension;
+        $alreadyTaken = Media::all()->pluck('poster')->search($filename) !== false;
+        
+        if ($alreadyTaken) {
+            $filename = $formattedTitle . '-'
+                . ($request->yearReleased ?? $request->yearStart) . '.' . $imageExtension;
+        }
+        
+        return $filename;
     }
 
     protected function getFormattedTitle(string $title)

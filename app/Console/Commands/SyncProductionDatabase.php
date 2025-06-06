@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Config;
  */
 class SyncProductionDatabase extends Command
 {
-    protected $signature = 'db:sync-from-prod {--host=} {--user=}';
+    // TODO Might be a good idea to have an optional parameter here that when provided tells the script to only remake the db from the existing file rather than pulling down a new sql file and remaking the local db
+    protected $signature = 'db:sync {--host=} {--user=}';
     protected $description = 'Pull the latest prod database and import locally';
 
     public function handle()
@@ -31,7 +32,7 @@ class SyncProductionDatabase extends Command
         }
 
         // Step 1: Pull the file with scp
-        $this->info("Pulling database dump from {$user}@{$host}...");
+        $this->info("Pulling database dump from {$user}@{$host} and storing it in $localPath...");
         $scpCmd = "scp {$user}@{$host}:{$remotePath} {$localPath}";
         exec($scpCmd, $scpOutput, $scpExit);
 

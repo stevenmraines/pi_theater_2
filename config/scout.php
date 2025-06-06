@@ -15,6 +15,8 @@ return [
     |
     */
 
+    // TODO Maybe set default to NULL for the driver, then explicitly set SCOUT_DRIVER to NULL in local .env, or leave it out entirely, so that local uploads don't add to algolia indexing
+    // TODO Although there may be times when I will want to mess with search stuff on local, maybe make an artisan command to toggle it on/off, or better yet check algolia's docs to see how to handle this
     'driver' => env('SCOUT_DRIVER', 'algolia'),
 
     /*

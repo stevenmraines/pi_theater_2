@@ -36,17 +36,17 @@ class UploadController extends Controller
     {
         $this->validateMovie($request);
 
-        $mediaId = $this->insertIntoMedia($request);
+        $media = $this->insertIntoMedia($request);
 
-        $this->insertIntoDriveMedia($request, $mediaId);
+        $this->insertIntoDriveMedia($request, $media->id);
 
-        $this->insertIntoMovieYear($request, $mediaId);
+        $this->insertIntoMovieYear($request, $media->id);
 
-        $this->insertIntoGenreMedia($request, $mediaId);
+        $this->insertIntoGenreMedia($request, $media->id);
 
-        $this->insertIntoCollectionMedia($request, $mediaId);
+        $this->insertIntoCollectionMedia($request, $media->id);
 
-        $this->moveImages($request);
+        $this->moveImages($request, $media);
 
         $this->restartDlna();
 
@@ -59,15 +59,15 @@ class UploadController extends Controller
     {
         $this->validateShow($request);
 
-        $mediaId = $this->insertIntoMedia($request, 'show');
+        $media = $this->insertIntoMedia($request, 'show');
 
-        $this->insertIntoShowYear($request, $mediaId);
+        $this->insertIntoShowYear($request, $media->id);
 
-        $this->insertIntoGenreMedia($request, $mediaId);
+        $this->insertIntoGenreMedia($request, $media->id);
 
-        $this->insertIntoCollectionMedia($request, $mediaId);
+        $this->insertIntoCollectionMedia($request, $media->id);
 
-        $this->moveImages($request);
+        $this->moveImages($request, $media);
 
         return [
             'success' => true
@@ -203,17 +203,18 @@ class UploadController extends Controller
         $media->title = $request->title;
         $media->summary = $request->summary;
         $media->notes = $request->notes;
-        $media->poster = $this->getPosterFilename($request);
         $media->jumbotron = $this->getJumbotronFilename($request);
-
+        $media->poster = $this->getPosterFilename($request, $media);
+        
         $media->save();
-
-        return $media->id;
+        
+        return $media;
     }
 
-    protected function getPosterFilename(Request $request)
+    protected function getPosterFilename(Request $request, Media $media)
     {
-        return $this->getImageFilename($request);
+        $proposedFilename = $this->getImageFilename($request);
+        return Utilities\PosterImage::getUniqueFilename($request, $media, $proposedFilename);
     }
 
     protected function getJumbotronFilename(Request $request)
@@ -238,15 +239,7 @@ class UploadController extends Controller
             $imageExtension = 'jpg';
         }
         
-        $filename = $formattedTitle . '.' . $imageExtension;
-        $alreadyTaken = Media::all()->pluck('poster')->search($filename) !== false;
-        
-        if ($alreadyTaken) {
-            $filename = $formattedTitle . '-'
-                . ($request->yearReleased ?? $request->yearStart) . '.' . $imageExtension;
-        }
-        
-        return $filename;
+        return $formattedTitle . '.' . $imageExtension;
     }
 
     protected function getFormattedTitle(string $title)
@@ -433,12 +426,12 @@ class UploadController extends Controller
         return $instance->id;
     }
 
-    protected function moveImages(Request $request)
+    protected function moveImages(Request $request, Media $media)
     {
         /*
          *  Handle poster image.
          */
-        $posterFilename = $this->getPosterFilename($request);
+        $posterFilename = $media->poster;
         $posterFilepath = public_path('img') . DIRECTORY_SEPARATOR . 'posters'
             . DIRECTORY_SEPARATOR . $posterFilename;
 

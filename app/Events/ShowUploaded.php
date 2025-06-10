@@ -16,9 +16,9 @@ class ShowUploaded
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Media $media;
+    public $media;
     
-    public Request $request;
+    public $request;
     
     /**
      * Create a new event instance.

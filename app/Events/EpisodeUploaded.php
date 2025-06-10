@@ -16,9 +16,9 @@ class EpisodeUploaded
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Episode $episode;
+    public $episode;
     
-    public Request $request;
+    public $request;
     
     /**
      * Create a new event instance.

@@ -29,11 +29,17 @@ class Image
 
     protected static function getImageFilename(Request $request, string $field = 'poster')
     {
-        $patterns = ['/[^a-z\d\s]/', '/\s/'];
+        $patterns = ['/[^a-z\d\s\-]/', '/\s/'];
         $replacements = ['', '-'];
         $formattedTitle = preg_replace($patterns, $replacements, strtolower($request->title));
-        // TODO Shouldn't this be $request->{$field}?
-        $imageExtension = strtolower(pathinfo($request->poster, PATHINFO_EXTENSION));
+        
+        $pathInfo = $request->poster;
+        if ($field !== 'poster') {
+            $pathInfo = $request->{$field}->getClientOriginalName();
+        }
+        
+        // TODO Don't know if extension is working for posters
+        $imageExtension = strtolower(pathinfo($pathInfo, PATHINFO_EXTENSION));
 
         // Default to jpg
         if(empty($imageExtension)) {

@@ -8,6 +8,8 @@ use Laravel\Scout\Searchable;
 class Genre extends Model
 {
     use Searchable;
+    
+    protected $fillable = ['name'];
 
     public function media() {
 		return

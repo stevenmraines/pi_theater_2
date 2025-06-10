@@ -4,11 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Laravel\Scout\Searchable;
+//use Laravel\Scout\Searchable;
 
 class Collection extends Model
 {
-    use Searchable;
+//    use Searchable;
+    
+    protected $fillable = ['name'];
 
     public function media() {
         return

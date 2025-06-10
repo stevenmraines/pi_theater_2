@@ -9,6 +9,15 @@ use Laravel\Scout\Searchable;
 class Media extends Model
 {
     use Searchable;
+    
+    protected $fillable = [
+        'media_type',
+        'title',
+        'summary',
+        'notes',
+        'poster',
+        'jumbotron',
+    ];
 
     public function collections() {
         return $this->belongsToMany('App\Collection');

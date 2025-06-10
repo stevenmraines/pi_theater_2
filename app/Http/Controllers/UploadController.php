@@ -2,30 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Collection;
-use App\Drive;
 use App\Episode;
-use App\Genre;
 use App\Media;
-use App\Utilities;
+use App\Utilities\Image as ImageUtilities;
+use App\Events\EpisodeUploaded;
+use App\Events\MovieUploaded;
+use App\Events\ShowUploaded;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Validator;
 
 set_time_limit(0);
 
-// TODO break up some of this functionality into smaller controllers
 class UploadController extends Controller
 {
     public function episode(Request $request)
     {
-        $this->validateEpisode($request);
+        $request->validate([
+            // TODO Run SQL to convert empty strings to NULL on episodes table summary field and update code to match
+            'drive_id' => 'required|exists:drives,id',
+            'episodeNumber' => 'required|integer|min:1',
+            'file' => 'required|string',
+            'season' => 'required|integer|min:1',
+            'media_id' => 'required|exists:media,id',
+            'summary' => 'nullable|string|max:4000',
+            'title' => 'required|string|max:191',
+        ]);
 
-        $episodeId = $this->insertIntoEpisodes($request);
+        $episode = new Episode([
+            'media_id' => $request->media_id,
+            'season' => $request->season,
+            'episode_number' => $request->episodeNumber,
+            'title' => $request->title,
+            'summary' => $request->summary,
+        ]);
 
-        $this->insertIntoDriveEpisode($request, $episodeId);
-
-        $this->restartDlna();
+        $episode->save();
+        
+        event(new EpisodeUploaded($episode, $request));
+        
+        // TODO Not sure this even works, also there may be a better way to get minidlna to recognize new files
+        if(env('APP_ENV', 'production') === 'production') {
+            exec("sudo service minidlna restart");
+        }
 
         return [
             'success' => true
@@ -34,78 +51,7 @@ class UploadController extends Controller
 
     public function movie(Request $request)
     {
-        $this->validateMovie($request);
-
-        $media = $this->insertIntoMedia($request);
-
-        $this->insertIntoDriveMedia($request, $media->id);
-
-        $this->insertIntoMovieYear($request, $media->id);
-
-        $this->insertIntoGenreMedia($request, $media->id);
-
-        $this->insertIntoCollectionMedia($request, $media->id);
-
-        $this->moveImages($request, $media);
-
-        $this->restartDlna();
-
-        return [
-            'success' => true
-        ];
-    }
-
-    public function show(Request $request)
-    {
-        $this->validateShow($request);
-
-        $media = $this->insertIntoMedia($request, 'show');
-
-        $this->insertIntoShowYear($request, $media->id);
-
-        $this->insertIntoGenreMedia($request, $media->id);
-
-        $this->insertIntoCollectionMedia($request, $media->id);
-
-        $this->moveImages($request, $media);
-
-        return [
-            'success' => true
-        ];
-    }
-
-    protected function validateEpisode(Request $request)
-    {
-        return $request->validate($this->getEpisodeValidationRules());
-    }
-
-    protected function validateMovie(Request $request)
-    {
-        return $request->validate($this->getMovieValidationRules());
-    }
-
-    protected function validateShow(Request $request)
-    {
-        return $request->validate($this->getShowValidationRules());
-    }
-
-    protected function getEpisodeValidationRules()
-    {
-        // TODO Run SQL to convert empty strings to NULL on episodes table summary field and update code to match
-        return [
-            'drive_id' => 'required|exists:drives,id',
-            'episodeNumber' => 'required|integer|min:1',
-            'file' => 'required|string',
-            'season' => 'required|integer|min:1',
-            'media_id' => 'required|exists:media,id',
-            'summary' => 'nullable|string|max:4000',
-            'title' => 'required|string|max:191',
-        ];
-    }
-
-    protected function getMediaValidationRules()
-    {
-        return [
+        $request->validate([
             'collections' => 'array',
             'genres' => 'required|array',
             'jumbotron' => 'nullable|image',
@@ -114,383 +60,61 @@ class UploadController extends Controller
             'posterUrl' => 'required_without:poster|url',
             'summary' => 'required|string|max:4000',
             'title' => 'required|string|max:191',
-        ];
-    }
-
-    protected function getMovieValidationRules()
-    {
-        $movieValidationRules = [
             'drive_id' => 'required|exists:drives,id',
             'file' => 'required|string',
             'yearReleased' => 'required|date_format:Y|after_or_equal:1900|before_or_equal:' . date('Y'),
-        ];
-
-        return array_merge(
-            $this->getMediaValidationRules(),
-            $movieValidationRules
-        );
-    }
-
-    protected function getShowValidationRules()
-    {
-        // TODO figure out how to extend existing after_or_equal date rule to allow zero
-        $showValidationRules = [
-            'yearEnd' => 'required|date_format:Y|gtef:yearStart|before_or_equal:' . date('Y'),
-            'yearStart' => 'required|date_format:Y|after_or_equal:1900|before_or_equal:' . date('Y'),
-        ];
-
-        return array_merge(
-            $this->getMediaValidationRules(),
-            $showValidationRules
-        );
-    }
-
-    protected function insertIntoEpisodes(Request $request)
-    {
-        $episode = new Episode;
-
-        $episode->media_id = $request->media_id;
-        $episode->season = $request->season;
-        $episode->episode_number = $request->episodeNumber;
-        $episode->title = $request->title;
-        $episode->summary = $request->summary;
-
-        $episode->save();
-
-        return $episode->id;
-    }
-
-    protected function insertIntoDriveEpisode(Request $request, int $episodeId)
-    {
-        $drive = Drive::find($request->drive_id)->name;
-
-        list($width, $height, $duration) = $this->getAttributeDefaults(
-            Utilities\Video::getAttributes(
-                public_path("videos/$drive/shows/{$request->file}")
-            )
-        );
-
-        $insert = "
-            INSERT INTO drive_episode
-            (
-                drive_id,
-                episode_id,
-                filename,
-                width,
-                height,
-                duration
-            )
-            VALUES (?, ?, ?, ?, ?, ?)
-        ";
-
-        $values = [
-            $request->drive_id,
-            $episodeId,
-            $request->file,
-            $width,
-            $height,
-            $duration
-        ];
-
-        return DB::insert($insert, $values);
-    }
-
-    protected function insertIntoMedia(Request $request, string $mediaType = 'movie')
-    {
+        ]);
+        
         $media = new Media;
-
-        $media->media_type = $mediaType;
+        $media->media_type = 'movie';
         $media->title = $request->title;
         $media->summary = $request->summary;
         $media->notes = $request->notes;
-        $media->jumbotron = $this->getJumbotronFilename($request);
-        $media->poster = $this->getPosterFilename($request, $media);
-        
+        $media->jumbotron = ImageUtilities::getJumbotronFilename($request);
+        $media->poster = ImageUtilities::getPosterFilename($request, $media);
         $media->save();
         
-        return $media;
-    }
-
-    protected function getPosterFilename(Request $request, Media $media)
-    {
-        $proposedFilename = $this->getImageFilename($request);
-        return Utilities\PosterImage::getUniqueFilename($request, $media, $proposedFilename);
-    }
-
-    protected function getJumbotronFilename(Request $request)
-    {
-        if($request->hasFile('jumbotron')) {
-            return $this->getImageFilename($request, 'jumbotron');
-        }
-
-        return null;
-    }
-
-    protected function getImageFilename(Request $request, string $field = 'poster')
-    {
-        $formattedTitle = $this->getFormattedTitle($request->title);
-        $imageExtension = strtolower(pathinfo($request->poster, PATHINFO_EXTENSION));
-
-        // TODO figure out how to do this without screwing up Algolia indexing
-        // $imageExtension = $request->{$field}->extension();
-
-        // Default to jpg
-        if(empty($imageExtension)) {
-            $imageExtension = 'jpg';
-        }
+        event(new MovieUploaded($media, $request));
         
-        return $formattedTitle . '.' . $imageExtension;
-    }
-
-    protected function getFormattedTitle(string $title)
-    {
-        $patterns = ['/[^a-z\d\s]/', '/\s/'];
-        $replacements = ['', '-'];
-
-        return preg_replace($patterns, $replacements, strtolower($title));
-    }
-
-    protected function insertIntoDriveMedia(Request $request, int $mediaId)
-    {
-        $drive = Drive::find($request->drive_id)->name;
-
-        list($width, $height, $duration) = $this->getAttributeDefaults(
-            Utilities\Video::getAttributes(
-                public_path("videos/$drive/movies/{$request->file}")
-            )
-        );
-
-        $insert = "
-            INSERT INTO drive_media
-            (
-                media_id,
-                drive_id,
-                filename,
-                width,
-                height,
-                duration
-            )
-            VALUES (?, ?, ?, ?, ?, ?)
-        ";
-
-        $values = [
-            $mediaId,
-            $request->drive_id,
-            $request->file,
-            $width,
-            $height,
-            $duration
-        ];
-
-        return DB::insert($insert, $values);
-    }
-
-    protected function insertIntoMovieYear(Request $request, int $mediaId)
-    {
-        $insert = "
-            INSERT INTO movie_year
-            (
-                media_id,
-                year_released
-            )
-            VALUES (?, ?)
-        ";
-
-        $values = [
-            $mediaId,
-            $request->yearReleased
-        ];
-
-        return DB::insert($insert, $values);
-    }
-
-    protected function insertIntoShowYear(Request $request, int $mediaId)
-    {
-        $insert = "
-            INSERT INTO show_year
-            (
-                media_id,
-                year_start,
-                year_end
-            )
-            VALUES (?, ?, ?)
-        ";
-
-        $values = [
-            $mediaId,
-            $request->yearStart,
-            $request->yearEnd
-        ];
-
-        return DB::insert($insert, $values);
-    }
-
-    protected function insertIntoGenreMedia(Request $request, int $mediaId)
-    {
-        $genreIds = $this->getGenreIds($request);
-
-        foreach($genreIds as $genreId) {
-            $insert = "
-                INSERT INTO genre_media
-                (
-                    genre_id,
-                    media_id
-                )
-                VALUES (?, ?)
-            ";
-
-            $values = [
-                $genreId,
-                $mediaId
-            ];
-
-            DB::insert($insert, $values);
-        }
-    }
-
-    protected function getGenreIds(Request $request)
-    {
-        return $this->getGenreOrCollectionIds($request, 'genres', Genre::class);
-    }
-
-    protected function insertIntoCollectionMedia(Request $request, int $mediaId)
-    {
-        if(
-            count($request->collections) === 1
-            && ($request->collections[0] === '' || is_null($request->collections[0]))
-        ) {
-            return;
+        // TODO Not sure this even works, also there may be a better way to get minidlna to recognize new files
+        if(env('APP_ENV', 'production') === 'production') {
+            exec("sudo service minidlna restart");
         }
 
-        $collectionIds = $this->getCollectionIds($request);
-
-        if(count($collectionIds) > 0) {
-            foreach($collectionIds as $collectionId) {
-                $insert = "
-                    INSERT INTO collection_media
-                    (
-                        collection_id,
-                        media_id
-                    )
-                    VALUES (?, ?)
-                ";
-
-                $values = [
-                    $collectionId,
-                    $mediaId
-                ];
-
-                DB::insert($insert, $values);
-            }
-        }
-    }
-
-    protected function getCollectionIds(Request $request)
-    {
-        return $this->getGenreOrCollectionIds($request, 'collections', Collection::class);
-    }
-
-    protected function getGenreOrCollectionIds(Request $request, string $field, $model)
-    {
-        $ids = [];
-
-        foreach($request->{$field} as $name) {
-            $record =
-                $model
-                    ::where('name', '=', $name)
-                    ->get()
-                    ->first();
-
-            if(!is_null($record)) {
-                $id = $record->id;
-            }
-
-            if(is_null($record)) {
-                $id = $this->insertGenreOrCollection($model, $name);
-            }
-
-            $ids[] = $id;
-        }
-
-        return array_unique($ids);
-    }
-
-    protected function insertGenreOrCollection($model, string $name)
-    {
-        $instance = new $model;
-
-        $instance->name = $name;
-
-        $instance->save();
-
-        return $instance->id;
-    }
-
-    protected function moveImages(Request $request, Media $media)
-    {
-        /*
-         *  Handle poster image.
-         */
-        $posterFilename = $media->poster;
-        $posterFilepath = public_path('img') . DIRECTORY_SEPARATOR . 'posters'
-            . DIRECTORY_SEPARATOR . $posterFilename;
-
-        // If posterUrl is present then the image needs to be downloaded from the URL
-        if(!empty($request->posterUrl)) {
-            file_put_contents($posterFilepath, file_get_contents($request->posterUrl));
-            // Resize the image with ImageMagick
-            exec("convert $posterFilepath -resize 230x345\! $posterFilepath");
-        }
-
-        // If no posterUrl, then the uploaded image needs to be stored
-        if(empty($request->posterUrl)) {
-            $request->poster->storeAs('posters', $posterFilename, 'images');
-        }
-
-        $this->setPermissions($posterFilepath);
-
-        /*
-         *  Handle jumbotron image, if any.
-         */
-        if($request->hasFile('jumbotron')) {
-            $jumbotronFilename = $this->getJumbotronFilename($request);
-
-            $request->jumbotron->storeAs('jumbotron', $jumbotronFilename, 'images');
-
-            $this->setPermissions(
-                public_path('img') . DIRECTORY_SEPARATOR . 'jumbotron'
-                . DIRECTORY_SEPARATOR . $jumbotronFilename
-            );
-        }
-    }
-
-    protected function setPermissions(string $path)
-    {
-        if (env('APP_ENV', 'production') !== 'production') {
-            return;
-        }
-        
-        chmod($path, 0664);
-        // TODO figure out what to do about chown not being permitted
-//        chown($path, 'pi');
-        chgrp($path, 'www-data');
-    }
-
-    protected function restartDlna()
-    {
-        if (env('APP_ENV', 'production') !== 'production') {
-            return;
-        }
-        
-        exec("sudo service minidlna restart");
-    }
-
-    protected function getAttributeDefaults($attributes)
-    {
         return [
-            isset($attributes['width']) && !is_null($attributes['width']) ? $attributes['width'] : 0,
-            isset($attributes['height']) && !is_null($attributes['height']) ? $attributes['height'] : 0,
-            isset($attributes['duration']) && !is_null($attributes['duration']) ? $attributes['duration'] : 0
+            'success' => true
+        ];
+    }
+
+    public function show(Request $request)
+    {
+        $request->validate([
+            'collections' => 'array',
+            'genres' => 'required|array',
+            'jumbotron' => 'nullable|image',
+            'notes' => 'nullable|string|max:191',
+            'poster' => 'required_without:posterUrl|image',
+            'posterUrl' => 'required_without:poster|url',
+            'summary' => 'required|string|max:4000',
+            'title' => 'required|string|max:191',
+            // TODO figure out how to extend existing after_or_equal date rule to allow zero
+            'yearEnd' => 'required|date_format:Y|gtef:yearStart|before_or_equal:' . date('Y'),
+            'yearStart' => 'required|date_format:Y|after_or_equal:1900|before_or_equal:' . date('Y'),
+        ]);
+
+        $media = new Media;
+        $media->media_type = 'show';
+        $media->title = $request->title;
+        $media->summary = $request->summary;
+        $media->notes = $request->notes;
+        $media->jumbotron = ImageUtilities::getJumbotronFilename($request);
+        $media->poster = ImageUtilities::getPosterFilename($request, $media);
+        $media->save();
+        
+        event(new ShowUploaded($media, $request));
+
+        return [
+            'success' => true
         ];
     }
 }

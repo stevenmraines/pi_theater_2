@@ -16,6 +16,17 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
+        'App\Events\MovieUploaded' => [
+            'App\Listeners\PopulateMovieInfo',
+            'App\Listeners\HandleMediaFiles',
+        ],
+        'App\Events\ShowUploaded' => [
+            'App\Listeners\PopulateShowInfo',
+            'App\Listeners\HandleMediaFiles',
+        ],
+        'App\Events\EpisodeUploaded' => [
+            'App\Listeners\PopulateEpisodeInfo',
+        ],
     ];
 
     /**

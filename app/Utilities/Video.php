@@ -17,6 +17,9 @@ class Video
     {
         try {
             $attributes = self::getFormatted($fullPath);
+            $attributes['width'] = $attributes['width'] ?: 0;
+            $attributes['height'] = $attributes['height'] ?: 0;
+            $attributes['duration'] = $attributes['duration'] ?: 0;
         }catch(\Exception $e) {
             $attributes = [];
         }

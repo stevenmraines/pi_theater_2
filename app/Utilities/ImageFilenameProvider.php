@@ -5,7 +5,7 @@ namespace App\Utilities;
 use App\Media;
 use Illuminate\Http\Request;
 
-class Image
+class ImageFilenameProvider
 {
     
     public static function getPosterFilename(Request $request, Media $media)

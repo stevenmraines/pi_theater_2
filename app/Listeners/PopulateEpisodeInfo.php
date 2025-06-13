@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Drive;
 use App\DriveEpisode;
-use App\Utilities\Video;
+use App\Utilities\VideoMetadataProvider;
 
 class PopulateEpisodeInfo
 {
@@ -28,7 +28,7 @@ class PopulateEpisodeInfo
             $filename,
         ]);
 
-        $attributes = Video::getAttributes(public_path($path));
+        $attributes = VideoMetadataProvider::getAttributes(public_path($path));
         
         (new DriveEpisode([
             'episode_id' => $event->episode->id,

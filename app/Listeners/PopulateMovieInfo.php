@@ -8,7 +8,7 @@ use App\DriveMedia;
 use App\Genre;
 use App\MovieYear;
 use App\Events\MovieUploaded;
-use App\Utilities\Video;
+use App\Utilities\VideoMetadataProvider;
 
 class PopulateMovieInfo
 {
@@ -32,7 +32,7 @@ class PopulateMovieInfo
             $filename,
         ]);
 
-        $attributes = Video::getAttributes(public_path($path));
+        $attributes = VideoMetadataProvider::getAttributes(public_path($path));
         
         (new DriveMedia([
             'media_id' => $event->media->id,

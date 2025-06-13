@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Episode;
 use App\Media;
-use App\Utilities\Image as ImageUtilities;
+use App\Utilities\ImageFilenameProvider;
 use App\Events\EpisodeUploaded;
 use App\Events\MovieUploaded;
 use App\Events\ShowUploaded;
@@ -70,8 +70,8 @@ class UploadController extends Controller
         $media->title = $request->title;
         $media->summary = $request->summary;
         $media->notes = $request->notes;
-        $media->jumbotron = ImageUtilities::getJumbotronFilename($request);
-        $media->poster = ImageUtilities::getPosterFilename($request, $media);
+        $media->jumbotron = ImageFilenameProvider::getJumbotronFilename($request);
+        $media->poster = ImageFilenameProvider::getPosterFilename($request, $media);
         $media->save();
         
         event(new MovieUploaded($media, $request));
@@ -107,8 +107,8 @@ class UploadController extends Controller
         $media->title = $request->title;
         $media->summary = $request->summary;
         $media->notes = $request->notes;
-        $media->jumbotron = ImageUtilities::getJumbotronFilename($request);
-        $media->poster = ImageUtilities::getPosterFilename($request, $media);
+        $media->jumbotron = ImageFilenameProvider::getJumbotronFilename($request);
+        $media->poster = ImageFilenameProvider::getPosterFilename($request, $media);
         $media->save();
         
         event(new ShowUploaded($media, $request));

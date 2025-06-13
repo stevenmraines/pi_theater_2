@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Utilities\Image;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

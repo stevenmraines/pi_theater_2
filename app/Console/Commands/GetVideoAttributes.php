@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Console\Helpers\Validation;
-use App\Utilities;
+use App\Utilities\VideoMetadataProvider;
 use Illuminate\Console\Command;
 
 class GetVideoAttributes extends Command
@@ -14,7 +14,7 @@ class GetVideoAttributes extends Command
      * @var string
      */
     protected $signature = 'get-video-attributes
-                            {file : The path and filename of the video to get data on}';
+                            {file : The path and filename of the video to get data on, for example "hdd1/movies/alien.mp4"}';
 
     /**
      * The console command description.
@@ -51,11 +51,14 @@ class GetVideoAttributes extends Command
         }
 
         $file = public_path("videos/" . $this->argument('file'));
-
-        if(!file_exists($file)) {
-            die("File not found\n");
+        if (env('APP_ENV', 'production') !== 'production') {
+            $file = public_path('testing/videos/' . $this->argument('file'));
         }
 
-        echo Utilities\Video::vstats($file);
+        if(!file_exists($file)) {
+            die("File $file not found\n");
+        }
+
+        echo VideoMetadataProvider::vstats($file);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Drive;
 use App\Episode;
 use App\Media;
 use App\Utilities\ImageFilenameProvider;
@@ -37,7 +38,7 @@ class UploadController extends Controller
 
         $episode->save();
         
-        event(new EpisodeUploaded($episode, $request));
+        event(new EpisodeUploaded(Drive::find($request->drive_id), $episode, $request));
         
         // TODO Not sure this even works, also there may be a better way to get minidlna to recognize new files
         if(env('APP_ENV', 'production') === 'production') {
@@ -74,7 +75,7 @@ class UploadController extends Controller
         $media->poster = ImageFilenameProvider::getPosterFilename($request, $media);
         $media->save();
         
-        event(new MovieUploaded($media, $request));
+        event(new MovieUploaded(Drive::find($request->drive_id), $media, $request));
         
         // TODO Not sure this even works, also there may be a better way to get minidlna to recognize new files
         if(env('APP_ENV', 'production') === 'production') {

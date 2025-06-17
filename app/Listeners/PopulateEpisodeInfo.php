@@ -19,16 +19,10 @@ class PopulateEpisodeInfo
         /*
          * DriveEpisode
          */
-        $drive = Drive::find($event->request->get('drive_id'));
+        $drive = $event->drive;
         $filename = $event->request->get('file');
-        $path = implode(DIRECTORY_SEPARATOR, [
-            'videos',
-            $drive->name,
-            Drive::EPISODE_DIRECTORY,
-            $filename,
-        ]);
-
-        $attributes = VideoMetadataProvider::getAttributes(public_path($path));
+        $path = $drive->episode_directory() . DIRECTORY_SEPARATOR . $filename;
+        $attributes = VideoMetadataProvider::getAttributes($path);
         
         (new DriveEpisode([
             'episode_id' => $event->episode->id,

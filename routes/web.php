@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 
+use App\Drive;
+
 Auth::routes();
 
 Route::get('/{home?}', function() {
@@ -27,6 +29,15 @@ Route::get('/{home?}', function() {
             ->orderBy('created_at', 'desc')
             ->limit(20)
             ->get();
+    
+    $drivePaths = [];
+    
+    Drive::all()->each(function ($drive) use (&$drivePaths) {
+        $drivePaths[$drive->name] = [
+            'movie_directory' => $drive->movie_directory(),
+            'episode_directory' => $drive->episode_directory(),
+        ];
+    });
 
     $initialState = [
         'algoliaKeys' => (object) [
@@ -47,8 +58,8 @@ Route::get('/{home?}', function() {
             'jumbotron' => asset('img/jumbotron'),
             'logos' => asset('img/logos'),
             'posters' => asset('img/posters'),
-            'videos' => asset('videos')
-        ]
+            'drivePaths' => $drivePaths,
+        ],
     ];
 
     return view('browse')->with('initialState', json_encode($initialState));

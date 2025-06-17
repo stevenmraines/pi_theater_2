@@ -41,6 +41,6 @@
 ></watchlist-modal>
 
 <video-player
+    v-bind:drive_paths="paths.drivePaths"
     v-bind:environment="environment"
-    v-bind:paths="paths"
 ></video-player>

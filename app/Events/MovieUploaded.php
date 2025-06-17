@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Drive;
 use App\Media;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ class MovieUploaded
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     
+    public $drive;
+    
     public $media;
     
     public $request;
@@ -25,8 +28,9 @@ class MovieUploaded
      *
      * @return void
      */
-    public function __construct(Media $media, Request $request)
+    public function __construct(Drive $drive, Media $media, Request $request)
     {
+        $this->drive = $drive;
         $this->media = $media;
         $this->request = $request;
     }

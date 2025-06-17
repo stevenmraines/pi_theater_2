@@ -48,8 +48,6 @@ return [
             'root' => public_path('img'),
             'visibility' => 'public'
         ],
-        
-        // TODO Might be good to define each drive, like 'hdd1' => ['root' => public_path('videos/hdd1')], not necessary rn though
 
         'local' => [
             'driver' => 'local',

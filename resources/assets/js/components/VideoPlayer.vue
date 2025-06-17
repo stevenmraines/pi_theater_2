@@ -46,7 +46,7 @@
 
 <script>
     export default {
-        props: ['environment', 'paths'],
+        props: ['environment', 'drive_paths'],
 
         data() {
             return {
@@ -70,22 +70,27 @@
         },
 
         computed: {
+            episodeDirectory() {
+                return this.drive_paths[this.drive].episode_directory;
+            },
+                
+            movieDirectory() {
+                return this.drive_paths[this.drive].movie_directory;
+            },
+            
             src: function() {
                 /*
                  * For local env, we don't have an attached drive with a bunch of videos,
                  * so we'll serve one particular short video we have committed for testing.
                  */
                 if (this.environment !== 'production') {
-                    return '/testing/videos/hdd1/movies/jingle-cats.mp4';
+                    return this.movieDirectory + '/jingle-cats.mp4';
                 }
                 
                 if(this.filename !== '') {
-                    return (
-                        this.paths.videos +
-                            '/' + this.drive +
-                            '/' + this.media_type +
-                            's/' + this.filename
-                    );
+                    return this.media_type === 'movie'
+                        ? (this.movieDirectory + '/' + this.filename)
+                        : (this.episodeDirectory + '/' + this.filename);
                 }
 
                 return '';

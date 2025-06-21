@@ -15,6 +15,10 @@ class Episode extends Model
     ];
     
     protected $with = ['drive'];
+    
+    public function show() {
+        return $this->hasOne('App\Media', 'id', 'media_id');
+    }
 
     public function drive() {
         return $this->belongsToMany('App\Drive')->withPivot(['filename', 'width', 'height', 'duration']);

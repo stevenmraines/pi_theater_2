@@ -55,9 +55,9 @@ class UploadController extends Controller
         $request->validate([
             'collections' => 'array',
             'genres' => 'required|array',
-            'jumbotron' => 'nullable|image',
+            'jumbotron' => 'nullable|mimetypes:image/jpeg,image/png,image/bmp,image/gif,image/svg+xml,image/webp',
             'notes' => 'nullable|string|max:191',
-            'poster' => 'required_without:posterUrl|image',
+            'poster' => 'required_without:posterUrl|mimetypes:image/jpeg,image/png,image/bmp,image/gif,image/svg+xml,image/webp',
             'posterUrl' => 'required_without:poster|url',
             'summary' => 'required|string|max:4000',
             'title' => 'required|string|max:191',
@@ -92,9 +92,9 @@ class UploadController extends Controller
         $request->validate([
             'collections' => 'array',
             'genres' => 'required|array',
-            'jumbotron' => 'nullable|image',
+            'jumbotron' => 'nullable|mimetypes:image/jpeg,image/png,image/bmp,image/gif,image/svg+xml,image/webp',
             'notes' => 'nullable|string|max:191',
-            'poster' => 'required_without:posterUrl|image',
+            'poster' => 'required_without:posterUrl|mimetypes:image/jpeg,image/png,image/bmp,image/gif,image/svg+xml,image/webp',
             'posterUrl' => 'required_without:poster|url',
             'summary' => 'required|string|max:4000',
             'title' => 'required|string|max:191',

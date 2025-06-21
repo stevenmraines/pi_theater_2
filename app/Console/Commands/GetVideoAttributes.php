@@ -18,10 +18,10 @@ class GetVideoAttributes extends Command
      *
      * @var string
      */
-    protected $signature = 'video:metadata
-                            {file : For example "alien.mp4"}'
-                            . '{video_type=movie : "movie" or "episode"}'
-                            . '{drive=hdd1 : Which hard drive to search}';
+    protected $signature = 'video:metadata'
+                            . ' {file : For example "alien.mp4"}'
+                            . ' {video_type=movie : "movie" or "episode"}'
+                            . ' {drive=hdd1 : Which hard drive to search}';
 
     /**
      * The console command description.

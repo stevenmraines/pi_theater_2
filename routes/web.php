@@ -60,11 +60,37 @@ Route::get('/{home?}', function() {
             'posters' => asset('img/posters'),
             'drivePaths' => $drivePaths,
         ],
+        'streams' => App\Stream::all(),
     ];
 
     return view('browse')->with('initialState', json_encode($initialState));
 
 })->name('browse')->where('home', 'home');
+
+Route::get('/stream/{id}', function ($id) {
+    $drivePaths = [];
+    
+    Drive::all()->each(function ($drive) use (&$drivePaths) {
+        $drivePaths[$drive->name] = [
+            'movie_directory' => $drive->movie_directory(),
+            'episode_directory' => $drive->episode_directory(),
+        ];
+    });
+    
+    $initialState = [
+        'environment' => env('APP_ENV', 'production'),
+        'user' => auth()->user(),
+        'paths' => (object) [
+            'img' => asset('img'),
+            'logos' => asset('img/logos'),
+            'posters' => asset('img/posters'),
+            'drivePaths' => $drivePaths,
+        ],
+        'stream' => App\Stream::find($id),
+    ];
+
+    return view('stream')->with('initialState', json_encode($initialState));
+});
 
 Route::get('/upload', 'AuthViewController@upload')->name('upload');
 

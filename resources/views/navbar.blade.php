@@ -71,6 +71,29 @@
 						</a>
 					</div>
 				</li>
+                <li class="nav-item dropdown my-auto">
+					<a
+						id="stream-menu"
+						class="nav-link dropdown-toggle"
+						href="javascript:void(0);"
+						data-toggle="dropdown"
+					>
+						Live
+					</a>
+					<div
+						id="stream-menu-container"
+						class="dropdown-menu dropdown-menu-left scrollbar"
+					>
+						<a :href="`/stream/${stream.id}`" v-for="stream in streams">
+                            @{{ stream.name }}
+<!--							<img
+								class="dropdown-item menu-logo"
+								v-bind:src="paths.logos + '/' + stream.menu_image"
+								v-on:click="getStream(stream.id)"
+							/>-->
+						</a>
+					</div>
+				</li>
 				<li class="nav-item dropdown">
 					<a
 						id="search-menu"

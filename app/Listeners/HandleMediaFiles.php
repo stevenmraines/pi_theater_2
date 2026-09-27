@@ -42,7 +42,7 @@ class HandleMediaFiles
         }
 
         // Set permissions
-        if (env('APP_ENV', 'production') === 'production') {
+        if (config('app.env', 'production') === 'production') {
             chmod($posterFilepath, 0664);
             // TODO figure out what to do about chown not being permitted
 //            chown($posterFilepath, 'pi');
@@ -63,7 +63,7 @@ class HandleMediaFiles
             ]);
             
             // Set permissions
-            if (env('APP_ENV', 'production') === 'production') {
+            if (config('app.env', 'production') === 'production') {
                 chmod($jumbotronFilepath, 0664);
                 // TODO figure out what to do about chown not being permitted
 //                chown($jumbotronFilepath, 'pi');

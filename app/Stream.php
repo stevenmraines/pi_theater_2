@@ -15,6 +15,8 @@ class Stream extends Model
                 return $this->getSuperheroTV();
             case 2: // FrightVision
                 return $this->getFrightVision();
+            default:
+                return collect();
         }
     }
     

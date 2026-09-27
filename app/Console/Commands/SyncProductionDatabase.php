@@ -16,7 +16,7 @@ class SyncProductionDatabase extends Command
 
     public function handle()
     {
-        if (env('APP_ENV', 'production') === 'production') {
+        if (config('app.env', 'production') === 'production') {
             $this->error("Attempting to run db:sync-from-prod in production! This command should only be run locally.");
             return 1;
         }

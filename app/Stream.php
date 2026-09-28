@@ -11,9 +11,9 @@ class Stream extends Model
     public function getMedia()
     {
         switch ($this->id) {
-            case 1: // Superhero TV
-                return $this->getSuperheroTV();
-            case 2: // FrightVision
+            case 1:
+                return $this->getNovelGraphix();
+            case 2:
                 return $this->getFrightVision();
             default:
                 return collect();
@@ -30,7 +30,7 @@ class Stream extends Model
             ->get();
     }
     
-    public function getSuperheroTV()
+    public function getNovelGraphix()
     {
         return Media::where('media_type', 'movie')
             ->whereHas('genres', function ($query) {

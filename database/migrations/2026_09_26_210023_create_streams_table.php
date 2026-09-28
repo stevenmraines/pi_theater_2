@@ -23,8 +23,8 @@ class CreateStreamsTable extends Migration
         });
         
         Stream::create([
-            'name' => 'Superhero TV',
-            'menu_image' => 'superhero_tv_stream.jpg',
+            'name' => 'Novel Graphix',
+            'menu_image' => 'novel_graphix_stream.jpg',
         ]);
         
         Stream::create([

@@ -48,7 +48,6 @@ class ScheduleStream extends Command
         $lookBackDate = Carbon::parse($date)->subDays(StreamMedia::DAYS_OF_UNIQUE_MEDIA)->format('Y-m-d');
         $ignoreHistory = $this->option('ignore_history');
         $streams = Stream::all();
-        $pastStreams = StreamMedia::where('date', '>=', $lookBackDate)->get();
 
         if ($streamId > 0) {
             $stream = Stream::find($streamId);
@@ -63,10 +62,13 @@ class ScheduleStream extends Command
             $streams = Stream::all();
         }
 
-        // TODO Need to wipe current day's content or something in case the command is run more than once
         foreach ($streams as $stream) {
             $this->line("Scheduling stream \"{$stream->name}\" (ID {$stream->id}) for $date...");
 
+            // Delete any content already scheduled for this stream on this date
+            StreamMedia::where('stream_id', $stream->id)->where('date', '=', $date)->delete();
+
+            $pastStreams = StreamMedia::where('stream_id', $stream->id)->where('date', '>=', $lookBackDate)->get();
             $allMedia = $stream->getMedia();
             $cumRuntime = 0; // In seconds
             $streamMedia = [];
@@ -85,7 +87,10 @@ class ScheduleStream extends Command
                     break;
                 }
 
-                // Use current day as a hash to get a random entry from the collection
+                /*
+                 * Use current day as a hash to get a random entry from the collection.
+                 * $i is needed because otherwise $index will be the same for each iteration of the loop.
+                 */
                 $hash = crc32($date . '-' . $i);
                 $i++;
                 $index = $hash % $allMedia->count();

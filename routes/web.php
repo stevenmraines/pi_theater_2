@@ -44,7 +44,7 @@ Route::get('/{home?}', function() {
             'appId' => config('app.algolia_app_id'),
             'apiKey' => config('app.algolia_api_key')
         ],
-        'environment' => config('app.env', 'production') === 'production',
+        'environment' => config('app.env', 'production'),
         'genres' => App\Genre::orderBy('name')->get(),
         'collections' => App\Collection::all(),
         'recentEpisodes' => App\Media::recentEpisodes(),
@@ -78,7 +78,7 @@ Route::get('/stream/{id}', function ($id) {
     });
     
     $initialState = [
-        'environment' => config('app.env', 'production') === 'production',
+        'environment' => config('app.env', 'production'),
         'paths' => (object) [
             'img' => asset('img'),
             'logos' => asset('img/logos'),

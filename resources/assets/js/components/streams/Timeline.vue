@@ -72,19 +72,22 @@ export default {
   flex-direction: column;
   row-gap: 5px;
 }
+.header {
+    color: black;
+    background-color: #999;
+}
 .channel-cell-header {
   flex: 0 0 225px;
 }
 .track {
   position: relative;
   flex: 0 0 auto;
-  height: 50px;
 }
 .hour {
   position: absolute;
   top: 0;
   box-sizing: border-box;
-  border-left: 1px solid #ccc;
+  border-left: 2px solid black;
   padding-left: 4px;
 }
 </style>

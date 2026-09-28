@@ -1,4 +1,4 @@
-Vue.component('video-player', require('./components/VideoPlayer.vue'));
+Vue.component('stream-player', require('./components/streams/StreamPlayer.vue'));
 Vue.component('timeline', require('./components/streams/Timeline.vue'));
 Vue.component('timeline-stream', require('./components/streams/TimelineStream.vue'));
 Vue.component('stream-media', require('./components/streams/StreamMedia.vue'));
@@ -42,36 +42,56 @@ $(document).keyup(function(event) {
 const app = new Vue({
 	el: '#vue-wrapper',
 
-	data: {
-		environment: window.__INITIAL_STATE__.environment,
+	data() {
+		return {
+			currentMedia: {},
 
-        paths: window.__INITIAL_STATE__.paths,
+			currentStream: {},
 
-        streamId: parseInt(window.__INITIAL_STATE__.streamId),
-        
-        streams: window.__INITIAL_STATE__.streams,
+			environment: window.__INITIAL_STATE__.environment,
 
-		user: window.__INITIAL_STATE__.user,
+			offset: 0,
 
-		video: {
-			drive: '',
-			episode_id: 0,
-			filename: '',
-			media_id: 0,
-			mediaType: '',
-			progress: 0,
-		},
+			paths: window.__INITIAL_STATE__.paths,
+
+			streamId: parseInt(window.__INITIAL_STATE__.streamId),
+			
+			streams: window.__INITIAL_STATE__.streams,
+		};
 	},
 
-	mounted: function() {
-		console.log(this.streams[0].media[0].media.drive[0].pivot.filename)
-	},
-
-	created: function() {
-		// Event.listen('addToWatchlist', this.addToWatchlist);
+	created() {
+		this.currentStream = this.streams.find((s) => s.id === this.streamId);
+		this.setCurrentMedia();
 	},
 
 	methods: {
-		
+		onCurrentMediaEnded() {
+			this.setCurrentMedia();
+		},
+
+		setCurrentMedia() {
+			const now = new Date();
+			const secondsSinceMidnight = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+			let start = 0;
+			let current = null;
+			let offset = 0;
+
+			for (const item of this.currentStream.media) {
+				const duration = item.media.drive[0].pivot.duration;
+				const end = start + duration;
+
+				if (secondsSinceMidnight < end) {
+					current = item.media;
+					offset = secondsSinceMidnight - start;
+					break;
+				}
+
+				start = end;
+			}
+
+			this.currentMedia = current;
+			this.offset = offset;
+		},
 	},
 });

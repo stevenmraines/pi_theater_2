@@ -3,10 +3,15 @@
 
 <div id="vue-wrapper" class="container-fluid px-0">
 	@include('navbar')
-    <h3>{{ json_decode($initialState)->streamName }}</h3>
-    <div>
-        <video :src="'/testing/videos/hdd1/movies/' + streams[0].media[0].media.drive[0].pivot.filename"></video>
-    </div>
+    <stream-player
+        v-if="Object.keys(currentMedia).length"
+        :environment="environment"
+        :media="currentMedia"
+        :offset="offset"
+        :paths="paths"
+        :stream="currentStream"
+        @video-ended="onCurrentMediaEnded"
+    ></stream-player>
     <timeline :streams="streams" :stream-id="streamId"></timeline>
 </div>
 

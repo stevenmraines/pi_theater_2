@@ -1,4 +1,7 @@
 Vue.component('video-player', require('./components/VideoPlayer.vue'));
+Vue.component('timeline', require('./components/streams/Timeline.vue'));
+Vue.component('timeline-stream', require('./components/streams/TimelineStream.vue'));
+Vue.component('stream-media', require('./components/streams/StreamMedia.vue'));
 
 /*
  * EVENT DISPATCHER
@@ -44,7 +47,7 @@ const app = new Vue({
 
         paths: window.__INITIAL_STATE__.paths,
 
-        stream_id: parseInt(window.__INITIAL_STATE__.stream_id),
+        streamId: parseInt(window.__INITIAL_STATE__.streamId),
         
         streams: window.__INITIAL_STATE__.streams,
 

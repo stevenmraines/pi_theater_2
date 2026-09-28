@@ -85,8 +85,10 @@ Route::get('/stream/{id}', function ($id) {
             'posters' => asset('img/posters'),
             'drivePaths' => $drivePaths,
         ],
-        'stream_id' => $id,
-        'streams' => App\Stream::with(['media', 'media.media', 'media.media.drive'])->get(),
+        'streamId' => $id,
+        'streamName' => App\Stream::find($id)->name,
+        'streamMenuImage' => App\Stream::find($id)->menu_image,
+        'streams' => App\Stream::with(['media', 'media.media', 'media.media.drive', 'media.media.movie_year'])->get(),
         'user' => auth()->user(),
     ];
 

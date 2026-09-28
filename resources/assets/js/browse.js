@@ -122,6 +122,8 @@ const app = new Vue({
 			seasons: [],
 			show_year: [],
 		},
+        
+        streams: window.__INITIAL_STATE__.streams,
 
 		// TODO need to save progress in browser even if the user isn't logged in
 		user: window.__INITIAL_STATE__.user,
@@ -245,6 +247,10 @@ const app = new Vue({
 			}).catch(function(error) {
 				console.log(error);
 			});
+		},
+        
+        getStream: function(id) {
+			window.target = `/stream/${id}`;
 		},
 
 		getGenre: function(id) {

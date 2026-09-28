@@ -44,7 +44,7 @@ Route::get('/{home?}', function() {
             'appId' => config('app.algolia_app_id'),
             'apiKey' => config('app.algolia_api_key')
         ],
-        'environment' => env('APP_ENV', 'production'),
+        'environment' => config('app.env', 'production'),
         'genres' => App\Genre::orderBy('name')->get(),
         'collections' => App\Collection::all(),
         'recentEpisodes' => App\Media::recentEpisodes(),
@@ -60,11 +60,40 @@ Route::get('/{home?}', function() {
             'posters' => asset('img/posters'),
             'drivePaths' => $drivePaths,
         ],
+        'streams' => App\Stream::all(),
     ];
 
     return view('browse')->with('initialState', json_encode($initialState));
 
 })->name('browse')->where('home', 'home');
+
+Route::get('/stream/{id}', function ($id) {
+    $drivePaths = [];
+    
+    Drive::all()->each(function ($drive) use (&$drivePaths) {
+        $drivePaths[$drive->name] = [
+            'movie_directory' => $drive->movie_directory(),
+            'episode_directory' => $drive->episode_directory(),
+        ];
+    });
+    
+    $initialState = [
+        'environment' => config('app.env', 'production'),
+        'paths' => (object) [
+            'img' => asset('img'),
+            'logos' => asset('img/logos'),
+            'posters' => asset('img/posters'),
+            'drivePaths' => $drivePaths,
+        ],
+        'streamId' => $id,
+        'streamName' => App\Stream::find($id)->name,
+        'streamMenuImage' => App\Stream::find($id)->menu_image,
+        'streams' => App\Stream::with(['media', 'media.media', 'media.media.drive', 'media.media.movie_year'])->get(),
+        'user' => auth()->user(),
+    ];
+
+    return view('stream')->with(['initialState' => json_encode($initialState), 'simpleNav' => true]);
+});
 
 Route::get('/upload', 'AuthViewController@upload')->name('upload');
 

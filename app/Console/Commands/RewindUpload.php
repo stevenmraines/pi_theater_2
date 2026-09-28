@@ -104,7 +104,7 @@ class RewindUpload extends Command
          */
         $prompt = "Rewinding $uploadType $mediaOrEpisodeId, '$title.' Do you want to continue?";
         
-        if (env('APP_ENV', 'production') === 'production') {
+        if (config('app.env', 'production') === 'production') {
             $prompt .= ' REMINDER, YOU ARE IN PRODUCTION!';
         }
         

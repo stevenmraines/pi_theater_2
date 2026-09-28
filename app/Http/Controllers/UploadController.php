@@ -41,7 +41,7 @@ class UploadController extends Controller
         event(new EpisodeUploaded(Drive::find($request->drive_id), $episode, $request));
         
         // TODO Not sure this even works, also there may be a better way to get minidlna to recognize new files
-        if(env('APP_ENV', 'production') === 'production') {
+        if (config('app.env', 'production') === 'production') {
             exec("sudo service minidlna restart");
         }
 
@@ -78,7 +78,7 @@ class UploadController extends Controller
         event(new MovieUploaded(Drive::find($request->drive_id), $media, $request));
         
         // TODO Not sure this even works, also there may be a better way to get minidlna to recognize new files
-        if(env('APP_ENV', 'production') === 'production') {
+        if (config('app.env', 'production') === 'production') {
             exec("sudo service minidlna restart");
         }
 

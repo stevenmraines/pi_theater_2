@@ -6,6 +6,7 @@ Route::resource('collection', 'CollectionController');
 Route::resource('genre', 'GenreController');
 Route::resource('media', 'MediaController');
 Route::resource('user', 'UserController');
+Route::resource('streams', 'StreamController');
 
 Route::post(
     '/history/update/{progress}/{userId}/{mediaId}/{episodeId?}',

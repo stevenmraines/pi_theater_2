@@ -17,70 +17,97 @@
 	<div class="collapse navbar-collapse" id="nav-content">
 		<div class="navbar-nav">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item dropdown my-auto">
-					<a
-						id="genres-menu"
-						class="nav-link dropdown-toggle"
-						href="javascript:void(0);"
-						data-toggle="dropdown"
-					>
-						Genres
-					</a>
-					<div
-						id="genres-menu-container"
-						class="dropdown-menu dropdown-menu-left px-2"
-					>
-						<table class="table">
-							<tbody>
-								<tr scope="row">
-									<td v-for="column in genreColumns" class="px-1 pb-0">
-										<div v-for="genre in column">
-											<a
-												class="nav-link"
-												href="javascript:void(0);"
-												v-on:click="getGenre(genre.id)"
-											>
-												@{{ genre.name }}
-											</a>
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</li>
-				<li class="nav-item dropdown my-auto">
-					<a
-						id="collections-menu"
-						class="nav-link dropdown-toggle"
-						href="javascript:void(0);"
-						data-toggle="dropdown"
-					>
-						Collections
-					</a>
-					<div
-						id="collections-menu-container"
-						class="dropdown-menu dropdown-menu-left scrollbar"
-					>
-						<a href="javascript:void(0);" v-for="collection in collections">
-							<img
+				@if(! ($simpleNav ?? false))
+					<li class="nav-item dropdown my-auto">
+						<a
+							id="genres-menu"
+							class="nav-link dropdown-toggle"
+							href="javascript:void(0);"
+							data-toggle="dropdown"
+						>
+							Genres
+						</a>
+						<div
+							id="genres-menu-container"
+							class="dropdown-menu dropdown-menu-left px-2"
+						>
+							<table class="table">
+								<tbody>
+									<tr scope="row">
+										<td v-for="column in genreColumns" class="px-1 pb-0">
+											<div v-for="genre in column">
+												<a
+													class="nav-link"
+													href="javascript:void(0);"
+													v-on:click="getGenre(genre.id)"
+												>
+													@{{ genre.name }}
+												</a>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</li>
+					<li class="nav-item dropdown my-auto">
+						<a
+							id="collections-menu"
+							class="nav-link dropdown-toggle"
+							href="javascript:void(0);"
+							data-toggle="dropdown"
+							>
+							Collections
+						</a>
+						<div
+							id="collections-menu-container"
+							class="dropdown-menu dropdown-menu-left scrollbar"
+							>
+							<a href="javascript:void(0);" v-for="collection in collections">
+								<img
 								class="dropdown-item menu-logo"
 								v-bind:src="paths.logos + '/' + collection.menu_image"
 								v-on:click="getCollection(collection.id)"
-							/>
+								/>
+							</a>
+						</div>
+					</li>
+					@endif
+                <li class="nav-item dropdown my-auto">
+					<a
+						id="stream-menu"
+						class="nav-link dropdown-toggle"
+						href="javascript:void(0);"
+						data-toggle="dropdown"
+					>
+						Live
+					</a>
+					<div
+						id="stream-menu-container"
+						class="dropdown-menu dropdown-menu-left scrollbar"
+					>
+						<a :href="`/stream/${stream.id}`" v-for="stream in streams">
+                            @{{ stream.name }}
+<!--							<img
+								class="dropdown-item menu-logo"
+								v-bind:src="paths.logos + '/' + stream.menu_image"
+								v-on:click="getStream(stream.id)"
+							/>-->
 						</a>
 					</div>
 				</li>
-				<li class="nav-item dropdown">
-					<a
-						id="search-menu"
-						class="nav-link py-0"
-						href="javascript:void(0);"
-						v-on:click="search"
-					>
-						<img src="{{ asset('img/search.png') }}" class="img-fluid" />
-					</a>
-				</li>
+				@if(! ($simpleNav ?? false))
+					<li class="nav-item dropdown">
+						<a
+							id="search-menu"
+							class="nav-link py-0"
+							href="javascript:void(0);"
+							v-on:click="search"
+						>
+							<img src="{{ asset('img/search.png') }}" class="img-fluid" />
+						</a>
+					</li>
+				@endif
 			</ul>
 		</div>
 		<ul class="navbar-nav ml-auto d-flex align-items-center">
@@ -100,13 +127,15 @@
 					>Register</a>
 				</li>
 			@else
-				<li class="nav-item align-top">
-					<a
-						class="nav-link"
-						href="javascript:void(0);"
-						v-on:click="showWatchlist"
-					>Watchlist</a>
-				</li>
+				@if(! ($simpleNav ?? false))
+					<li class="nav-item align-top">
+						<a
+							class="nav-link"
+							href="javascript:void(0);"
+							v-on:click="showWatchlist"
+						>Watchlist</a>
+					</li>
+				@endif
 				<li class="nav-item dropdown">
 					<a
 						id="user-options-menu"

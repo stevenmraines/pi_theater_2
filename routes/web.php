@@ -44,7 +44,7 @@ Route::get('/{home?}', function() {
             'appId' => config('app.algolia_app_id'),
             'apiKey' => config('app.algolia_api_key')
         ],
-        'environment' => env('APP_ENV', 'production'),
+        'environment' => config('app.env', 'production') === 'production',
         'genres' => App\Genre::orderBy('name')->get(),
         'collections' => App\Collection::all(),
         'recentEpisodes' => App\Media::recentEpisodes(),
@@ -78,18 +78,19 @@ Route::get('/stream/{id}', function ($id) {
     });
     
     $initialState = [
-        'environment' => env('APP_ENV', 'production'),
-        'user' => auth()->user(),
+        'environment' => config('app.env', 'production') === 'production',
         'paths' => (object) [
             'img' => asset('img'),
             'logos' => asset('img/logos'),
             'posters' => asset('img/posters'),
             'drivePaths' => $drivePaths,
         ],
-        'stream' => App\Stream::find($id),
+        'stream_id' => $id,
+        'streams' => App\Stream::with(['media', 'media.media', 'media.media.drive'])->get(),
+        'user' => auth()->user(),
     ];
 
-    return view('stream')->with('initialState', json_encode($initialState));
+    return view('stream')->with(['initialState' => json_encode($initialState), 'simpleNav' => true]);
 });
 
 Route::get('/upload', 'AuthViewController@upload')->name('upload');

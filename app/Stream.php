@@ -39,4 +39,9 @@ class Stream extends Model
             ->with('genres')
             ->get();
     }
+
+    public function media()
+    {
+        return $this->hasMany(StreamMedia::class, 'stream_id', 'id');
+    }
 }

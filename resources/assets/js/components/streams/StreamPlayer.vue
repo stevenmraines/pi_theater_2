@@ -2,7 +2,7 @@
     <div>
         <h5 class="mb-5">Now Playing: {{ media.title }}</h5>
         <div class="player-wrapper w-100 mb-5">
-            <video ref="video-el" controls>
+            <video ref="video-el" @loadedmetadata="onVideoLoadedMetaData" controls>
                 <source :src="src" :type="videoType" />
             </video>
         </div>
@@ -56,10 +56,10 @@ export default {
         },
     },
 
-    mounted() {
-        if (this.src) {
-            this.$refs['video-el'].offset = this.offset;
-        }
+    methods: {
+        onVideoLoadedMetaData() {
+            this.$refs['video-el'].currentTime = this.offset;
+        },
     },
 
     watch: {

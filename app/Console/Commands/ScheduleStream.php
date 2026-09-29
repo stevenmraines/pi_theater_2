@@ -91,10 +91,11 @@ class ScheduleStream extends Command
                  * Use current day as a hash to get a random entry from the collection.
                  * $i is needed because otherwise $index will be the same for each iteration of the loop.
                  */
+                $count = $allMedia->count();
                 $hash = crc32($date . '-' . $i);
                 $i++;
-                $index = $hash % $allMedia->count();
-                $entry = $allMedia->values()->get($index)->load('drive');
+                $index = (($hash % $count) + $count) % $count;
+                $entry = $allMedia->get($index)->load('drive');
 
                 if (collect($streamMedia)->pluck('media_id')->contains($entry->id)) {
                     continue;

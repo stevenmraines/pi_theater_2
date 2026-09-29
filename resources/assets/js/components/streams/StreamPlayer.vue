@@ -64,8 +64,9 @@ export default {
 
     watch: {
         media(newValue, oldValue) {
-            this.$refs['video-el'].src = this.offset;
-            this.$refs['video-el'].offset = this.offset;
+            if (this.src) {
+                this.$refs['video-el'].offset = this.offset;
+            }
         },
     },
 }

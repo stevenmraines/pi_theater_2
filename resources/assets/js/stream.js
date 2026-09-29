@@ -86,9 +86,23 @@ const app = new Vue({
 				start = end;
 			}
 
-			console.log(`Setting currentMedia to ${current.title}`);
+			console.log(`Setting currentMedia to ${current.title} (${current.id})`);
+
+			
 			this.offset = offset;
 			this.currentMedia = current;
+			
+			// Set this in the URL so that the timeline scrollbar will jump to the current titles position
+			const streamMediaComponentId = this.currentStream.id + '-' + current.id;
+			window.location.hash = streamMediaComponentId;
+
+			this.$nextTick(function() {
+				const element = document.getElementById(streamMediaComponentId);
+				
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+				}
+			});
 		},
 	},
 });

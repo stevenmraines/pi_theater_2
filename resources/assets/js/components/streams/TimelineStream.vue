@@ -12,6 +12,7 @@
         :style="item.style"
       >
         <stream-media
+          :is-active="item.media.id === currentMedia.id"
           :media="item.media"
           :stream="stream"
         ></stream-media>
@@ -25,6 +26,7 @@ export default {
   name: 'TimelineStream',
 
   props: {
+    currentMedia: { type: Object, default: () => ({}) },
     isActive: { type: Boolean, default: false },
     pxPerHour: { type: Number, default: 300 },
     stream: { type: Object, required: true },

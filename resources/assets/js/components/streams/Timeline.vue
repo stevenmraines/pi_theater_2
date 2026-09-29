@@ -28,6 +28,7 @@
       <timeline-stream
         v-for="stream in streams"
         :key="stream.id"
+        :current-media="currentMedia"
         :is-active="stream.id === streamId"
         :px-per-hour="pxPerHour"
         :stream="stream"
@@ -41,6 +42,7 @@ export default {
   name: 'Timeline',
 
   props: {
+    currentMedia: { type: Object, default: () => ({}) },
     streamId: { type: Number, required: true },
     streams: { type: Array, default: () => [] },
     pxPerHour: { type: Number, default: 300 },

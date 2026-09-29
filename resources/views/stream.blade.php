@@ -12,7 +12,7 @@
         :stream="currentStream"
         @StreamPlayer:ended="onCurrentMediaEnded"
     ></stream-player>
-    <timeline :streams="streams" :stream-id="streamId"></timeline>
+    <timeline :streams="streams" :stream-id="streamId" :current-media="currentMedia"></timeline>
 </div>
 
 <script>

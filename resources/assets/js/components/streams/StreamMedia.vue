@@ -1,5 +1,5 @@
 <template>
-    <div class="stream-media" @click="onStreamMediaClick">
+    <div :id="stream.id + '-' + media.id" class="stream-media" :class="{ active: isActive }" @click="onStreamMediaClick">
         <h6>{{ media.title }} ({{ media.movie_year.year_released }})</h6>
         <p :title="media.summary">{{ media.summary }}</p>
         <em>{{ runtimeString }}</em>
@@ -10,10 +10,11 @@
 export default {
     name: 'StreamMedia',
 
-    props: [
-        'media',
-        'stream',
-    ],
+    props: {
+        isActive: { type: Boolean, default: false },
+        media: { type: Object, required: true },
+        stream: { type: Object, required: true },
+    },
 
     data() {
         return {
@@ -52,5 +53,10 @@ export default {
 
 .stream-media p {
     text-overflow: ellipsis;
+}
+
+.active {
+    background-color: rgba(237, 178, 31, 0.1);
+    border: 1px solid rgb(237,178,31);
 }
 </style>

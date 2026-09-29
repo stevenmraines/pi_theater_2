@@ -27,7 +27,7 @@ export default {
             const episodeDirectory = this.paths.drivePaths[drive.name].episode_directory;
             const movieDirectory = this.paths.drivePaths[drive.name].movie_directory;
             const directory = this.media.media_type === 'movie' ? movieDirectory : episodeDirectory;
-            const filename = this.environment === 'production' ? drive.filename : 'jingle-cats.mp4';
+            const filename = this.environment === 'production' ? drive.pivot.filename : 'jingle-cats.mp4';
             console.log(drive, episodeDirectory, movieDirectory, directory, filename)
             return `/${directory}/${filename}`;
         },

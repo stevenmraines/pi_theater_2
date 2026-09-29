@@ -2,7 +2,7 @@
     <div>
         <h5 class="mb-5">Now Playing: {{ media.title }}</h5>
         <div class="player-wrapper w-100 mb-5">
-            <video ref="video-el" @loadedmetadata="onVideoLoadedMetaData" controls>
+            <video ref="video-el" @loadedmetadata="onVideoLoadedMetaData" @ended="$emit('StreamPlayer:ended')" controls>
                 <source :src="src" :type="videoType" />
             </video>
         </div>
@@ -28,7 +28,6 @@ export default {
             const movieDirectory = this.paths.drivePaths[drive.name].movie_directory;
             const directory = this.media.media_type === 'movie' ? movieDirectory : episodeDirectory;
             const filename = this.environment === 'production' ? drive.pivot.filename : 'jingle-cats.mp4';
-            console.log(drive, episodeDirectory, movieDirectory, directory, filename)
             return `/${directory}/${filename}`;
         },
 

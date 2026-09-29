@@ -10,7 +10,7 @@
         :offset="offset"
         :paths="paths"
         :stream="currentStream"
-        @video-ended="onCurrentMediaEnded"
+        @StreamPlayer:ended="onCurrentMediaEnded"
     ></stream-player>
     <timeline :streams="streams" :stream-id="streamId"></timeline>
 </div>

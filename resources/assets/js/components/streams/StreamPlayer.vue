@@ -32,7 +32,7 @@ export default {
         },
 
         videoType() {
-            if (this.environment !== 'production' || ! this.src) {
+            if (this.environment !== 'production') {
                 return 'video/mp4';
             }
             

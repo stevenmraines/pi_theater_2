@@ -55,17 +55,42 @@ export default {
         },
     },
 
+    created() {
+        Event.listen('toggleFullscreen', () => {
+            if (! document.fullscreenElement) {
+                this.$refs['video-el'].requestFullscreen();
+            } else {
+                document.exitFullscreen()
+            }
+        });
+        
+        Event.listen('toggleMute', () => this.$refs['video-el'].muted = ! this.$refs['video-el'].muted);
+        
+        Event.listen('togglePlay', () => {
+            if (this.$refs['video-el'].paused) {
+                this.$refs['video-el'].play();
+            } else {
+                this.$refs['video-el'].pause();
+            }
+        });
+    },
+
     methods: {
         onVideoLoadedMetaData() {
+            console.log('onVideoLoadedMetaData');
             this.$refs['video-el'].currentTime = this.offset;
+            // Many browsers require the video to be muted in order to play
+            this.$refs['video-el'].muted = true;
+            this.$refs['video-el'].play();
         },
     },
 
     watch: {
-        media(newValue, oldValue) {
-            if (this.src) {
-                this.$refs['video-el'].offset = this.offset;
-            }
+        media: {
+            deep: true,
+            handler: function (newValue, oldValue) {
+                onVideoLoadedMetaData();
+            },
         },
     },
 }

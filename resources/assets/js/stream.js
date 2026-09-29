@@ -25,14 +25,15 @@ window.Event = new class {
  */
 $(document).keyup(function(event) {
 	switch(event.which) {
-		case 38:  // Up arrow
+		case 70:  // F key
+			Event.trigger('toggleFullscreen');
+			break;
+		case 77:  // M key
+			Event.trigger('toggleMute');
+			break;
+		case 80:  // P key
 			Event.trigger('togglePlay');
 			break;
-		case 40:  // Down arrow
-			Event.trigger('toggleTimeRange');
-			break;
-		case 70:  // F key
-			Event.trigger('fullscreen');
 	}
 });
 
@@ -45,17 +46,11 @@ const app = new Vue({
 	data() {
 		return {
 			currentMedia: {},
-
 			currentStream: {},
-
 			environment: window.__INITIAL_STATE__.environment,
-
 			offset: 0,
-
 			paths: window.__INITIAL_STATE__.paths,
-
 			streamId: parseInt(window.__INITIAL_STATE__.streamId),
-			
 			streams: window.__INITIAL_STATE__.streams,
 		};
 	},
@@ -67,6 +62,7 @@ const app = new Vue({
 
 	methods: {
 		onCurrentMediaEnded() {
+			console.log('onCurrentMediaEnded');
 			this.setCurrentMedia();
 		},
 
@@ -74,7 +70,7 @@ const app = new Vue({
 			const now = new Date();
 			const secondsSinceMidnight = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
 			let start = 0;
-			let current = null;
+			let current = {};
 			let offset = 0;
 
 			for (const item of this.currentStream.media) {
@@ -90,8 +86,9 @@ const app = new Vue({
 				start = end;
 			}
 
-			this.currentMedia = current;
+			console.log(`Setting currentMedia to ${current.title}`);
 			this.offset = offset;
+			this.currentMedia = current;
 		},
 	},
 });

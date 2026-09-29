@@ -49,6 +49,9 @@ class ScheduleStream extends Command
         $ignoreHistory = $this->option('ignore_history');
         $streams = Stream::all();
 
+        // Delete any streamed media older than DAYS_OF_UNIQUE_MEDIA number of days
+        StreamMedia::where('date', '<', $lookBackDate)->delete();
+
         if ($streamId > 0) {
             $stream = Stream::find($streamId);
 

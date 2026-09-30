@@ -2,7 +2,7 @@
     <div>
         <h5 class="mb-5">Now Playing: {{ media.title }}</h5>
         <div class="player-wrapper w-100 mb-5">
-            <video ref="video-el" @loadedmetadata="onVideoLoadedMetaData" @ended="$emit('StreamPlayer:ended')" controls>
+            <video ref="video-el" @loadedmetadata="onVideoLoadedMetaData" @ended="$emit('ended')" controls>
                 <source :src="src" :type="videoType" />
             </video>
         </div>

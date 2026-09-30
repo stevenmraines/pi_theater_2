@@ -11,7 +11,7 @@
         :offset="offset"
         :paths="paths"
         :stream="currentStream"
-        @StreamPlayer:ended="onCurrentMediaEnded"
+        @ended="onCurrentMediaEnded"
     ></stream-player>
     
     <timeline

@@ -88,7 +88,7 @@ Route::get('/stream/{id}', function ($id) {
         'streamId' => $id,
         'streamName' => App\Stream::find($id)->name,
         'streamMenuImage' => App\Stream::find($id)->menu_image,
-        'streams' => App\Stream::with(['media', 'media.media', 'media.media.drive', 'media.media.movie_year'])->get(),
+        'streams' => App\Stream::withMedia()->get(),
         'user' => auth()->user(),
     ];
 

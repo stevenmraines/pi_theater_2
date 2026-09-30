@@ -92,12 +92,21 @@ const app = new Vue({
 			this.offset = offset;
 			this.currentMedia = current;
 			
-			// Set this in the URL so that the timeline scrollbar will jump to the current titles position
-			const streamMediaComponentId = this.currentStream.id + '-' + current.id;
-			window.location.hash = streamMediaComponentId;
+			// Set this in the URL so that the timeline scrollbar will jump to the current hour position
+			let hour = now.getHours(); // 0-23
+			const minutes = now.getMinutes();
+			
+			if (minutes >= 50 && hour < 23) {
+				hour++;
+			}
+			
+			const amOrPm = hour < 12 ? 'am' : 'pm';
+			const timelineHourElementId = (hour === 0 ? 12 : (hour >= 13 ? hour - 12 : hour)) + '-' + amOrPm;
+			
+			window.location.hash = timelineHourElementId;
 
 			this.$nextTick(function() {
-				const element = document.getElementById(streamMediaComponentId);
+				const element = document.getElementById(timelineHourElementId);
 				
 				if (element) {
 					element.scrollIntoView({ behavior: 'smooth', inline: 'center' });

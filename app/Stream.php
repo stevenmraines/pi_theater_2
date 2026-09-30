@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Stream extends Model
 {
     protected $fillable = ['name', 'menu_image'];
+
+    public function scopeWithMedia(\Illuminate\Database\Eloquent\Builder $query)
+    {
+        return $query->with([
+            'media' => function ($q) {
+                $q->where('stream_media.date', \Carbon\Carbon::today()->toDateString())
+                    ->with(['media', 'media.drive', 'media.movie_year']);
+            },
+        ]);
+    }
     
     public function getMedia()
     {

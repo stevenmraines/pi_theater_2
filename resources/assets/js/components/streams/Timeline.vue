@@ -8,6 +8,7 @@
           <div
             v-for="(n, index) in [12,1,2,3,4,5,6,7,8,9,10,11]"
             :key="index + 'AM'"
+            :id="n + '-am'"
             class="hour"
             :style="{ left: index * pxPerHour + 'px', width: pxPerHour + 'px' }"
           >
@@ -16,6 +17,7 @@
           <div
             v-for="(n, index) in [12,1,2,3,4,5,6,7,8,9,10,11,12,1]"
             :key="index + 'PM'"
+            :id="n + ((n === 12 || n === 1) && index !== 0 && index !== 1 ? 'am' : 'pm')"
             class="hour"
             :style="{ left: (index + 12) * pxPerHour + 'px', width: pxPerHour + 'px' }"
           >

@@ -2,7 +2,7 @@
     <div>
         <h5 class="mb-5">Now Playing: {{ media.title }}</h5>
         <div class="player-wrapper w-100 mb-5">
-            <video ref="video-el" @loadedmetadata="onVideoLoadedMetaData" @ended="$emit('ended')" controls>
+            <video ref="video-el" @loadedmetadata="onVideoLoadedMetaData" @ended="$emit('ended')" muted controls>
                 <source :src="src" :type="videoType" />
             </video>
         </div>
@@ -80,7 +80,7 @@ export default {
             console.log('onVideoLoadedMetaData');
             this.$refs['video-el'].currentTime = this.offset;
             // Many browsers require the video to be muted in order to play
-            this.$refs['video-el'].muted = true;
+            // this.$refs['video-el'].muted = true;
             this.$refs['video-el'].play();
         },
     },
@@ -89,7 +89,7 @@ export default {
         media: {
             deep: true,
             handler: function (newValue, oldValue) {
-                onVideoLoadedMetaData();
+                this.onVideoLoadedMetaData();
             },
         },
     },

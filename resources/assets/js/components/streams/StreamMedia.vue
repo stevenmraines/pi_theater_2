@@ -52,7 +52,10 @@ export default {
 }
 
 .stream-media p {
-    text-overflow: ellipsis;
+/*    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 440px;
+    max-height: 70px;*/
 }
 
 .active {

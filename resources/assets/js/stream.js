@@ -106,6 +106,14 @@ const app = new Vue({
 			window.location.hash = timelineHourElementId;
 
 			this.$nextTick(function() {
+                // Make vertical scrollbar jump to current channel
+                const timelineStreamElementId = `stream-${this.currentStream.id}`;
+                const streamElement = document.getElementById(timelineStreamElementId);
+                
+                if (streamElement) {
+                    streamElement.scrollIntoView({ behavior: 'instant', block: 'center' });
+                }
+                
 				const element = document.getElementById(timelineHourElementId);
 				
 				if (element) {

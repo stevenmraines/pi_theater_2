@@ -25,6 +25,8 @@ class Stream extends Model
                 return $this->getNovelGraphix();
             case 2:
                 return $this->getFrightVision();
+            case 3:
+                return $this->getHalloweenFavorites();
             default:
                 return collect();
         }
@@ -37,6 +39,16 @@ class Stream extends Model
                 $query->whereIn('name', ['Horror']); 
             })
             ->with('genres')
+            ->get();
+    }
+    
+    public function getHalloweenFavorites()
+    {
+        return Media::where('media_type', 'movie')
+            ->whereHas('collections', function ($query) {
+                $query->whereIn('name', ['Halloween Favorites']);
+            })
+            ->with('collections')
             ->get();
     }
     

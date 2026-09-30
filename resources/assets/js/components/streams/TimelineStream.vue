@@ -1,7 +1,10 @@
 <template>
-  <div :class="{'d-flex': true, active: isActive}">
+  <div :id="`stream-${stream.id}`" :class="{'d-flex': true, active: isActive}">
     <div class="channel-cell">
-      <h4>{{ stream.name }}</h4>
+        <div style="position: relative;" class="w-100 h-100">
+            <h4 v-if="! stream.menu_image">{{ stream.name }}</h4>
+            <img v-else :src="paths.logos + '/' + stream.menu_image" />
+        </div>
     </div>
 
     <div class="track" :style="{ width: 24 * pxPerHour + 'px' }">
@@ -28,6 +31,7 @@ export default {
   props: {
     currentMedia: { type: Object, default: () => ({}) },
     isActive: { type: Boolean, default: false },
+    paths: { type: Object, required: true },
     pxPerHour: { type: Number, default: 300 },
     stream: { type: Object, required: true },
   },
@@ -53,11 +57,18 @@ export default {
 
 <style scoped>
 .channel-cell {
-  flex: 0 0 225px;
+  flex: 0 0 400px;
   position: sticky;
   left: 0;
   z-index: 2;
-  background: #777;
+  background: linear-gradient(0.25turn, black, black, black, transparent);
+}
+.channel-cell img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
 }
 .track {
   position: relative;

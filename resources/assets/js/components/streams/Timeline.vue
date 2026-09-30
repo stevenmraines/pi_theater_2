@@ -17,7 +17,7 @@
           <div
             v-for="(n, index) in [12,1,2,3,4,5,6,7,8,9,10,11,12,1]"
             :key="index + 'PM'"
-            :id="n + ((n === 12 || n === 1) && index !== 0 && index !== 1 ? 'am' : 'pm')"
+            :id="n + ((n === 12 || n === 1) && index !== 0 && index !== 1 ? '-am' : '-pm')"
             class="hour"
             :style="{ left: (index + 12) * pxPerHour + 'px', width: pxPerHour + 'px' }"
           >
@@ -32,6 +32,7 @@
         :key="stream.id"
         :current-media="currentMedia"
         :is-active="stream.id === streamId"
+        :paths="paths"
         :px-per-hour="pxPerHour"
         :stream="stream"
       ></timeline-stream>
@@ -47,6 +48,7 @@ export default {
     currentMedia: { type: Object, default: () => ({}) },
     streamId: { type: Number, required: true },
     streams: { type: Array, default: () => [] },
+    paths: { type: Object, required: true },
     pxPerHour: { type: Number, default: 300 },
   },
 
@@ -69,19 +71,24 @@ export default {
 
 <style scoped>
 .timeline {
-  overflow-x: auto;
+  overflow: auto;
+  max-height: 400px;
 }
 .timeline-inner {
+  position: relative;
   display: flex;
   flex-direction: column;
   row-gap: 5px;
 }
 .header {
+    position: sticky;
+    top: 0;
     color: black;
     background-color: #999;
+    z-index: 3; /* Stack on top of channel logo which has z-2 */
 }
 .channel-cell-header {
-  flex: 0 0 225px;
+  flex: 0 0 400px;
 }
 .track {
   position: relative;

@@ -88,11 +88,11 @@
 					>
 						<a :href="`/stream/${stream.id}`" v-for="stream in streams">
                             @{{ stream.name }}
-<!--							<img
+							<img
+                                v-if="stream.menu_image"
 								class="dropdown-item menu-logo"
 								v-bind:src="paths.logos + '/' + stream.menu_image"
-								v-on:click="getStream(stream.id)"
-							/>-->
+							/>
 						</a>
 					</div>
 				</li>

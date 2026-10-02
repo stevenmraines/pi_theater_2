@@ -13,11 +13,11 @@ class CreateHalloweenStream extends Migration
      */
     public function up()
     {
-        $s1 = App\Stream::where('name', 'Novel Graphix')->first();
+        $s1 = App\Stream::withoutGlobalScopes()->where('name', 'Novel Graphix')->first();
         $s1->menu_image = null;
         $s1->save();
         
-        $s2 = App\Stream::where('name', 'FrightVision')->first();
+        $s2 = App\Stream::withoutGlobalScopes()->where('name', 'FrightVision')->first();
         $s2->menu_image = null;
         $s2->save();
         
@@ -35,6 +35,6 @@ class CreateHalloweenStream extends Migration
      */
     public function down()
     {
-        App\Stream::where('name', 'Halloween Favorites')->delete();
+        App\Stream::withoutGlobalScopes()->where('name', 'Halloween Favorites')->delete();
     }
 }

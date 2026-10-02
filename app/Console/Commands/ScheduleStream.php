@@ -66,7 +66,7 @@ class ScheduleStream extends Command
         }
 
         foreach ($streams as $stream) {
-            $this->line("Scheduling stream \"{$stream->name}\" (ID {$stream->id}) for $date...");
+            $this->info("Scheduling stream \"{$stream->name}\" (ID {$stream->id}) for $date...");
 
             // Delete any content already scheduled for this stream on this date
             StreamMedia::where('stream_id', $stream->id)->where('date', '=', $date)->delete();
@@ -78,6 +78,8 @@ class ScheduleStream extends Command
             $i = 0;
             $maxAttempts = $allMedia->count() * 50;
             $attempts = 0;
+            $collectionStreamIndex = 0;
+            $lastScheduledMediaAccountedFor = false;
 
             if ($allMedia->isEmpty()) {
                 $this->error("No media found for stream with ID {$stream->id}");
@@ -85,39 +87,83 @@ class ScheduleStream extends Command
             }
 
             while ($cumRuntime < 60 * 60 * 24) {
-                if (++$attempts > $maxAttempts) {
-                    $this->error("Ran out of unique media to schedule");
-                    break;
+
+                if ($stream->type === 'random') {
+                    if (++$attempts > $maxAttempts) {
+                        $this->error("Ran out of unique media to schedule");
+                        break;
+                    }
+
+                    /*
+                    * Use current day as a hash to get a random entry from the collection.
+                    * $i is needed because otherwise $index will be the same for each iteration of the loop.
+                    */
+                    $count = $allMedia->count();
+                    $hash = crc32($date . '-' . $i);
+                    $i++;
+                    $index = (($hash % $count) + $count) % $count;
+                    $entry = $allMedia->get($index)->load('drive');
+
+                    if (collect($streamMedia)->pluck('media_id')->contains($entry->id)) {
+                        continue;
+                    }
+
+                    if (! $ignoreHistory && $pastStreams->pluck('media_id')->contains($entry->id)) {
+                        continue;
+                    }
+
+                    $streamMedia[] = StreamMedia::create([
+                        'stream_id' => $stream->id,
+                        'media_id' => $entry->id,
+                        'date' => $date,
+                    ]);
+
+                    // TODO This doesn't take previous stream day overlap into account
+                    $cumRuntime += $entry->drive->first()->pivot->duration;
+
+                    $this->line("Scheduled {$entry->title}");
                 }
 
-                /*
-                 * Use current day as a hash to get a random entry from the collection.
-                 * $i is needed because otherwise $index will be the same for each iteration of the loop.
-                 */
-                $count = $allMedia->count();
-                $hash = crc32($date . '-' . $i);
-                $i++;
-                $index = (($hash % $count) + $count) % $count;
-                $entry = $allMedia->get($index)->load('drive');
+                if ($stream->type === 'collection') {
+                    $lastScheduledMedia = StreamMedia::where('stream_id', $stream->id)
+                        ->whereDate('date', Carbon::parse($date)->subDay()->toDateString())
+                        ->orderBy('id', 'desc')
+                        ->first();
+                    
+                    if ($lastScheduledMedia && ! $ignoreHistory) {
+                        // Schedule in order starting from last scheduled media
+                        $indexOfLastScheduledMedia = $allMedia->search(function ($item, $key) use ($lastScheduledMedia) {
+                            return $item->id == $lastScheduledMedia->media_id;
+                        });
 
-                if (collect($streamMedia)->pluck('media_id')->contains($entry->id)) {
-                    continue;
+                        if (! $lastScheduledMediaAccountedFor && $indexOfLastScheduledMedia && $indexOfLastScheduledMedia + 1 < $allMedia->count()) {
+                            $lastScheduledMediaAccountedFor = true;
+                            $collectionStreamIndex = $indexOfLastScheduledMedia + 1;
+                        } else if (! $lastScheduledMediaAccountedFor) {
+                            $lastScheduledMediaAccountedFor = true;
+                            $collectionStreamIndex = 0;
+                        }
+                    }
+
+                    if ($collectionStreamIndex < $allMedia->count()) {
+                        $entry = $allMedia->get($collectionStreamIndex)->load('drive');
+
+                        $streamMedia[] = StreamMedia::create([
+                            'stream_id' => $stream->id,
+                            'media_id' => $entry->id,
+                            'date' => $date,
+                        ]);
+
+                        $this->line("Scheduled {$entry->title}");
+                        
+                        $cumRuntime += $entry->drive->first()->pivot->duration;
+                        
+                        $collectionStreamIndex++;
+                    } else {
+                        $this->info("Reached end of collection, resetting \$collectionStreamIndex and starting over from beginning");
+                        $collectionStreamIndex = 0;
+                    }
                 }
-
-                if (! $ignoreHistory && $pastStreams->pluck('media_id')->contains($entry->id)) {
-                    continue;
-                }
-
-                $streamMedia[] = StreamMedia::create([
-                    'stream_id' => $stream->id,
-                    'media_id' => $entry->id,
-                    'date' => $date,
-                ]);
-
-                // TODO This doesn't take previous stream day overlap into account
-                $cumRuntime += $entry->drive->first()->pivot->duration;
-
-                $this->line("Scheduled {$entry->title}");
             }
         }
     }

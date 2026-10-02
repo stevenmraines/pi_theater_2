@@ -2,11 +2,52 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Stream extends Model
 {
-    protected $fillable = ['name', 'menu_image'];
+    protected $fillable = [
+        'name',
+        'menu_image',
+        'month_start',
+        'day_start',
+        'month_end',
+        'day_end',
+        'type',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('active', function (Builder $builder) {
+            $now   = Carbon::now();
+            $today = $now->month * 100 + $now->day;
+
+            $start = '(month_start * 100 + day_start)';
+            $end   = '(month_end * 100 + day_end)';
+
+            $builder->where(function ($query) use ($today, $start, $end) {
+                $query->whereNull('month_start')
+                    // Normal range (e.g. Oct 1 - Oct 31) today must fall between start and end
+                    ->orWhere(function ($query) use ($today, $start, $end) {
+                        $query->whereRaw("$start <= $end")
+                            ->whereRaw("$start <= ?", [$today])
+                            ->whereRaw("$end >= ?", [$today]);
+                    })
+                    // Wrapping range (Dec 15 - Jan 5) today is after the start OR before the end
+                    ->orWhere(function ($query) use ($today, $start, $end) {
+                        $query->whereRaw("$start > $end")
+                            ->where(function ($query) use ($today, $start, $end) {
+                                $query->whereRaw("$start <= ?", [$today])
+                                    ->orWhereRaw("$end >= ?", [$today]);
+                            });
+                    });
+            });
+        });
+    }
 
     public function scopeWithMedia(\Illuminate\Database\Eloquent\Builder $query)
     {

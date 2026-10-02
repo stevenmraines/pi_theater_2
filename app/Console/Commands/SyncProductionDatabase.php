@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 
 /*
  * You'll need an SSH key in order for this to work, because of the scp command.
@@ -17,7 +18,7 @@ class SyncProductionDatabase extends Command
     public function handle()
     {
         if (config('app.env', 'production') === 'production') {
-            $this->error("Attempting to run db:sync-from-prod in production! This command should only be run locally.");
+            $this->error("Attempting to run db:sync in production! This command should only be run locally.");
             return 1;
         }
 
@@ -41,8 +42,8 @@ class SyncProductionDatabase extends Command
             return 1;
         }
 
-        // Step 2: Run migrate:fresh to wipe the DB
-        $this->call('migrate:fresh');
+        // Step 2: Drop everything, the dump file will provide the schema
+        Schema::dropAllTables();
 
         // Step 3: Import into local DB
         $database = Config::get('database.connections.mysql.database');
@@ -59,6 +60,9 @@ class SyncProductionDatabase extends Command
         }
 
         $this->info("Local database updated successfully.");
-        return 0;
+
+        // Step 4: Apply any migrations that exist locally but not on production
+        $this->info("Running migrations...");
+        return $this->call('migrate');
     }
 }

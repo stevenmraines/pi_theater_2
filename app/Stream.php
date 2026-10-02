@@ -68,12 +68,14 @@ class Stream extends Model
                 return $this->getFrightVision();
             case 3:
                 return $this->getHalloweenFavorites();
+            case 4:
+                return $this->getCommunity();
             default:
                 return collect();
         }
     }
     
-    public function getFrightVision()
+    protected function getFrightVision()
     {
         return Media::where('media_type', 'movie')
             ->whereHas('genres', function ($query) {
@@ -82,8 +84,15 @@ class Stream extends Model
             ->with('genres')
             ->get();
     }
+
+    protected function getCommunity()
+    {
+        return Media::where('title', 'Community')
+            ->where('media_type', 'show')
+            ->get();
+    }
     
-    public function getHalloweenFavorites()
+    protected function getHalloweenFavorites()
     {
         return Media::where('media_type', 'movie')
             ->whereHas('collections', function ($query) {
@@ -93,7 +102,7 @@ class Stream extends Model
             ->get();
     }
     
-    public function getNovelGraphix()
+    protected function getNovelGraphix()
     {
         return Media::where('media_type', 'movie')
             ->whereHas('genres', function ($query) {

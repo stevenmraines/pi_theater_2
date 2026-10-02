@@ -21,6 +21,12 @@ export default {
         'stream': { type: Object, required: true },
     },
 
+    data() {
+        return {
+            startOffset: this.offset,
+        };
+    },
+
     computed: {
         src() {
             const drive = this.media.drive[0];
@@ -78,19 +84,18 @@ export default {
     methods: {
         onVideoLoadedMetaData() {
             console.log('onVideoLoadedMetaData');
-            this.$refs['video-el'].currentTime = this.offset;
-            // Many browsers require the video to be muted in order to play
-            // this.$refs['video-el'].muted = true;
-            this.$refs['video-el'].play();
+            const video = this.$refs['video-el'];
+            video.currentTime = this.startOffset;
+            this.startOffset = 0; // Don't apply offset to next video that is played when first video finishes
+            video.play().catch(() => {});
         },
     },
 
     watch: {
-        media: {
-            deep: true,
-            handler: function (newValue, oldValue) {
-                this.onVideoLoadedMetaData();
-            },
+        'media.id'() {
+            this.$nextTick(() => {
+                this.$refs['video-el'].load();
+            });
         },
     },
 }

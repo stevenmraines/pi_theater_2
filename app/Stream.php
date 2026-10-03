@@ -49,12 +49,22 @@ class Stream extends Model
         });
     }
 
-    public function scopeWithMedia(\Illuminate\Database\Eloquent\Builder $query)
+    public function scopeWithMedia(Builder $query)
     {
         return $query->with([
-            'media' => function ($q) {
-                $q->where('stream_media.date', \Carbon\Carbon::today()->toDateString())
+            'stream_media' => function ($q) {
+                $q->where('stream_media.date', Carbon::today()->toDateString())
                     ->with(['media', 'media.drive', 'media.movie_year']);
+            },
+        ]);
+    }
+
+    public function scopeWithEpisodes(Builder $query)
+    {
+        return $query->with([
+            'stream_episodes' => function ($q) {
+                $q->where('stream_episodes.date', Carbon::today()->toDateString())
+                    ->with(['episode.show.show_year']);
             },
         ]);
     }
@@ -87,8 +97,13 @@ class Stream extends Model
 
     protected function getCommunity()
     {
-        return Media::where('title', 'Community')
+        $media = Media::where('title', 'Community')
             ->where('media_type', 'show')
+            ->first();
+
+        return Episode::where('media_id', $media->id)
+            ->orderBy('season', 'asc')
+            ->orderBy('episode_number', 'asc')
             ->get();
     }
     
@@ -112,8 +127,13 @@ class Stream extends Model
             ->get();
     }
 
-    public function media()
+    public function stream_media()
     {
         return $this->hasMany(StreamMedia::class, 'stream_id', 'id');
+    }
+
+    public function stream_episodes()
+    {
+        return $this->hasMany(StreamEpisode::class, 'stream_id', 'id');
     }
 }

@@ -27,15 +27,25 @@
         </div>
       </div>
 
-      <timeline-stream
-        v-for="stream in streams"
-        :key="stream.id"
-        :current-media="currentMedia"
-        :is-active="stream.id === streamId"
-        :paths="paths"
-        :px-per-hour="pxPerHour"
-        :stream="stream"
-      ></timeline-stream>
+      <div v-for="stream in streams" :key="stream.id">
+        <timeline-stream
+          v-if="stream.type !== 'show'"
+          :current-media="currentMedia"
+          :is-active="stream.id === streamId"
+          :paths="paths"
+          :px-per-hour="pxPerHour"
+          :stream="stream"
+        ></timeline-stream>
+        
+        <timeline-show-stream
+          v-else
+          :current-episode="currentEpisode"
+          :is-active="stream.id === streamId"
+          :paths="paths"
+          :px-per-hour="pxPerHour"
+          :stream="stream"
+        ></timeline-show-stream>
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +55,7 @@ export default {
   name: 'Timeline',
 
   props: {
+    currentEpisode: { type: Object, default: () => ({}) },
     currentMedia: { type: Object, default: () => ({}) },
     streamId: { type: Number, required: true },
     streams: { type: Array, default: () => [] },

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Stream;
+use App\StreamEpisode;
 use App\StreamMedia;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -80,6 +81,8 @@ class ScheduleStream extends Command
             $attempts = 0;
             $collectionStreamIndex = 0;
             $lastScheduledMediaAccountedFor = false;
+            $showStreamIndex = 0;
+            $lastScheduledEpisodeAccountedFor = false;
 
             if ($allMedia->isEmpty()) {
                 $this->error("No media found for stream with ID {$stream->id}");
@@ -162,6 +165,49 @@ class ScheduleStream extends Command
                     } else {
                         $this->info("Reached end of collection, resetting \$collectionStreamIndex and starting over from beginning");
                         $collectionStreamIndex = 0;
+                    }
+                }
+
+                if ($stream->type === 'show') {
+                    $lastScheduledEpisode = StreamEpisode::where('stream_id', $stream->id)
+                        ->whereDate('date', Carbon::parse($date)->subDay()->toDateString())
+                        ->orderBy('id', 'desc')
+                        ->first();
+                    
+                    if ($lastScheduledEpisode && ! $ignoreHistory) {
+                        // Schedule in order starting from last scheduled ep
+                        $indexOfLastScheduledEpisode = $allMedia->search(function ($item, $key) use ($lastScheduledEpisode) {
+                            return $item->id == $lastScheduledEpisode->episode_id;
+                        });
+
+                        // No need to account for season and episode_number because Stream::getMedia() orders shows by season and ep asc already
+                        if (! $lastScheduledEpisodeAccountedFor && $indexOfLastScheduledEpisode && $indexOfLastScheduledEpisode + 1 < $allMedia->count()) {
+                            $lastScheduledEpisodeAccountedFor = true;
+                            $showStreamIndex = $indexOfLastScheduledEpisode + 1;
+                        } else if (! $lastScheduledEpisodeAccountedFor) {
+                            $lastScheduledEpisodeAccountedFor = true;
+                            $showStreamIndex = 0;
+                        }
+                    }
+
+                    if ($showStreamIndex < $allMedia->count()) {
+                        $entry = $allMedia->get($showStreamIndex)->load('drive');
+
+                        // TODO I guess we're not doing anything with $streamMedia right now, but this could cause issues in the future if it contains both StreamMedia and StreamEpisode instances
+                        $streamMedia[] = StreamEpisode::create([
+                            'stream_id' => $stream->id,
+                            'episode_id' => $entry->id,
+                            'date' => $date,
+                        ]);
+
+                        $this->line("Scheduled s{$entry->season} e{$entry->episode_number} - {$entry->title}");
+                        
+                        $cumRuntime += $entry->drive->first()->pivot->duration;
+                        
+                        $showStreamIndex++;
+                    } else {
+                        $this->info("Reached end of show, resetting \$showStreamIndex and starting over from beginning");
+                        $showStreamIndex = 0;
                     }
                 }
             }

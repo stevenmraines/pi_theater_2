@@ -4,18 +4,21 @@
 <div id="vue-wrapper" class="container-fluid px-0">
 	@include('navbar')
     
+    <!-- TODO How to handle show vs movie? -->
     <stream-player
-        v-if="Object.keys(currentMedia).length"
+        v-if="Object.keys(currentMedia).length || Object.keys(currentEpisode).length"
         :environment="environment"
+        :episode="currentEpisode"
         :media="currentMedia"
         :offset="offset"
         :paths="paths"
         :stream="currentStream"
-        @ended="onCurrentMediaEnded"
+        @ended="onCurrentEpisodeOrMediaEnded"
     ></stream-player>
     
     <timeline
         :current-media="currentMedia"
+        :current-episode="currentEpisode"
         :paths="paths"
         :stream-id="streamId"
         :streams="streams"

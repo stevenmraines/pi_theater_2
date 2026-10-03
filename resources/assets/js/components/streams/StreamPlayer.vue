@@ -1,6 +1,9 @@
 <template>
     <div>
-        <h5 class="mb-5">Now Playing: {{ media.title }}</h5>
+        <h5 class="mb-5">
+            Now Playing:
+            {{ Object.keys(this.media).length ? media.title : episode.show.title + ' - ' + episode.title }}
+        </h5>
         <div class="player-wrapper w-100 mb-5">
             <video ref="video-el" @loadedmetadata="onVideoLoadedMetaData" @ended="$emit('ended')" muted controls>
                 <source :src="src" :type="videoType" />
@@ -15,6 +18,7 @@ export default {
 
     props: {
         'environment': { type: String, default: 'production' },
+        'episode': { type: Object, required: true },
         'media': { type: Object, required: true },
         'offset': { type: Number, default: 0 },
         'paths': { type: Object, required: true },
@@ -29,11 +33,20 @@ export default {
 
     computed: {
         src() {
-            const drive = this.media.drive[0];
+            let drive;
+            
+            if (Object.keys(this.media).length) {
+                drive = this.media.drive[0];
+            } else {
+                drive = this.episode.drive[0];
+            }
+
             const episodeDirectory = this.paths.drivePaths[drive.name].episode_directory;
             const movieDirectory = this.paths.drivePaths[drive.name].movie_directory;
-            const directory = this.media.media_type === 'movie' ? movieDirectory : episodeDirectory;
+            // jingle-cats.mp4 is only in the testing/movies directory
+            const directory = this.media.media_type === 'movie' || this.environment !== 'production' ? movieDirectory : episodeDirectory;
             const filename = this.environment === 'production' ? drive.pivot.filename : 'jingle-cats.mp4';
+            
             return `/${directory}/${filename}`;
         },
 
@@ -92,6 +105,12 @@ export default {
     },
 
     watch: {
+        'episode.id'() {
+            this.$nextTick(() => {
+                this.$refs['video-el'].load();
+            });
+        },
+
         'media.id'() {
             this.$nextTick(() => {
                 this.$refs['video-el'].load();

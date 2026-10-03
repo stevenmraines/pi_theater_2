@@ -88,7 +88,7 @@ Route::get('/stream/{id}', function ($id) {
         'streamId' => $id,
         'streamName' => App\Stream::find($id)->name,
         'streamMenuImage' => App\Stream::find($id)->menu_image,
-        'streams' => App\Stream::withMedia()->get(),
+        'streams' => App\Stream::withMedia()->withEpisodes()->get(),
         'user' => auth()->user(),
     ];
 

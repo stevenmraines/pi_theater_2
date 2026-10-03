@@ -10,15 +10,15 @@
     <div class="track" :style="{ width: 24 * pxPerHour + 'px' }">
       <div
         v-for="item in scheduled"
-        :key="stream.id + '-' + item.media.id"
+        :key="stream.id + '-' + item.episode.id"
         class="slot"
         :style="item.style"
       >
-        <stream-media
-          :is-active="item.media.id === currentMedia.id"
-          :media="item.media"
+        <stream-episode
+          :episode="item.episode"
+          :is-active="item.episode.id === currentEpisode.id"
           :stream="stream"
-        ></stream-media>
+        ></stream-episode>
       </div>
     </div>
   </div>
@@ -26,10 +26,10 @@
 
 <script>
 export default {
-  name: 'TimelineStream',
+  name: 'TimelineShowStream',
 
   props: {
-    currentMedia: { type: Object, default: () => ({}) },
+    currentEpisode: { type: Object, default: () => ({}) },
     isActive: { type: Boolean, default: false },
     paths: { type: Object, required: true },
     pxPerHour: { type: Number, default: 300 },
@@ -37,18 +37,16 @@ export default {
   },
 
   computed: {
-    // Lay movies out back-to-back, starting at midnight
-    // (or at stream.start_offset, in seconds since midnight, if you add one).
     scheduled() {
-      let cursor = this.stream.start_offset || 0; // seconds
-      return this.stream.stream_media.map(sm => {
-        const duration = sm.media.drive[0].pivot.duration; // seconds
+      let cursor = this.stream.start_offset || 0;
+      return this.stream.stream_episodes.map(se => {
+        const duration = se.episode.drive[0].pivot.duration;
         const style = {
           left: (cursor / 3600) * this.pxPerHour + 'px',
           width: (duration / 3600) * this.pxPerHour + 'px',
         };
         cursor += duration;
-        return { media: sm.media, style };
+        return { episode: se.episode, style };
       });
     },
   },

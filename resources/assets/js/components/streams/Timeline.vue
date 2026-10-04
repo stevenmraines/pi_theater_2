@@ -99,7 +99,7 @@ export default {
     z-index: 3; /* Stack on top of channel logo which has z-2 */
 }
 .channel-cell-header {
-  flex: 0 0 400px;
+  flex: 0 0 300px;
 }
 .track {
   position: relative;

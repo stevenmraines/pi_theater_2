@@ -57,7 +57,7 @@ export default {
 
 <style scoped>
 .channel-cell {
-  flex: 0 0 400px;
+  flex: 0 0 300px;
   position: sticky;
   left: 0;
   z-index: 2;

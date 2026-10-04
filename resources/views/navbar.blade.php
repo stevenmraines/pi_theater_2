@@ -87,10 +87,9 @@
 						class="dropdown-menu dropdown-menu-left scrollbar"
 					>
 						<a :href="`/stream/${stream.id}`" v-for="stream in streams">
-                            @{{ stream.name }}
 							<img
                                 v-if="stream.menu_image"
-								class="dropdown-item menu-logo"
+								class="dropdown-item menu-logo px-0"
 								v-bind:src="paths.logos + '/' + stream.menu_image"
 							/>
 						</a>

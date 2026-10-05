@@ -83,7 +83,7 @@ export default {
 <style scoped>
 .timeline {
   overflow: auto;
-  max-height: 400px;
+  /* max-height: 400px; */
 }
 .timeline-inner {
   position: relative;
@@ -96,7 +96,7 @@ export default {
     top: 0;
     color: black;
     background-color: #999;
-    z-index: 3; /* Stack on top of channel logo which has z-2 */
+    z-index: 3;
 }
 .channel-cell-header {
   flex: 0 0 300px;

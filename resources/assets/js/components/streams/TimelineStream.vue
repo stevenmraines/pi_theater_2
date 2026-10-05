@@ -69,6 +69,8 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
+  background-color: black;
+  padding-right: 7px;
 }
 .track {
   position: relative;

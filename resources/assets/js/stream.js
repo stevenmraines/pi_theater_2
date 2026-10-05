@@ -114,7 +114,8 @@ const app = new Vue({
                 const streamElement = document.getElementById(timelineStreamElementId);
                 
                 if (streamElement) {
-                    streamElement.scrollIntoView({ behavior: 'instant', block: 'center' });
+					document.getElementsByTagName('html')[0].scrollTop = 0;
+                    // streamElement.scrollIntoView({ behavior: 'instant', block: 'center' });
                 }
                 
 				const element = document.getElementById(timelineHourElementId);
@@ -176,9 +177,10 @@ const app = new Vue({
                 const timelineStreamElementId = `stream-${this.currentStream.id}`;
                 const streamElement = document.getElementById(timelineStreamElementId);
                 
-                if (streamElement) {
-                    streamElement.scrollIntoView({ behavior: 'instant', block: 'center' });
-                }
+				if (streamElement) {
+					document.getElementsByTagName('html')[0].scrollTop = 0;
+					// streamElement.scrollIntoView({ behavior: 'instant', block: 'center' });
+				}
                 
 				const element = document.getElementById(timelineHourElementId);
 				

@@ -57,6 +57,7 @@ class PendingFilesProvider
 
             // If it's a movie, call the IMDb API and append the results
             // TODO This code to call the imdb api could be in its own class
+            // TODO No wonder this page takes so long to load that it times out...should do something about this in the future
             if($fileType === self::MOVIE_FILE_TYPE) {
                 $key = config('app.imdb_api_key');
 

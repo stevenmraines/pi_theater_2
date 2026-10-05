@@ -24,6 +24,8 @@ class Drive extends Model
     }
 
     public static function pending() {
+        set_time_limit(0);
+
         // Get all current drives
         $drives = Drive::all();
 

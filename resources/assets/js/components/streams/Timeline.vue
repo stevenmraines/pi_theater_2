@@ -99,7 +99,7 @@ export default {
     z-index: 3;
 }
 .channel-cell-header {
-  flex: 0 0 300px;
+  flex: 0 0 220px;
 }
 .track {
   position: relative;

@@ -3,7 +3,7 @@
     <div class="channel-cell">
         <div style="position: relative;" class="w-100 h-100">
             <h4 v-if="! stream.menu_image">{{ stream.name }}</h4>
-            <img v-else :src="paths.logos + '/' + stream.menu_image" />
+            <img v-else :src="paths.logos + '/' + stream.timeline_image" />
         </div>
     </div>
 
@@ -55,20 +55,18 @@ export default {
 
 <style scoped>
 .channel-cell {
-  flex: 0 0 300px;
+  flex: 0 0 220px;
   position: sticky;
   left: 0;
   z-index: 2;
-  background: linear-gradient(0.25turn, black, black, black, transparent);
+  background: linear-gradient(to right, black 85%, transparent);
 }
 .channel-cell img {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  background-color: black;
-  padding-right: 7px;
+  left: 0;
+  transform: translateY(-50%);
+  width: 200px;
 }
 .track {
   position: relative;

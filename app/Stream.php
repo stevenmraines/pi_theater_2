@@ -11,6 +11,7 @@ class Stream extends Model
     protected $fillable = [
         'name',
         'menu_image',
+        'timeline_image',
         'month_start',
         'day_start',
         'month_end',

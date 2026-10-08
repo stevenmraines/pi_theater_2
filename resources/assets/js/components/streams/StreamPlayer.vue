@@ -101,6 +101,7 @@ export default {
             video.currentTime = this.startOffset;
             this.startOffset = 0; // Don't apply offset to next video that is played when first video finishes
             video.play().catch(() => {});
+            video.muted = false;
         },
     },
 

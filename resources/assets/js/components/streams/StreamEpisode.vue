@@ -1,7 +1,7 @@
 <template>
     <div :id="stream.id + '-' + episode.id" class="stream-media" :class="{ active: isActive }" @click="onStreamEpisodeClick">
         <h6>
-            {{ `s${episode.season} e${episode.episode_number} - ${episode.title}` }}
+            {{ `s${episode.season.number} e${episode.episode_number} - ${episode.title}` }}
         </h6>
         <p :title="episode.summary">{{ episode.summary }}</p>
         <em>{{ runtimeString }}</em>

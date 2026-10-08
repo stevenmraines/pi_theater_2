@@ -39,7 +39,8 @@ class MediaController extends Controller
         return
             Media::find($id)
                 ->load('drive')
-                ->load('episodes')
+                ->load('seasons')
+                ->load('episodes.season')
                 ->load('genres')
                 ->load('movie_year')
                 ->load('show_year');

@@ -52,6 +52,7 @@ class ScheduleStream extends Command
 
         // Delete any streamed media older than DAYS_OF_UNIQUE_MEDIA number of days
         StreamMedia::where('date', '<', $lookBackDate)->delete();
+        StreamEpisode::where('date', '<', $lookBackDate)->delete();
 
         if ($streamId > 0) {
             $stream = Stream::find($streamId);

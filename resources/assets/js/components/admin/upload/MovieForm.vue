@@ -121,6 +121,7 @@
             'collections',
             'drive',
             'driveEventDispatcher',
+            'imdbApiQuotaExceeded',
             'files',
             'genres'
         ],
@@ -333,6 +334,10 @@
                         this.currentMovie.posterUrl = imdb.i.imageUrl;
                     }
 
+                    if (this.imdbApiQuotaExceeded) {
+                        return;
+                    }
+
                     // Call to API to get more details
                     var url = 'https://imdb8.p.rapidapi.com/title/get-overview-details';
                     var options = {
@@ -441,6 +446,10 @@
 
             titleChange(title) {
                 this.currentMovie.title = title;
+
+                if (this.imdbApiQuotaExceeded) {
+                    return;
+                }
 
                 // Update IMDb API search results
                 if(title !== '') {

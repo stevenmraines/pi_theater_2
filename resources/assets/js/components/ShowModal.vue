@@ -31,7 +31,8 @@
                             <div class="card-header">
                                 <div class="d-flex justify-content-between" style="min-height: 100%">
                                     <span class="my-auto font-weight-bold">
-                                        Season {{ currentSeason }}
+                                        Season {{ currentSeason ? currentSeason.number : '' }}
+                                        {{ currentSeason && currentSeason.name ? ' - ' + currentSeason.name : '' }}
                                     </span>
 
                                     <div class="btn-group dropdown">
@@ -47,7 +48,10 @@
                                                 v-for="(season, index) in seasons"
                                                 v-on:click="changeSeason(season)"
                                                 :key="index"
-                                            >Season {{ season }}</button>
+                                            >
+                                                Season {{ season.number }}
+                                                {{ season && season.name ? ' - ' + season.name : '' }}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -161,7 +165,7 @@
                                     v-on:click="watch(mostRecentEpisode.id, false)"
                                 >
                                     <i class="mdi mdi-arrow-right-drop-circle-outline"></i> CONTINUE
-                                    S{{ formattedNumber(mostRecentEpisode.season) }}
+                                    S{{ formattedNumber(mostRecentEpisode.season.number) }}
                                     E{{ formattedNumber(mostRecentEpisode.episode_number) }}
                                 </button>
 
@@ -174,7 +178,7 @@
                                     v-on:click="watch(nextEpisode.id, true)"
                                 >
                                     <i class="mdi mdi-arrow-right-drop-circle-outline"></i> PLAY
-                                    S{{ formattedNumber(nextEpisode.season) }}
+                                    S{{ formattedNumber(nextEpisode.season.number) }}
                                     E{{ formattedNumber(nextEpisode.episode_number) }}
                                 </button>
                             </div>
@@ -192,12 +196,13 @@
 
         data() {
             return {
-                currentSeason: 1,
+                currentSeason: null,
                 episodes: [],
                 genres: [],
                 id: 0,
                 notes: null,
                 poster: 'missing-poster.jpg',
+                seasons: [],
                 show_year: [],
                 summary: '',
                 title: '',
@@ -205,11 +210,23 @@
             };
         },
 
+        created() {
+			Event.listen('displayShowModal', this.display);
+            Event.listen('hideShowModal', this.hide);
+            Event.listen('hideModal', this.hide);
+            Event.listen('setShow', this.setShow);
+		},
+
         computed: {
             currentSeasonEpisodes: function() {
+                if (! this.currentSeason) {
+                    return [];
+                }
+                
                 var self = this;
+                
                 return this.episodes.filter(function(episode) {
-                    return episode.season == self.currentSeason;
+                    return parseInt(episode.season_id) == parseInt(self.currentSeason.id);
                 });
             },
 
@@ -250,7 +267,7 @@
             },
 
             minSeason: function() {
-                return this.seasons.length > 0 ? this.seasons[0] : 0;
+                return this.seasons.length > 0 ? this.seasons[0] : { number: 0, name: 'undefined' };
             },
 
             mostRecentEpisode: function() {
@@ -279,7 +296,7 @@
                     let nextEpisode = this.mostRecentEpisode.episode_number + 1;
 
                     for(let i = 0; i < this.episodes.length; i++) {
-                        if(this.episodes[i].season == this.mostRecentEpisode.season
+                        if(this.episodes[i].season_id == this.mostRecentEpisode.season.id
                                 && this.episodes[i].episode_number == nextEpisode) {
                             return this.episodes[i];
                         }
@@ -287,10 +304,10 @@
 
                     // Try to start next season
                     nextEpisode = 1;
-                    let nextSeason = this.mostRecentEpisode.season + 1;
+                    let nextSeason = this.mostRecentEpisode.season.number + 1;
 
                     for(let i = 0; i < this.episodes.length; i++) {
-                        if(this.episodes[i].season == nextSeason && this.episodes[i].episode_number == 1) {
+                        if(this.episodes[i].season.number == nextSeason && this.episodes[i].episode_number == 1) {
                             return this.episodes[i];
                         }
                     }
@@ -315,22 +332,6 @@
                 return 0;
             },
 
-            seasons: function() {
-                var seasons = [];
-
-                for(var i = 0; i < this.episodes.length; i++) {
-                    if(seasons.indexOf(this.episodes[i].season) < 0) {
-                        seasons.push(this.episodes[i].season);
-                    }
-                }
-
-                seasons.sort(function(a, b) {
-                    return a - b;
-                });
-
-                return seasons;
-            },
-
             showHistory: function() {
                 var history = [];
 
@@ -346,13 +347,6 @@
                 return history.length > 0 ? history : null;
             },
         },
-
-		created() {
-			Event.listen('displayShowModal', this.display);
-            Event.listen('hideShowModal', this.hide);
-            Event.listen('hideModal', this.hide);
-            Event.listen('setShow', this.setShow);
-		},
 
       	methods: {
             display() {
@@ -410,9 +404,9 @@
             },
 
             getRef(episode) {
-                if(episode.season && episode.episode_number) {
+                if(episode.season.number && episode.episode_number) {
                     return 'episode_s'
-                        + this.formattedNumber(episode.season) + '-e'
+                        + this.formattedNumber(episode.season.number) + '-e'
                         + this.formattedNumber(episode.episode_number);
                 }
 
@@ -452,6 +446,8 @@
                 this.genres = data.genres;
                 this.user = data.user;
                 this.episodes = data.episodes;
+                this.seasons = data.seasons;
+                this.currentSeason = data.currentSeason;
             },
 
             watch(episode_id, restart) {

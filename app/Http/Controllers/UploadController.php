@@ -9,6 +9,7 @@ use App\Utilities\ImageFilenameProvider;
 use App\Events\EpisodeUploaded;
 use App\Events\MovieUploaded;
 use App\Events\ShowUploaded;
+use App\Season;
 use Illuminate\Http\Request;
 
 set_time_limit(0);
@@ -19,18 +20,42 @@ class UploadController extends Controller
     {
         $request->validate([
             // TODO Run SQL to convert empty strings to NULL on episodes table summary field and update code to match
+            'allSeasons' => 'required|json',
             'drive_id' => 'required|exists:drives,id',
             'episodeNumber' => 'required|integer|min:1',
             'file' => 'required|string',
-            'season' => 'required|integer|min:1',
             'media_id' => 'required|exists:media,id',
+            'season' => 'required|json',
             'summary' => 'nullable|string|max:4000',
             'title' => 'required|string|max:191',
         ]);
 
+        $existingSeasons = Media::find($request->media_id)->load('seasons')->seasons;
+
+        foreach (json_decode($request->allSeasons, true) as $season) {
+            if (! in_array($season['number'], $existingSeasons->pluck('number')->toArray())) {
+                Season::create([
+                    'media_id' => $request->media_id,
+                    'name' => $season['name'],
+                    'number' => $season['number'],
+                ]);
+            }
+        }
+
+        $rawSeason = json_decode($request->season, true);
+        
+        if (array_key_exists('id', $rawSeason) && $rawSeason['id'] !== null) {
+            $seasonId = $rawSeason['id'];
+        } else {
+            $seasonId = Season::where('number', $rawSeason['number'])
+                ->where('media_id', $request->media_id)
+                ->first()
+                ->id;
+        }
+
         $episode = new Episode([
             'media_id' => $request->media_id,
-            'season' => $request->season,
+            'season_id' => $seasonId,
             'episode_number' => $request->episodeNumber,
             'title' => $request->title,
             'summary' => $request->summary,

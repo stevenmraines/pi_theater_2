@@ -120,6 +120,7 @@ const app = new Vue({
             episodes: [],
             genres: [],
 			seasons: [],
+			currentSeason: null,
 			show_year: [],
 		},
         
@@ -282,6 +283,16 @@ const app = new Vue({
 				}
 
 				if(response.data.media_type === 'show') {
+					let minSeason = {};
+					
+					for (let i = 0; i < response.data.seasons.length; i++) {
+						if (! Object.keys(minSeason).length || parseFloat(response.data.seasons[i].number) < parseFloat(minSeason.number)) {
+							minSeason = response.data.seasons[i];
+						}
+					}
+
+					response.data.currentSeason = minSeason;
+					
 					self.showModal.id = response.data.id;
 					self.showModal.title = response.data.title;
 					self.showModal.summary = response.data.summary;
@@ -289,6 +300,7 @@ const app = new Vue({
 					self.showModal.poster = response.data.poster;
 					self.showModal.episodes = response.data.episodes;
 					self.showModal.genres = response.data.genres;
+					self.showModal.currentSeason = response.data.currentSeason;
 					self.showModal.seasons = response.data.seasons;
 					self.showModal.show_year = response.data.show_year;
 				}

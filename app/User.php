@@ -32,6 +32,7 @@ class User extends Authenticatable
             $this
                 ->belongsToMany('App\Episode', 'episode_history', 'user_id', 'episode_id')
                 ->with('drive')
+                ->with('season')
                 ->withPivot('progress')
                 ->withPivot('updated_at')
                 ->orderBy('episode_history.updated_at', 'DESC');

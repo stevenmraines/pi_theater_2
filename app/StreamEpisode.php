@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class StreamEpisode extends Model
 {
-    protected $fillable = ['stream_id', 'episode_id', 'date'];
+    protected $fillable = [
+        'stream_id',
+        'episode_id',
+        'date',
+    ];
 
     public function stream()
     {

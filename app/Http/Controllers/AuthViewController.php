@@ -19,9 +19,10 @@ class AuthViewController extends Controller
             'collections' => \App\Collection::all()->sortBy('name')->values(),
             'drives' => \App\Drive::all(),
             'genres' => \App\Genre::all()->sortBy('name')->values(),
+            'imdbApiQuotaExceeded' => \App\Utilities\IMDbClient::quotaExceeded(),
             'imdbKey' => config('app.imdb_api_key'),
             'pending' => \App\Drive::pending(),
-            'shows' => \App\Media::where('media_type', '=', 'show')->with('episodes')->get()
+            'shows' => \App\Media::where('media_type', '=', 'show')->with('seasons')->with('episodes')->get()
         ];
 
         return view('admin.upload.upload')->with('initialState', json_encode($initialState));

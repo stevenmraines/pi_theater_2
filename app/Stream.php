@@ -65,7 +65,7 @@ class Stream extends Model
         return $query->with([
             'stream_episodes' => function ($q) {
                 $q->where('stream_episodes.date', Carbon::today()->toDateString())
-                    ->with(['episode.show.show_year']);
+                    ->with(['episode.show.show_year', 'episode.season']);
             },
         ]);
     }
@@ -102,9 +102,11 @@ class Stream extends Model
             ->where('media_type', 'show')
             ->first();
 
-        return Episode::where('media_id', $media->id)
-            ->orderBy('season', 'asc')
+        return Episode::where('episodes.media_id', $media->id)
+            ->leftJoin('seasons', 'seasons.id', '=', 'episodes.season_id')
+            ->orderBy('season_number', 'asc')
             ->orderBy('episode_number', 'asc')
+            ->select(['episodes.*', \DB::raw('seasons.number AS season_number')])
             ->get();
     }
     

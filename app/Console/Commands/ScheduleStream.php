@@ -200,7 +200,7 @@ class ScheduleStream extends Command
                             'date' => $date,
                         ]);
 
-                        $this->line("Scheduled s{$entry->season} e{$entry->episode_number} - {$entry->title}");
+                        $this->line("Scheduled s{$entry->season->number} e{$entry->episode_number} - {$entry->title}");
                         
                         $cumRuntime += $entry->drive->first()->pivot->duration;
                         

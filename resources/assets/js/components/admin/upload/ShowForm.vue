@@ -125,6 +125,7 @@
             'drive',
             'driveEventDispatcher',
             'genres',
+            'imdbApiQuotaExceeded',
         ],
 
         data() {
@@ -317,6 +318,12 @@
                         this.show.posterUrl = imdb.i.imageUrl;
                     }
 
+                    if (this.imdbApiQuotaExceeded) {
+                        console.log('skipping imdbSearchChange, imdb api quota exceeded');
+                        this.currentImdbSearchResult = null;
+                        return;
+                    }
+
                     // Call to API to get more details
                     var url = 'https://imdb8.p.rapidapi.com/title/get-overview-details';
                     var options = {
@@ -446,6 +453,12 @@
 
             titleChange(title) {
                 this.show.title = title;
+
+                if (this.imdbApiQuotaExceeded) {
+                    console.log('skipping titleChange, imdb api quota exceeded');
+                    this.currentImdbSearchResult = null;
+                    return;
+                }
 
                 // Update IMDb API search results
                 if(title !== '') {

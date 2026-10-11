@@ -26,11 +26,16 @@
                 <!-- Season -->
                 <season-input
                     :eventDispatcher="eventDispatcher"
+                    :allSeasons="currentShow.seasons"
                     :value="currentEpisode.season"
                 ></season-input>
 
                 <div class="alert alert-danger mb-2" role="alert" v-if="!seasonValid()">
                     <strong>Error: </strong>The Season field is not valid
+                </div>
+
+                <div class="alert alert-warning mb-2" role="alert">
+                    <strong>Warning: </strong>Remember to add the auto-detected season to the array of all season options for the current show!
                 </div>
 
                 <!-- Episode Number -->
@@ -76,6 +81,7 @@
             'drive',
             'driveEventDispatcher',
             'files',
+            'imdbApiQuotaExceeded',
             'shows',
         ],
 
@@ -85,7 +91,7 @@
                 currentImdbSearchResult: null,
                 currentShowId: this.shows[0].id,
                 episodes: [],
-                eventDispatcher: new Vue({})
+                eventDispatcher: new Vue({}),
             };
         },
 
@@ -139,6 +145,7 @@
             this.eventDispatcher.$on('episodeNumberChange', this.episodeNumberChange);
             this.eventDispatcher.$on('imdbSearchChange', this.imdbSearchChange);
             this.eventDispatcher.$on('seasonChange', this.seasonChange);
+            this.eventDispatcher.$on('seasonRemove', this.seasonRemove);
             this.eventDispatcher.$on('showChange', this.showChange);
             this.eventDispatcher.$on('submit', this.submit);
             this.eventDispatcher.$on('summaryChange', this.summaryChange);
@@ -151,7 +158,7 @@
                     drive_id: this.drive,
                     episodeNumber: this.getEpisodeNumberFromFile(this.files[i].filename),
                     file: this.files[i].filename,
-                    season: this.getSeasonFromFile(this.files[i].filename),
+                    season: { number: '', name: '' },
                     summary: '',
                     title: '',
                 });
@@ -185,7 +192,7 @@
             getTitleFromSeasonAndEpisode() {
                 // Get index of current season
                 var sIndex = _.findIndex(this.currentShow.imdbSeasons, {
-                    'season': this.currentEpisode.season,
+                    'season': this.currentEpisode.season.number,
                 });
 
                 if(sIndex >= 0) {
@@ -210,6 +217,16 @@
             },
 
             imdbSearchCurrentShow() {
+                if (Object.hasOwn(this.currentShow, 'imdb') && Object.keys(this.currentShow.imdb).length) {
+                    console.log('imdb already set')
+                    return this.imdbSearchSeasons(this.currentShow.imdb.d[0].id);
+                }
+
+                if (this.imdbApiQuotaExceeded) {
+                    console.log('quota exceeded, skipping imdbSearchCurrentShow')
+                    return;
+                }
+
                 var url = 'https://imdb8.p.rapidapi.com/title/auto-complete';
                 var options = {
                     headers: {
@@ -237,6 +254,16 @@
             },
 
             imdbSearchSeasons(imdbId) {
+                if (Object.hasOwn(this.currentShow, 'imdbSeasons') && this.currentShow.imdbSeasons.length) {
+                    console.log('imdbSeasons already set');
+                    return this.getTitleFromSeasonAndEpisode();
+                }
+
+                if (this.imdbApiQuotaExceeded) {
+                    console.log('quota exceeded, skipping imdbSearchSeasons');
+                    return;
+                }
+
                 var url = 'https://imdb8.p.rapidapi.com/title/get-seasons';
                 var options = {
                     headers: {
@@ -267,13 +294,57 @@
                 return number > 0 && !isNaN(number);
             },
 
-            seasonChange(season) {
-                this.currentEpisode.season = parseInt(season);
+            seasonChange(data) {
+                this.$set(this.currentEpisode, 'season', data.season);
+
+                // Check if this is a new season that needs to be added to currentShow.seasons
+                let addIndex = 0;
+                let numberAlreadyPresent = false;
+                
+                for (let i = 0; i < this.currentShow.seasons.length; i++) {
+                    if (parseFloat(data.season.number) === parseFloat(this.currentShow.seasons[i].number)) {
+                        numberAlreadyPresent = true;
+                    }
+                    
+                    if (parseFloat(data.season.number) < parseFloat(this.currentShow.seasons[i].number)) {
+                        addIndex = i;
+                    }
+                }
+
+                if (! numberAlreadyPresent) {
+                    const showIndex = this.shows.findIndex((s) => parseInt(s.id) === parseInt(this.currentShowId));
+
+                    if(showIndex >= 0) {
+                        this.shows[showIndex].seasons.splice(addIndex, 0, data.season);
+                    }
+                } else {
+                    // Do we need to update the name field?
+                    const showIndex = this.shows.findIndex((s) => parseInt(s.id) === parseInt(this.currentShowId));
+
+                    if(showIndex >= 0) {
+                        const existingIndex = this.shows[showIndex].seasons.findIndex((s) => parseFloat(s.number) === parseFloat(data.season.number));
+                        
+                        if (existingIndex >= 0) {
+                            this.shows[showIndex].seasons[existingIndex].name = data.season.name;
+                        }
+                    }
+                }
+
                 this.getTitleFromSeasonAndEpisode();
             },
 
+            seasonRemove(data) {
+                const index = this.currentShow.seasons.findIndex((s) => parseFloat(s.number) === parseFloat(data.season.number));
+                
+                if (index >= 0) {
+                    this.currentShow.seasons.splice(index, 1);
+                }
+
+                this.$set(this.currentEpisode, 'season', { number: '', name: '' });
+            },
+
             seasonValid() {
-                return this.numberValid(this.currentEpisode.season);
+                return this.numberValid(this.currentEpisode.season.number);
             },
 
             showChange(showId) {
@@ -286,6 +357,8 @@
 
                 var episode = this.currentEpisode;
                 episode.media_id = this.currentShowId;
+                episode.season = JSON.stringify(episode.season);
+                episode.allSeasons = JSON.stringify(this.currentShow.seasons);
 
                 axios
                     .post('/api/upload/episode', window.getFormData(episode))
@@ -323,6 +396,10 @@
             },
 
             videoFileChangeUpdateImdb() {
+                if (! Object.keys(this.currentFile).length) {
+                    return;
+                }
+
                 // Find correct show based on the filename
                 var index = _.findIndex(this.shows, { 'titleLowercase': this.currentFile.title.toLowerCase() });
 

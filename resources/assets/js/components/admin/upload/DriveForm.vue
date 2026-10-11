@@ -50,6 +50,7 @@
                     role="tabpanel"
                     :drive="currentDrive"
                     :driveEventDispatcher="eventDispatcher"
+                    :imdb-api-quota-exceeded="imdbApiQuotaExceeded"
                     :files="episodes"
                     :shows="shows"
                 ></episode-form>
@@ -70,6 +71,7 @@
                 :drive="currentDrive"
                 :driveEventDispatcher="eventDispatcher"
                 :genres="genres"
+                :imdb-api-quota-exceeded="imdbApiQuotaExceeded"
             ></show-form>
         </div>
     </div>
@@ -82,6 +84,7 @@
                 currentDrive: 0,
                 drives: window.__INITIAL_STATE__.drives,
                 eventDispatcher: new Vue({}),
+                imdbApiQuotaExceeded: window.__INITIAL_STATE__.imdbApiQuotaExceeded,
                 pending: window.__INITIAL_STATE__.pending,
                 shows: this.sortShows(window.__INITIAL_STATE__.shows),
             };

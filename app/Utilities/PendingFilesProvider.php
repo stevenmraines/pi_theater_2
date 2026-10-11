@@ -56,30 +56,12 @@ class PendingFilesProvider
             ];
 
             // If it's a movie, call the IMDb API and append the results
-            // TODO This code to call the imdb api could be in its own class
-            // TODO No wonder this page takes so long to load that it times out...should do something about this in the future
             if($fileType === self::MOVIE_FILE_TYPE) {
-                $key = config('app.imdb_api_key');
-
-                throw_if(empty($key), \RuntimeException::class, 'IMDb API key not found.');
+                $imdbClient = new IMDbClient(new \GuzzleHttp\Client(), config('app.imdb_api_key'));
+                $data = $imdbClient->autoComplete($title);
     
-                $guzzleClient = new \GuzzleHttp\Client();
-    
-                $response = $guzzleClient->get(
-                    'https://imdb8.p.rapidapi.com/title/auto-complete',
-                    [
-                        'headers' => [
-                            'X-RapidAPI-Host' => 'imdb8.p.rapidapi.com',
-                            'X-RapidAPI-Key' => $key
-                        ],
-                        'query' => [
-                            'q' => $title
-                        ]
-                    ]
-                );
-    
-                if($response->getStatusCode() === 200) {
-                    $fileInfoArray['imdb'] = json_decode((string) $response->getBody(), true);
+                if($data) {
+                    $fileInfoArray['imdb'] = $data;
                 }
             }
 

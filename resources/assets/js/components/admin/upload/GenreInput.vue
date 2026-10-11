@@ -11,6 +11,7 @@
                 </button>
 
                 <div class="dropdown-menu">
+                    <!-- TODO Doesn't index here shadow the prop called index? -->
                     <a
                         :key="index"
                         href="javascript:void(0);"

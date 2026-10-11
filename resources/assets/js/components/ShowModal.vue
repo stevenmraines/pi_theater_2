@@ -31,7 +31,7 @@
                             <div class="card-header">
                                 <div class="d-flex justify-content-between" style="min-height: 100%">
                                     <span class="my-auto font-weight-bold">
-                                        Season {{ currentSeason.number }}
+                                        Season {{ currentSeason ? currentSeason.number : '' }}
                                         {{ currentSeason && currentSeason.name ? ' - ' + currentSeason.name : '' }}
                                     </span>
 
@@ -48,7 +48,10 @@
                                                 v-for="(season, index) in seasons"
                                                 v-on:click="changeSeason(season)"
                                                 :key="index"
-                                            >Season {{ season.number }}</button>
+                                            >
+                                                Season {{ season.number }}
+                                                {{ season && season.name ? ' - ' + season.name : '' }}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -175,7 +178,7 @@
                                     v-on:click="watch(nextEpisode.id, true)"
                                 >
                                     <i class="mdi mdi-arrow-right-drop-circle-outline"></i> PLAY
-                                    S{{ formattedNumber(nextEpisode.season) }}
+                                    S{{ formattedNumber(nextEpisode.season.number) }}
                                     E{{ formattedNumber(nextEpisode.episode_number) }}
                                 </button>
                             </div>
@@ -193,7 +196,7 @@
 
         data() {
             return {
-                currentSeason: {},
+                currentSeason: null,
                 episodes: [],
                 genres: [],
                 id: 0,
@@ -216,9 +219,14 @@
 
         computed: {
             currentSeasonEpisodes: function() {
+                if (! this.currentSeason) {
+                    return [];
+                }
+                
                 var self = this;
+                
                 return this.episodes.filter(function(episode) {
-                    return episode.season_id == self.currentSeason.id;
+                    return parseInt(episode.season_id) == parseInt(self.currentSeason.id);
                 });
             },
 
@@ -439,6 +447,7 @@
                 this.user = data.user;
                 this.episodes = data.episodes;
                 this.seasons = data.seasons;
+                this.currentSeason = data.currentSeason;
             },
 
             watch(episode_id, restart) {

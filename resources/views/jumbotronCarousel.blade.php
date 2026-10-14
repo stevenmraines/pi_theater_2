@@ -20,7 +20,7 @@
 			<div class="jumbo-carousel-overlay">
 				<div class="jumbo-carousel-info">
 					<button
-						class="btn btn-outline-primary jumbo-carousel-button mr-5"
+						class="btn btn-outline-primary jumbo-carousel-button"
 						data-placement="top"
 						data-toggle="tooltip"
 						title="Play"

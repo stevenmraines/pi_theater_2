@@ -111,4 +111,35 @@ class HistoryController extends Controller
                 ->load('watchlist');
     }
 
+    /**
+     * @param int $mediaId The ID of the show the user clicked play on.
+     * @param int $userId The ID of the current user.
+     */
+    public function playShow($mediaId, $userId = 0)
+    {
+        $show = Media::find($mediaId)->load('episodes');
+
+        if ($userId > 0) {
+            $user = User::find($userId)->load('episode_history');
+            
+            $mostRecent = $user
+                ->episode_history
+                ->where('media_id', $mediaId)
+                ->sortByDesc(function ($item, $key) {
+                    return $item->pivot->updated_at;
+                })
+                ->first();
+            
+            if ($mostRecent) {
+                return [
+                    'id' => $mediaId,
+                    'progress' => $mostRecent->pivot->progress,
+                    'episode_id' => $mostRecent->id,
+                ];
+            }
+        }
+
+        return ['id' => $mediaId, 'progress' => 0, 'episode_id' => $show->episodes->pluck('id')->first()];
+    }
+
 }

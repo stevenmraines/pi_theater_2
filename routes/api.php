@@ -12,6 +12,12 @@ Route::post(
     '/history/update/{progress}/{userId}/{mediaId}/{episodeId?}',
     'HistoryController@update'
 );
+
+Route::get(
+    '/history/playShow/{mediaId}/{userId?}',
+    'HistoryController@playShow'
+);
+
 // Route::post('/history/finish/{userId}/{mediaId}', 'HistoryController@finish');
 
 Route::post('/watchlist/add/{userId}/{mediaId}', 'WatchlistController@add');

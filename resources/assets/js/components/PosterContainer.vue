@@ -10,7 +10,7 @@
 		<img v-bind:src="poster" class="img-fluid" />
 		<div class="poster-overlay d-flex flex-column justify-content-around">
 			<span class="mx-auto px-2">{{ title }}</span>
-			<a href="javascript:void(0);" class="mx-auto play text-center">
+			<a href="javascript:void(0);" class="mx-auto play text-center" @click="play">
 				&#9658;
 			</a>
 			<button class="mx-auto btn btn-outline-success" v-on:click="getMedia">
@@ -143,6 +143,14 @@
 			unhover() {
 				if(typeof this.eventDispatcher.$emit === 'function') {
 					this.eventDispatcher.$emit('posterContainerUnhover');
+				}
+			},
+
+			play() {
+				if (this.media_type === 'movie') {
+					Event.trigger('setVideo', { id : this.id, progress : 0 });
+				} else {
+					Event.trigger('playShow', { id : this.id, progress : 0 });
 				}
 			},
 		},

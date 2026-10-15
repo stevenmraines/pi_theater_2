@@ -146,6 +146,7 @@ const app = new Vue({
 	created: function() {
 		Event.listen('addToWatchlist', this.addToWatchlist);
 		Event.listen('getMedia', this.getMedia);
+		Event.listen('playShow', this.playShow);
 		Event.listen('removeFromWatchlist', this.removeFromWatchlist);
 		Event.listen('setVideo', this.setVideo);
 		Event.listen('updateHistory', this.updateHistory);
@@ -315,6 +316,16 @@ const app = new Vue({
 			}).catch(function(error) {
 				console.log(error);
 			});
+		},
+
+		playShow(data) {
+			axios.get(`/api/history/playShow/${data.id}` + (this.user ? '/' + this.user.id : ''))
+				.then((response) => {
+					this.setVideo(response.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		},
 
 		removeFromWatchlist: function(mediaId) {

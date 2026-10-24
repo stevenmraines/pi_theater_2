@@ -81,6 +81,8 @@ class Stream extends Model
                 return $this->getHalloweenFavorites();
             case 4:
                 return $this->getCommunity();
+            case 5:
+                return $this->getGoosebumps();
             default:
                 return collect();
         }
@@ -93,6 +95,20 @@ class Stream extends Model
                 $query->whereIn('name', ['Horror']); 
             })
             ->with('genres')
+            ->get();
+    }
+
+    protected function getGoosebumps()
+    {
+        $media = Media::where('media_type', 'show')
+            ->where('title', 'Goosebumps')
+            ->first();
+        
+        return Episode::where('episodes.media_id', $media->id)
+            ->leftJoin('seasons', 'seasons.id', '=', 'episodes.season_id')
+            ->orderBy('season_number', 'asc')
+            ->orderBy('episode_number', 'asc')
+            ->select(['episodes.*', \DB::raw('seasons.number AS season_number')])
             ->get();
     }
 

@@ -15,7 +15,7 @@
         :style="item.style"
       >
         <stream-media
-          :is-active="item.media.id === currentMedia.id"
+          :is-active="item.media.id === currentMedia.id && isActive"
           :media="item.media"
           :stream="stream"
         ></stream-media>

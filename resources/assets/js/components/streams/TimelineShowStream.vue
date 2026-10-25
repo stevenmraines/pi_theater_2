@@ -16,7 +16,7 @@
       >
         <stream-episode
           :episode="item.episode"
-          :is-active="item.episode.id === currentEpisode.id"
+          :is-active="item.episode.id === currentEpisode.id && isActive"
           :stream="stream"
         ></stream-episode>
       </div>

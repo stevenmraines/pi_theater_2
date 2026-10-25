@@ -92,7 +92,7 @@ class ScheduleStream extends Command
 
             while ($cumRuntime < 60 * 60 * 24) {
 
-                if ($stream->type === 'random') {
+                if ($stream->type === 'genre') {
                     if (++$attempts > $maxAttempts) {
                         $this->error("Ran out of unique media to schedule");
                         break;

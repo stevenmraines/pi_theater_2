@@ -17,6 +17,9 @@ class Stream extends Model
         'month_end',
         'day_end',
         'type',
+        'collection_id',
+        'genre_id',
+        'media_id',
     ];
 
     protected static function boot()
@@ -72,77 +75,49 @@ class Stream extends Model
     
     public function getMedia()
     {
-        switch ($this->id) {
-            case 1:
-                return $this->getNovelGraphix();
-            case 2:
-                return $this->getFrightVision();
-            case 3:
-                return $this->getHalloweenFavorites();
-            case 4:
-                return $this->getCommunity();
-            case 5:
-                return $this->getGoosebumps();
+        switch ($this->type) {
+            case 'collection':
+                return $this->getCollection();
+            case 'genre':
+                return $this->getGenre();
+            case 'show':
+                return $this->getShow();
             default:
                 return collect();
         }
     }
-    
-    protected function getFrightVision()
+
+    protected function getCollection()
     {
+        $collection = Collection::find($this->collection_id);
+
         return Media::where('media_type', 'movie')
-            ->whereHas('genres', function ($query) {
-                $query->whereIn('name', ['Horror']); 
-            })
-            ->with('genres')
-            ->get();
-    }
-
-    protected function getGoosebumps()
-    {
-        $media = Media::where('media_type', 'show')
-            ->where('title', 'Goosebumps')
-            ->first();
-        
-        return Episode::where('episodes.media_id', $media->id)
-            ->leftJoin('seasons', 'seasons.id', '=', 'episodes.season_id')
-            ->orderBy('season_number', 'asc')
-            ->orderBy('episode_number', 'asc')
-            ->select(['episodes.*', \DB::raw('seasons.number AS season_number')])
-            ->get();
-    }
-
-    protected function getCommunity()
-    {
-        $media = Media::where('title', 'Community')
-            ->where('media_type', 'show')
-            ->first();
-
-        return Episode::where('episodes.media_id', $media->id)
-            ->leftJoin('seasons', 'seasons.id', '=', 'episodes.season_id')
-            ->orderBy('season_number', 'asc')
-            ->orderBy('episode_number', 'asc')
-            ->select(['episodes.*', \DB::raw('seasons.number AS season_number')])
-            ->get();
-    }
-    
-    protected function getHalloweenFavorites()
-    {
-        return Media::where('media_type', 'movie')
-            ->whereHas('collections', function ($query) {
-                $query->whereIn('name', ['Halloween Favorites']);
+            ->whereHas('collections', function ($query) use ($collection) {
+                $query->whereIn('name', [$collection->name]);
             })
             ->with('collections')
             ->get();
     }
-    
-    protected function getNovelGraphix()
+
+    protected function getGenre()
     {
+        $genre = Genre::find($this->genre_id);
+
         return Media::where('media_type', 'movie')
-            ->whereHas('genres', function ($query) {
-                $query->whereIn('name', ['Superhero']); 
+            ->whereHas('genres', function ($query) use ($genre) {
+                $query->whereIn('name', [$genre->name]); 
             })
             ->with('genres')
+            ->get();
+    }
+
+    protected function getShow()
+    {
+        return Episode::where('episodes.media_id', $this->media_id)
+            ->leftJoin('seasons', 'seasons.id', '=', 'episodes.season_id')
+            ->orderBy('season_number', 'asc')
+            ->orderBy('episode_number', 'asc')
+            ->select(['episodes.*', \DB::raw('seasons.number AS season_number')])
             ->get();
     }
 
